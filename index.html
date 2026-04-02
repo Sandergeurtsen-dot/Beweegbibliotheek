@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Columbus Beweegbibliotheek</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero__brand">
+          <img
+            class="hero__logo"
+            src="./assets/logo-columbusschool.png"
+            alt="Logo van Columbus school"
+          />
+          <div class="hero__copy">
+            <p class="eyebrow">Voor docenten, desktop en digibord</p>
+            <h1>Columbus Beweegbibliotheek</h1>
+            <p class="hero__description">
+              Vind snel een werkvorm voor bewegend leren. Kies een bouw, een vak
+              en het lesmoment, of zoek direct op woorden als tafels, spelling
+              of energizer.
+            </p>
+          </div>
+        </div>
+
+        <div class="hero__actions">
+          <div class="hero__stats">
+            <div class="hero-stat">
+              <strong id="totalTaskCount">0</strong>
+              <span>opdrachten</span>
+            </div>
+            <div class="hero-stat">
+              <strong>3</strong>
+              <span>bouwen</span>
+            </div>
+            <div class="hero-stat">
+              <strong>3</strong>
+              <span>vakken</span>
+            </div>
+            <div class="hero-stat">
+              <strong>3</strong>
+              <span>lesmomenten</span>
+            </div>
+          </div>
+
+          <div class="hero__goal">
+            <p class="eyebrow eyebrow--light">Doel van de app</p>
+            <p>
+              Docenten moeten makkelijk bewegend leren oefeningen kunnen vinden
+              en direct kunnen toepassen in de les.
+            </p>
+          </div>
+
+          <button id="resetButton" class="button button--ghost" type="button">
+            Wis alle keuzes
+          </button>
+        </div>
+      </header>
+
+      <main class="app-layout">
+        <section class="content panel">
+          <div class="content__header">
+            <div>
+              <p id="contentEyebrow" class="eyebrow eyebrow--small"></p>
+              <h2 id="contentTitle"></h2>
+              <p id="contentDescription" class="content__description"></p>
+            </div>
+
+            <div class="content__controls">
+              <button id="backButton" class="button button--secondary" type="button">
+                1 stap terug
+              </button>
+              <div id="selectionChips" class="selection-chips"></div>
+            </div>
+          </div>
+
+          <section id="stepSection" class="step-section">
+            <div class="section-head">
+              <h3 id="stepSectionTitle"></h3>
+              <p id="stepSectionDescription"></p>
+            </div>
+            <div id="stepCards" class="step-grid"></div>
+          </section>
+
+          <section id="resultsSection" class="results-section">
+            <div class="section-head">
+              <h3 id="resultsTitle"></h3>
+              <p id="resultsMeta"></p>
+            </div>
+
+            <div id="taskDetail" class="task-detail"></div>
+            <div id="taskGrid" class="task-grid"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <noscript>
+      <div class="noscript">
+        Deze app gebruikt JavaScript om de bibliotheek te tonen. Zet JavaScript
+        aan om de opdrachten te bekijken.
+      </div>
+    </noscript>
+
+    <script src="./script.js" defer></script>
+  </body>
+</html>
