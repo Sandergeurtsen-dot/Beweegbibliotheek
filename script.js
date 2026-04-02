@@ -1,6 +1,9 @@
 const GROUP_34 = "groep-3-4";
 const GROUP_56 = "groep-5-6";
 const GROUP_78 = "groep-7-8";
+const CLASS_SIZE = 25;
+const CLASS_GROUP_COUNT = 5;
+const CLASS_GROUP_SIZE = 5;
 
 const byGroup = (groep34, groep56, groep78) => ({
   [GROUP_34]: groep34,
@@ -1532,7 +1535,7 @@ const taskBlueprints = {
 const library = buildLibrary();
 const allTasks = flattenTasks();
 
-const state = {
+const initialState = {
   groupId: null,
   subjectId: null,
   momentId: null,
@@ -1541,6 +1544,12 @@ const state = {
   detailView: "task",
   mobileFiltersOpen: false
 };
+
+const state = {
+  ...initialState
+};
+
+let historyIndex = 0;
 
 const orderMaps = {
   groups: new Map(groups.map((item, index) => [item.id, index])),
@@ -1586,8 +1595,10 @@ bindIfPresent(ui.selectionChips, "click", handleChipClick);
 bindIfPresent(ui.stepCards, "click", handleStepCardClick);
 bindIfPresent(ui.taskDetail, "click", handleTaskDetailClick);
 bindIfPresent(ui.taskGrid, "click", handleTaskGridClick);
+window.addEventListener("popstate", handlePopState);
 
-render();
+initializeHistory();
+commitState("replace");
 
 function bindIfPresent(element, eventName, handler) {
   if (element) {
@@ -1683,7 +1694,7 @@ function buildCardPack(group, subject, moment, blueprint, title) {
 
   return {
     title: `Printset voor ${title}`,
-    intro: buildCardIntro(subject, moment, group, title),
+    intro: buildCardIntro(subject, moment, group, title, cards.length),
     note: buildCardNote(subject.id, group.id, blueprint.visual, blueprint.key),
     cards,
     supportCards,
@@ -1692,7 +1703,7 @@ function buildCardPack(group, subject, moment, blueprint, title) {
   };
 }
 
-function buildCardIntro(subject, moment, group, title) {
+function buildCardIntro(subject, moment, group, title, cardCount) {
   const methodLine =
     subject.id === "spelling"
       ? "De inhoud volgt de lijn van Staal 2 met herkenbare categorieen, klankgroepen en waar nodig het werkwoordschema."
@@ -1700,7 +1711,7 @@ function buildCardIntro(subject, moment, group, title) {
         ? "De inhoud sluit aan bij Getal & Ruimte Junior met automatiseren, rekentaal, vaste strategieen en duidelijke modellen."
         : "De inhoud sluit aan bij de taaldoelen van deze werkvorm.";
 
-  return `Deze printset sluit direct aan bij ${title} voor ${group.label}. Print de kaartjes op A4, knip ze uit en leg ze meteen klaar voor ${moment.label.toLowerCase()} binnen ${subject.label.toLowerCase()}. ${methodLine}`;
+  return `Deze printset sluit direct aan bij ${title} voor ${group.label}. Je krijgt ${cardCount} werkkaartjes, uitgewerkt voor een klas van ${CLASS_SIZE} leerlingen. Verdeel ze los of in ${CLASS_GROUP_COUNT} setjes van ${CLASS_GROUP_SIZE} voor ${moment.label.toLowerCase()} binnen ${subject.label.toLowerCase()}. ${methodLine}`;
 }
 
 function buildCardNote(subjectId, groupId, visual, taskKey) {
@@ -2509,10 +2520,13 @@ function expandCardSet(cards, subjectId, groupId, family, taskKey, title) {
   const extras = getExpansionCards(subjectId, groupId, family, taskKey, title).map((item, index) =>
     normalizeCardItem(item, `${title} extra ${index + 1}`, item.hint || "Gebruik deze kaart als extra oefenkaart.")
   );
+  const methodCards = getMethodWorkCards(subjectId, groupId, family, taskKey, title).map((item, index) =>
+    normalizeCardItem(item, `${title} methode ${index + 1}`, buildMethodWorkHint(subjectId, family, taskKey, index))
+  );
   const seenTexts = new Set();
   const merged = [];
 
-  [...cards, ...extras].forEach((cardItem) => {
+  [...cards, ...extras, ...methodCards].forEach((cardItem) => {
     const fingerprint = normalize(`${cardItem.label} ${cardItem.text}`);
 
     if (!seenTexts.has(fingerprint)) {
@@ -2521,7 +2535,7 @@ function expandCardSet(cards, subjectId, groupId, family, taskKey, title) {
     }
   });
 
-  return merged.slice(0, 12);
+  return fillCardsToClassSize(merged);
 }
 
 function getExpansionCards(subjectId, groupId, family, taskKey, title) {
@@ -2599,6 +2613,227 @@ function getExpansionCards(subjectId, groupId, family, taskKey, title) {
   ];
 }
 
+function getMethodWorkCards(subjectId, groupId) {
+  if (subjectId === "spelling" && groupId === GROUP_34) {
+    return [
+      card("Staal 2", "Welk categoriekaartje past bij: kat?", ""),
+      card("Staal 2", "Welk categoriekaartje past bij: vis?", ""),
+      card("Staal 2", "Welk categoriekaartje past bij: pen?", ""),
+      card("Staal 2", "Welk categoriekaartje past bij: maan?", ""),
+      card("Staal 2", "Welk categoriekaartje past bij: boom?", ""),
+      card("Staal 2", "Welk categoriekaartje past bij: roos?", ""),
+      card("Woordkaart", "Hak het woord: bed", ""),
+      card("Woordkaart", "Hak het woord: tak", ""),
+      card("Woordkaart", "Hak het woord: bus", ""),
+      card("Woordkaart", "Zing het woord: beer", ""),
+      card("Woordkaart", "Zing het woord: teen", ""),
+      card("Woordkaart", "Zing het woord: doos", ""),
+      card("Woordkaart", "Plankwoord: bank", ""),
+      card("Woordkaart", "Plankwoord: kast", ""),
+      card("Woordkaart", "Plankwoord: melk", ""),
+      card("Woordbeeld", "Lees goed en onthoud: huis", ""),
+      card("Woordbeeld", "Lees goed en onthoud: school", ""),
+      card("Woordbeeld", "Lees goed en onthoud: jas", ""),
+      card("Controle", "Zeg het woord, hak het woord en schrijf het op.", ""),
+      card("Controle", "Noem de categorie voordat je schrijft.", "")
+    ];
+  }
+
+  if (subjectId === "spelling" && groupId === GROUP_56) {
+    return [
+      card("Staal 2", "Klankgroepenwoord: lopen", ""),
+      card("Staal 2", "Klankgroepenwoord: tafel", ""),
+      card("Staal 2", "Klankgroepenwoord: bakker", ""),
+      card("Staal 2", "Klankgroepenwoord: regen", ""),
+      card("Staal 2", "Klankgroepenwoord: vogel", ""),
+      card("Staal 2", "Ei of ij: trein", ""),
+      card("Staal 2", "Ei of ij: geit", ""),
+      card("Staal 2", "Ei of ij: ijs", ""),
+      card("Staal 2", "Au of ou: touw", ""),
+      card("Staal 2", "Au of ou: pauw", ""),
+      card("Staal 2", "Au of ou: goud", ""),
+      card("Staal 2", "Maak het verkleinwoord van: boom", ""),
+      card("Staal 2", "Maak het verkleinwoord van: kip", ""),
+      card("Staal 2", "Maak het verkleinwoord van: ring", ""),
+      card("Staal 2", "Maak het meervoud van: stoel", ""),
+      card("Staal 2", "Maak het meervoud van: sleutel", ""),
+      card("Staal 2", "Maak het meervoud van: boek", ""),
+      card("Regelkaart", "Noem eerst de regel en schrijf daarna pas.", ""),
+      card("Regelkaart", "Gebruik de klankgroepenkaart als steun.", ""),
+      card("Controle", "Vertel waarom dit woord bij deze categorie hoort.", "")
+    ];
+  }
+
+  if (subjectId === "spelling") {
+    return [
+      card("Staal 2", "Zoek de persoonsvorm in: Jij loopt naar buiten.", ""),
+      card("Staal 2", "Zoek de persoonsvorm in: Morgen verandert het plan.", ""),
+      card("Staal 2", "Bepaal de ik-vorm van: antwoorden", ""),
+      card("Staal 2", "Bepaal de ik-vorm van: verhuizen", ""),
+      card("Staal 2", "Bepaal de stam van: bedoelen", ""),
+      card("Staal 2", "Bepaal de stam van: gebeuren", ""),
+      card("Staal 2", "Kies: hij word / hij wordt", ""),
+      card("Staal 2", "Kies: jij bedoelt / bedoeld", ""),
+      card("Staal 2", "Kies: het gebeurt / gebeurd", ""),
+      card("Staal 2", "Zwakke verleden tijd van: werken", ""),
+      card("Staal 2", "Zwakke verleden tijd van: fietsen", ""),
+      card("Staal 2", "Zwakke verleden tijd van: verhuizen", ""),
+      card("Staal 2", "Voltooid deelwoord van: spelen", ""),
+      card("Staal 2", "Voltooid deelwoord van: antwoorden", ""),
+      card("Staal 2", "Voltooid deelwoord van: verhuizen", ""),
+      card("Werkwoordschema", "Volg alle stappen van het werkwoordschema hardop.", ""),
+      card("Controle", "Gebruik een controlezin bij: jij wordt", ""),
+      card("Controle", "Gebruik een controlezin bij: hij bedoelt", ""),
+      card("Woordbeeld", "Lastig woordbeeld: chauffeur", ""),
+      card("Woordbeeld", "Lastig woordbeeld: interessant", "")
+    ];
+  }
+
+  if (subjectId === "rekenen" && groupId === GROUP_34) {
+    return [
+      card("Getal & Ruimte", "8 + 7", ""),
+      card("Getal & Ruimte", "13 - 5", ""),
+      card("Getal & Ruimte", "5 + 9", ""),
+      card("Getal & Ruimte", "14 - 6", ""),
+      card("Getal & Ruimte", "7 + 8", ""),
+      card("Getal & Ruimte", "Verdubbel 4", ""),
+      card("Getal & Ruimte", "Verdubbel 7", ""),
+      card("Getal & Ruimte", "Halveer 10", ""),
+      card("Getal & Ruimte", "Halveer 14", ""),
+      card("Getal & Ruimte", "Splits 8 op 2 manieren", ""),
+      card("Getal & Ruimte", "Splits 10 op 2 manieren", ""),
+      card("Getal & Ruimte", "Splits 12 op 2 manieren", ""),
+      card("Modelkaart", "Zet 8 op de getallenlijn van 0 tot 10", ""),
+      card("Modelkaart", "Maak 3 sprongen vooruit vanaf 6", ""),
+      card("Modelkaart", "Welk getal ligt tussen 14 en 16?", ""),
+      card("Rekentaal", "Wat is meer: 17 of 14?", ""),
+      card("Rekentaal", "Wat is minder: 9 of 12?", ""),
+      card("Rekentaal", "Maak 1 euro met munten", ""),
+      card("Rekentaal", "Hoe laat is het 1 uur later dan 8 uur?", ""),
+      card("Controle", "Noem je strategie voordat je antwoord geeft.", "")
+    ];
+  }
+
+  if (subjectId === "rekenen" && groupId === GROUP_56) {
+    return [
+      card("Getal & Ruimte", "6 x 7", ""),
+      card("Getal & Ruimte", "42 : 6", ""),
+      card("Getal & Ruimte", "9 x 8", ""),
+      card("Getal & Ruimte", "72 : 9", ""),
+      card("Getal & Ruimte", "7 x 6", ""),
+      card("Getal & Ruimte", "56 : 8", ""),
+      card("Getal & Ruimte", "24 + 18", ""),
+      card("Getal & Ruimte", "63 - 27", ""),
+      card("Getal & Ruimte", "39 + 19", ""),
+      card("Getal & Ruimte", "48 - 17", ""),
+      card("Strategie", "Kies: rijgen", ""),
+      card("Strategie", "Kies: splitsen", ""),
+      card("Strategie", "Kies: getallenlijn", ""),
+      card("Strategie", "Kies: schatten", ""),
+      card("Strategie", "Kies: controleren", ""),
+      card("Modelkaart", "Zet 75 op de getallenlijn", ""),
+      card("Modelkaart", "Welke sprong past van 50 naar 75?", ""),
+      card("Rekentaal", "Noem verschil, totaal of product bij de som.", ""),
+      card("Rekentaal", "Leg uit waarom jouw strategie handig is.", ""),
+      card("Controle", "Schat eerst en reken daarna precies.", "")
+    ];
+  }
+
+  if (subjectId === "rekenen") {
+    return [
+      card("Getal & Ruimte", "1/2 = 50%", ""),
+      card("Getal & Ruimte", "0,25 = 25%", ""),
+      card("Getal & Ruimte", "3/4 van 20", ""),
+      card("Getal & Ruimte", "15% van 200", ""),
+      card("Getal & Ruimte", "25% van 200", ""),
+      card("Getal & Ruimte", "2/3 van 18", ""),
+      card("Getal & Ruimte", "3/5 van 25", ""),
+      card("Getal & Ruimte", "0,75 + 0,5", ""),
+      card("Getal & Ruimte", "1,25 meter + 75 cm", ""),
+      card("Getal & Ruimte", "35% van 200", ""),
+      card("Modelkaart", "Gebruik een verhoudingstabel", ""),
+      card("Modelkaart", "Gebruik een breukmodel", ""),
+      card("Modelkaart", "Gebruik decimale notatie", ""),
+      card("Modelkaart", "Gebruik percententaal", ""),
+      card("Strategie", "Schat eerst de uitkomst", ""),
+      card("Strategie", "Controleer met een tweede aanpak", ""),
+      card("Strategie", "Leg uit welke notaties bij elkaar horen", ""),
+      card("Rekentaal", "Wat betekent verhouding in deze opgave?", ""),
+      card("Rekentaal", "Vergelijk breuk, procent en decimaal", ""),
+      card("Controle", "Onderbouw waarom jouw antwoord redelijk is.", "")
+    ];
+  }
+
+  return [];
+}
+
+function buildMethodWorkHint(subjectId, family, taskKey, index) {
+  if (family === "spelling_goedfout") {
+    return "Laat leerlingen goed of fout kiezen, verbeteren en de regel of categorie erbij noemen.";
+  }
+
+  if (family === "spelling_dictaat") {
+    return "Hang deze kaart op voor de loper of gebruik hem als woord- of zinkaart bij het dictee.";
+  }
+
+  if (family === "spelling_lijn") {
+    return "Leg deze kaart op de lijn en laat leerlingen de stappen of woorddelen in de goede volgorde leggen.";
+  }
+
+  if (family === "spelling_woorden" || family === "spelling_regels") {
+    return "Gebruik deze methodekaart als leerlingkaart en laat leerlingen steeds de categorie of regel verwoorden.";
+  }
+
+  if (family === "rekenen_route") {
+    return "Gebruik deze kaart als route-, missie- of hintkaart en laat leerlingen hun aanpak hardop benoemen.";
+  }
+
+  if (family === "rekenen_lijn") {
+    return "Leg deze kaart op of bij de getallenlijn en laat leerlingen verplaatsen, schatten of vergelijken.";
+  }
+
+  if (family === "rekenen_hoeken") {
+    return "Gebruik deze kaart als keuze- of modelkaart in een hoek en laat leerlingen hun keuze toelichten.";
+  }
+
+  if (family === "rekenen_antwoorden" || family === "rekenen_strategie") {
+    return "Gebruik deze kaart als leerlingkaart en laat eerst de strategie of rekentaal noemen en daarna pas antwoorden.";
+  }
+
+  if (subjectId === "spelling") {
+    return "Methodekaart in de lijn van Staal 2: categorie noemen, hardop redeneren en daarna pas schrijven.";
+  }
+
+  if (subjectId === "rekenen") {
+    return "Methodekaart in de lijn van Getal & Ruimte Junior: eerst denken, dan model of strategie kiezen en controleren.";
+  }
+
+  return `Gebruik deze kaart als extra leerlingkaart ${index + 1}.`;
+}
+
+function fillCardsToClassSize(cards) {
+  const completed = cards.slice(0, CLASS_SIZE);
+
+  if (completed.length === CLASS_SIZE || cards.length === 0) {
+    return completed;
+  }
+
+  let index = 0;
+
+  while (completed.length < CLASS_SIZE) {
+    const source = cards[index % cards.length];
+    const round = Math.floor(index / cards.length) + 2;
+    completed.push({
+      label: `${source.label} set ${round}`,
+      text: source.text,
+      hint: `${source.hint} Extra kopie voor een volledige klas van ${CLASS_SIZE} leerlingen.`
+    });
+    index += 1;
+  }
+
+  return completed;
+}
+
 function getSupportCards(group, subject, moment, blueprint, title) {
   const visualCards = getVisualSupportCards(blueprint.visual, title);
   const methodCards = getMethodSupportCards(subject.id, group.id, moment.id);
@@ -2613,6 +2848,9 @@ function getVisualSupportCards(visual, title) {
       card("Opstelling", "Kaartjesplek", "Leg of hang hier de werkkaartjes."),
       card("Opstelling", "Team 1", "Gebruik als teamlabel."),
       card("Opstelling", "Team 2", "Gebruik als tweede teamlabel."),
+      card("Opstelling", "Team 3", "Gebruik als derde teamlabel."),
+      card("Opstelling", "Team 4", "Gebruik als vierde teamlabel."),
+      card("Opstelling", "Team 5", "Gebruik als vijfde teamlabel."),
       card("Opstelling", "Controleplek", "Laat leerlingen hier antwoorden checken."),
       card("Opstelling", "Klaar", "Gebruik als eindbordje.")
     ],
@@ -2636,7 +2874,8 @@ function getVisualSupportCards(visual, title) {
       card("Station", "Station 1", "Print voor het eerste station."),
       card("Station", "Station 2", "Print voor het tweede station."),
       card("Station", "Station 3", "Print voor het derde station."),
-      card("Station", "Station 4", "Gebruik als extra of bonusstation."),
+      card("Station", "Station 4", "Gebruik voor het vierde station."),
+      card("Station", "Station 5", "Gebruik voor het vijfde station of een extra ronde."),
       card("Station", "Doorwisselen", "Gebruik bij het wisselen van station."),
       card("Station", "Controle", "Gebruik als gezamenlijke checkplek.")
     ],
@@ -2645,6 +2884,8 @@ function getVisualSupportCards(visual, title) {
       card("Route", "Stop 1", "Gebruik als eerste halte."),
       card("Route", "Stop 2", "Gebruik als tweede halte."),
       card("Route", "Stop 3", "Gebruik als derde halte."),
+      card("Route", "Stop 4", "Gebruik als vierde halte."),
+      card("Route", "Stop 5", "Gebruik als vijfde halte."),
       card("Route", "Controle", "Gebruik als controlepunt."),
       card("Route", "Finish", "Gebruik aan het eind van de route.")
     ],
@@ -2653,6 +2894,8 @@ function getVisualSupportCards(visual, title) {
       card("Missie", "Post 1", "Gebruik bij de eerste missiepost."),
       card("Missie", "Post 2", "Gebruik bij de tweede missiepost."),
       card("Missie", "Post 3", "Gebruik bij de derde missiepost."),
+      card("Missie", "Post 4", "Gebruik bij de vierde missiepost."),
+      card("Missie", "Post 5", "Gebruik bij de vijfde missiepost."),
       card("Missie", "Controle", "Gebruik voor het nakijkpunt."),
       card("Missie", "Eindmissie", "Gebruik als finishkaart.")
     ],
@@ -2777,11 +3020,12 @@ function buildPrintChecklist(subject, cards, supportCards, teacherSheets) {
         : "Leshulp voor de opdracht";
 
   return [
-    `${cards.length} werkkaartjes voor de opdracht`,
+    `${cards.length} werkkaartjes: 1 leerlingkaart per leerling in een klas van ${CLASS_SIZE}`,
+    `Adviesverdeling: ${CLASS_GROUP_COUNT} setjes van ${CLASS_GROUP_SIZE} werkkaartjes`,
     `${supportCards.length} organisatie- en hulpmateriaalkaartjes`,
-    `${teacherSheets.length} antwoord- en controlebladen`,
+    `${teacherSheets.length} groeps-, antwoord- en controlebladen`,
     `${methodLine}`,
-    "Print bij voorkeur 1 extra reserveset als meerdere groepjes tegelijk werken"
+    "Print bij voorkeur 1 extra reserveset van de werkkaartjes voor een tweede ronde of een reservestapel"
   ];
 }
 
@@ -2795,11 +3039,20 @@ function getTeacherSheets(group, subject, moment, blueprint, title) {
         ? "Som / opgave: ____________________\nModel of strategie: ____________________\nAntwoord: ____________________\nControle: ____________________"
         : "Antwoord: ____________________\nUitleg: ____________________\nControle: hardop teruglezen";
 
-  return [
+  const groupSheets = Array.from({ length: CLASS_GROUP_COUNT }, (_, index) =>
     card(
-      "Werkblad",
-      `${title}\nNaam: ____________________\n${roundLines}\n${answerBlock}`,
-      `Print 1 blad per ${group.id === GROUP_34 ? "tweetal of klein groepje" : "groepje"}.`
+      `Groepsblad ${index + 1}`,
+      `${title}\nGroep ${index + 1} (${CLASS_GROUP_SIZE} leerlingen)\n${roundLines}\n${answerBlock}`,
+      `Print 1 blad voor groep ${index + 1} van ${CLASS_GROUP_SIZE} leerlingen.`
+    )
+  );
+
+  return [
+    ...groupSheets,
+    card(
+      "Klasoverzicht",
+      `Klascheck ${title}\nGroep 1 klaar: ____________________\nGroep 2 klaar: ____________________\nGroep 3 klaar: ____________________\nGroep 4 klaar: ____________________\nGroep 5 klaar: ____________________\nMateriaal compleet terug: ja / nee`,
+      `Print 1 klasoverzicht voor de leerkracht tijdens ${moment.label.toLowerCase()}.`
     ),
     card(
       "Controleblad",
@@ -2859,10 +3112,97 @@ function flattenTasks() {
   );
 }
 
+function snapshotNavigationState() {
+  return {
+    groupId: state.groupId,
+    subjectId: state.subjectId,
+    momentId: state.momentId,
+    taskId: state.taskId,
+    search: state.search,
+    detailView: state.detailView
+  };
+}
+
+function applyNavigationState(nextState = initialState) {
+  state.groupId = nextState.groupId ?? null;
+  state.subjectId = nextState.subjectId ?? null;
+  state.momentId = nextState.momentId ?? null;
+  state.taskId = nextState.taskId ?? null;
+  state.search = nextState.search ?? "";
+  state.detailView = nextState.detailView === "cards" ? "cards" : "task";
+  state.mobileFiltersOpen = false;
+
+  if (ui.searchInput) {
+    ui.searchInput.value = state.search;
+  }
+}
+
+function isSameNavigationState(left, right) {
+  if (!left || !right) {
+    return false;
+  }
+
+  return (
+    left.groupId === right.groupId &&
+    left.subjectId === right.subjectId &&
+    left.momentId === right.momentId &&
+    left.taskId === right.taskId &&
+    left.search === right.search &&
+    left.detailView === right.detailView
+  );
+}
+
+function syncBrowserHistory(mode = "replace") {
+  if (!window.history || typeof window.history.replaceState !== "function") {
+    return;
+  }
+
+  const appState = snapshotNavigationState();
+  const currentState = window.history.state?.appState;
+
+  if (mode === "push") {
+    if (isSameNavigationState(appState, currentState)) {
+      window.history.replaceState({ appState, navIndex: historyIndex }, "");
+      return;
+    }
+
+    historyIndex += 1;
+    window.history.pushState({ appState, navIndex: historyIndex }, "");
+    return;
+  }
+
+  window.history.replaceState({ appState, navIndex: historyIndex }, "");
+}
+
+function commitState(historyMode = "replace") {
+  render();
+  syncBrowserHistory(historyMode);
+}
+
+function initializeHistory() {
+  const existingState = window.history?.state;
+
+  if (existingState?.appState) {
+    historyIndex = typeof existingState.navIndex === "number" ? existingState.navIndex : 0;
+    applyNavigationState(existingState.appState);
+    return;
+  }
+
+  historyIndex = 0;
+  applyNavigationState(initialState);
+}
+
+function handlePopState(event) {
+  const nextState = event.state?.appState;
+  historyIndex = typeof event.state?.navIndex === "number" ? event.state.navIndex : 0;
+  applyNavigationState(nextState || initialState);
+  render();
+}
+
 function handleSearchInput(event) {
   state.search = event.target.value;
   syncSelectedTask();
-  render();
+  commitState("replace");
 }
 
 function clearSearch() {
@@ -2871,7 +3211,7 @@ function clearSearch() {
     ui.searchInput.value = "";
   }
   syncSelectedTask();
-  render();
+  commitState("replace");
 }
 
 function toggleMobileFilters() {
@@ -2925,7 +3265,7 @@ function handleChipClick(event) {
     state.detailView = "task";
   }
 
-  render();
+  commitState("push");
 }
 
 function handleStepCardClick(event) {
@@ -2949,7 +3289,7 @@ function handleTaskGridClick(event) {
   const shouldScroll = state.taskId !== nextTaskId;
   state.taskId = nextTaskId;
   state.detailView = "task";
-  render();
+  commitState("push");
 
   if (shouldScroll) {
     ui.taskDetail.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -2961,7 +3301,7 @@ function handleTaskDetailClick(event) {
 
   if (tabButton) {
     state.detailView = tabButton.dataset.detailView;
-    render();
+    commitState("push");
     return;
   }
 
@@ -3019,49 +3359,46 @@ function toggleFilter(level, id) {
     state.mobileFiltersOpen = false;
   }
 
-  render();
+  commitState("push");
 }
 
 function handleBack() {
+  if (historyIndex > 0 && window.history && typeof window.history.back === "function") {
+    window.history.back();
+    return;
+  }
+
   if (state.taskId) {
     state.taskId = null;
     state.detailView = "task";
-    render();
+    commitState("replace");
     return;
   }
 
   if (state.momentId) {
     state.momentId = null;
     state.detailView = "task";
-    render();
+    commitState("replace");
     return;
   }
 
   if (state.subjectId) {
     state.subjectId = null;
     state.detailView = "task";
-    render();
+    commitState("replace");
     return;
   }
 
   if (state.groupId) {
     state.groupId = null;
     state.detailView = "task";
-    render();
+    commitState("replace");
   }
 }
 
 function resetState() {
-  state.groupId = null;
-  state.subjectId = null;
-  state.momentId = null;
-  state.taskId = null;
-  state.search = "";
-  state.detailView = "task";
-  if (ui.searchInput) {
-    ui.searchInput.value = "";
-  }
-  render();
+  applyNavigationState(initialState);
+  commitState("push");
 }
 
 function syncSelectedTask() {
@@ -3637,23 +3974,27 @@ function renderCardLayer(task) {
       <div class="card-layer__intro">
         <strong>${escapeHtml(task.cardPack.title)}</strong>
         <p>${escapeHtml(task.cardPack.intro)}</p>
-        <p>Tip: print op A4 en snijd of knip de kaartjes los. In printweergave blijft alleen deze printsetpagina zichtbaar.</p>
+        <p>Tip: print op A4 en snijd of knip de kaartjes los. Deze printset is opgebouwd voor een klas van ${CLASS_SIZE} leerlingen en blijft in printweergave als losse printpagina zichtbaar.</p>
         <ul class="card-layer__checklist">
           ${task.cardPack.printChecklist.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
         </ul>
       </div>
 
-      ${renderPrintSection("Werkkaartjes bij de opdracht", "Deze kaartjes gebruiken leerlingen tijdens het oefenen.", task.cardPack.cards)}
+      ${renderPrintSection(
+        `Werkkaartjes bij de opdracht (${task.cardPack.cards.length})`,
+        `Deze set is uitgewerkt voor ${CLASS_SIZE} leerlingen. Verdeel los of in ${CLASS_GROUP_COUNT} setjes van ${CLASS_GROUP_SIZE}.`,
+        task.cardPack.cards
+      )}
 
       ${renderPrintSection(
-        "Opstellings- en hulpmateriaal",
-        "Deze kaartjes hoef je als leerkracht niet meer zelf te maken; je kunt ze direct uitprinten en neerleggen.",
+        `Opstellings- en hulpmateriaal (${task.cardPack.supportCards.length})`,
+        "Deze kaartjes hoef je als leerkracht niet meer zelf te maken; je kunt ze direct uitprinten en klaarleggen voor de klasorganisatie.",
         task.cardPack.supportCards
       )}
 
       ${renderPrintSection(
-        "Werkbladen en controlebladen",
-        "Deze bladen kun je direct uitprinten voor antwoorden, registratie en controle.",
+        `Groepsbladen en controlebladen (${task.cardPack.teacherSheets.length})`,
+        "Deze bladen kun je direct uitprinten voor 5 groepjes, registratie en controle.",
         task.cardPack.teacherSheets
       )}
 
