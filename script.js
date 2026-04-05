@@ -2154,7 +2154,9 @@ function taskNeedsCards(blueprint) {
 function buildCardPack(group, subject, moment, blueprint, title, printProfile) {
   const overviewSheets = buildOverviewSheets(group, subject, moment, blueprint, title, printProfile);
   const cards = getStarterCards(subject.id, group.id, blueprint.visual, blueprint.key, title, printProfile);
-  const supportCards = printProfile.includeSupportCards ? getSupportCards(group, subject, moment, blueprint, title) : [];
+  const supportCards = printProfile.includeSupportCards
+    ? finalizeSupportCardsForClass(getSupportCards(group, subject, moment, blueprint, title), blueprint.visual)
+    : [];
   const teacherSheets = printProfile.includeTeacherSheets ? getTeacherSheets(group, subject, moment, blueprint, title) : [];
 
   return {
@@ -2190,7 +2192,7 @@ function buildOverviewSheets(group, subject, moment, blueprint, title, printProf
     {
       label: "Lesplaat 2",
       title: `Klasindeling voor ${CLASS_SIZE} leerlingen`,
-      art: renderClassLayoutArt(subject.accent, moment.accent),
+      art: renderClassLayoutArt(blueprint.visual, subject.accent, moment.accent),
       text: getPrintOrganizationLines(blueprint.visual, printProfile).join("\n"),
       hint: `Gebruik dit blad als organisatiesteun voor ${CLASS_GROUP_COUNT} groepjes van ${CLASS_GROUP_SIZE} leerlingen.`
     },
@@ -2210,7 +2212,7 @@ function getPrintOrganizationLines(visual, printProfile) {
   if (printProfile.expandWorkCardsToClassSize) {
     lines.push(`Gebruik ${CLASS_SIZE} leerlingkaartjes en geef ieder kind 1 kaart.`);
   } else if (["dictation", "path", "relay", "stations", "corners", "line"].includes(visual)) {
-    lines.push("Laat de groepjes om de beurt starten of laat twee groepjes tegelijk werken met duidelijke wisselmomenten.");
+    lines.push(`Gebruik ${CLASS_GROUP_COUNT} werksets zodat alle groepjes tegelijk of in een rustige doorloop kunnen werken.`);
   } else {
     lines.push("Laat per groepje één leerling starten en laat de rest meedenken, overleggen of controleren.");
   }
@@ -2226,6 +2228,82 @@ function getPrintOrganizationLines(visual, printProfile) {
   }
 
   return lines;
+}
+
+function finalizeSupportCardsForClass(cards, visual) {
+  const merged = [...cards, ...getClassManagementSupportCards(visual)];
+  const seen = new Set();
+
+  return merged.filter((cardItem) => {
+    const fingerprint = normalize(`${cardItem.label} ${cardItem.text}`);
+
+    if (seen.has(fingerprint)) {
+      return false;
+    }
+
+    seen.add(fingerprint);
+    return true;
+  });
+}
+
+function getClassManagementSupportCards(visual) {
+  const groupCards = Array.from({ length: CLASS_GROUP_COUNT }, (_, index) =>
+    card("Groepskaart", `Groep ${index + 1}`, `Gebruik deze kaart bij groep ${index + 1} van ${CLASS_GROUP_SIZE} leerlingen.`)
+  );
+
+  if (visual === "dictation") {
+    return [
+      ...groupCards,
+      ...Array.from({ length: CLASS_GROUP_COUNT }, (_, index) =>
+        card("Rolkaart", `Loper ${index + 1}`, `Gebruik deze rolkaart bij groep ${index + 1}.`)
+      ),
+      ...Array.from({ length: CLASS_GROUP_COUNT }, (_, index) =>
+        card("Rolkaart", `Schrijver ${index + 1}`, `Gebruik deze rolkaart bij groep ${index + 1}.`)
+      ),
+      ...Array.from({ length: CLASS_GROUP_COUNT }, (_, index) =>
+        card("Rolkaart", `Controleur ${index + 1}`, `Gebruik deze rolkaart bij groep ${index + 1}.`)
+      )
+    ];
+  }
+
+  if (visual === "stations") {
+    return [
+      ...groupCards,
+      card("Hulpkaart", "Startsignaal", "Gebruik deze kaart om alle groepjes tegelijk te laten starten."),
+      card("Hulpkaart", "Doorwisselen", "Gebruik deze kaart bij elk wisselmoment."),
+      card("Hulpkaart", "Eindcontrole", "Gebruik deze kaart bij de gezamenlijke afronding.")
+    ];
+  }
+
+  if (visual === "corners") {
+    return [
+      ...groupCards,
+      card("Hulpkaart", "Twijfelplek", "Gebruik deze kaart als middenplek voor klassikale bespreking."),
+      card("Hulpkaart", "Leg uit", "Gebruik deze kaart als herinnering om de keuze hardop toe te lichten.")
+    ];
+  }
+
+  if (visual === "path" || visual === "mission" || visual === "relay") {
+    return [
+      ...groupCards,
+      card("Hulpkaart", "Start", "Gebruik deze kaart voor het gezamenlijke begin."),
+      card("Hulpkaart", "Controle", "Gebruik deze kaart bij het checkpunt."),
+      card("Hulpkaart", "Klaar", "Gebruik deze kaart bij de afronding.")
+    ];
+  }
+
+  if (visual === "line") {
+    return [
+      ...groupCards,
+      card("Hulpkaart", "Set 1", "Gebruik deze kaart bij de eerste werkset."),
+      card("Hulpkaart", "Set 2", "Gebruik deze kaart bij de tweede werkset."),
+      card("Hulpkaart", "Set 3", "Gebruik deze kaart bij de derde werkset."),
+      card("Hulpkaart", "Set 4", "Gebruik deze kaart bij de vierde werkset."),
+      card("Hulpkaart", "Set 5", "Gebruik deze kaart bij de vijfde werkset.")
+    ];
+  }
+
+  return groupCards;
 }
 
 function getPrintSequenceLabels(visual) {
@@ -2274,7 +2352,7 @@ function buildCardIntro(subject, moment, group, title, cardCount, printProfile) 
 
   const distributionLine = printProfile.expandWorkCardsToClassSize
     ? `Je krijgt ${cardCount} leerlingkaartjes, passend voor een klas van ${CLASS_SIZE} leerlingen.`
-    : `Je krijgt ${cardCount} gerichte opdrachtkaarten of bladen voor deze werkvorm.`;
+    : `Je krijgt ${cardCount} werkkaarten, verdeeld over ${CLASS_GROUP_COUNT} werksets voor ongeveer ${CLASS_SIZE} leerlingen.`;
 
   return `Deze printset sluit direct aan bij ${title} voor ${group.label}. ${distributionLine} Gebruik ze binnen ${moment.label.toLowerCase()} voor ${subject.label.toLowerCase()}. ${methodLine}`;
 }
@@ -3764,7 +3842,7 @@ function getStarterCards(subjectId, groupId, visual, taskKey, title, printProfil
     normalizeCardItem(item, `${title} ${index + 1}`, buildCardHint(subjectId, groupId, family, taskKey, index))
   );
 
-  return expandCardSet(normalizedItems, subjectId, groupId, family, taskKey, title, printProfile);
+  return expandCardSet(normalizedItems, subjectId, groupId, family, taskKey, title, visual, printProfile);
 }
 
 function getCardFamily(subjectId, taskKey, visual) {
@@ -3861,7 +3939,7 @@ function normalizeCardItem(item, defaultLabel, defaultHint) {
   };
 }
 
-function expandCardSet(cards, subjectId, groupId, family, taskKey, title, printProfile) {
+function expandCardSet(cards, subjectId, groupId, family, taskKey, title, visual, printProfile) {
   const hasTaskSpecificOverride = Boolean(getCardPackOverrides()[taskKey]);
   const extras = hasTaskSpecificOverride
     ? []
@@ -3885,7 +3963,49 @@ function expandCardSet(cards, subjectId, groupId, family, taskKey, title, printP
     }
   });
 
-  return printProfile.expandWorkCardsToClassSize ? fillCardsToClassSize(merged) : merged;
+  return finalizeWorkCardsForClass(merged, visual, printProfile);
+}
+
+function finalizeWorkCardsForClass(cards, visual, printProfile) {
+  if (printProfile.expandWorkCardsToClassSize) {
+    return fillCardsToClassSize(cards);
+  }
+
+  if (!cards.length) {
+    return [];
+  }
+
+  const copyCount = getWorkSetCopyCount(visual);
+
+  if (copyCount > 1) {
+    return duplicateCardsForGroups(cards, copyCount);
+  }
+
+  return cards;
+}
+
+function getWorkSetCopyCount(visual) {
+  if (["dictation", "stations", "path", "mission", "relay", "corners", "line"].includes(visual)) {
+    return CLASS_GROUP_COUNT;
+  }
+
+  return 1;
+}
+
+function duplicateCardsForGroups(cards, copies) {
+  const duplicated = [];
+
+  for (let groupNumber = 1; groupNumber <= copies; groupNumber += 1) {
+    cards.forEach((source) => {
+      duplicated.push({
+        ...source,
+        label: `${source.label} • groep ${groupNumber}`,
+        hint: `${source.hint} Werkset voor groep ${groupNumber} van ${CLASS_GROUP_SIZE} leerlingen.`
+      });
+    });
+  }
+
+  return duplicated;
 }
 
 function getExpansionCards(subjectId, groupId, family, taskKey, title) {
@@ -4467,7 +4587,7 @@ function buildPrintChecklist(subject, overviewSheets, cards, supportCards, teach
     checklist.push(
       printProfile.expandWorkCardsToClassSize
         ? `${cards.length} leerlingkaartjes of matchkaarten voor een klas van ${CLASS_SIZE}`
-        : `${cards.length} opdrachtkaarten of werkbladen voor deze werkvorm`
+        : `${cards.length} werkkaarten, verdeeld over ${CLASS_GROUP_COUNT} werksets`
     );
   }
 
@@ -5432,7 +5552,7 @@ function renderTaskDetail(task) {
 function renderCardLayer(task) {
   const cardDescription = task.printProfile.expandWorkCardsToClassSize
     ? `Deze set is uitgewerkt voor ${CLASS_SIZE} leerlingen. Geef ieder kind 1 kaart.`
-    : `Deze set hoort direct bij de opdracht en is logisch geordend voor een klas van ongeveer ${CLASS_SIZE} leerlingen.`;
+    : `Deze set hoort direct bij de opdracht en is logisch geordend in ${CLASS_GROUP_COUNT} werksets voor een klas van ongeveer ${CLASS_SIZE} leerlingen.`;
 
   const printTip = task.printProfile.expandWorkCardsToClassSize
     ? "Tip: print op A4, knip de leerlingkaartjes los en deel ze direct uit."
@@ -5738,7 +5858,109 @@ function renderIllustrationScene(task, subjectAccent, momentAccent, stroke) {
   `;
 }
 
-function renderClassLayoutArt(subjectAccent, momentAccent) {
+function renderClassLayoutArt(visual, subjectAccent, momentAccent) {
+  if (visual === "dictation") {
+    return `
+      <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor loopdictee of kaartwandeling">
+        <rect width="360" height="180" rx="22" fill="#f7fbff" />
+        ${renderCardRack(274, 32, "Wandkaarten", subjectAccent, "#19424a")}
+        ${renderZone(28, 26, 104, 36, "5 groepjes", "#ffffff", "#19424a", 12)}
+        ${renderZone(28, 86, 70, 30, "Groep 1", "#ffffff", "#19424a", 10.5)}
+        ${renderZone(112, 86, 70, 30, "Groep 2", "#ffffff", "#19424a", 10.5)}
+        ${renderZone(196, 86, 70, 30, "Groep 3", "#ffffff", "#19424a", 10.5)}
+        ${renderZone(70, 132, 70, 30, "Groep 4", "#ffffff", "#19424a", 10.5)}
+        ${renderZone(154, 132, 70, 30, "Groep 5", "#ffffff", "#19424a", 10.5)}
+        ${renderMiniSign(28, 62, "LOPER", momentAccent)}
+        ${renderMiniSign(90, 62, "SCHRIJVER", subjectAccent)}
+        ${renderMiniSign(170, 62, "WISSEL", momentAccent)}
+      </svg>
+    `;
+  }
+
+  if (visual === "stations") {
+    return `
+      <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor stationswerk">
+        <rect width="360" height="180" rx="22" fill="#f7fbff" />
+        ${renderZone(20, 20, 80, 34, "Station 1", "#ffffff", "#19424a", 11)}
+        ${renderZone(140, 20, 80, 34, "Station 2", "#ffffff", "#19424a", 11)}
+        ${renderZone(260, 20, 80, 34, "Station 3", "#ffffff", "#19424a", 11)}
+        ${renderZone(58, 122, 80, 34, "Station 4", "#ffffff", "#19424a", 11)}
+        ${renderZone(222, 122, 80, 34, "Station 5", "#ffffff", "#19424a", 11)}
+        ${renderTrack(
+          [
+            [100, 38],
+            [140, 38],
+            [220, 38],
+            [260, 38],
+            [262, 122],
+            [138, 138],
+            [60, 122],
+            [20, 54]
+          ],
+          momentAccent
+        )}
+        ${renderMiniSign(142, 84, "WISSEL RONDE", subjectAccent)}
+      </svg>
+    `;
+  }
+
+  if (visual === "corners") {
+    return `
+      <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor hoekenwerk">
+        <rect width="360" height="180" rx="22" fill="#f7fbff" />
+        ${renderZone(18, 22, 82, 34, "Hoek A", "#ffffff", "#19424a", 11)}
+        ${renderZone(260, 22, 82, 34, "Hoek B", "#ffffff", "#19424a", 11)}
+        ${renderZone(18, 124, 82, 34, "Hoek C", "#ffffff", "#19424a", 11)}
+        ${renderZone(260, 124, 82, 34, "Hoek D", "#ffffff", "#19424a", 11)}
+        ${renderZone(126, 70, 108, 42, "Midden en uitleg", "#ffffff", "#19424a", 11)}
+        ${renderMiniSign(122, 122, "5 groepjes", subjectAccent)}
+        ${renderMiniSign(208, 122, "KIES", momentAccent)}
+      </svg>
+    `;
+  }
+
+  if (visual === "line") {
+    return `
+      <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor lijn- of vloeropdracht">
+        <rect width="360" height="180" rx="22" fill="#f7fbff" />
+        <path d="M34 104 H326" stroke="#19424a" stroke-width="6" stroke-linecap="round" />
+        ${renderZone(24, 34, 96, 34, "Werkset 1", "#ffffff", "#19424a", 11)}
+        ${renderZone(132, 34, 96, 34, "Werkset 2", "#ffffff", "#19424a", 11)}
+        ${renderZone(240, 34, 96, 34, "Werkset 3", "#ffffff", "#19424a", 11)}
+        ${renderZone(78, 124, 96, 34, "Werkset 4", "#ffffff", "#19424a", 11)}
+        ${renderZone(186, 124, 96, 34, "Werkset 5", "#ffffff", "#19424a", 11)}
+        ${renderMiniSign(134, 84, "LEG OP VOLGORDE", subjectAccent)}
+      </svg>
+    `;
+  }
+
+  if (visual === "path" || visual === "mission" || visual === "relay") {
+    return `
+      <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor routeopdracht">
+        <rect width="360" height="180" rx="22" fill="#f7fbff" />
+        ${renderMiniSign(24, 26, "START", subjectAccent)}
+        ${renderRouteStop(88, 138, "1", momentAccent, "#19424a")}
+        ${renderRouteStop(140, 120, "2", momentAccent, "#19424a")}
+        ${renderRouteStop(192, 102, "3", momentAccent, "#19424a")}
+        ${renderRouteStop(244, 84, "4", momentAccent, "#19424a")}
+        ${renderRouteStop(296, 66, "5", momentAccent, "#19424a")}
+        ${renderTrack(
+          [
+            [48, 34],
+            [84, 130],
+            [136, 112],
+            [188, 94],
+            [240, 76],
+            [288, 58]
+          ],
+          momentAccent
+        )}
+        ${renderMiniSign(38, 154, "Groep 1-5", subjectAccent)}
+        ${renderMiniSign(226, 142, "Doorloop", momentAccent)}
+      </svg>
+    `;
+  }
+
   return `
     <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor 25 leerlingen">
       <rect width="360" height="180" rx="22" fill="#f7fbff" />
