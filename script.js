@@ -141,9 +141,590 @@ function spellingDocTask(groupId, config) {
   });
 }
 
+function taalDocTask(groupId, config) {
+  return docTask(groupId, {
+    ...config,
+    methodKeywords: ["staal 2", "taal", "dynamische schooldag", "mondeling taalonderwijs"]
+  });
+}
+
 function buildTaskBlueprintsFromDoc() {
   return {
-    taal: emptyTaskMoments(),
+    taal: {
+      energizers: [
+        taalDocTask(GROUP_34, {
+          key: "woord-of-geen-woord",
+          visual: "jump",
+          visualHint: "Een snelle luisterreactie waarbij leerlingen springen of hurken bij echte woorden en onzinwoorden.",
+          title: "Woord of geen woord?",
+          summary: "Leerlingen schakelen snel tussen luisteren, herkennen en bewegen bij echte woorden en onzinwoorden.",
+          duration: "3-5 min",
+          setup: "Geen voorbereiding. Laat leerlingen naast hun tafel staan met genoeg ruimte voor een kleine sprong of hurk.",
+          goal: "Woordenschat, auditieve taalverwerking en luisteren kort activeren.",
+          movementFocus: "Snel een beweging koppelen aan de vraag of iets een echt woord is.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat leerlingen naast hun tafel staan.",
+            "Noem om de beurt echte woorden en onzinwoorden, bijvoorbeeld tafel, mip, boek of slaro.",
+            "Bij een echt woord maken leerlingen een sprong. Bij een onzinwoord hurken ze.",
+            "Bespreek na een paar voorbeelden kort waarom iets wel of geen woord is."
+          ],
+          differentiation: "Maak het moeilijker met themawoorden of laat leerlingen zelf een echt woord of onzinwoord bedenken.",
+          teacherTip: "Houd het tempo hoog en wissel bekende en onbekende woorden af, zodat leerlingen echt moeten luisteren.",
+          keywords: ["groep 3/4", "woordenschat", "luisteren", "auditieve verwerking", "energizer"]
+        }),
+        taalDocTask(GROUP_34, {
+          key: "zin-of-geen-zin",
+          visual: "jump",
+          visualHint: "Twee vaste bewegingen maken direct zichtbaar of een uitspraak al een volledige zin is.",
+          title: "Zin of geen zin?",
+          summary: "Leerlingen laten met een beweging zien of een uitspraak een volledige zin is.",
+          duration: "5 min",
+          setup: "Geen voorbereiding. Spreek twee bewegingen af: wel een zin of geen zin.",
+          goal: "Zinsbegrip, mondeling taalonderwijs en taalbeschouwing oefenen.",
+          movementFocus: "Snelle gebaren koppelen aan de vraag of een uitspraak volledig is.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Spreek af: handen omhoog betekent wel een zin en handen op knieën betekent geen zin.",
+            "Noem uitspraken zoals 'De hond rent.', 'Op de tafel.' en 'Ik eet een appel.'",
+            "Laat leerlingen met hun beweging zien wat zij denken.",
+            "Vraag af en toe: wat ontbreekt er nog?"
+          ],
+          differentiation: "Laat leerlingen zelf een goede en een onvolledige zin bedenken voor een volgende ronde.",
+          teacherTip: "Kies zowel heel duidelijke als twijfelachtige voorbeelden; dan wordt de nabespreking sterker.",
+          keywords: ["groep 3/4", "zinsbegrip", "taalbeschouwing", "zin", "mondelinge taal"]
+        }),
+        taalDocTask(GROUP_34, {
+          key: "klank-en-gebaar",
+          visual: "jump",
+          visualHint: "Leerlingen reageren met een afgesproken gebaar zodra ze de themaklank vooraan horen.",
+          title: "Klank en gebaar",
+          summary: "Een korte taalstart waarbij een gekozen klank en thematische woorden direct aan een gebaar worden gekoppeld.",
+          duration: "3-5 min",
+          setup: "Geen voorbereiding. Kies één klank en spreek één vast gebaar af.",
+          goal: "Woordenschat, luisteren en beginnende taalbeschouwing rond klanken activeren.",
+          movementFocus: "Direct reageren met een arm- of lichaamsgebaar zodra de afgesproken klank wordt gehoord.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Kies één klank, bijvoorbeeld m.",
+            "Noem woorden uit het actuele thema.",
+            "Horen leerlingen de afgesproken klank vooraan, dan maken ze een groot afgesproken gebaar.",
+            "Horen ze de klank niet, dan blijven ze stil staan."
+          ],
+          differentiation: "Gebruik eindklanken of laat leerlingen om de beurt zelf woorden noemen.",
+          teacherTip: "Neem woorden uit het thema van de week; dan verstevig je tegelijk de actieve woordenschat.",
+          keywords: ["groep 3/4", "klank", "woordenschat", "luisteren", "taalbeschouwing"]
+        }),
+        taalDocTask(GROUP_56, {
+          key: "waar-hoort-het-woord",
+          visual: "corners",
+          visualHint: "Thematische woorden worden al lopend gekoppeld aan de juiste betekenis- of categoriehoek.",
+          title: "Waar hoort het woord?",
+          summary: "Leerlingen koppelen woorden snel aan een categorie en verwoorden daarna waarom die keuze past.",
+          duration: "5 min",
+          setup: "Label vier hoeken, bijvoorbeeld beroep, plaats, voorwerp en handeling.",
+          goal: "Woordenschat, categoriseren en luisteren actief oefenen.",
+          movementFocus: "Naar een categoriehoek lopen en de keuze kort mondeling onderbouwen.",
+          materials: ["Eventueel hoekkaartjes"],
+          steps: [
+            "Label vier hoeken met categorieën, bijvoorbeeld beroep, plaats, voorwerp en handeling.",
+            "Noem een woord.",
+            "Laat leerlingen naar de juiste hoek lopen.",
+            "Vraag één leerling om zijn of haar keuze te verwoorden."
+          ],
+          differentiation: "Gebruik abstractere woorden of woorden uit zaakvakthema's voor extra uitdaging.",
+          teacherTip: "Zorg dat in elke ronde minstens één leerling ook uitlegt waarom de andere hoeken niet passen.",
+          keywords: ["groep 5/6", "woordenschat", "categoriseren", "hoeken", "luisteren"]
+        }),
+        taalDocTask(GROUP_56, {
+          key: "feit-of-mening",
+          visual: "jump",
+          visualHint: "Met staan of hurken reageren leerlingen direct op het verschil tussen feitelijke en subjectieve taal.",
+          title: "Feit of mening?",
+          summary: "Leerlingen onderscheiden snelle uitspraken als feit of mening en lichten die keuze daarna toe.",
+          duration: "5 min",
+          setup: "Geen voorbereiding. Spreek twee bewegingen af: staan is feit en hurken is mening.",
+          goal: "Mondeling taalonderwijs, taalbeschouwing en kritisch luisteren oefenen.",
+          movementFocus: "Direct reageren met een vaste houding en daarna kort verwoorden waarom iets een feit of mening is.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Spreek af: staan betekent feit en hurken betekent mening.",
+            "Noem uitspraken zoals 'Water kookt bij 100 graden.' of 'Voetbal is de leukste sport.'",
+            "Laat leerlingen reageren met de afgesproken beweging.",
+            "Bespreek af en toe waarom iets een feit of mening is."
+          ],
+          differentiation: "Gebruik uitspraken uit de actuele thematekst of laat leerlingen zelf een feit en een mening formuleren.",
+          teacherTip: "Kies uitspraken die net genoeg discussie oproepen; zo blijft het geen trucje maar een denkactiviteit.",
+          keywords: ["groep 5/6", "feit", "mening", "kritisch luisteren", "taalbeschouwing"]
+        }),
+        taalDocTask(GROUP_56, {
+          key: "synoniemensprint",
+          visual: "jump",
+          visualHint: "Leerlingen bewegen op de plaats en roepen bij een signaal snel een passend synoniem.",
+          title: "Synoniemensprint",
+          summary: "Een korte woordenschatflits waarbij leerlingen in tempo synoniemen noemen en hun reactie aan een stopgebaar koppelen.",
+          duration: "3-5 min",
+          setup: "Geen voorbereiding. Laat leerlingen rustig op de plaats bewegen.",
+          goal: "Woordenschat en woordrelaties snel activeren.",
+          movementFocus: "Joggen op de plaats en bij een signaal direct stoppen en een synoniem noemen.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat leerlingen rustig op de plaats joggen.",
+            "Noem een woord, bijvoorbeeld blij.",
+            "Bij het signaal roepen leerlingen een synoniem en maken tegelijk een stopbeweging.",
+            "Herhaal dit met 5 tot 8 woorden."
+          ],
+          differentiation: "Gebruik antoniemen in een vervolgronde of laat leerlingen in tweetallen antwoorden geven.",
+          teacherTip: "Kies woorden met meerdere mogelijke antwoorden; dan krijgt de klas sneller een rijker woordveld.",
+          keywords: ["groep 5/6", "synoniemen", "woordenschat", "woordrelaties", "energizer"]
+        }),
+        taalDocTask(GROUP_78, {
+          key: "standpunt-in-de-ruimte",
+          visual: "line",
+          visualHint: "Leerlingen kiezen fysiek een positie bij een stelling en lichten hun standpunt daarna kort toe.",
+          title: "Standpunt in de ruimte",
+          summary: "Een snelle taalactivatie waarbij leerlingen een mening innemen en die in één zin onderbouwen.",
+          duration: "5 min",
+          setup: "Wijs twee kanten van het lokaal aan: eens en oneens.",
+          goal: "Spreken, argumenteren en luisteren kort activeren.",
+          movementFocus: "Een duidelijke positie innemen in de ruimte en daarna kort verwoorden waarom je daar staat.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Wijs twee kanten van het lokaal aan: eens en oneens.",
+            "Noem een stelling, bijvoorbeeld: huiswerk is nuttig voor iedereen.",
+            "Leerlingen kiezen een kant.",
+            "Vraag twee of drie leerlingen om in één zin hun keuze toe te lichten."
+          ],
+          differentiation: "Voeg een middenpositie toe voor twijfel als je meer nuance wilt.",
+          teacherTip: "Laat leerlingen eerst kiezen zonder overleg; zo zie je sneller hun eigen eerste gedachte.",
+          keywords: ["groep 7/8", "standpunt", "argumenteren", "spreken", "luisteren"]
+        }),
+        taalDocTask(GROUP_78, {
+          key: "kernwoord-kiezen",
+          visual: "jump",
+          visualHint: "Leerlingen lopen naar het kernwoord dat volgens hen het onderwerp of de tekst het best samenvat.",
+          title: "Kernwoord kiezen",
+          summary: "Leerlingen kiezen uit meerdere kernwoorden en verantwoorden daarna welk woord het beste past.",
+          duration: "5 min",
+          setup: "Geen voorbereiding. Spreek drie plekken in het lokaal af voor drie mogelijke kernwoorden.",
+          goal: "Woordenschat, samenvatten en tekstbegrip activeren.",
+          movementFocus: "Naar een gekozen kernwoordplek lopen en daarna kort uitleggen waarom dat woord het best past.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Noem een onderwerp of gelezen tekst.",
+            "Lees drie mogelijke kernwoorden voor.",
+            "Leerlingen lopen naar de plek van het woord dat volgens hen het beste past.",
+            "Bespreek kort waarom dat kernwoord het onderwerp goed samenvat."
+          ],
+          differentiation: "Laat leerlingen daarna zelf een nog beter kernwoord formuleren.",
+          teacherTip: "Kies kernwoorden die dicht bij elkaar liggen; dan moeten leerlingen echt samenvattend nadenken.",
+          keywords: ["groep 7/8", "kernwoord", "samenvatten", "tekstbegrip", "woordenschat"]
+        }),
+        taalDocTask(GROUP_78, {
+          key: "waar-twijfel-niet-waar",
+          visual: "line",
+          visualHint: "Drie plekken in het lokaal maken kritisch luisteren zichtbaar: waar, twijfel en niet waar.",
+          title: "Waar, twijfel, niet waar",
+          summary: "Leerlingen luisteren kritisch naar uitspraken en kiezen vervolgens een positie die ze moeten verantwoorden.",
+          duration: "5 min",
+          setup: "Maak drie plekken in de klas: waar, twijfel en niet waar.",
+          goal: "Luisteren, taalbeschouwing en mondeling taalonderwijs oefenen.",
+          movementFocus: "Een positie kiezen in de ruimte en daarna verwoorden waarom je daar staat.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Maak drie plekken in de klas: waar, twijfel en niet waar.",
+            "Noem een uitspraak uit een tekst of onderwerp.",
+            "Leerlingen kiezen een positie.",
+            "Vraag enkele leerlingen hun keuze te verantwoorden."
+          ],
+          differentiation: "Gebruik ook bronkritische of argumentatieve uitspraken voor een verdiepend gesprek.",
+          teacherTip: "Laat leerlingen in de twijfelzone juist benoemen welke informatie ze nog missen.",
+          keywords: ["groep 7/8", "kritisch luisteren", "taalbeschouwing", "waar of niet waar", "argumentatie"]
+        })
+      ],
+      tijdens: [
+        taalDocTask(GROUP_34, {
+          key: "loopdictee-woordenschat",
+          visual: "dictation",
+          visualHint: "Tweetallen halen woordkaartjes op, zeggen het woord hardop en gebruiken het daarna in een zin.",
+          title: "Loopdictee woordenschat",
+          summary: "Leerlingen halen nieuwe woorden op en oefenen direct met betekenis, uitspraak en gebruik in een zin.",
+          duration: "10 min",
+          setup: "Hang 6 tot 8 woordkaartjes in het lokaal en leg schrijfmateriaal klaar.",
+          goal: "Woordenschat, spreken en luisteren actief inoefenen.",
+          movementFocus: "Lopen, onthouden en daarna samen het woord uitspreken en gebruiken.",
+          materials: ["Woordkaartjes", "Wisbordje of papier"],
+          steps: [
+            "Werk in tweetallen.",
+            "Eén leerling loopt naar een woordkaart, onthoudt het woord en loopt terug.",
+            "Samen zeggen de leerlingen het woord, leggen uit wat het betekent of gebruiken het in een zin.",
+            "Daarna wisselen de rollen."
+          ],
+          differentiation: "Gebruik ook beeldkaartjes of laat sterkere leerlingen zelf een zin maken met het woord.",
+          teacherTip: "Laat leerlingen eerst het woord hardop herhalen voordat ze naar betekenis of gebruik gaan.",
+          keywords: ["groep 3/4", "woordenschat", "loopdictee", "spreken", "luisteren"]
+        }),
+        taalDocTask(GROUP_34, {
+          key: "praatmaatjes-in-beweging",
+          visual: "circle",
+          visualHint: "Leerlingen bewegen door het lokaal, zoeken een maatje en oefenen korte mondelinge taalbeurten.",
+          title: "Praatmaatjes in beweging",
+          summary: "Een korte duo-opdracht waarin spreken, luisteren en zinsvorming via een wandel- en wisselmoment worden geoefend.",
+          duration: "5-10 min",
+          setup: "Geen voorbereiding of leg enkele praatvragen klaar als steun.",
+          goal: "Spreken, luisteren, beurt nemen en zinsvorming oefenen.",
+          movementFocus: "Rustig bewegen, snel een maatje zoeken en daarna om de beurt een korte taalbeurt geven.",
+          materials: ["Geen extra materiaal", "Eventueel praatkaartjes"],
+          steps: [
+            "Laat leerlingen rustig door het lokaal lopen.",
+            "Bij een signaal zoeken zij een maatje.",
+            "Geef een korte vraag, bijvoorbeeld: Wat zie je op de boerderij?",
+            "Leerling A vertelt, leerling B luistert en noemt daarna één woord of zin terug."
+          ],
+          differentiation: "Laat leerlingen eerst nadenken met een themawoord, gebaar of voorwerp als steun.",
+          teacherTip: "Model eerst hoe een volledig antwoord en een goede luisterreactie klinken.",
+          keywords: ["groep 3/4", "spreken", "luisteren", "beurt nemen", "praatmaatjes"]
+        }),
+        taalDocTask(GROUP_34, {
+          key: "verhaalestafette",
+          visual: "relay",
+          visualHint: "Groepjes bouwen om de beurt een verhaal op, waarbij elke leerling na een loopbeurt één zin toevoegt.",
+          title: "Verhaalestafette",
+          summary: "Leerlingen oefenen samenhangend vertellen door een verhaal zin voor zin in estafettevorm uit te bouwen.",
+          duration: "10-12 min",
+          setup: "Geen voorbereiding. Verdeel de klas in kleine groepjes en wijs een paar plekken in het lokaal aan.",
+          goal: "Vertellen, woordenschat en verhaalopbouw oefenen.",
+          movementFocus: "Lopen naar een vertelplek, één zin toevoegen en daarna direct doorwisselen.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Verdeel de klas in kleine groepjes.",
+            "De eerste leerling loopt naar een plek in het lokaal en vertelt één zin van een verhaal.",
+            "Daarna tikt hij of zij de volgende leerling aan.",
+            "De volgende leerling voegt een zin toe, zodat het verhaal steeds verder groeit."
+          ],
+          differentiation: "Werk met een beginzin, een themawoord of drie plaatjes als steun.",
+          teacherTip: "Geef groepjes eventueel eerst één vaste beginzin; dan komt de inhoud sneller op gang.",
+          keywords: ["groep 3/4", "verhaalestafette", "vertellen", "verhaalopbouw", "woordenschat"]
+        }),
+        taalDocTask(GROUP_56, {
+          key: "loopdictee-kernzinnen",
+          visual: "dictation",
+          visualHint: "Tweetallen halen kernzinnen op en formuleren samen de hoofdgedachte van een tekst.",
+          title: "Loopdictee kernzinnen",
+          summary: "Leerlingen oefenen hoofdgedachte en kernzinnen door tekststroken al lopend op te halen en samen te verwerken.",
+          duration: "10-15 min",
+          setup: "Hang korte tekststroken of kernzinnen in het lokaal.",
+          goal: "Lezen, samenvatten en schriftelijk taalonderwijs actief oefenen.",
+          movementFocus: "Lopen, onthouden en daarna samen kerninformatie formuleren.",
+          materials: ["Tekststroken", "Papier of wisbordje"],
+          steps: [
+            "Werk in tweetallen.",
+            "Eén leerling loopt naar een tekststrook en onthoudt de kernzin.",
+            "Terug bij het maatje schrijven of formuleren ze samen de hoofdgedachte.",
+            "Daarna wisselen ze."
+          ],
+          differentiation: "Gebruik ondersteunende woorden of een half ingevulde samenvatstructuur voor wie dat nodig heeft.",
+          teacherTip: "Laat leerlingen eerst de kernzin navertellen voordat ze gaan schrijven; zo blijft de inhoud voorop staan.",
+          keywords: ["groep 5/6", "kernzin", "hoofdgedachte", "samenvatten", "loopdictee"]
+        }),
+        taalDocTask(GROUP_56, {
+          key: "vraag-en-antwoordwandeling",
+          visual: "path",
+          visualHint: "Tweetallen lopen langs vraagkaartjes en oefenen complete mondelinge antwoorden in wisselende rollen.",
+          title: "Vraag en antwoordwandeling",
+          summary: "Leerlingen oefenen volledige antwoorden en beurtwisseling al lopend langs korte taalvragen.",
+          duration: "10 min",
+          setup: "Verspreid 6 tot 8 vraagkaartjes door het lokaal.",
+          goal: "Spreken, luisteren, formuleren en beurtwisseling oefenen.",
+          movementFocus: "Van vraag naar vraag lopen en per stop een volledige mondelinge beurt geven.",
+          materials: ["Vraagkaartjes"],
+          steps: [
+            "Verspreid vraagkaartjes door het lokaal.",
+            "Leerlingen lopen in tweetallen langs de kaartjes.",
+            "Bij elk kaartje leest leerling A de vraag en leerling B antwoordt in een volledige zin.",
+            "Bij het volgende kaartje wisselen de rollen."
+          ],
+          differentiation: "Laat leerlingen aan het eind één sterk antwoord klassikaal delen.",
+          teacherTip: "Zeg expliciet dat korte éénwoordantwoorden niet genoeg zijn; zo borg je de taalopbrengst.",
+          keywords: ["groep 5/6", "vraag en antwoord", "spreken", "luisteren", "formuliering"]
+        }),
+        taalDocTask(GROUP_56, {
+          key: "schrijfronde-met-stopplaatsen",
+          visual: "stations",
+          visualHint: "Drie stopplaatsen helpen leerlingen een korte tekst in logische delen op te bouwen.",
+          title: "Schrijfronde met stopplaatsen",
+          summary: "Leerlingen schrijven een korte tekst in drie logische stappen: begin, midden en slot.",
+          duration: "10-12 min",
+          setup: "Maak drie stopplaatsen: begin, midden en slot.",
+          goal: "Schrijven, tekstopbouw en taalbeschouwing actief inoefenen.",
+          movementFocus: "Tussen stopplaatsen lopen en per plek één nieuw deel van de tekst toevoegen.",
+          materials: ["Papier of werkblad"],
+          steps: [
+            "Leerlingen starten bij de plek begin en schrijven daar de eerste zin of het eerste deelidee.",
+            "Daarna lopen ze naar midden en voegen daar vervolgzin of vervolgzinnen toe.",
+            "Bij slot schrijven ze een passende afronding.",
+            "Bespreek kort hoe de tekst nu is opgebouwd."
+          ],
+          differentiation: "Gebruik een beschrijving, instructie of mini-verhaal als tekstsoort.",
+          teacherTip: "Laat leerlingen voor elke stopplaats eerst mondeling zeggen wat ze willen schrijven; dat houdt de tekstlijn helder.",
+          keywords: ["groep 5/6", "schrijven", "tekstopbouw", "begin midden slot", "stopplaatsen"]
+        }),
+        taalDocTask(GROUP_78, {
+          key: "wandel-en-vat-samen",
+          visual: "path",
+          visualHint: "Tweetallen lopen een vaste route terwijl één leerling de tekst samenvat en de ander aanvult.",
+          title: "Wandel en vat samen",
+          summary: "Leerlingen oefenen kernachtig samenvatten in spreektaal tijdens een korte looproute.",
+          duration: "10 min",
+          setup: "Gebruik een gelezen tekst of filmpje en spreek een vaste route af.",
+          goal: "Samenvatten, spreken en luisteren actief inoefenen.",
+          movementFocus: "Rustig lopen, kernachtig samenvatten en daarna aanvullen of controleren.",
+          materials: ["Geen extra materiaal", "Eventueel samenvatkaartje"],
+          steps: [
+            "Leerlingen lopen in tweetallen een vaste route.",
+            "Leerling A vat de tekst in maximaal drie zinnen samen.",
+            "Leerling B luistert en vult aan met wat nog ontbreekt.",
+            "Daarna wisselen de rollen met een tweede tekst of alinea."
+          ],
+          differentiation: "Geef een vaste samenvatstructuur: onderwerp, belangrijkste informatie en conclusie.",
+          teacherTip: "Zet vooraf een maximum aan het aantal zinnen; dan blijft de samenvatting echt kernachtig.",
+          keywords: ["groep 7/8", "samenvatten", "spreken", "luisteren", "wandelroute"]
+        }),
+        taalDocTask(GROUP_78, {
+          key: "interviewcarrousel",
+          visual: "line",
+          visualHint: "Twee rijen tegenover elkaar maken vragen stellen, antwoorden en doorschuiven direct overzichtelijk.",
+          title: "Interviewcarrousel",
+          summary: "Leerlingen oefenen vragen stellen en doorvragen in een carrousel met steeds nieuwe gesprekspartners.",
+          duration: "10-15 min",
+          setup: "Laat leerlingen in twee rijen tegenover elkaar staan en maak een set interviewvragen klaar.",
+          goal: "Mondeling taalonderwijs, luisteren en spreken oefenen.",
+          movementFocus: "Kort antwoorden, doorvragen en na elke ronde één plek doorschuiven.",
+          materials: ["Vraagkaartjes"],
+          steps: [
+            "Laat leerlingen in twee rijen tegenover elkaar staan.",
+            "De ene rij stelt een vraag en de andere rij antwoordt.",
+            "Na één minuut schuift één rij een plek door.",
+            "Herhaal dit met nieuwe vragen of vervolgvragen."
+          ],
+          differentiation: "Werk rond een thema, boek of zaakvakonderwerp voor meer inhoudelijke diepgang.",
+          teacherTip: "Model eerst hoe een goede vervolg- of doorvraag klinkt; dat tilt het gesprek meteen omhoog.",
+          keywords: ["groep 7/8", "interview", "doorvragen", "spreken", "luisteren"]
+        }),
+        taalDocTask(GROUP_78, {
+          key: "schrijfposten",
+          visual: "stations",
+          visualHint: "Verschillende schrijfposten helpen leerlingen doel, publiek, kern en slot in een compacte tekstopzet te ordenen.",
+          title: "Schrijfposten",
+          summary: "Leerlingen bouwen een korte tekstopzet op door langs schrijfposten met een eigen functie te bewegen.",
+          duration: "10-15 min",
+          setup: "Maak 3 of 4 posten zoals doel, publiek, kern en slot.",
+          goal: "Schrijven, tekstopbouw en taalbeschouwing doelgericht oefenen.",
+          movementFocus: "Van schrijfpost naar schrijfpost lopen en per post een ander tekstonderdeel bepalen.",
+          materials: ["Werkblad of schrijfkaart"],
+          steps: [
+            "Leerlingen starten bij de eerste post en noteren daar het doel van hun tekst.",
+            "Bij de volgende post bepalen zij voor wie de tekst is.",
+            "Bij kern en slot schrijven zij steekwoorden of zinnen.",
+            "Aan het eind hebben zij een compacte tekstopzet."
+          ],
+          differentiation: "Gebruik verschillende tekstsoorten, zoals betoog, uitleg, verslag of e-mail.",
+          teacherTip: "Laat leerlingen hun tekstdoel steeds hardop uitspreken; dat maakt de keuzes bij de andere posten beter.",
+          keywords: ["groep 7/8", "schrijven", "tekstopbouw", "doel en publiek", "schrijfposten"]
+        })
+      ],
+      bewegend: [
+        taalDocTask(GROUP_34, {
+          key: "zinnenstraat",
+          visual: "line",
+          visualHint: "Losse woordkaartjes maken de opbouw van een zin letterlijk zichtbaar op de vloer.",
+          title: "Zinnenstraat",
+          summary: "Leerlingen voelen en zien hoe een zin is opgebouwd door woorden op volgorde in de ruimte te plaatsen.",
+          duration: "10 min",
+          setup: "Schrijf losse woordkaartjes van eenvoudige zinnen.",
+          goal: "Zinsvorming, woordvolgorde en taalbeschouwing concreet maken.",
+          movementFocus: "Op de juiste plek gaan staan en de zin daarna samen hardop lezen.",
+          materials: ["Woordkaartjes"],
+          steps: [
+            "Geef enkele leerlingen elk een woordkaartje, bijvoorbeeld ik, zie, een en kat.",
+            "De leerlingen gaan in de goede volgorde naast elkaar staan.",
+            "Lees de zin samen hardop.",
+            "Verwissel daarna bewust twee woorden en bespreek wat er misgaat."
+          ],
+          differentiation: "Laat leerlingen ontbrekende woorden toevoegen of twee zinnen vergelijken.",
+          teacherTip: "Gebruik eerst korte, heldere zinnen; zo zien leerlingen sneller wat woordvolgorde doet.",
+          keywords: ["groep 3/4", "zinsvorming", "woordvolgorde", "taalbeschouwing", "zin"]
+        }),
+        taalDocTask(GROUP_34, {
+          key: "verhaalpad-drie-stappen",
+          visual: "path",
+          visualHint: "Drie stapplaatsen in het lokaal helpen leerlingen gebeurtenissen ordenen in begin, midden en einde.",
+          title: "Verhaalpad met drie stappen",
+          summary: "Leerlingen koppelen gebeurtenissen uit een verhaal aan begin, midden of einde en gebruiken die plekken als vertelsteun.",
+          duration: "10 min",
+          setup: "Maak drie plekken in het lokaal: begin, midden en einde.",
+          goal: "Luisteren, navertellen en verhaalopbouw begrijpen.",
+          movementFocus: "Naar een stapplaats lopen en daar verwoorden waarom een gebeurtenis bij dat deel van het verhaal hoort.",
+          materials: ["Drie kaartjes of vellen papier"],
+          steps: [
+            "Vertel of lees een kort verhaal.",
+            "Laat leerlingen naar begin, midden of einde lopen als jij een gebeurtenis noemt.",
+            "Bespreek samen waarom die gebeurtenis op die plek hoort.",
+            "Laat daarna een paar leerlingen het hele verhaal navertellen met de drie stapplaatsen als steun."
+          ],
+          differentiation: "Gebruik prentenboeken of actuele themateksten voor extra herkenning.",
+          teacherTip: "Noem eerst heel duidelijke gebeurtenissen en maak de keuze daarna pas subtieler.",
+          keywords: ["groep 3/4", "verhaalopbouw", "navertellen", "begin midden einde", "luisteren"]
+        }),
+        taalDocTask(GROUP_34, {
+          key: "woordveld-in-de-ruimte",
+          visual: "corners",
+          visualHint: "Vier themahoeken helpen leerlingen woorden betekenisvol ordenen en categoriseren.",
+          title: "Woordveld in de ruimte",
+          summary: "Leerlingen plaatsen woorden in de juiste themacategorie en bouwen zo samen een concreet woordveld op.",
+          duration: "10-15 min",
+          setup: "Kies een thema en vier categorieën, bijvoorbeeld dieren, spullen, plekken en acties.",
+          goal: "Woordenschat, categoriseren en taalbeschouwing betekenisvol oefenen.",
+          movementFocus: "Naar een categoriehoek lopen en die keuze mondeling verwoorden.",
+          materials: ["Woordkaartjes", "Of alleen stemgebruik"],
+          steps: [
+            "Maak in vier hoeken van het lokaal een categorie zichtbaar.",
+            "Noem een woord of geef een kaartje aan een leerling.",
+            "De leerling loopt naar de juiste categoriehoek.",
+            "Bespreek steeds kort waarom het woord daar past."
+          ],
+          differentiation: "Laat leerlingen zelf woorden uit het thema toevoegen.",
+          teacherTip: "Gebruik eerst woorden die duidelijk bij één categorie horen en voeg daarna twijfelgevallen toe.",
+          keywords: ["groep 3/4", "woordveld", "categoriseren", "woordenschat", "thema"]
+        }),
+        taalDocTask(GROUP_56, {
+          key: "alinea-opstelling",
+          visual: "line",
+          visualHint: "Kaarten voor inleiding, kern en slot maken de bouw van een tekst zichtbaar in de ruimte.",
+          title: "Alinea-opstelling",
+          summary: "Leerlingen zien dat een tekst uit delen met een eigen functie bestaat en plaatsen ideeën op de juiste plek.",
+          duration: "10 min",
+          setup: "Maak kaartjes met inleiding, kern en slot of met losse alinea's.",
+          goal: "Tekststructuur, schrijven en lezen zichtbaar maken.",
+          movementFocus: "Op de juiste plek in de tekstlijn gaan staan en daarna de functie van dat deel benoemen.",
+          materials: ["Kaartjes"],
+          steps: [
+            "Geef drie leerlingen de kaartjes inleiding, kern en slot.",
+            "Laat hen in de goede volgorde gaan staan.",
+            "Bespreek welke informatie bij elk deel hoort.",
+            "Laat daarna andere leerlingen zinnen of ideeën bij de juiste plek brengen."
+          ],
+          differentiation: "Gebruik ook informatieve teksten met kopjes als extra uitwerking.",
+          teacherTip: "Laat leerlingen niet alleen de volgorde noemen, maar ook hardop zeggen wat de taak van elk deel is.",
+          keywords: ["groep 5/6", "alinea", "tekststructuur", "inleiding kern slot", "schrijven"]
+        }),
+        taalDocTask(GROUP_56, {
+          key: "woordweb-op-de-vloer",
+          visual: "circle",
+          visualHint: "Een kernwoord in het midden en woorden eromheen maken semantische relaties zichtbaar.",
+          title: "Woordweb op de vloer",
+          summary: "Leerlingen bouwen samen een mondeling woordweb op rond een themawoord.",
+          duration: "10 min",
+          setup: "Leg in het midden een kernwoord neer.",
+          goal: "Woordenschat, semantische relaties en thematisch werken zichtbaar maken.",
+          movementFocus: "Woorden rond een kernwoord plaatsen en hardop benoemen welke relatie ze hebben.",
+          materials: ["Woordkaartjes", "Of post-its"],
+          steps: [
+            "Kies een kernwoord uit het thema, bijvoorbeeld vulkaan of uitvinding.",
+            "Leerlingen krijgen om de beurt een woordkaartje en leggen of staan het op de juiste plek rond het kernwoord.",
+            "Bespreek of het woord hoort bij eigenschap, onderdeel, handeling of voorbeeld.",
+            "Bouw zo samen een mondeling woordweb."
+          ],
+          differentiation: "Laat leerlingen zelf ontbrekende woorden toevoegen of relatiestippen benoemen.",
+          teacherTip: "Vraag steeds expliciet wat de relatie met het kernwoord is; dan blijft het woordweb inhoudelijk sterk.",
+          keywords: ["groep 5/6", "woordweb", "woordenschat", "semantische relaties", "thema"]
+        }),
+        taalDocTask(GROUP_56, {
+          key: "signaalwoorden-route",
+          visual: "corners",
+          visualHint: "Signaalwoorden worden gekoppeld aan de juiste tekstverbandplek in het lokaal.",
+          title: "Signaalwoorden-route",
+          summary: "Leerlingen lopen met een signaalwoord naar het juiste tekstverband en gebruiken het daarna in een zin.",
+          duration: "10 min",
+          setup: "Maak plekken in het lokaal voor tijd, oorzaak-gevolg, opsomming en tegenstelling.",
+          goal: "Lezen, schrijven, tekstverbanden en taalbeschouwing oefenen.",
+          movementFocus: "Naar de juiste tekstverbandplek lopen en hardop uitleggen waarom dat signaalwoord daar hoort.",
+          materials: ["Kaartjes met signaalwoorden"],
+          steps: [
+            "Geef een leerling een kaartje met een signaalwoord zoals daarna, omdat, maar of ten eerste.",
+            "De leerling loopt naar de juiste tekstverbandplek.",
+            "Laat hem of haar hardop uitleggen waarom het signaalwoord daar hoort.",
+            "Gebruik daarna het woord in een voorbeeldzin."
+          ],
+          differentiation: "Laat tweetallen zelf een zin maken met het signaalwoord als verdiepingsstap.",
+          teacherTip: "Houd de vier verbanden zichtbaar in dezelfde taal als je in de methode gebruikt.",
+          keywords: ["groep 5/6", "signaalwoorden", "tekstverbanden", "taalbeschouwing", "schrijven"]
+        }),
+        taalDocTask(GROUP_78, {
+          key: "argumentenlijn",
+          visual: "line",
+          visualHint: "Een lijn met standpunt, argument en voorbeeld maakt de opbouw van een overtuigende redenering zichtbaar.",
+          title: "Argumentenlijn",
+          summary: "Leerlingen ordenen standpunt, argumenten en voorbeelden fysiek op een lijn.",
+          duration: "10-15 min",
+          setup: "Maak kaartjes met standpunt, argumenten en voorbeelden.",
+          goal: "Argumenteren, schrijven en spreken zichtbaar structureren.",
+          movementFocus: "De juiste plaats in de redenering innemen en toelichten waarom dat onderdeel daar hoort.",
+          materials: ["Kaartjes"],
+          steps: [
+            "Leg op de vloer een volgorde van drie plekken: standpunt, argument en voorbeeld.",
+            "Leerlingen krijgen kaartjes en gaan op de juiste plek staan.",
+            "Bespreek samen hoe een overtuigende redenering is opgebouwd.",
+            "Laat daarna kleine groepjes zelf een nieuwe argumentenlijn maken."
+          ],
+          differentiation: "Laat leerlingen sterke en zwakke argumenten vergelijken in een extra ronde.",
+          teacherTip: "Vraag steeds wat er misgaat als een voorbeeld voor het standpunt komt; zo zien leerlingen de structuur beter.",
+          keywords: ["groep 7/8", "argumenteren", "standpunt", "voorbeeld", "redenering"]
+        }),
+        taalDocTask(GROUP_78, {
+          key: "tekstsoorten-hoeken",
+          visual: "corners",
+          visualHint: "Vier hoeken maken verschillen tussen tekstsoorten zichtbaar via fragmenten en kenmerken.",
+          title: "Tekstsoorten-hoeken",
+          summary: "Leerlingen koppelen fragmenten aan de juiste tekstsoort en benoemen daarna de kenmerken.",
+          duration: "10 min",
+          setup: "Label hoeken met bijvoorbeeld verhaal, instructie, nieuwsbericht en meningstekst.",
+          goal: "Lezen, schrijven en taalbeschouwing rond tekstsoorten oefenen.",
+          movementFocus: "Naar een tekstsoorthoek lopen en vervolgens kenmerken van die tekstsoort benoemen.",
+          materials: ["Tekstkaartjes of korte fragmenten"],
+          steps: [
+            "Lees een fragment of geef een kaartje aan een leerling.",
+            "De leerling loopt naar de hoek van de passende tekstsoort.",
+            "Bespreek welke kenmerken daarbij horen.",
+            "Vergelijk twee tekstsoorten kort met elkaar."
+          ],
+          differentiation: "Laat leerlingen zelf tekstkenmerken toevoegen bij de juiste hoek.",
+          teacherTip: "Gebruik fragmenten die nét niet te makkelijk zijn; dan moeten leerlingen echt op kenmerken letten.",
+          keywords: ["groep 7/8", "tekstsoorten", "taalbeschouwing", "lezen", "schrijven"]
+        }),
+        taalDocTask(GROUP_78, {
+          key: "presentatiepad",
+          visual: "path",
+          visualHint: "Vaste stapplaatsen laten leerlingen een presentatie logisch en fysiek doorlopen.",
+          title: "Presentatiepad",
+          summary: "Leerlingen ervaren de opbouw van een mondelinge presentatie door langs vaste stapplaatsen te lopen.",
+          duration: "10 minuten",
+          setup: "Maak drie tot vier stapplaatsen: opening, kernpunt 1, kernpunt 2 en afsluiting.",
+          goal: "Presenteren, mondeling taalonderwijs en structureren concreet oefenen.",
+          movementFocus: "Langs de presentatievolgorde lopen en per plek hardop het juiste onderdeel uitspreken.",
+          materials: ["Vloerkaartjes"],
+          steps: [
+            "Leerlingen lopen tijdens het oefenen langs de vaste stapplaatsen.",
+            "Bij elke plek spreken zij het bijbehorende deel van hun presentatie uit.",
+            "Door de route ervaren zij de opbouw van hun verhaal.",
+            "Na afloop geven maatjes feedback op duidelijkheid en volgorde."
+          ],
+          differentiation: "Gebruik ook één extra plek voor voorbeeld of bron als verdieping.",
+          teacherTip: "Laat leerlingen hun presentatie eerst met steekwoorden oefenen en pas daarna zonder steun.",
+          keywords: ["groep 7/8", "presenteren", "mondeling taalonderwijs", "opbouw", "presentatiepad"]
+        })
+      ]
+    },
     spelling: {
       energizers: [
         spellingDocTask(GROUP_34, {
@@ -1402,6 +1983,33 @@ function buildLibrary() {
 }
 
 const taskPrintProfiles = {
+  "woord-of-geen-woord": { enabled: false },
+  "zin-of-geen-zin": { enabled: false },
+  "klank-en-gebaar": { enabled: false },
+  "waar-hoort-het-woord": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  "feit-of-mening": { enabled: false },
+  synoniemensprint: { enabled: false },
+  "standpunt-in-de-ruimte": { enabled: false },
+  "kernwoord-kiezen": { enabled: false },
+  "waar-twijfel-niet-waar": { enabled: false },
+  "loopdictee-woordenschat": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: true, includeTeacherSheets: true },
+  "praatmaatjes-in-beweging": { enabled: false },
+  verhaalestafette: { enabled: false },
+  "loopdictee-kernzinnen": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: true, includeTeacherSheets: true },
+  "vraag-en-antwoordwandeling": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  "schrijfronde-met-stopplaatsen": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: true },
+  "wandel-en-vat-samen": { enabled: false },
+  interviewcarrousel: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  schrijfposten: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: true },
+  zinnenstraat: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  "verhaalpad-drie-stappen": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  "woordveld-in-de-ruimte": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  "alinea-opstelling": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  "woordweb-op-de-vloer": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  "signaalwoorden-route": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  argumentenlijn: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  "tekstsoorten-hoeken": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  presentatiepad: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
   "klap-stamp-of-stil": { enabled: false },
   "waar-hoor-je-de-klank": { enabled: false },
   "letterflits-in-beweging": { enabled: false },
@@ -1565,7 +2173,7 @@ function buildCardIntro(subject, moment, group, title, cardCount, printProfile) 
       ? "De inhoud volgt de lijn van Staal 2 met herkenbare categorieen, klankgroepen en waar nodig het werkwoordschema."
       : subject.id === "rekenen"
         ? "De inhoud sluit aan bij Getal & Ruimte Junior met automatiseren, rekentaal, vaste strategieen en duidelijke modellen."
-        : "De inhoud sluit aan bij de taaldoelen van deze werkvorm.";
+        : "De inhoud sluit aan bij Staal 2 taal met spreken, luisteren, woordenschat, tekstopbouw en tekstverbanden.";
 
   const distributionLine = printProfile.expandWorkCardsToClassSize
     ? `Je krijgt ${cardCount} leerlingkaartjes, passend voor een klas van ${CLASS_SIZE} leerlingen.`
@@ -1575,6 +2183,86 @@ function buildCardIntro(subject, moment, group, title, cardCount, printProfile) 
 }
 
 function buildCardNote(subjectId, groupId, visual, taskKey) {
+  if (taskKey === "loopdictee-woordenschat" || taskKey === "loopdictee-kernzinnen") {
+    return [
+      "Hang de stroken verspreid op en laat de loper steeds maar 1 strook tegelijk ophalen.",
+      "Laat het tweetal na elke ronde hardop herhalen wat de kernzin of het woord betekent voordat ze iets opschrijven.",
+      "Gebruik de laatste ronde om samen de hoofdgedachte, het kernwoord of een voorbeeldzin te formuleren."
+    ];
+  }
+
+  if (taskKey === "waar-hoort-het-woord" || taskKey === "woordveld-in-de-ruimte" || taskKey === "tekstsoorten-hoeken") {
+    return [
+      "Print eerst de grote hoekkaarten en leg of hang daarna pas de losse woord- of fragmentkaartjes klaar.",
+      "Laat leerlingen steeds eerst kiezen en daarna in 1 volledige zin uitleggen waarom die plek klopt.",
+      "Gebruik het middenvak of een aparte twijfelplek voor woorden of fragmenten waarover je samen wilt praten."
+    ];
+  }
+
+  if (taskKey === "zinnenstraat") {
+    return [
+      "Print de woordkaartjes per zinset in dezelfde kleur zodat leerlingen sneller een complete zin kunnen bouwen.",
+      "Laat de klas de zin eerst hardop lezen en verwissel daarna bewust 2 kaartjes om woordvolgorde te bespreken.",
+      "Gebruik een extra ronde waarin leerlingen zelf een ontbrekend woord toevoegen."
+    ];
+  }
+
+  if (taskKey === "verhaalpad-drie-stappen") {
+    return [
+      "Leg begin, midden en einde zichtbaar op de vloer en houd de gebeurteniskaarten apart in je hand of op een stapel.",
+      "Laat leerlingen na hun keuze uitleggen waarom de gebeurtenis juist aan het begin, in het midden of aan het einde hoort.",
+      "Gebruik de drie stapplaatsen daarna als steun om het hele verhaal na te vertellen."
+    ];
+  }
+
+  if (taskKey === "vraag-en-antwoordwandeling" || taskKey === "interviewcarrousel") {
+    return [
+      "Print de vraagkaartjes groot genoeg zodat tweetallen ze al lopend of staand kunnen lezen.",
+      "Spreek af dat het antwoord altijd in een volledige zin begint en dat de luisteraar 1 vervolgvraag stelt.",
+      "Laat tweetallen aan het einde 1 sterk antwoord kiezen om klassikaal te delen."
+    ];
+  }
+
+  if (taskKey === "schrijfronde-met-stopplaatsen" || taskKey === "schrijfposten") {
+    return [
+      "Leg de postkaarten in vaste volgorde neer en laat leerlingen steeds alleen op die ene stap focussen.",
+      "Gebruik de schrijfhulpkaartjes pas na de eerste denktijd, zodat leerlingen eerst zelf formuleren.",
+      "Lees aan het einde de opbouw terug: begin, kern en slot of doel, publiek, kern en slot."
+    ];
+  }
+
+  if (taskKey === "alinea-opstelling") {
+    return [
+      "Leg eerst de grote kaarten inleiding, kern en slot neer en voeg daarna pas de losse ideekaarten toe.",
+      "Laat leerlingen bij elke kaart benoemen welke functie dat deel in de tekst heeft.",
+      "Gebruik een tweede ronde waarin leerlingen zelf nog een passende zin bij de juiste plek brengen."
+    ];
+  }
+
+  if (taskKey === "woordweb-op-de-vloer") {
+    return [
+      "Leg het kernwoord in het midden en plaats daarna de categorielabels er duidelijk omheen.",
+      "Laat leerlingen hun kaartje neerleggen en hardop benoemen of het een eigenschap, onderdeel, handeling of voorbeeld is.",
+      "Voeg pas daarna eigen woorden van leerlingen toe, zodat het basiswoordweb eerst stevig staat."
+    ];
+  }
+
+  if (taskKey === "signaalwoorden-route") {
+    return [
+      "Print zowel de tekstverband-plekken als de losse signaalwoorden en houd de voorbeeldzinnen apart als tweede ronde.",
+      "Laat leerlingen eerst het tekstverband kiezen en daarna een voorbeeldzin maken met hetzelfde signaalwoord.",
+      "Bespreek steeds welk verband het signaalwoord zichtbaar maakt: tijd, oorzaak-gevolg, opsomming of tegenstelling."
+    ];
+  }
+
+  if (taskKey === "argumentenlijn" || taskKey === "presentatiepad") {
+    return [
+      "Leg de stapkaarten in vaste volgorde neer en laat leerlingen pas daarna hun eigen kaartje of spreektekst koppelen.",
+      "Gebruik steeds dezelfde volgorde hardop: standpunt - argument - voorbeeld of opening - kern - afsluiting.",
+      "Laat maatjes aan het einde kort feedback geven op duidelijkheid, volgorde en compleetheid."
+    ];
+  }
+
   if (taskKey === "zoek-je-spellingmaatje" || taskKey === "zoek-de-juiste-spellingpartner") {
     return [
       "Geef iedere leerling één kaart en laat leerlingen pas stoppen als zij hun match of matchgroep kunnen uitleggen.",
@@ -1748,6 +2436,22 @@ function buildCardNote(subjectId, groupId, visual, taskKey) {
       "Laat leerlingen niet alleen een antwoord kiezen, maar ook de strategie of rekentaal erbij noemen.",
       "Gebruik steeds 1 duidelijke aanpak per ronde; dat past bij de opbouw van Getal & Ruimte Junior.",
       "Leg modelkaarten zichtbaar neer als geheugensteun, bijvoorbeeld getallenlijn, verhoudingstabel of rekenschema."
+    ];
+  }
+
+  if (subjectId === "taal" && groupId === GROUP_34) {
+    return [
+      "Laat leerlingen nieuwe woorden en zinnen steeds eerst hardop zeggen voordat zij lopen, leggen of kiezen.",
+      "Gebruik korte praatsteunen zoals wat betekent dit, waar hoort dit en maak een zin om taal en beweging te verbinden.",
+      "Houd de kaartsets klein en overzichtelijk zodat de aandacht bij woordenschat, zinsbouw en verhaalvolgorde blijft."
+    ];
+  }
+
+  if (subjectId === "taal") {
+    return [
+      "Laat leerlingen steeds in volledige zinnen antwoorden en kort uitleggen waarom een kaart, kernwoord of plek past.",
+      "Gebruik taalsteun uit de lijn van Staal 2 zoals kernzin, signaalwoord, tekstdeel, standpunt of argument.",
+      "Kies liever 1 duidelijke taalhandeling per ronde dan te veel doelen tegelijk."
     ];
   }
 
@@ -2250,11 +2954,205 @@ function getCardPackOverrides() {
       card("Rekentaal", "dichterbij of verder", "Laat leerlingen hun positie verklaren.")
     ]
   ),
+  ...buildDocTaalCardOverrides(),
   ...buildDocSpellingCardOverrides(),
   ...buildDocRekenenCardOverrides()
   };
 
   return getCardPackOverrides.cache;
+}
+
+function buildDocTaalCardOverrides() {
+  return {
+    "waar-hoort-het-woord": [
+      card("Hoekkaart", "Beroep", "Hang deze hoekkaart zichtbaar op."),
+      card("Hoekkaart", "Plaats", "Hang deze hoekkaart zichtbaar op."),
+      card("Hoekkaart", "Voorwerp", "Hang deze hoekkaart zichtbaar op."),
+      card("Hoekkaart", "Handeling", "Hang deze hoekkaart zichtbaar op."),
+      ...cardSeries(
+        "Woordkaart",
+        ["bakker", "bibliotheek", "schaar", "springen", "dierenarts", "speelplein", "vergrootglas", "schrijven"],
+        "Lees het woord en laat leerlingen naar de juiste categoriehoek lopen."
+      )
+    ],
+    "loopdictee-woordenschat": cardSeries(
+      "Woordkaart",
+      ["boerderij", "tractor", "regenlaars", "dierenarts", "schuur", "weiland", "voeren", "modder"],
+      "Hang deze woordkaart op voor het loopdictee. Laat tweetallen het woord uitspreken, de betekenis benoemen en er een zin mee maken."
+    ),
+    "loopdictee-kernzinnen": cardSeries(
+      "Kernzin",
+      [
+        "Een vulkaan is een berg met een opening.",
+        "Diep in de aarde zit heet gesteente.",
+        "Bij een uitbarsting komen lava en as naar buiten.",
+        "Niet alle vulkanen zijn altijd actief.",
+        "Onderzoekers meten signalen om gevaar te voorspellen.",
+        "Daarom wonen mensen rond een vulkaan extra alert."
+      ],
+      "Hang deze kernzin op voor het loopdictee en laat tweetallen samen de hoofdgedachte formuleren."
+    ),
+    "vraag-en-antwoordwandeling": cardSeries(
+      "Vraagkaart",
+      [
+        "Wat is het belangrijkste woord uit dit onderwerp?",
+        "Wat gebeurde eerst in de tekst of het verhaal?",
+        "Waarom gebeurde dat volgens jou?",
+        "Welk voorbeeld past goed bij dit onderwerp?",
+        "Welke zin vat dit stukje het best samen?",
+        "Wat zou je nog willen weten over dit onderwerp?",
+        "Welke oorzaak hoort bij deze situatie?",
+        "Hoe leg jij dit begrip uit aan een klasgenoot?"
+      ],
+      "Leg deze vraagkaart op de route. Laat het maatje antwoorden in een volledige zin en laat de ander 1 vervolgvraag stellen."
+    ),
+    "schrijfronde-met-stopplaatsen": [
+      card("Stopkaart", "Begin", "Leg deze kaart bij de eerste schrijfplek."),
+      card("Stopkaart", "Midden", "Leg deze kaart bij de tweede schrijfplek."),
+      card("Stopkaart", "Slot", "Leg deze kaart bij de derde schrijfplek."),
+      card("Stopkaart", "Controle", "Gebruik deze kaart bij het teruglezen."),
+      card("Schrijfhulp", "Schrijf eerst waar je tekst over gaat.", "Gebruik deze prompt bij begin."),
+      card("Schrijfhulp", "Voeg in het midden een voorbeeld of uitleg toe.", "Gebruik deze prompt bij midden."),
+      card("Schrijfhulp", "Rond af met een passende laatste zin.", "Gebruik deze prompt bij slot."),
+      card("Schrijfhulp", "Lees je tekst terug: klopt de volgorde?", "Gebruik deze prompt bij controle.")
+    ],
+    interviewcarrousel: cardSeries(
+      "Interviewvraag",
+      [
+        "Welk boek of onderwerp vind jij interessant en waarom?",
+        "Welke vraag zou jij nog aan de hoofdpersoon stellen?",
+        "Wat is volgens jou de belangrijkste informatie uit deze tekst?",
+        "Welk voorbeeld maakt jouw uitleg sterker?",
+        "Wanneer verander jij van mening over een onderwerp?",
+        "Hoe merk je dat iemand goed luistert?",
+        "Welke samenvattende zin past bij dit thema?",
+        "Welk woord uit dit onderwerp wil jij onthouden?"
+      ],
+      "Gebruik deze vraagkaart in de carrousel. Laat de luisteraar ook 1 doorvraag stellen."
+    ),
+    schrijfposten: [
+      card("Postkaart", "Doel", "Leg deze post als eerste neer."),
+      card("Postkaart", "Publiek", "Leg deze post als tweede neer."),
+      card("Postkaart", "Kern", "Leg deze post als derde neer."),
+      card("Postkaart", "Slot", "Leg deze post als vierde neer."),
+      card("Schrijfhulp", "Waarom schrijf je deze tekst?", "Gebruik bij post doel."),
+      card("Schrijfhulp", "Voor wie schrijf je deze tekst?", "Gebruik bij post publiek."),
+      card("Schrijfhulp", "Welke 2 kernpunten moeten erin?", "Gebruik bij post kern."),
+      card("Schrijfhulp", "Hoe sluit je duidelijk af?", "Gebruik bij post slot.")
+    ],
+    zinnenstraat: [
+      card("Zinset 1", "ik", "Leg deze kaart vooraan in zinset 1."),
+      card("Zinset 1", "zie", "Leg deze kaart na het onderwerp."),
+      card("Zinset 1", "een", "Leg deze kaart als lidwoord."),
+      card("Zinset 1", "kat", "Leg deze kaart achteraan in zinset 1."),
+      card("Zinset 2", "Noor", "Leg deze kaart vooraan in zinset 2."),
+      card("Zinset 2", "leest", "Gebruik als persoonsvorm."),
+      card("Zinset 2", "in", "Gebruik als tussenwoord."),
+      card("Zinset 2", "de klas", "Leg deze woordgroep aan het einde."),
+      card("Zinset 3", "wij", "Leg deze kaart vooraan in zinset 3."),
+      card("Zinset 3", "lopen", "Gebruik als persoonsvorm."),
+      card("Zinset 3", "naar", "Gebruik als verbindend woord."),
+      card("Zinset 3", "buiten", "Leg deze kaart achteraan in zinset 3.")
+    ],
+    "verhaalpad-drie-stappen": [
+      card("Stapkaart", "Begin", "Leg deze kaart op de eerste plek."),
+      card("Stapkaart", "Midden", "Leg deze kaart op de tweede plek."),
+      card("Stapkaart", "Einde", "Leg deze kaart op de derde plek."),
+      card("Gebeurtenis", "Noor trekt haar laarzen aan.", "Laat leerlingen bepalen waar dit in het verhaal hoort."),
+      card("Gebeurtenis", "De klas loopt naar het bos.", "Laat leerlingen bepalen waar dit in het verhaal hoort."),
+      card("Gebeurtenis", "De kinderen horen geritsel in de struiken.", "Laat leerlingen bepalen waar dit in het verhaal hoort."),
+      card("Gebeurtenis", "Ze vinden een leeg nest.", "Laat leerlingen bepalen waar dit in het verhaal hoort."),
+      card("Gebeurtenis", "Het begint zacht te regenen.", "Laat leerlingen bepalen waar dit in het verhaal hoort."),
+      card("Gebeurtenis", "Iedereen loopt blij terug naar school.", "Laat leerlingen bepalen waar dit in het verhaal hoort.")
+    ],
+    "woordveld-in-de-ruimte": [
+      card("Categorie", "Dieren", "Hang deze categoriekaart zichtbaar op."),
+      card("Categorie", "Spullen", "Hang deze categoriekaart zichtbaar op."),
+      card("Categorie", "Plekken", "Hang deze categoriekaart zichtbaar op."),
+      card("Categorie", "Acties", "Hang deze categoriekaart zichtbaar op."),
+      ...cardSeries(
+        "Woordkaart",
+        ["schaap", "tractor", "stal", "rennen", "koe", "kruiwagen", "weiland", "voeren"],
+        "Laat leerlingen dit woord bij de juiste themacategorie leggen of brengen."
+      )
+    ],
+    "alinea-opstelling": [
+      card("Tekstdeel", "Inleiding", "Leg deze kaart vooraan in de opstelling."),
+      card("Tekstdeel", "Kern", "Leg deze kaart in het midden."),
+      card("Tekstdeel", "Slot", "Leg deze kaart achteraan."),
+      card("Ideekaart", "Hier vertel je waar de tekst over gaat.", "Past bij de inleiding."),
+      card("Ideekaart", "Hier geef je uitleg en voorbeelden.", "Past bij de kern."),
+      card("Ideekaart", "Hier rond je af of trek je een conclusie.", "Past bij het slot."),
+      card("Zinidee", "De schooltuin wordt steeds groener.", "Laat leerlingen kiezen waar deze zin het best past."),
+      card("Zinidee", "Veel kinderen helpen met zaaien en water geven.", "Laat leerlingen kiezen waar deze zin het best past."),
+      card("Zinidee", "Daarom is de schooltuin een fijne leerplek.", "Laat leerlingen kiezen waar deze zin het best past.")
+    ],
+    "woordweb-op-de-vloer": [
+      card("Kernwoord", "vulkaan", "Leg dit woord in het midden van het woordweb."),
+      card("Relatie", "eigenschap", "Leg deze labelkaart rond het kernwoord."),
+      card("Relatie", "onderdeel", "Leg deze labelkaart rond het kernwoord."),
+      card("Relatie", "handeling", "Leg deze labelkaart rond het kernwoord."),
+      card("Relatie", "voorbeeld", "Leg deze labelkaart rond het kernwoord."),
+      ...cardSeries(
+        "Woordkaart",
+        ["heet", "gevaarlijk", "krater", "lava", "uitbarsten", "roken", "berg", "as"],
+        "Laat leerlingen dit woord koppelen aan de juiste plek in het woordweb."
+      )
+    ],
+    "signaalwoorden-route": [
+      card("Plekkaart", "Tijd", "Hang deze kaart bij de plek voor tijd."),
+      card("Plekkaart", "Oorzaak-gevolg", "Hang deze kaart bij de plek voor oorzaak-gevolg."),
+      card("Plekkaart", "Opsomming", "Hang deze kaart bij de plek voor opsomming."),
+      card("Plekkaart", "Tegenstelling", "Hang deze kaart bij de plek voor tegenstelling."),
+      ...cardSeries(
+        "Signaalwoord",
+        ["daarna", "eerst", "omdat", "daardoor", "ten eerste", "ook", "maar", "toch"],
+        "Laat leerlingen het signaalwoord naar het juiste tekstverband brengen en er daarna een voorbeeldzin mee maken."
+      )
+    ],
+    argumentenlijn: [
+      card("Stapkaart", "Standpunt", "Leg deze kaart op de eerste plek van de lijn."),
+      card("Stapkaart", "Argument", "Leg deze kaart op de tweede plek van de lijn."),
+      card("Stapkaart", "Voorbeeld", "Leg deze kaart op de derde plek van de lijn."),
+      card("Kaartset A", "Standpunt: iedere leerling zou buiten mogen lezen.", "Laat leerlingen deze kaart op de juiste plek zetten."),
+      card("Kaartset A", "Argument: buiten lezen geeft meer rust en frisse lucht.", "Laat leerlingen deze kaart op de juiste plek zetten."),
+      card("Kaartset A", "Voorbeeld: op het plein leest onze klas vaak langer geconcentreerd.", "Laat leerlingen deze kaart op de juiste plek zetten."),
+      card("Kaartset B", "Standpunt: telefoons horen niet mee op schoolreis.", "Laat leerlingen deze kaart op de juiste plek zetten."),
+      card("Kaartset B", "Argument: zonder telefoon let je beter op wat je ziet en hoort.", "Laat leerlingen deze kaart op de juiste plek zetten."),
+      card("Kaartset B", "Voorbeeld: vorig jaar onthielden leerlingen de rondleiding beter zonder scherm.", "Laat leerlingen deze kaart op de juiste plek zetten.")
+    ],
+    "tekstsoorten-hoeken": [
+      card("Hoekkaart", "Verhaal", "Hang deze hoekkaart zichtbaar op."),
+      card("Hoekkaart", "Instructie", "Hang deze hoekkaart zichtbaar op."),
+      card("Hoekkaart", "Nieuwsbericht", "Hang deze hoekkaart zichtbaar op."),
+      card("Hoekkaart", "Meningstekst", "Hang deze hoekkaart zichtbaar op."),
+      ...cardSeries(
+        "Fragment",
+        [
+          "Gisteren vond Noor een sleutel onder de bank.",
+          "Pak eerst een glas en vul het met water.",
+          "De school opent volgende week een nieuwe leestuin.",
+          "Ik vind dat elke klas meer buitenles moet krijgen.",
+          "Daarna liep de hond ineens het bos in.",
+          "Roer de verf eerst goed door.",
+          "Volgens de directeur doen 200 kinderen mee.",
+          "Mijn eerste argument is dat bewegen helpt om beter te leren."
+        ],
+        "Lees of geef dit fragment en laat leerlingen naar de passende tekstsoorthoek lopen."
+      )
+    ],
+    presentatiepad: [
+      card("Stapkaart", "Opening", "Leg deze kaart aan het begin van het presentatiepad."),
+      card("Stapkaart", "Kernpunt 1", "Leg deze kaart als tweede stap."),
+      card("Stapkaart", "Kernpunt 2", "Leg deze kaart als derde stap."),
+      card("Stapkaart", "Voorbeeld", "Leg deze kaart als extra stap of bronmoment."),
+      card("Stapkaart", "Afsluiting", "Leg deze kaart aan het einde van het pad."),
+      card("Spreekhulp", "Stel jezelf en je onderwerp kort voor.", "Gebruik bij de opening."),
+      card("Spreekhulp", "Noem hier je eerste belangrijke punt.", "Gebruik bij kernpunt 1."),
+      card("Spreekhulp", "Noem hier een voorbeeld of bron.", "Gebruik bij de voorbeeldstap."),
+      card("Spreekhulp", "Sluit af met je belangrijkste boodschap.", "Gebruik bij de afsluiting.")
+    ]
+  };
 }
 
 function buildDocSpellingCardOverrides() {
@@ -2776,14 +3674,34 @@ function getCardFamily(subjectId, taskKey, visual) {
   const key = normalize(taskKey);
 
   if (subjectId === "taal") {
-    if (key.includes("letterestafette")) return "taal_estafette";
-    if (key.includes("rijmren")) return "taal_keuze";
-    if (key.includes("vertelbal") || key.includes("praatcarrousel") || key.includes("spreekspoor")) return "taal_praat";
-    if (key.includes("themawoord")) return "taal_themakaarten";
-    if (key.includes("prentenloopdictee")) return "taal_dictaat";
-    if (key.includes("luisterhoeken")) return "taal_hoeken";
-    if (key.includes("levendezinnen")) return "taal_lijn";
-    if (key.includes("verhaalpad") || key.includes("argumentencircuit") || key.includes("kernwoordstations")) return "taal_route";
+    if (key.includes("estafette")) return "taal_estafette";
+    if (
+      key.includes("woord-of-geen-woord") ||
+      key.includes("zin-of-geen-zin") ||
+      key.includes("klank-en-gebaar") ||
+      key.includes("feit-of-mening") ||
+      key.includes("synoniemensprint") ||
+      key.includes("kernwoord-kiezen")
+    ) {
+      return "taal_keuze";
+    }
+    if (
+      key.includes("praatmaatjes") ||
+      key.includes("vraag-en-antwoord") ||
+      key.includes("interview") ||
+      key.includes("wandel-en-vat-samen")
+    ) {
+      return "taal_praat";
+    }
+    if (key.includes("woordveld") || key.includes("woordweb") || key.includes("waar-hoort-het-woord")) return "taal_themakaarten";
+    if (key.includes("loopdictee")) return "taal_dictaat";
+    if (key.includes("tekstsoorten") || key.includes("hoeken")) return "taal_hoeken";
+    if (key.includes("zinnenstraat") || key.includes("alinea-opstelling") || key.includes("argumentenlijn") || key.includes("standpunt")) {
+      return "taal_lijn";
+    }
+    if (key.includes("verhaalpad") || key.includes("signaalwoorden-route") || key.includes("presentatiepad") || key.includes("schrijfposten")) {
+      return "taal_route";
+    }
     return visual === "dictation" ? "taal_dictaat" : "taal_praat";
   }
 
@@ -2949,6 +3867,59 @@ function getExpansionCards(subjectId, groupId, family, taskKey, title) {
 }
 
 function getMethodWorkCards(subjectId, groupId) {
+  if (subjectId === "taal" && groupId === GROUP_34) {
+    return [
+      card("Staal 2 taal", "Noem een themawoord en leg uit wat het betekent.", ""),
+      card("Staal 2 taal", "Maak een zin met: boerderij.", ""),
+      card("Staal 2 taal", "Maak een zin met: regenlaars.", ""),
+      card("Staal 2 taal", "Welke gebeurtenis hoort aan het begin van het verhaal?", ""),
+      card("Staal 2 taal", "Welke gebeurtenis hoort aan het einde van het verhaal?", ""),
+      card("Praatzin", "Ik denk dat dit hoort bij ...", ""),
+      card("Praatzin", "Dit woord betekent ...", ""),
+      card("Praatzin", "Mijn zin is ...", ""),
+      card("Zinbouw", "Zet op volgorde: ik / zie / een / kat", ""),
+      card("Zinbouw", "Zet op volgorde: Noor / leest / in / de klas", ""),
+      card("Verhaal", "Vertel eerst wat er aan het begin gebeurt.", ""),
+      card("Verhaal", "Vertel daarna wat er in het midden gebeurt.", ""),
+      card("Verhaal", "Vertel tenslotte hoe het afloopt.", ""),
+      card("Controle", "Zeg het woord, leg het uit en gebruik het in een zin.", "")
+    ];
+  }
+
+  if (subjectId === "taal" && groupId === GROUP_56) {
+    return [
+      card("Staal 2 taal", "Welke categorie past bij dit woord?", ""),
+      card("Staal 2 taal", "Wat is het kernwoord van dit stukje?", ""),
+      card("Staal 2 taal", "Welke zin is de kernzin?", ""),
+      card("Staal 2 taal", "Geef antwoord in een volledige zin.", ""),
+      card("Staal 2 taal", "Welk signaalwoord past bij tijd?", ""),
+      card("Staal 2 taal", "Welk signaalwoord past bij oorzaak-gevolg?", ""),
+      card("Tekststructuur", "Wat hoort in de inleiding?", ""),
+      card("Tekststructuur", "Wat hoort in de kern?", ""),
+      card("Tekststructuur", "Wat hoort in het slot?", ""),
+      card("Woordweb", "Is dit een eigenschap, onderdeel, handeling of voorbeeld?", ""),
+      card("Controle", "Noem eerst de functie en leg daarna uit waarom.", ""),
+      card("Controle", "Vat het geheel samen in 1 zin.", "")
+    ];
+  }
+
+  if (subjectId === "taal") {
+    return [
+      card("Staal 2 taal", "Formuleer een duidelijk standpunt.", ""),
+      card("Staal 2 taal", "Geef 1 sterk argument.", ""),
+      card("Staal 2 taal", "Noem een voorbeeld dat je argument ondersteunt.", ""),
+      card("Staal 2 taal", "Welk tekstsoortkenmerk hoor je hier?", ""),
+      card("Staal 2 taal", "Welke kernzin vat deze alinea samen?", ""),
+      card("Staal 2 taal", "Welke tekstsoort past bij dit fragment?", ""),
+      card("Presentatie", "Hoe open je jouw presentatie sterk?", ""),
+      card("Presentatie", "Wat is je eerste kernpunt?", ""),
+      card("Presentatie", "Welk voorbeeld maakt jouw uitleg sterker?", ""),
+      card("Presentatie", "Hoe sluit je kort en duidelijk af?", ""),
+      card("Controle", "Vat jouw antwoord samen in 1 krachtige zin.", ""),
+      card("Controle", "Leg uit waarom deze opbouw logisch is.", "")
+    ];
+  }
+
   if (subjectId === "spelling" && groupId === GROUP_34) {
     return [
       card("Staal 2", "Welk categoriekaartje past bij: kat?", ""),
@@ -3103,6 +4074,10 @@ function getMethodWorkCards(subjectId, groupId) {
 }
 
 function buildMethodWorkHint(subjectId, family, taskKey, index) {
+  if (family.startsWith("taal_")) {
+    return "Gebruik deze kaart in de lijn van Staal 2 taal: spreek in volledige zinnen, benoem de functie en licht je keuze toe.";
+  }
+
   if (family === "spelling_goedfout") {
     return "Laat leerlingen goed of fout kiezen, verbeteren en de regel of categorie erbij noemen.";
   }
@@ -3137,6 +4112,10 @@ function buildMethodWorkHint(subjectId, family, taskKey, index) {
 
   if (subjectId === "spelling") {
     return "Methodekaart in de lijn van Staal 2: categorie noemen, hardop redeneren en daarna pas schrijven.";
+  }
+
+  if (subjectId === "taal") {
+    return "Methodekaart in de lijn van Staal 2 taal: gebruik kernwoorden, signaalwoorden of tekstdelen en onderbouw je keuze mondeling.";
   }
 
   if (subjectId === "rekenen") {
@@ -3285,6 +4264,33 @@ function getVisualSupportCards(visual, title) {
 }
 
 function getMethodSupportCards(subjectId, groupId, momentId) {
+  if (subjectId === "taal" && groupId === GROUP_34) {
+    return [
+      card("Methodehulp", "Woordkaart", "Print als steunkaart voor woordenschat en betekenis."),
+      card("Methodehulp", "Praatzin", "Gebruik om in volledige zinnen te antwoorden."),
+      card("Methodehulp", "Begin - midden - einde", "Gebruik als steun bij verhaalopbouw."),
+      card("Methodehulp", "Woord in een zin", "Gebruik om nieuwe woorden meteen toe te passen.")
+    ];
+  }
+
+  if (subjectId === "taal" && groupId === GROUP_56) {
+    return [
+      card("Methodehulp", "Kernzin", "Print als steunkaart bij samenvatten."),
+      card("Methodehulp", "Vraagkaart", "Gebruik bij mondelinge beurtwisselingen."),
+      card("Methodehulp", "Inleiding - kern - slot", "Gebruik als steun bij tekstopbouw."),
+      card("Methodehulp", "Signaalwoord", "Gebruik om tekstverbanden zichtbaar te maken.")
+    ];
+  }
+
+  if (subjectId === "taal") {
+    return [
+      card("Methodehulp", "Standpunt", "Gebruik als startkaart bij argumenteren."),
+      card("Methodehulp", "Argument", "Gebruik om de redenering op te bouwen."),
+      card("Methodehulp", "Tekstsoort", "Gebruik om kenmerken te benoemen."),
+      card("Methodehulp", "Presentatieschema", "Gebruik voor opening, kern en afsluiting.")
+    ];
+  }
+
   if (subjectId === "spelling" && groupId === GROUP_34) {
     return [
       card("Methodehulp", "Categoriekaart", "Print als herkenbare Staal-steunkaart."),
@@ -3352,7 +4358,7 @@ function buildPrintChecklist(subject, cards, supportCards, teacherSheets, printP
       ? "Methodehulp uit Staal 2"
       : subject.id === "rekenen"
         ? "Methodehulp uit Getal & Ruimte Junior"
-        : "Leshulp voor de opdracht";
+        : "Methodehulp uit Staal 2 taal";
 
   const checklist = [];
 
@@ -3417,6 +4423,27 @@ function getTeacherSheets(group, subject, moment, blueprint, title) {
 }
 
 function buildCardHint(subjectId, groupId, family, taskKey, index) {
+  if (
+    [
+      "waar-hoort-het-woord",
+      "woordveld-in-de-ruimte",
+      "tekstsoorten-hoeken",
+      "signaalwoorden-route",
+      "argumentenlijn",
+      "presentatiepad"
+    ].includes(taskKey)
+  ) {
+    return "Gebruik deze kaart als plek-, structuur- of inhoudskaart binnen de opdracht.";
+  }
+
+  if (["vraag-en-antwoordwandeling", "interviewcarrousel", "loopdictee-woordenschat", "loopdictee-kernzinnen"].includes(taskKey)) {
+    return "Gebruik deze kaart direct in de route, carrousel of loopronde.";
+  }
+
+  if (["zinnenstraat", "verhaalpad-drie-stappen", "alinea-opstelling", "schrijfronde-met-stopplaatsen", "schrijfposten"].includes(taskKey)) {
+    return "Leg deze kaart op de vloer of bij een vaste post in de juiste volgorde.";
+  }
+
   if (taskKey === "luisterhoeken" || taskKey === "regelhoeken" || taskKey === "rekenhoekenspel") {
     return "Hang deze kaart zichtbaar in een hoek of vak.";
   }
@@ -4408,6 +5435,12 @@ function renderIllustration(task, compact) {
 }
 
 function renderIllustrationScene(task, subjectAccent, momentAccent, stroke) {
+  const taskSpecificScene = renderTaskSpecificIllustration(task, subjectAccent, momentAccent, stroke);
+
+  if (taskSpecificScene) {
+    return taskSpecificScene;
+  }
+
   if (task.visual === "relay") {
     return `
       ${renderZone(24, 74, 78, 44, "START", "#ffffff", stroke)}
@@ -4596,10 +5629,766 @@ function renderIllustrationScene(task, subjectAccent, momentAccent, stroke) {
   `;
 }
 
-function renderZone(x, y, width, height, label, fill, stroke) {
+function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, stroke) {
+  const key = task.key;
+
+  if (
+    [
+      "woord-of-geen-woord",
+      "zin-of-geen-zin",
+      "klank-en-gebaar",
+      "feit-of-mening",
+      "synoniemensprint",
+      "kernwoord-kiezen",
+      "klap-stamp-of-stil",
+      "waar-hoor-je-de-klank",
+      "letterflits-in-beweging",
+      "waar-of-niet-waar-spelling",
+      "spellingsprint",
+      "waar-of-niet-waar-werkwoorden",
+      "spellingscan-in-beweging",
+      "waar-of-niet-waar-34",
+      "klap-als-het-klopt",
+      "waar-niet-waar-bovenbouw"
+    ].includes(key)
+  ) {
+    const jumpPresets = {
+      "woord-of-geen-woord": { prompt: "WOORD?", actions: ["WOORD", "GEEN", "LEG UIT"] },
+      "zin-of-geen-zin": { prompt: "VOLLEDIGE ZIN?", actions: ["ZIN", "GEEN", "WAT MIST"] },
+      "klank-en-gebaar": { prompt: "HOOR JE M?", actions: ["GEBAAR", "STIL", "NOEM"] },
+      "feit-of-mening": { prompt: "FEIT OF MENING?", actions: ["FEIT", "MENING", "WAAROM"] },
+      synoniemensprint: { prompt: "WELK SYNONIEM?", actions: ["ROEP", "STOP", "WISSEL"] },
+      "kernwoord-kiezen": { prompt: "KIES KERNWOORD", actions: ["A", "B", "C"] },
+      "klap-stamp-of-stil": { prompt: "HOOR DE KLANK?", actions: ["KLAP", "STAMP", "STIL"] },
+      "waar-hoor-je-de-klank": { prompt: "WAAR ZIT DE KLANK?", actions: ["VOOR", "MIDDEN", "ACHTER"] },
+      "letterflits-in-beweging": { prompt: "WELK PATROON?", actions: ["KORT", "LANG", "DRAAI"] },
+      "waar-of-niet-waar-spelling": { prompt: "REGEL GOED?", actions: ["WAAR", "NIET", "REGEL"] },
+      spellingsprint: { prompt: "WELK WOORDTYPE?", actions: ["WEET", "REGEL", "LETTER"] },
+      "waar-of-niet-waar-werkwoorden": { prompt: "WW GOED?", actions: ["WAAR", "NIET", "REGEL"] },
+      "spellingscan-in-beweging": { prompt: "ZIN GOED?", actions: ["GOED", "FOUT", "HERSTEL"] },
+      "waar-of-niet-waar-34": { prompt: "SOM GOED?", actions: ["WAAR", "NIET", "WAAROM"] },
+      "klap-als-het-klopt": { prompt: "STELLING?", actions: ["KLAP", "STIL", "LEG UIT"] },
+      "waar-niet-waar-bovenbouw": { prompt: "RELATIE?", actions: ["WAAR", "NIET", "LEG UIT"] }
+    };
+
+    return renderChoiceJumpScene(jumpPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (["tel-en-spring", "tafels-springen"].includes(key)) {
+    const countPresets = {
+      "tel-en-spring": { prompt: "SPRING MEE", numbers: ["2", "4", "6"], note: "TELRITME" },
+      "tafels-springen": { prompt: "VOLG DE TAFEL", numbers: ["5", "10", "15"], note: "VEELVOUDEN" }
+    };
+
+    return renderCountJumpScene(countPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (key === "rekenbevries") {
+    return renderMoveStopScene(
+      { start: "BEWEEG", stop: "STOP", prompt: "8 + 6?", check: "ANTWOORD" },
+      subjectAccent,
+      momentAccent,
+      stroke
+    );
+  }
+
+  if (
+    [
+      "waar-hoort-het-woord",
+      "woordveld-in-de-ruimte",
+      "signaalwoorden-route",
+      "tekstsoorten-hoeken",
+      "hoeken-kiezen-bij-spelling",
+      "vier-hoeken-categorie-of-regel",
+      "hoeken-kiezen",
+      "keuzehoeken-rekenen"
+    ].includes(key)
+  ) {
+    const cornerPresets = {
+      "waar-hoort-het-woord": {
+        center: "KIES CATEGORIE",
+        corners: ["BEROEP", "PLAATS", "VOORWRP", "HANDEL."]
+      },
+      "woordveld-in-de-ruimte": {
+        center: "THEMAWOORD",
+        corners: ["DIEREN", "SPULLEN", "PLEKKEN", "ACTIES"]
+      },
+      "signaalwoorden-route": {
+        center: "TEKSTVERBAND",
+        corners: ["TIJD", "OORZAAK", "OPSOMM.", "TEGENST."]
+      },
+      "tekstsoorten-hoeken": {
+        center: "TEKSTSOORT",
+        corners: ["VERHAAL", "INSTRUCT.", "NIEUWS", "MENING"]
+      },
+      "hoeken-kiezen-bij-spelling": {
+        center: "KIES CATEGORIE",
+        corners: ["LUISTER", "LETTER", "REGEL", "WEET"]
+      },
+      "vier-hoeken-categorie-of-regel": {
+        center: "KIES REGEL",
+        corners: ["WW", "WEET", "LEEST.", "LEEN"]
+      },
+      "hoeken-kiezen": { center: "KIES ANTWOORD", corners: ["A", "B", "C", "D"] },
+      "keuzehoeken-rekenen": {
+        center: "KIES HOEK",
+        corners: ["BREUK", "PROCENT", "GRAFIEK", "MODEL"]
+      }
+    };
+
+    return renderCornerChoiceScene(cornerPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (
+    [
+      "loopdictee-woordenschat",
+      "loopdictee-kernzinnen",
+      "loopdictee-luisterwoorden",
+      "loopdictee-categorie-van-de-week",
+      "loopdictee-werkwoordspelling",
+      "loopdictee-rekenen"
+    ].includes(key)
+  ) {
+    const dictationPresets = {
+      "loopdictee-woordenschat": {
+        write: "ZEG + LEG UIT",
+        wall: "WOORDEN",
+        role: "LOPER",
+        tags: ["BETEK.", "ZIN"]
+      },
+      "loopdictee-kernzinnen": {
+        write: "KERNZIN",
+        wall: "TEKST",
+        role: "LOPER",
+        tags: ["SAMENVAT", "CHECK"]
+      },
+      "loopdictee-luisterwoorden": {
+        write: "HAK + SCHRIJF",
+        wall: "WOORDEN",
+        role: "LOPER",
+        tags: ["LEES", "ONTHOUD"]
+      },
+      "loopdictee-categorie-van-de-week": {
+        write: "SCHRIJF + REGEL",
+        wall: "WOORD / ZIN",
+        role: "LOPER",
+        tags: ["REGEL", "CHECK"]
+      },
+      "loopdictee-werkwoordspelling": {
+        write: "KIES WW-VORM",
+        wall: "ZINNEN",
+        role: "LOPER",
+        tags: ["TIJD", "STAM"]
+      },
+      "loopdictee-rekenen": {
+        write: "REKEN SAMEN",
+        wall: "OPGAVE",
+        role: "LOPER",
+        tags: ["ONTHOUD", "REKEN"]
+      }
+    };
+
+    return renderDictationSceneDetailed(dictationPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (["verhaalestafette", "woordkaartjes-estafette", "rekenen-estafette", "antwoordestafette"].includes(key)) {
+    const relayPresets = {
+      verhaalestafette: {
+        start: "STARTZIN",
+        team: "VERTEL VERDER",
+        rack: "VERHAAL",
+        chip: "VOLGENDE"
+      },
+      "woordkaartjes-estafette": {
+        start: "START",
+        team: "TEAM SCHRIJFT",
+        rack: "WOORDEN",
+        chip: "CATEGORIE"
+      },
+      "rekenen-estafette": {
+        start: "START",
+        team: "TEAM REKENT",
+        rack: "SOM + ANTWOORD",
+        chip: "KOPPEL"
+      },
+      antwoordestafette: {
+        start: "START",
+        team: "TEAM OVERLEGT",
+        rack: "OPGAVEN",
+        chip: "ANTWOORD"
+      }
+    };
+
+    return renderRelaySceneDetailed(relayPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (
+    ["schrijfronde-met-stopplaatsen", "schrijfposten", "categoriecircuit", "spellingcircuit-bovenbouw", "rekencircuit-56", "rekencircuit-bovenbouw"].includes(
+      key
+    )
+  ) {
+    const stationPresets = {
+      "schrijfronde-met-stopplaatsen": { stations: ["BEGIN", "MIDDEN", "SLOT"], chip: "LEES TERUG" },
+      schrijfposten: { stations: ["DOEL", "PUBLIEK", "KERN"], chip: "SLOT" },
+      categoriecircuit: { stations: ["LUISTER", "WEET", "REGEL"], chip: "WISSEL" },
+      "spellingcircuit-bovenbouw": { stations: ["WW", "LEEN", "LEEST."], chip: "CHECK" },
+      "rekencircuit-56": { stations: ["TAFELS", "BREUK", "CHECK"], chip: "DOOR" },
+      "rekencircuit-bovenbouw": { stations: ["PROCENT", "SCHAAL", "GRAFIEK"], chip: "DOOR" }
+    };
+
+    return renderStationsSceneDetailed(stationPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (
+    ["woordweb-op-de-vloer", "zoek-je-spellingmaatje", "zoek-de-juiste-spellingpartner", "zoek-iemand-die", "breuk-decimaal-procent-match"].includes(
+      key
+    )
+  ) {
+    const matchPresets = {
+      "woordweb-op-de-vloer": {
+        center: "KERNWOORD",
+        cards: ["EIGENSCH.", "ONDERDEEL", "HANDELING", "VOORBLD", "THEMA"]
+      },
+      "zoek-je-spellingmaatje": {
+        center: "ZELFDE PATROON",
+        cards: ["VIS", "PEN", "MAAN", "BOEK", "DEUR"]
+      },
+      "zoek-de-juiste-spellingpartner": {
+        center: "WOORD + REGEL",
+        cards: ["APEN", "REGEL", "VOORBLD", "GEIT", "WEET"]
+      },
+      "zoek-iemand-die": {
+        center: "MATCH",
+        cards: ["1/2", "0,5", "50%", "1/4", "25%"]
+      },
+      "breuk-decimaal-procent-match": {
+        center: "NOTATIES",
+        cards: ["1/2", "0,5", "50%", "3/4", "75%"]
+      }
+    };
+
+    return renderMatchSceneDetailed(matchPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (["praatmaatjes-in-beweging", "interviewcarrousel", "staand-flitsen", "splitsen-met-je-lichaam"].includes(key)) {
+    const duoPresets = {
+      "praatmaatjes-in-beweging": { left: "VRAAG", right: "ANTWOORD", middle: "ZEG TERUG" },
+      interviewcarrousel: { left: "VRAAG", right: "ANTWOORD", middle: "SCHUIF DOOR" },
+      "staand-flitsen": { left: "SOM", right: "ANTWOORD", middle: "OM BEURT" },
+      "splitsen-met-je-lichaam": { left: "5", right: "3", middle: "SAMEN 8" }
+    };
+
+    return renderDuoSceneDetailed(duoPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (key === "woord-bouwen-met-lichaamsletters") {
+    return renderWordBuildSceneDetailed({ letters: ["M", "A", "A", "N"], note: "BOUW HET WOORD" }, subjectAccent, momentAccent, stroke);
+  }
+
+  if (
+    [
+      "vraag-en-antwoordwandeling",
+      "wandel-en-vat-samen",
+      "presentatiepad",
+      "verhaalpad-drie-stappen",
+      "sommenwandeling",
+      "wandel-en-leg-uit",
+      "weetwoordmuur",
+      "regelroute",
+      "leestekenroute",
+      "grafiekenwandeling",
+      "schaalwandeling",
+      "foutenjacht"
+    ].includes(key)
+  ) {
+    if (key === "weetwoordmuur") {
+      return renderWallSceneDetailed(
+        { wall: ["EI", "IJ", "OU"], write: "SCHRIJF", note: "KIES WOORDBEELD" },
+        subjectAccent,
+        momentAccent,
+        stroke
+      );
+    }
+
+    if (key === "leestekenroute") {
+      return renderTextRouteSceneDetailed(
+        { strips: ["ZIN 1", "ZIN 2", "ZIN 3"], side: "?, !, ,", note: "VOEG TOE" },
+        subjectAccent,
+        momentAccent,
+        stroke
+      );
+    }
+
+    if (key === "grafiekenwandeling") {
+      return renderGraphRouteSceneDetailed(
+        { charts: ["GRAFIEK A", "GRAFIEK B", "GRAFIEK C"], prompts: ["STIJGT?", "HOOGST?"], note: "VERGELIJK" },
+        subjectAccent,
+        momentAccent,
+        stroke
+      );
+    }
+
+    if (key === "foutenjacht") {
+      return renderTextRouteSceneDetailed(
+        { strips: ["FOUT 1", "FOUT 2", "FOUT 3"], side: "HERSTEL", note: "LEG UIT" },
+        subjectAccent,
+        momentAccent,
+        stroke
+      );
+    }
+
+    const routePresets = {
+      "vraag-en-antwoordwandeling": {
+        start: "START",
+        stops: ["LEES", "ANTWOORD", "VRAAG DOOR", "WISSEL"],
+        side: "TWEETAL",
+        end: "VOLGENDE"
+      },
+      "wandel-en-vat-samen": {
+        start: "LOOP",
+        stops: ["ONDERWERP", "BELANGR.", "AANVUL", "CHECK"],
+        side: "MAATJE",
+        end: "WISSEL"
+      },
+      presentatiepad: {
+        start: "OPENING",
+        stops: ["KERN 1", "KERN 2", "VOORBLD", "AFSLUIT"],
+        side: "SPREEK",
+        end: "FEEDBACK"
+      },
+      "verhaalpad-drie-stappen": {
+        start: "VERHAAL",
+        stops: ["BEGIN", "MIDDEN", "EINDE", "VERTEL"],
+        side: "KAART",
+        end: "NAVERTEL"
+      },
+      sommenwandeling: { start: "START", stops: ["LEES", "ONTHOUD", "REKEN", "CHECK"], side: "WISBORD", end: "VOLGENDE" },
+      "wandel-en-leg-uit": { start: "LOOP", stops: ["LEG UIT", "LUISTER", "VRAAG", "WISSEL"], side: "MAATJE", end: "CHECK" },
+      regelroute: { start: "WOORD", stops: ["REGEL", "VOORBLD", "LEG UIT", "CHECK"], side: "SET", end: "KLAAR" },
+      schaalwandeling: { start: "LOOP", stops: ["MEET", "REKEN", "SCHAAL", "CHECK"], side: "MEETLINT", end: "UITKOMST" }
+    };
+
+    return renderRouteSceneDetailed(routePresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (
+    [
+      "zinnenstraat",
+      "alinea-opstelling",
+      "standpunt-in-de-ruimte",
+      "waar-twijfel-niet-waar",
+      "argumentenlijn",
+      "hakkenpad-op-de-vloer",
+      "werkwoordschema-op-de-vloer",
+      "zin-in-delen"
+    ].includes(key)
+  ) {
+    const floorPresets = {
+      zinnenstraat: { steps: ["IK", "ZIE", "EEN", "KAT"], note: "LEES DE ZIN" },
+      "alinea-opstelling": { steps: ["INLEID.", "KERN", "SLOT"], note: "TEKSTDELEN" },
+      "standpunt-in-de-ruimte": { steps: ["EENS", "TWIJFEL", "ONEENS"], note: "KIES POSITIE" },
+      "waar-twijfel-niet-waar": { steps: ["WAAR", "TWIJFEL", "NIET"], note: "LEG UIT" },
+      argumentenlijn: { steps: ["STANDP.", "ARGUM.", "VOORBLD"], note: "BOUW OP" },
+      "hakkenpad-op-de-vloer": { steps: ["V", "I", "S"], note: "PLAK HET WOORD" },
+      "werkwoordschema-op-de-vloer": { steps: ["OND", "TIJD", "STAM", "UITG", "CHECK"], note: "LOOP HET SCHEMA" },
+      "zin-in-delen": { steps: ["NOOR", "FIETST", "NAAR", "SCHOOL"], note: "ZOEK OND / PV" }
+    };
+
+    return renderFloorStepsSceneDetailed(floorPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (["korte-klank-lange-stap", "lettergroepstraat"].includes(key)) {
+    const lanePresets = {
+      "korte-klank-lange-stap": { lanes: ["KORTE KLANK", "LANGE KLANK"], words: ["ZON", "BOMEN"], note: "KIES DE KANT" },
+      lettergroepstraat: { lanes: ["OPEN", "GESLOTEN"], words: ["A-PEN", "KIP-PEN"], note: "LOOP LETTERGREPEN" }
+    };
+
+    return renderTwoLaneSceneDetailed(lanePresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (["getallenlijn-lopen", "breukenlijn-op-de-vloer", "kommagetallen-op-volgorde"].includes(key)) {
+    const linePresets = {
+      "getallenlijn-lopen": { anchors: ["0", "10", "20"], cards: ["+1", "+2", "-1"], note: "SPRING" },
+      "breukenlijn-op-de-vloer": { anchors: ["0", "1/2", "1"], cards: ["1/4", "3/4", "5/4"], note: "PLAATS" },
+      "kommagetallen-op-volgorde": { anchors: ["0,0", "0,5", "1,0"], cards: ["0,25", "0,75", "1,25"], note: "VOLGORDE" }
+    };
+
+    return renderNumberLineSceneDetailed(linePresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (key === "verhoudingentabel-op-de-vloer") {
+    return renderTableSceneDetailed(
+      { headers: ["GLAZEN", "ML"], top: ["1", "2", "4"], bottom: ["250", "500", "1000"], note: "VERHOUDING" },
+      subjectAccent,
+      momentAccent,
+      stroke
+    );
+  }
+
+  if (key === "omtrek-of-oppervlakte") {
+    return renderAreaSceneDetailed({ border: "OMTREK", fill: "OPP.", note: "EROMHEEN / ERIN" }, subjectAccent, momentAccent, stroke);
+  }
+
+  if (key === "coordinatenraster") {
+    return renderGridSceneDetailed({ point: "3,4", note: "LOOP NAAR VAK" }, subjectAccent, momentAccent, stroke);
+  }
+
+  if (key === "hoeken-en-lijnen-met-je-lichaam") {
+    return renderGeometrySceneDetailed({ tags: ["RECHT", "SCHERP", "STOMP"], note: "BEELD UIT" }, subjectAccent, momentAccent, stroke);
+  }
+
+  return "";
+}
+
+function renderChoiceJumpScene(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderZone(28, 84, 124, 42, preset.prompt, "#ffffff", stroke, 12)}
+    ${renderChoicePad(248, 154, preset.actions[0], subjectAccent, stroke)}
+    ${renderChoicePad(296, 120, preset.actions[1], subjectAccent, stroke)}
+    ${renderChoicePad(248, 86, preset.actions[2], subjectAccent, stroke)}
+    ${renderTrack(
+      [
+        [154, 144],
+        [198, 144],
+        [232, 152]
+      ],
+      momentAccent
+    )}
+    ${renderMiniSign(170, 92, "REAGEER DIRECT", momentAccent)}
+  `;
+}
+
+function renderCountJumpScene(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderZone(28, 86, 120, 42, preset.prompt, "#ffffff", stroke, 12)}
+    ${renderChoicePad(222, 154, preset.numbers[0], subjectAccent, stroke)}
+    ${renderChoicePad(282, 120, preset.numbers[1], subjectAccent, stroke)}
+    ${renderChoicePad(222, 86, preset.numbers[2], subjectAccent, stroke)}
+    ${renderTrack(
+      [
+        [148, 142],
+        [188, 142],
+        [220, 152],
+        [262, 122]
+      ],
+      momentAccent
+    )}
+    ${renderMiniSign(164, 92, preset.note, momentAccent)}
+  `;
+}
+
+function renderMoveStopScene(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderMiniSign(34, 86, preset.start, subjectAccent)}
+    ${renderTrack(
+      [
+        [58, 98],
+        [100, 132],
+        [150, 150]
+      ],
+      momentAccent
+    )}
+    ${renderZone(164, 132, 84, 38, preset.stop, "#ffffff", stroke)}
+    ${renderZone(262, 82, 64, 40, preset.prompt, "#ffffff", stroke, 12)}
+    ${renderMiniSign(258, 134, preset.check, subjectAccent)}
+  `;
+}
+
+function renderCornerChoiceScene(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderZone(24, 66, 88, 38, preset.corners[0], "#ffffff", stroke, 11)}
+    ${renderZone(248, 66, 88, 38, preset.corners[1], "#ffffff", stroke, 11)}
+    ${renderZone(24, 156, 88, 38, preset.corners[2], "#ffffff", stroke, 11)}
+    ${renderZone(248, 156, 88, 38, preset.corners[3], "#ffffff", stroke, 11)}
+    ${renderZone(122, 100, 116, 56, preset.center, "#ffffff", stroke, 12)}
+    ${renderTrack(
+      [
+        [180, 128],
+        [224, 104],
+        [248, 86]
+      ],
+      momentAccent
+    )}
+  `;
+}
+
+function renderDictationSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderZone(26, 138, 116, 40, preset.write, "#ffffff", stroke, 12)}
+    ${renderCardRack(258, 62, preset.wall, subjectAccent, stroke)}
+    ${renderTrack(
+      [
+        [142, 154],
+        [178, 126],
+        [216, 110],
+        [248, 96]
+      ],
+      momentAccent
+    )}
+    ${renderMiniSign(156, 72, preset.role, momentAccent)}
+    ${renderWordCard(166, 178, 56, 26, preset.tags[0], subjectAccent, stroke, 10)}
+    ${renderWordCard(230, 178, 56, 26, preset.tags[1], subjectAccent, stroke, 10)}
+  `;
+}
+
+function renderRelaySceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderZone(24, 74, 78, 44, preset.start, "#ffffff", stroke)}
+    ${renderZone(136, 122, 106, 48, preset.team, "#ffffff", stroke, 12)}
+    ${renderCardRack(272, 74, preset.rack, subjectAccent, stroke)}
+    ${renderTrack(
+      [
+        [92, 120],
+        [124, 144],
+        [172, 144],
+        [232, 106],
+        [272, 98]
+      ],
+      momentAccent
+    )}
+    ${renderMiniSign(148, 80, preset.chip, momentAccent)}
+  `;
+}
+
+function renderStationsSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderZone(28, 102, 78, 42, preset.stations[0], "#ffffff", stroke, 12)}
+    ${renderZone(138, 70, 86, 42, preset.stations[1], "#ffffff", stroke, 12)}
+    ${renderZone(252, 112, 78, 42, preset.stations[2], "#ffffff", stroke, 12)}
+    ${renderTrack(
+      [
+        [106, 122],
+        [140, 92],
+        [198, 92],
+        [230, 116],
+        [252, 132]
+      ],
+      momentAccent
+    )}
+    ${renderMiniSign(154, 152, preset.chip, subjectAccent)}
+  `;
+}
+
+function renderMatchSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    <circle cx="180" cy="124" r="46" fill="#ffffff" stroke="${stroke}" stroke-width="4" />
+    <rect x="138" y="109" width="84" height="30" rx="12" fill="${momentAccent}" opacity="0.9" />
+    <text x="180" y="128" text-anchor="middle" fill="#ffffff" font-size="12" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
+      preset.center
+    )}</text>
+    ${renderWordCard(150, 54, 60, 28, preset.cards[0], subjectAccent, stroke, 11)}
+    ${renderWordCard(82, 92, 60, 28, preset.cards[1], subjectAccent, stroke, 11)}
+    ${renderWordCard(82, 154, 60, 28, preset.cards[2], subjectAccent, stroke, 11)}
+    ${renderWordCard(220, 154, 60, 28, preset.cards[3], subjectAccent, stroke, 11)}
+    ${renderWordCard(220, 92, 60, 28, preset.cards[4], subjectAccent, stroke, 11)}
+  `;
+}
+
+function renderDuoSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderLearnerIcon(92, 140, subjectAccent, stroke, preset.left)}
+    ${renderLearnerIcon(268, 140, momentAccent, stroke, preset.right)}
+    ${renderZone(128, 90, 104, 36, preset.middle, "#ffffff", stroke, 12)}
+    ${renderTrack(
+      [
+        [116, 136],
+        [156, 118],
+        [232, 118],
+        [244, 136]
+      ],
+      momentAccent
+    )}
+  `;
+}
+
+function renderWordBuildSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderWordCard(54, 128, 46, 46, preset.letters[0], subjectAccent, stroke, 18)}
+    ${renderWordCard(110, 128, 46, 46, preset.letters[1], subjectAccent, stroke, 18)}
+    ${renderWordCard(166, 128, 46, 46, preset.letters[2], subjectAccent, stroke, 18)}
+    ${renderWordCard(222, 128, 46, 46, preset.letters[3], subjectAccent, stroke, 18)}
+    ${renderMiniSign(120, 82, preset.note, momentAccent)}
+    ${renderTrack(
+      [
+        [100, 118],
+        [138, 102],
+        [226, 102],
+        [252, 118]
+      ],
+      momentAccent
+    )}
+  `;
+}
+
+function renderRouteSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderMiniSign(30, 90, preset.start, subjectAccent)}
+    ${renderRouteStop(100, 160, preset.stops[0], momentAccent, stroke)}
+    ${renderRouteStop(148, 140, preset.stops[1], momentAccent, stroke)}
+    ${renderRouteStop(198, 118, preset.stops[2], momentAccent, stroke)}
+    ${renderRouteStop(246, 96, preset.stops[3], momentAccent, stroke)}
+    ${renderFlag(308, 56, subjectAccent)}
+    ${renderZone(244, 144, 90, 36, preset.side, "#ffffff", stroke, 11)}
+    ${renderMiniSign(274, 82, preset.end, momentAccent)}
+  `;
+}
+
+function renderWallSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderWordCard(238, 54, 56, 30, preset.wall[0], subjectAccent, stroke, 11)}
+    ${renderWordCard(238, 94, 56, 30, preset.wall[1], subjectAccent, stroke, 11)}
+    ${renderWordCard(238, 134, 56, 30, preset.wall[2], subjectAccent, stroke, 11)}
+    ${renderZone(40, 136, 102, 40, preset.write, "#ffffff", stroke, 12)}
+    ${renderTrack(
+      [
+        [142, 154],
+        [176, 128],
+        [210, 108],
+        [236, 98]
+      ],
+      momentAccent
+    )}
+    ${renderMiniSign(138, 78, preset.note, momentAccent)}
+  `;
+}
+
+function renderTextRouteSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderWordCard(44, 90, 90, 28, preset.strips[0], subjectAccent, stroke, 11)}
+    ${renderWordCard(146, 124, 90, 28, preset.strips[1], subjectAccent, stroke, 11)}
+    ${renderWordCard(248, 90, 90, 28, preset.strips[2], subjectAccent, stroke, 11)}
+    ${renderTrack(
+      [
+        [90, 118],
+        [144, 138],
+        [234, 138],
+        [280, 118]
+      ],
+      momentAccent
+    )}
+    ${renderZone(126, 170, 108, 30, preset.side, "#ffffff", stroke, 11)}
+    ${renderMiniSign(132, 66, preset.note, momentAccent)}
+  `;
+}
+
+function renderGraphRouteSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderMiniGraphCard(38, 88, preset.charts[0], subjectAccent, stroke)}
+    ${renderMiniGraphCard(140, 70, preset.charts[1], subjectAccent, stroke)}
+    ${renderMiniGraphCard(244, 96, preset.charts[2], subjectAccent, stroke)}
+    ${renderTrack(
+      [
+        [90, 154],
+        [146, 132],
+        [250, 144]
+      ],
+      momentAccent
+    )}
+    ${renderWordCard(56, 166, 72, 26, preset.prompts[0], momentAccent, stroke, 10)}
+    ${renderWordCard(232, 166, 72, 26, preset.prompts[1], momentAccent, stroke, 10)}
+    ${renderMiniSign(134, 164, preset.note, subjectAccent)}
+  `;
+}
+
+function renderFloorStepsSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  const boxes = preset.steps
+    .map((step, index) => renderWordCard(34 + index * 58, 118, 50, 42, step, subjectAccent, stroke, 12))
+    .join("");
+
+  return `
+    ${boxes}
+    ${renderMiniSign(116, 74, preset.note, momentAccent)}
+    ${renderTrack(
+      [
+        [58, 112],
+        [106, 98],
+        [248, 98],
+        [286, 112]
+      ],
+      momentAccent
+    )}
+  `;
+}
+
+function renderTwoLaneSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderZone(40, 82, 118, 40, preset.lanes[0], "#ffffff", stroke, 11)}
+    ${renderZone(40, 140, 118, 40, preset.lanes[1], "#ffffff", stroke, 11)}
+    ${renderWordCard(214, 80, 70, 30, preset.words[0], subjectAccent, stroke, 11)}
+    ${renderWordCard(214, 144, 70, 30, preset.words[1], subjectAccent, stroke, 11)}
+    ${renderMiniSign(188, 54, preset.note, momentAccent)}
+    <path d="M168 100 H206 M168 160 H206" stroke="${momentAccent}" stroke-width="5" stroke-linecap="round" stroke-dasharray="8 8" />
+  `;
+}
+
+function renderNumberLineSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    <path d="M34 124 H326" stroke="${stroke}" stroke-width="6" stroke-linecap="round" />
+    ${renderTick(82)}
+    ${renderTick(178)}
+    ${renderTick(274)}
+    ${renderCardTag(60, 82, preset.anchors[0], subjectAccent)}
+    ${renderCardTag(156, 68, preset.anchors[1], subjectAccent)}
+    ${renderCardTag(252, 82, preset.anchors[2], subjectAccent)}
+    ${renderWordCard(84, 150, 50, 24, preset.cards[0], momentAccent, stroke, 10)}
+    ${renderWordCard(160, 150, 50, 24, preset.cards[1], momentAccent, stroke, 10)}
+    ${renderWordCard(236, 150, 50, 24, preset.cards[2], momentAccent, stroke, 10)}
+    ${renderMiniSign(262, 146, preset.note, momentAccent)}
+  `;
+}
+
+function renderTableSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    <rect x="54" y="86" width="252" height="96" rx="18" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
+    <path d="M118 86 V182 M182 86 V182 M244 86 V182 M54 134 H306" stroke="${stroke}" stroke-width="3" />
+    ${renderTableText(86, 118, preset.headers[0], subjectAccent)}
+    ${renderTableText(86, 166, preset.headers[1], subjectAccent)}
+    ${renderTableText(150, 118, preset.top[0], stroke)}
+    ${renderTableText(214, 118, preset.top[1], stroke)}
+    ${renderTableText(274, 118, preset.top[2], stroke)}
+    ${renderTableText(150, 166, preset.bottom[0], stroke)}
+    ${renderTableText(214, 166, preset.bottom[1], stroke)}
+    ${renderTableText(274, 166, preset.bottom[2], stroke)}
+    ${renderMiniSign(124, 58, preset.note, momentAccent)}
+  `;
+}
+
+function renderAreaSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    <rect x="86" y="76" width="180" height="96" rx="10" fill="${momentAccent}" opacity="0.12" stroke="${stroke}" stroke-width="5" />
+    <rect x="126" y="108" width="100" height="36" rx="10" fill="${subjectAccent}" opacity="0.18" />
+    ${renderMiniSign(98, 54, preset.border, subjectAccent)}
+    ${renderMiniSign(150, 182, preset.fill, momentAccent)}
+    ${renderZone(26, 144, 44, 34, preset.note, "#ffffff", stroke, 10)}
+  `;
+}
+
+function renderGridSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    <rect x="104" y="72" width="152" height="120" rx="18" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
+    <path d="M142 72 V192 M180 72 V192 M218 72 V192 M104 102 H256 M104 132 H256 M104 162 H256" stroke="${stroke}" stroke-width="2" opacity="0.8" />
+    <circle cx="199" cy="147" r="10" fill="${momentAccent}" />
+    ${renderMiniSign(126, 52, preset.point, subjectAccent)}
+    ${renderMiniSign(122, 196, preset.note, momentAccent)}
+  `;
+}
+
+function renderGeometrySceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    <path d="M70 170 L70 110 L128 110" stroke="${stroke}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M176 170 L212 110 L248 170" stroke="${stroke}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M282 170 L314 132 L332 170" stroke="${stroke}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+    ${renderMiniSign(46, 176, preset.tags[0], subjectAccent)}
+    ${renderMiniSign(170, 176, preset.tags[1], momentAccent)}
+    ${renderMiniSign(276, 176, preset.tags[2], subjectAccent)}
+    ${renderMiniSign(132, 60, preset.note, momentAccent)}
+  `;
+}
+
+function renderZone(x, y, width, height, label, fill, stroke, fontSize = 14) {
   return `
     <rect x="${x}" y="${y}" width="${width}" height="${height}" rx="16" fill="${fill}" stroke="${stroke}" stroke-width="3" />
-    <text x="${x + width / 2}" y="${y + height / 2 + 5}" text-anchor="middle" fill="${stroke}" font-size="14" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
+    <text x="${x + width / 2}" y="${y + height / 2 + 5}" text-anchor="middle" fill="${stroke}" font-size="${fontSize}" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
       label
     )}</text>
   `;
@@ -4624,10 +6413,48 @@ function renderCardRack(x, y, label, accent, stroke) {
   `;
 }
 
+function renderChoicePad(x, y, label, accent, stroke) {
+  return `
+    <rect x="${x}" y="${y}" width="72" height="32" rx="14" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
+    <text x="${x + 36}" y="${y + 21}" text-anchor="middle" fill="${accent}" font-size="11" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
+      label
+    )}</text>
+  `;
+}
+
+function renderWordCard(x, y, width, height, label, accent, stroke, fontSize = 12) {
+  return `
+    <rect x="${x}" y="${y}" width="${width}" height="${height}" rx="12" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
+    <text x="${x + width / 2}" y="${y + height / 2 + 4}" text-anchor="middle" fill="${accent}" font-size="${fontSize}" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
+      label
+    )}</text>
+  `;
+}
+
 function renderMiniSign(x, y, label, accent) {
   return `
     <rect x="${x}" y="${y}" width="54" height="24" rx="10" fill="${accent}" opacity="0.15" />
     <text x="${x + 27}" y="${y + 16}" text-anchor="middle" fill="${accent}" font-size="11" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
+      label
+    )}</text>
+  `;
+}
+
+function renderRouteStop(x, y, label, accent, stroke) {
+  return `
+    <circle cx="${x}" cy="${y}" r="12" fill="#ffffff" stroke="${stroke}" stroke-width="4" />
+    <text x="${x}" y="${y + 4}" text-anchor="middle" fill="${accent}" font-size="8.5" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
+      label
+    )}</text>
+  `;
+}
+
+function renderLearnerIcon(x, y, accent, stroke, label) {
+  return `
+    <circle cx="${x}" cy="${y - 22}" r="14" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
+    <rect x="${x - 18}" y="${y - 4}" width="36" height="42" rx="16" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
+    <rect x="${x - 24}" y="${y + 36}" width="48" height="22" rx="11" fill="${accent}" opacity="0.14" />
+    <text x="${x}" y="${y + 51}" text-anchor="middle" fill="${accent}" font-size="10" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
       label
     )}</text>
   `;
@@ -4686,6 +6513,23 @@ function renderBingoBoard(x, y, stroke, accent) {
     <circle cx="${x + 92}" cy="${y + 46}" r="7" fill="${accent}" opacity="0.55" />
     <circle cx="${x + 59}" cy="${y + 68}" r="7" fill="${accent}" opacity="0.7" />
   `;
+}
+
+function renderMiniGraphCard(x, y, label, accent, stroke) {
+  return `
+    <rect x="${x}" y="${y}" width="78" height="56" rx="14" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
+    <path d="M${x + 14} ${y + 42} H${x + 62} M${x + 14} ${y + 42} V${y + 16}" stroke="${accent}" stroke-width="3" />
+    <path d="M${x + 18} ${y + 38} L${x + 30} ${y + 28} L${x + 42} ${y + 30} L${x + 56} ${y + 18}" stroke="${accent}" stroke-width="3" fill="none" />
+    <text x="${x + 39}" y="${y + 52}" text-anchor="middle" fill="${stroke}" font-size="10" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
+      label
+    )}</text>
+  `;
+}
+
+function renderTableText(x, y, text, fill) {
+  return `<text x="${x}" y="${y}" text-anchor="middle" fill="${fill}" font-size="13" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
+    text
+  )}</text>`;
 }
 
 function getFilteredTasks() {
