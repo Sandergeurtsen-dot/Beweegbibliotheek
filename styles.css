@@ -759,6 +759,11 @@ body::before {
   gap: 12px;
 }
 
+.card-pack-item--visual {
+  grid-auto-rows: max-content;
+  align-content: start;
+}
+
 .card-pack-item::after {
   content: "";
   position: absolute;
@@ -779,6 +784,27 @@ body::before {
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+
+.card-pack-item__title {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.2;
+  color: var(--green-deep);
+  font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
+}
+
+.card-pack-item__art {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #d7e4f1;
+  background: #f6fbff;
+}
+
+.card-pack-item__art svg {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .card-pack-item__body {
@@ -1112,8 +1138,20 @@ body::before {
     box-shadow: none;
   }
 
+  .card-pack-item--visual {
+    min-height: 86mm;
+  }
+
   .card-pack-item::after {
     border-color: rgba(29, 16, 96, 0.28);
+  }
+
+  .card-pack-item__title {
+    font-size: 12pt;
+  }
+
+  .card-pack-item__art {
+    border-color: #9fb7da;
   }
 
   .card-pack-item__body {

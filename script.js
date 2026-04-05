@@ -2152,6 +2152,7 @@ function taskNeedsCards(blueprint) {
 }
 
 function buildCardPack(group, subject, moment, blueprint, title, printProfile) {
+  const overviewSheets = buildOverviewSheets(group, subject, moment, blueprint, title, printProfile);
   const cards = getStarterCards(subject.id, group.id, blueprint.visual, blueprint.key, title, printProfile);
   const supportCards = printProfile.includeSupportCards ? getSupportCards(group, subject, moment, blueprint, title) : [];
   const teacherSheets = printProfile.includeTeacherSheets ? getTeacherSheets(group, subject, moment, blueprint, title) : [];
@@ -2160,11 +2161,107 @@ function buildCardPack(group, subject, moment, blueprint, title, printProfile) {
     title: `Printset voor ${title}`,
     intro: buildCardIntro(subject, moment, group, title, cards.length, printProfile),
     note: buildCardNote(subject.id, group.id, blueprint.visual, blueprint.key),
+    overviewSheets,
     cards,
     supportCards,
     teacherSheets,
-    printChecklist: buildPrintChecklist(subject, cards, supportCards, teacherSheets, printProfile)
+    printChecklist: buildPrintChecklist(subject, overviewSheets, cards, supportCards, teacherSheets, printProfile)
   };
+}
+
+function buildOverviewSheets(group, subject, moment, blueprint, title, printProfile) {
+  const previewTask = {
+    key: blueprint.key,
+    title,
+    subjectId: subject.id,
+    momentId: moment.id,
+    visual: blueprint.visual,
+    usesCards: printProfile.enabled
+  };
+
+  return [
+    {
+      label: "Lesplaat 1",
+      title: "Opstelling en doel",
+      art: renderIllustration(previewTask, false),
+      text: `${group.label} • ${subject.label} • ${moment.label}\n${title}\n${blueprint.setup}`,
+      hint: "Print deze overzichtsplaat als eerste blad bij het klaarleggen."
+    },
+    {
+      label: "Lesplaat 2",
+      title: `Klasindeling voor ${CLASS_SIZE} leerlingen`,
+      art: renderClassLayoutArt(subject.accent, moment.accent),
+      text: getPrintOrganizationLines(blueprint.visual, printProfile).join("\n"),
+      hint: `Gebruik dit blad als organisatiesteun voor ${CLASS_GROUP_COUNT} groepjes van ${CLASS_GROUP_SIZE} leerlingen.`
+    },
+    {
+      label: "Lesplaat 3",
+      title: "Logische stapvolgorde",
+      art: renderSequenceArt(getPrintSequenceLabels(blueprint.visual), subject.accent, moment.accent),
+      text: getPrintSequenceText(blueprint.steps).join("\n"),
+      hint: "Leg dit blad naast de werkkaarten zodat de volgorde voor iedereen duidelijk blijft."
+    }
+  ];
+}
+
+function getPrintOrganizationLines(visual, printProfile) {
+  const lines = [`Verdeel de klas in ${CLASS_GROUP_COUNT} groepjes van ${CLASS_GROUP_SIZE} leerlingen.`];
+
+  if (printProfile.expandWorkCardsToClassSize) {
+    lines.push(`Gebruik ${CLASS_SIZE} leerlingkaartjes en geef ieder kind 1 kaart.`);
+  } else if (["dictation", "path", "relay", "stations", "corners", "line"].includes(visual)) {
+    lines.push("Laat de groepjes om de beurt starten of laat twee groepjes tegelijk werken met duidelijke wisselmomenten.");
+  } else {
+    lines.push("Laat per groepje één leerling starten en laat de rest meedenken, overleggen of controleren.");
+  }
+
+  if (visual === "dictation") {
+    lines.push("Laat binnen elk groepje rollen wisselen: loper, schrijver en controleur.");
+  } else if (visual === "stations") {
+    lines.push("Zet bij elk station één duidelijke opdracht en laat groepjes steeds doorwisselen op signaal.");
+  } else if (visual === "corners") {
+    lines.push("Gebruik de hoeken als vaste keuzeplekken en laat daarna per groepje kort uitleggen waarom die keuze past.");
+  } else {
+    lines.push("Gebruik het laatste moment om samen terug te lezen, te controleren of kort te laten presenteren.");
+  }
+
+  return lines;
+}
+
+function getPrintSequenceLabels(visual) {
+  if (visual === "dictation") {
+    return ["HANG OP", "LOOP", "SCHRIJF", "WISSEL"];
+  }
+
+  if (visual === "stations") {
+    return ["LEG NEER", "START", "WISSEL", "CHECK"];
+  }
+
+  if (visual === "corners") {
+    return ["KIES", "LOOP", "LEG UIT", "CHECK"];
+  }
+
+  if (visual === "path" || visual === "mission") {
+    return ["START", "VOLG", "BESPREEK", "FINISH"];
+  }
+
+  if (visual === "line") {
+    return ["LEG", "LOOP", "LEES", "CHECK"];
+  }
+
+  return ["KLAAR", "UITLEG", "OEFEN", "CHECK"];
+}
+
+function getPrintSequenceText(steps) {
+  return steps.slice(0, 4).map((step, index) => `${index + 1}. ${shortenPrintText(step, 78)}`);
+}
+
+function shortenPrintText(text, maxLength = 78) {
+  if (text.length <= maxLength) {
+    return text;
+  }
+
+  return `${text.slice(0, maxLength - 1).trimEnd()}…`;
 }
 
 function buildCardIntro(subject, moment, group, title, cardCount, printProfile) {
@@ -4352,7 +4449,7 @@ function getMethodSupportCards(subjectId, groupId, momentId) {
   ];
 }
 
-function buildPrintChecklist(subject, cards, supportCards, teacherSheets, printProfile) {
+function buildPrintChecklist(subject, overviewSheets, cards, supportCards, teacherSheets, printProfile) {
   const methodLine =
     subject.id === "spelling"
       ? "Methodehulp uit Staal 2"
@@ -4361,6 +4458,10 @@ function buildPrintChecklist(subject, cards, supportCards, teacherSheets, printP
         : "Methodehulp uit Staal 2 taal";
 
   const checklist = [];
+
+  if (overviewSheets.length) {
+    checklist.push(`${overviewSheets.length} lesplaten met opstelling, klasindeling en stapvolgorde`);
+  }
 
   if (cards.length) {
     checklist.push(
@@ -5331,11 +5432,11 @@ function renderTaskDetail(task) {
 function renderCardLayer(task) {
   const cardDescription = task.printProfile.expandWorkCardsToClassSize
     ? `Deze set is uitgewerkt voor ${CLASS_SIZE} leerlingen. Geef ieder kind 1 kaart.`
-    : "Deze set hoort direct bij de opdracht en is bedoeld voor hoeken, routepunten, stations of tweetallen.";
+    : `Deze set hoort direct bij de opdracht en is logisch geordend voor een klas van ongeveer ${CLASS_SIZE} leerlingen.`;
 
   const printTip = task.printProfile.expandWorkCardsToClassSize
     ? "Tip: print op A4, knip de leerlingkaartjes los en deel ze direct uit."
-    : "Tip: print op A4 of A3, knip alleen los wat je echt nodig hebt en hang of leg de kaarten daarna klaar.";
+    : `Tip: print op A4 of A3, begin met de lesplaten en gebruik daarna de overige printvellen voor ${CLASS_GROUP_COUNT} groepjes van ${CLASS_GROUP_SIZE}.`;
 
   return `
     <div class="card-layer">
@@ -5349,15 +5450,21 @@ function renderCardLayer(task) {
       </div>
 
       ${renderPrintSection(
-        `Werkkaartjes bij de opdracht (${task.cardPack.cards.length})`,
-        cardDescription,
-        task.cardPack.cards
+        `Lesplaten en overzicht (${task.cardPack.overviewSheets.length})`,
+        `Print deze drie bladen eerst. Ze geven de opstelling, de klasindeling voor ${CLASS_SIZE} leerlingen en de stapvolgorde in een logische volgorde weer.`,
+        task.cardPack.overviewSheets
       )}
 
       ${renderPrintSection(
         `Opstellings- en hulpmateriaal (${task.cardPack.supportCards.length})`,
         "Deze kaartjes hoef je als leerkracht niet meer zelf te maken; je kunt ze direct uitprinten en klaarleggen voor de klasorganisatie.",
         task.cardPack.supportCards
+      )}
+
+      ${renderPrintSection(
+        `Werkkaartjes bij de opdracht (${task.cardPack.cards.length})`,
+        cardDescription,
+        task.cardPack.cards
       )}
 
       ${renderPrintSection(
@@ -5387,19 +5494,21 @@ function renderPrintSection(title, description, items) {
         <p>${escapeHtml(description)}</p>
       </div>
       <div class="card-pack-grid">
-        ${items
-          .map(
-            (card) => `
-              <article class="card-pack-item">
-                <span class="card-pack-item__tag">${escapeHtml(card.label)}</span>
-                <div class="card-pack-item__body">${renderPrintableText(card.text)}</div>
-                <div class="card-pack-item__hint">${escapeHtml(card.hint)}</div>
-              </article>
-            `
-          )
-          .join("")}
+        ${items.map((card) => renderPrintCard(card)).join("")}
       </div>
     </section>
+  `;
+}
+
+function renderPrintCard(card) {
+  return `
+    <article class="card-pack-item ${card.art ? "card-pack-item--visual" : ""}">
+      <span class="card-pack-item__tag">${escapeHtml(card.label)}</span>
+      ${card.title ? `<h5 class="card-pack-item__title">${escapeHtml(card.title)}</h5>` : ""}
+      ${card.art ? `<div class="card-pack-item__art">${card.art}</div>` : ""}
+      <div class="card-pack-item__body">${renderPrintableText(card.text)}</div>
+      <div class="card-pack-item__hint">${escapeHtml(card.hint)}</div>
+    </article>
   `;
 }
 
@@ -5629,6 +5738,51 @@ function renderIllustrationScene(task, subjectAccent, momentAccent, stroke) {
   `;
 }
 
+function renderClassLayoutArt(subjectAccent, momentAccent) {
+  return `
+    <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor 25 leerlingen">
+      <rect width="360" height="180" rx="22" fill="#f7fbff" />
+      <rect x="0" y="116" width="360" height="64" fill="#eef8fb" />
+      ${renderZone(24, 24, 104, 38, "Klas van 25", "#ffffff", "#19424a", 12)}
+      ${renderZone(232, 24, 104, 38, "5 groepjes", "#ffffff", "#19424a", 12)}
+      ${renderZone(34, 86, 80, 34, "Groep 1", "#ffffff", "#19424a", 11)}
+      ${renderZone(140, 86, 80, 34, "Groep 2", "#ffffff", "#19424a", 11)}
+      ${renderZone(246, 86, 80, 34, "Groep 3", "#ffffff", "#19424a", 11)}
+      ${renderZone(88, 132, 80, 34, "Groep 4", "#ffffff", "#19424a", 11)}
+      ${renderZone(194, 132, 80, 34, "Groep 5", "#ffffff", "#19424a", 11)}
+      ${renderMiniSign(42, 64, "5 LEERL.", subjectAccent)}
+      ${renderMiniSign(250, 64, "WISSEL", momentAccent)}
+    </svg>
+  `;
+}
+
+function renderSequenceArt(labels, subjectAccent, momentAccent) {
+  return `
+    <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Stapvolgorde">
+      <rect width="360" height="180" rx="22" fill="#f7fbff" />
+      ${renderZone(18, 62, 70, 44, labels[0], "#ffffff", "#19424a", 11)}
+      ${renderZone(102, 62, 70, 44, labels[1], "#ffffff", "#19424a", 11)}
+      ${renderZone(186, 62, 70, 44, labels[2], "#ffffff", "#19424a", 11)}
+      ${renderZone(270, 62, 70, 44, labels[3], "#ffffff", "#19424a", 11)}
+      ${renderTrack(
+        [
+          [88, 84],
+          [100, 84],
+          [172, 84],
+          [184, 84],
+          [256, 84],
+          [268, 84]
+        ],
+        momentAccent
+      )}
+      ${renderMiniSign(34, 120, "1", subjectAccent)}
+      ${renderMiniSign(118, 120, "2", subjectAccent)}
+      ${renderMiniSign(202, 120, "3", subjectAccent)}
+      ${renderMiniSign(286, 120, "4", subjectAccent)}
+    </svg>
+  `;
+}
+
 function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, stroke) {
   const key = task.key;
 
@@ -5707,7 +5861,7 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
     const cornerPresets = {
       "waar-hoort-het-woord": {
         center: "KIES CATEGORIE",
-        corners: ["BEROEP", "PLAATS", "VOORWRP", "HANDEL."]
+        corners: ["BEROEP", "PLAATS", "VOORWERP", "HANDELING"]
       },
       "woordveld-in-de-ruimte": {
         center: "THEMAWOORD",
@@ -5715,11 +5869,11 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       },
       "signaalwoorden-route": {
         center: "TEKSTVERBAND",
-        corners: ["TIJD", "OORZAAK", "OPSOMM.", "TEGENST."]
+        corners: ["TIJD", "OORZAAK", "OPSOMMING", "TEGENSTELLING"]
       },
       "tekstsoorten-hoeken": {
         center: "TEKSTSOORT",
-        corners: ["VERHAAL", "INSTRUCT.", "NIEUWS", "MENING"]
+        corners: ["VERHAAL", "INSTRUCTIE", "NIEUWS", "MENING"]
       },
       "hoeken-kiezen-bij-spelling": {
         center: "KIES CATEGORIE",
@@ -5751,10 +5905,10 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
   ) {
     const dictationPresets = {
       "loopdictee-woordenschat": {
-        write: "ZEG + LEG UIT",
+        write: "ZEG EN LEG UIT",
         wall: "WOORDEN",
         role: "LOPER",
-        tags: ["BETEK.", "ZIN"]
+        tags: ["BETEKENIS", "ZIN"]
       },
       "loopdictee-kernzinnen": {
         write: "KERNZIN",
@@ -5946,13 +6100,13 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       },
       "wandel-en-vat-samen": {
         start: "LOOP",
-        stops: ["ONDERWERP", "BELANGR.", "AANVUL", "CHECK"],
+        stops: ["ONDERWERP", "BELANGRIJK", "AANVULLEN", "CHECK"],
         side: "MAATJE",
         end: "WISSEL"
       },
       presentatiepad: {
         start: "OPENING",
-        stops: ["KERN 1", "KERN 2", "VOORBLD", "AFSLUIT"],
+        stops: ["KERN 1", "KERN 2", "VOORBEELD", "AFSLUITEN"],
         side: "SPREEK",
         end: "FEEDBACK"
       },
@@ -5985,10 +6139,10 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
   ) {
     const floorPresets = {
       zinnenstraat: { steps: ["IK", "ZIE", "EEN", "KAT"], note: "LEES DE ZIN" },
-      "alinea-opstelling": { steps: ["INLEID.", "KERN", "SLOT"], note: "TEKSTDELEN" },
+      "alinea-opstelling": { steps: ["INLEIDING", "KERN", "SLOT"], note: "TEKSTDELEN" },
       "standpunt-in-de-ruimte": { steps: ["EENS", "TWIJFEL", "ONEENS"], note: "KIES POSITIE" },
       "waar-twijfel-niet-waar": { steps: ["WAAR", "TWIJFEL", "NIET"], note: "LEG UIT" },
-      argumentenlijn: { steps: ["STANDP.", "ARGUM.", "VOORBLD"], note: "BOUW OP" },
+      argumentenlijn: { steps: ["STANDPUNT", "ARGUMENT", "VOORBEELD"], note: "BOUW OP" },
       "hakkenpad-op-de-vloer": { steps: ["V", "I", "S"], note: "PLAK HET WOORD" },
       "werkwoordschema-op-de-vloer": { steps: ["OND", "TIJD", "STAM", "UITG", "CHECK"], note: "LOOP HET SCHEMA" },
       "zin-in-delen": { steps: ["NOOR", "FIETST", "NAAR", "SCHOOL"], note: "ZOEK OND / PV" }
@@ -6388,9 +6542,7 @@ function renderGeometrySceneDetailed(preset, subjectAccent, momentAccent, stroke
 function renderZone(x, y, width, height, label, fill, stroke, fontSize = 14) {
   return `
     <rect x="${x}" y="${y}" width="${width}" height="${height}" rx="16" fill="${fill}" stroke="${stroke}" stroke-width="3" />
-    <text x="${x + width / 2}" y="${y + height / 2 + 5}" text-anchor="middle" fill="${stroke}" font-size="${fontSize}" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
-      label
-    )}</text>
+    ${renderSvgTextBlock(x, y, width, height, label, stroke, fontSize, 3)}
   `;
 }
 
@@ -6407,36 +6559,28 @@ function renderCardRack(x, y, label, accent, stroke) {
     <rect x="${x + 10}" y="${y + 12}" width="36" height="14" rx="7" fill="${accent}" opacity="0.25" />
     <rect x="${x + 10}" y="${y + 34}" width="36" height="14" rx="7" fill="${accent}" opacity="0.2" />
     <rect x="${x + 10}" y="${y + 56}" width="36" height="14" rx="7" fill="${accent}" opacity="0.16" />
-    <text x="${x + 28}" y="${y + 104}" text-anchor="middle" fill="${stroke}" font-size="12" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
-      label
-    )}</text>
+    ${renderSvgTextBlock(x - 2, y + 88, 60, 22, label, stroke, 11, 2)}
   `;
 }
 
 function renderChoicePad(x, y, label, accent, stroke) {
   return `
     <rect x="${x}" y="${y}" width="72" height="32" rx="14" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
-    <text x="${x + 36}" y="${y + 21}" text-anchor="middle" fill="${accent}" font-size="11" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
-      label
-    )}</text>
+    ${renderSvgTextBlock(x, y, 72, 32, label, accent, 10.5, 2)}
   `;
 }
 
 function renderWordCard(x, y, width, height, label, accent, stroke, fontSize = 12) {
   return `
     <rect x="${x}" y="${y}" width="${width}" height="${height}" rx="12" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
-    <text x="${x + width / 2}" y="${y + height / 2 + 4}" text-anchor="middle" fill="${accent}" font-size="${fontSize}" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
-      label
-    )}</text>
+    ${renderSvgTextBlock(x, y, width, height, label, accent, fontSize, 3)}
   `;
 }
 
 function renderMiniSign(x, y, label, accent) {
   return `
     <rect x="${x}" y="${y}" width="54" height="24" rx="10" fill="${accent}" opacity="0.15" />
-    <text x="${x + 27}" y="${y + 16}" text-anchor="middle" fill="${accent}" font-size="11" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
-      label
-    )}</text>
+    ${renderSvgTextBlock(x, y, 54, 24, label, accent, 9.8, 2)}
   `;
 }
 
@@ -6454,9 +6598,7 @@ function renderLearnerIcon(x, y, accent, stroke, label) {
     <circle cx="${x}" cy="${y - 22}" r="14" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
     <rect x="${x - 18}" y="${y - 4}" width="36" height="42" rx="16" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
     <rect x="${x - 24}" y="${y + 36}" width="48" height="22" rx="11" fill="${accent}" opacity="0.14" />
-    <text x="${x}" y="${y + 51}" text-anchor="middle" fill="${accent}" font-size="10" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
-      label
-    )}</text>
+    ${renderSvgTextBlock(x - 26, y + 36, 52, 24, label, accent, 9.2, 2)}
   `;
 }
 
@@ -6483,9 +6625,7 @@ function renderTick(x) {
 function renderCardTag(x, y, label, accent) {
   return `
     <rect x="${x}" y="${y}" width="34" height="24" rx="8" fill="#ffffff" stroke="${accent}" stroke-width="3" />
-    <text x="${x + 17}" y="${y + 16}" text-anchor="middle" fill="${accent}" font-size="12" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
-      label
-    )}</text>
+    ${renderSvgTextBlock(x, y, 34, 24, label, accent, 10.5, 2)}
   `;
 }
 
@@ -6520,16 +6660,104 @@ function renderMiniGraphCard(x, y, label, accent, stroke) {
     <rect x="${x}" y="${y}" width="78" height="56" rx="14" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
     <path d="M${x + 14} ${y + 42} H${x + 62} M${x + 14} ${y + 42} V${y + 16}" stroke="${accent}" stroke-width="3" />
     <path d="M${x + 18} ${y + 38} L${x + 30} ${y + 28} L${x + 42} ${y + 30} L${x + 56} ${y + 18}" stroke="${accent}" stroke-width="3" fill="none" />
-    <text x="${x + 39}" y="${y + 52}" text-anchor="middle" fill="${stroke}" font-size="10" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
-      label
-    )}</text>
+    ${renderSvgTextBlock(x + 8, y + 40, 62, 16, label, stroke, 9.5, 2)}
   `;
 }
 
 function renderTableText(x, y, text, fill) {
-  return `<text x="${x}" y="${y}" text-anchor="middle" fill="${fill}" font-size="13" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
-    text
-  )}</text>`;
+  return renderSvgTextBlock(x - 24, y - 12, 48, 24, text, fill, 12, 2);
+}
+
+function renderSvgTextBlock(x, y, width, height, label, fill, preferredFontSize = 12, maxLines = 2) {
+  const fitted = fitSvgText(label, width, height, preferredFontSize, maxLines);
+  const centerX = x + width / 2;
+  const lineHeight = fitted.fontSize * 1.06;
+  const startY = y + height / 2 - ((fitted.lines.length - 1) * lineHeight) / 2 + fitted.fontSize * 0.36;
+
+  return `
+    <text text-anchor="middle" fill="${fill}" font-size="${fitted.fontSize}" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">
+      ${fitted.lines
+        .map(
+          (line, index) =>
+            `<tspan x="${centerX}" y="${startY + index * lineHeight}">${escapeHtml(line)}</tspan>`
+        )
+        .join("")}
+    </text>
+  `;
+}
+
+function fitSvgText(label, width, height, preferredFontSize, maxLines) {
+  for (let fontSize = preferredFontSize; fontSize >= 7.5; fontSize -= 0.5) {
+    const maxChars = Math.max(3, Math.floor(width / (fontSize * 0.6)));
+    const lines = wrapSvgText(label, maxChars, maxLines);
+    const lineHeight = fontSize * 1.06;
+
+    if (lines.length * lineHeight <= height - 6) {
+      return { lines, fontSize };
+    }
+  }
+
+  return {
+    lines: wrapSvgText(label, Math.max(3, Math.floor(width / 4.8)), maxLines),
+    fontSize: 7.5
+  };
+}
+
+function wrapSvgText(label, maxChars, maxLines) {
+  const rawTokens = String(label)
+    .replaceAll("/", " / ")
+    .replaceAll("-", " - ")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+  const tokens = rawTokens.flatMap((token) => splitSvgToken(token, maxChars));
+  const lines = [];
+  let current = "";
+
+  tokens.forEach((token) => {
+    const next = current ? `${current} ${token}` : token;
+
+    if (next.length <= maxChars || current.length === 0) {
+      current = next;
+      return;
+    }
+
+    lines.push(current);
+    current = token;
+  });
+
+  if (current) {
+    lines.push(current);
+  }
+
+  if (lines.length <= maxLines) {
+    return lines;
+  }
+
+  const visible = lines.slice(0, maxLines - 1);
+  const lastLine = lines.slice(maxLines - 1).join(" ");
+  visible.push(lastLine);
+  return visible;
+}
+
+function splitSvgToken(token, maxChars) {
+  if (token.length <= maxChars) {
+    return [token];
+  }
+
+  const parts = [];
+  let cursor = token;
+
+  while (cursor.length > maxChars) {
+    parts.push(cursor.slice(0, maxChars));
+    cursor = cursor.slice(maxChars);
+  }
+
+  if (cursor) {
+    parts.push(cursor);
+  }
+
+  return parts;
 }
 
 function getFilteredTasks() {
