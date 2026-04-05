@@ -130,14 +130,595 @@ function docTask(groupId, config) {
     steps: config.steps,
     differentiation: onlyGroup(groupId, config.differentiation),
     teacherTip: onlyGroup(groupId, config.teacherTip),
-    keywords: [...config.keywords, "getal en ruimte junior", "dynamische schooldag", "rekenen"]
+    keywords: [...config.keywords, ...(config.methodKeywords ?? ["getal en ruimte junior", "dynamische schooldag", "rekenen"])]
   };
+}
+
+function spellingDocTask(groupId, config) {
+  return docTask(groupId, {
+    ...config,
+    methodKeywords: ["staal 2", "spelling", "dynamische schooldag", "jose schraven"]
+  });
 }
 
 function buildTaskBlueprintsFromDoc() {
   return {
     taal: emptyTaskMoments(),
-    spelling: emptyTaskMoments(),
+    spelling: {
+      energizers: [
+        spellingDocTask(GROUP_34, {
+          key: "klap-stamp-of-stil",
+          visual: "jump",
+          visualHint: "Een snelle klankreactie waarbij leerlingen klappen, stampen of juist stil blijven.",
+          title: "Klap, stamp of stil",
+          summary: "Leerlingen reageren direct op een klank, letter of kort woord en herhalen zo auditieve analyse in beweging.",
+          duration: "3-5 min",
+          setup: "Geen voorbereiding. Laat leerlingen naast hun tafel staan met genoeg ruimte om kleine bewegingen te maken.",
+          goal: "Klank-tekenkoppeling, auditieve analyse en luisterwoorden snel herhalen.",
+          movementFocus: "Kleine bewegingen koppelen aan de plek waar de klank in het woord wordt gehoord.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat leerlingen naast hun tafel staan en spreek de drie reacties af: klappen, stampen of stil blijven.",
+            "Noem een klank, letter of kort woord, bijvoorbeeld maan, sok, vis, raam of pen.",
+            "Leerlingen klappen als de klank vooraan staat, stampen als die achteraan staat en blijven stil als die niet voorkomt.",
+            "Bespreek na enkele woorden kort waarom de gekozen reactie klopt."
+          ],
+          differentiation: "Maak het moeilijker met middenklanken of tweetekenklanken zoals oe, eu en ie.",
+          teacherTip: "Houd het tempo hoog en kies woorden uit de les van die week, zodat de overgang kort maar inhoudelijk sterk blijft.",
+          keywords: ["groep 3/4", "klank", "auditieve analyse", "luisterwoorden", "energizer"]
+        }),
+        spellingDocTask(GROUP_34, {
+          key: "waar-hoor-je-de-klank",
+          visual: "jump",
+          visualHint: "Drie vaste bewegingen maken de plaats van een klank in een woord direct zichtbaar.",
+          title: "Waar hoor je de klank?",
+          summary: "Leerlingen laten met een beweging zien of een afgesproken klank vooraan, in het midden of achteraan staat.",
+          duration: "5 min",
+          setup: "Geen voorbereiding. Spreek drie duidelijke bewegingen af voor vooraan, midden en achteraan.",
+          goal: "Begin-, midden- en eindklank herkennen in woorden uit groep 3 en 4.",
+          movementFocus: "Snelle arm- en lichaamssignalen koppelen aan de plek van de klank in het woord.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Spreek drie bewegingen af: handen omhoog voor vooraan, handen op schouders voor midden en handen op knieën voor achteraan.",
+            "Noem een woord, bijvoorbeeld boom, vis, teen of sok.",
+            "Laat leerlingen met hun beweging zien waar ze de afgesproken klank horen.",
+            "Bespreek steeds één of twee voorbeelden kort na."
+          ],
+          differentiation: "Laat leerlingen zelf woorden bedenken bij een gekozen klank als verlenging.",
+          teacherTip: "Gebruik steeds dezelfde klank in een korte reeks; zo wordt het vergelijken van woorden eenvoudiger.",
+          keywords: ["groep 3/4", "beginklank", "middenklank", "eindklank", "klankpositie"]
+        }),
+        spellingDocTask(GROUP_34, {
+          key: "letterflits-in-beweging",
+          visual: "jump",
+          visualHint: "Leerlingen joggen op de plaats en reageren met een passende beweging op korte, lange en tweetekenklanken.",
+          title: "Letterflits in beweging",
+          summary: "Een korte beweegflits die letters, klanken en spellingpatronen in hoog tempo activeert.",
+          duration: "3-5 min",
+          setup: "Geen voorbereiding of leg eventueel een paar letterkaartjes klaar.",
+          goal: "Letterherkenning, hakken en plakken en het herkennen van spellingpatronen versnellen.",
+          movementFocus: "Joggen op de plaats en per klanktype direct een vaste beweging maken.",
+          materials: ["Geen extra materiaal", "Eventueel letterkaartjes"],
+          steps: [
+            "Laat leerlingen rustig op de plaats joggen.",
+            "Flits een letter of noem een woord.",
+            "Bij een korte klank maken leerlingen een kleine sprong, bij een lange klank strekken ze zich uit en bij een tweetekenklank draaien ze één keer om hun as.",
+            "Sluit af met twee voorbeeldwoorden die samen hardop gespeld worden."
+          ],
+          differentiation: "Gebruik in groep 3 alleen luisterwoorden en voeg in groep 4 woorden toe met aa, ee, oo, ie, oe en eu.",
+          teacherTip: "Kies een vast tempo en wissel de woorden snel af; zo blijft het echt een energizer en geen lange instructie.",
+          keywords: ["groep 3/4", "letterherkenning", "korte klank", "lange klank", "tweetekenklank"]
+        }),
+        spellingDocTask(GROUP_56, {
+          key: "waar-of-niet-waar-spelling",
+          visual: "jump",
+          visualHint: "Leerlingen springen of hurken bij korte stellingen over regels en woordbeelden.",
+          title: "Waar of niet waar - spelling",
+          summary: "Een korte check waarbij leerlingen direct reageren op spellingstellingen en daarna hun keuze toelichten.",
+          duration: "5 min",
+          setup: "Geen voorbereiding. Laat leerlingen naast hun tafel staan met ruimte om te springen of te hurken.",
+          goal: "Regels en woordbeelden rond lettergroepwoorden, weetwoorden en regelwoorden snel ophalen.",
+          movementFocus: "Direct reageren met springen of hurken en daarna kort uitleggen welke regel geldt.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat leerlingen naast hun tafel staan en spreek af: waar is springen, niet waar is hurken.",
+            "Noem een stelling, bijvoorbeeld: in apen hoor je een lange klank en schrijf je één klinker.",
+            "Laat leerlingen direct reageren met springen of hurken.",
+            "Bespreek kort waarom het antwoord goed of fout is."
+          ],
+          differentiation: "Laat leerlingen zelf een stelling bedenken voor een maatje of een volgende ronde.",
+          teacherTip: "Kies expres ook één veelgemaakte fout, zodat je meteen ziet welke regel nog extra uitleg nodig heeft.",
+          keywords: ["groep 5/6", "lettergroepwoorden", "weetwoorden", "regelwoorden", "stelling"]
+        }),
+        spellingDocTask(GROUP_56, {
+          key: "hoeken-kiezen-bij-spelling",
+          visual: "corners",
+          visualHint: "Leerlingen lopen naar de hoek van de juiste spellingcategorie en verwoorden daarna hun keuze.",
+          title: "Hoeken kiezen bij spelling",
+          summary: "Vier categoriehoeken helpen leerlingen om woorden snel te sorteren en de Staal-categorieen te benoemen.",
+          duration: "5-7 min",
+          setup: "Maak vier hoeken: luisterwoord, lettergroepwoord, regelwoord en weetwoord.",
+          goal: "Spellingcategorieen uit Staal 2 herkennen en actief ophalen.",
+          movementFocus: "Lopen naar de juiste hoek en mondeling verklaren waarom het woord in die categorie past.",
+          materials: ["Vier hoekkaarten"],
+          steps: [
+            "Richt vier hoeken in: luisterwoord, lettergroepwoord, regelwoord en weetwoord.",
+            "Noem een woord, bijvoorbeeld bomen, kippen, geit of circus.",
+            "Laat leerlingen naar de hoek lopen die volgens hen past.",
+            "Vraag steeds één leerling om de keuze kort uit te leggen."
+          ],
+          differentiation: "Gebruik minder hoeken als een categorie nog nieuw is en bouw daarna uit naar alle vier.",
+          teacherTip: "Houd een vast rijtje woorden per categorie achter de hand, zodat je snel kunt schakelen als de klas extra voorbeelden nodig heeft.",
+          keywords: ["groep 5/6", "spellingcategorieen", "staal 2", "hoeken", "lettergroepwoord", "weetwoord"]
+        }),
+        spellingDocTask(GROUP_56, {
+          key: "spellingsprint",
+          visual: "jump",
+          visualHint: "Vaste gebaren koppelen weetwoorden, regelwoorden en lettergroepwoorden aan een korte beweegstart.",
+          title: "Spellingsprint",
+          summary: "Leerlingen reageren met een gebaar op een woord of categorie en halen zo snel woordbeelden en regels op.",
+          duration: "3-5 min",
+          setup: "Geen voorbereiding. Spreek de drie gebaren af voordat je start.",
+          goal: "Woordbeeld en regelverinnerlijking in een heel korte bewegende herhaalronde activeren.",
+          movementFocus: "Kleine, snelle gebaren koppelen aan categorieen en woordbeelden.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat leerlingen op hun plek bewegen, bijvoorbeeld joggen of rustig stappen.",
+            "Noem een woord of categorie.",
+            "Bij een weetwoord tikken leerlingen hun hoofd aan, bij een regelwoord steken ze één vinger op en bij een lettergroepwoord maken ze een grote stap.",
+            "Eindig met twee woorden die samen hardop gespeld worden."
+          ],
+          differentiation: "Voeg leenwoorden toe als extra uitdaging of laat leerlingen na afloop zelf een woord aan de juiste beweging koppelen.",
+          teacherTip: "Gebruik woorden uit de categorie van de week; dan werkt deze energizer ook meteen als opfrisser van de les.",
+          keywords: ["groep 5/6", "woordbeeld", "regelwoord", "weetwoord", "herhaalstart"]
+        }),
+        spellingDocTask(GROUP_78, {
+          key: "waar-of-niet-waar-werkwoorden",
+          visual: "jump",
+          visualHint: "Een korte bovenbouwcheck met staan of hurken bij stellingen over werkwoordspelling.",
+          title: "Waar of niet waar - werkwoorden",
+          summary: "Leerlingen reageren lichamelijk op stellingen over werkwoordspelling en geven daarna kort de regel.",
+          duration: "5 min",
+          setup: "Geen voorbereiding. Laat leerlingen verspreid naast hun tafel staan.",
+          goal: "Persoonsvorm, onderwerp en tijd herkennen als basis voor werkwoordspelling.",
+          movementFocus: "Direct staan of hurken en daarna de regel kort hardop maken.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Noem een stelling, zoals: hij vindt schrijf je met dt of loop jij eindigt zonder t.",
+            "Waar betekent staan en niet waar betekent hurken.",
+            "Laat leerlingen direct reageren.",
+            "Vraag steeds één leerling om de juiste regel kort uit te leggen."
+          ],
+          differentiation: "Voeg zinnen met leestekens of hoofdletters in directe rede toe voor extra uitdaging.",
+          teacherTip: "Wissel makkelijke en lastige stellingen af; zo blijft de hele klas actief meedenken.",
+          keywords: ["groep 7/8", "werkwoordspelling", "persoonsvorm", "onderwerp", "tegenwoordig tijd"]
+        }),
+        spellingDocTask(GROUP_78, {
+          key: "vier-hoeken-categorie-of-regel",
+          visual: "corners",
+          visualHint: "Vier hoeken laten leerlingen snel kiezen tussen werkwoordspelling, weetwoorden, leestekens en leenwoorden.",
+          title: "Vier hoeken - categorie of regel",
+          summary: "Leerlingen sorteren woorden en zinnen al lopend naar de juiste categorie of regelhoek.",
+          duration: "5-7 min",
+          setup: "Label vier hoeken, bijvoorbeeld werkwoordspelling, weetwoord, leesteken en leenwoord.",
+          goal: "Categorieherkenning en transfer naar zinnen en eigen schrijfwerk oefenen.",
+          movementFocus: "Kiezen, lopen en daarna kort verwoorden welke regel of categorie past.",
+          materials: ["Vier hoekkaarten"],
+          steps: [
+            "Label vier hoeken met werkwoordspelling, weetwoord, leesteken en leenwoord.",
+            "Noem een woord of zin, bijvoorbeeld gebeurde, cappuccino of 'Kom je?', vroeg Noor.",
+            "Laat leerlingen naar de hoek lopen die het best past.",
+            "Bespreek per ronde één voorbeeld kort na."
+          ],
+          differentiation: "Gebruik ook zinnen uit eigen schrijfwerk om de transfer groter te maken.",
+          teacherTip: "Kies voorbeelden die echt twijfel oproepen; dan levert de nabespreking het meeste op.",
+          keywords: ["groep 7/8", "werkwoordspelling", "leestekens", "leenwoorden", "hoeken"]
+        }),
+        spellingDocTask(GROUP_78, {
+          key: "spellingscan-in-beweging",
+          visual: "jump",
+          visualHint: "Leerlingen lopen op de plaats en reageren op zinnen die goed of fout gespeld kunnen zijn.",
+          title: "Spellingscan in beweging",
+          summary: "Een snelle bewegende revisiecheck waarbij leerlingen fouten in zinnen signaleren en verbeteren.",
+          duration: "3-5 min",
+          setup: "Geen voorbereiding. Laat leerlingen rustig op de plaats bewegen.",
+          goal: "Spellingbewustzijn en revisievaardigheid in een korte check activeren.",
+          movementFocus: "Licht bewegen op de plaats en direct een foutsignaal of goed-signaal geven.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat leerlingen rustig op de plaats lopen of stappen.",
+            "Lees een zin voor met mogelijk een fout.",
+            "Als de zin goed is, steken leerlingen beide handen op. Zien ze een fout, dan tikken ze hun denkbeeldige rode pen aan.",
+            "Vraag daarna naar de verbetering."
+          ],
+          differentiation: "Laat leerlingen later zelf zinnen uit het thema of eigen werk aanleveren voor nieuwe rondes.",
+          teacherTip: "Lees de zin maar één keer voor; zo stimuleer je echt controleren op gehoor en taalgevoel.",
+          keywords: ["groep 7/8", "revisie", "spellingbewustzijn", "zinnen", "controle"]
+        })
+      ],
+      tijdens: [
+        spellingDocTask(GROUP_34, {
+          key: "loopdictee-luisterwoorden",
+          visual: "dictation",
+          visualHint: "Tweetallen halen luisterwoorden op, hakken de klanken en schrijven het woord daarna samen op.",
+          title: "Loopdictee luisterwoorden",
+          summary: "Een actief spellingdictee waarbij tweetallen woorden ophalen, hakken en meteen correct opschrijven.",
+          duration: "10 min",
+          setup: "Hang 6 tot 8 woordkaartjes in het lokaal en leg per tweetal schrijfmateriaal klaar.",
+          goal: "Luisterwoorden actief inoefenen met hakken, plakken en correct opschrijven.",
+          movementFocus: "Lopen, onthouden, terugkeren en daarna samen de klanken uitspreken en schrijven.",
+          materials: ["Woordkaartjes", "Potlood", "Schrift of wisbordje"],
+          steps: [
+            "Werk in tweetallen.",
+            "Eén leerling loopt naar een woordkaartje, leest of onthoudt het woord en loopt terug.",
+            "Samen hakken de leerlingen het woord, zeggen de klanken en schrijven het op.",
+            "Daarna wisselen de rollen."
+          ],
+          differentiation: "Laat sterke spellers na het opschrijven meteen een zin maken met het woord.",
+          teacherTip: "Laat leerlingen eerst hardop hakken voordat er geschreven wordt; zo blijft de auditieve analyse centraal.",
+          keywords: ["groep 3/4", "loopdictee", "luisterwoorden", "hakken", "plakken"]
+        }),
+        spellingDocTask(GROUP_34, {
+          key: "woordkaartjes-estafette",
+          visual: "relay",
+          visualHint: "Teams halen om de beurt een woordkaartje op en schrijven samen het woord van de categorie van de week.",
+          title: "Woordkaartjes-estafette",
+          summary: "Kleine teams oefenen veel woorden in tempo en koppelen beweging aan hardop redeneren over spelling.",
+          duration: "10-12 min",
+          setup: "Maak kaartjes met woorden uit de categorie van de week en leg schrijfmateriaal klaar per team.",
+          goal: "Veel oefenherhaling binnen de categorie van de week in Staal 2.",
+          movementFocus: "Korte estafetteloopjes afwisselen met samen hardop analyseren en schrijven.",
+          materials: ["Kaartjes", "Schrift of wisbordjes"],
+          steps: [
+            "Verdeel de klas in kleine teams.",
+            "De eerste leerling haalt een kaartje op, leest het woord hardop en legt uit wat hij of zij hoort.",
+            "Het team schrijft het woord op.",
+            "Daarna haalt de volgende leerling een nieuw kaartje."
+          ],
+          differentiation: "Geef zwakkere leerlingen kaartjes met een plaatje erbij of kortere woorden uit dezelfde categorie.",
+          teacherTip: "Laat ieder team steeds eerst de categorie noemen voordat het woord wordt opgeschreven.",
+          keywords: ["groep 3/4", "estafette", "categorie van de week", "staal 2", "woordkaartjes"]
+        }),
+        spellingDocTask(GROUP_34, {
+          key: "zoek-je-spellingmaatje",
+          visual: "circle",
+          visualHint: "Leerlingen lopen rond met een woordkaartje en zoeken een groepje met hetzelfde spellingpatroon.",
+          title: "Zoek je spellingmaatje",
+          summary: "Leerlingen vergelijken woordbeelden al lopend en leggen daarna uit welk spellingpatroon ze delen.",
+          duration: "10 min",
+          setup: "Geef iedere leerling een kaartje met een woord of plaatje uit een duidelijk spellingpatroon.",
+          goal: "Woorden sorteren op klank of spellingpatroon en daarover praten met een maatje.",
+          movementFocus: "Rondlopen, vergelijken en pas stoppen als je samen kunt uitleggen waarom woorden bij elkaar horen.",
+          materials: ["Kaartjes met woorden of plaatjes"],
+          steps: [
+            "Geef iedere leerling een woordkaartje.",
+            "Laat leerlingen door de klas lopen en iemand zoeken met hetzelfde patroon, bijvoorbeeld korte klank, lange klank of tweetekenklank.",
+            "Als een duo of groepje denkt bij elkaar te horen, leggen ze uit waarom.",
+            "Controleer klassikaal enkele voorbeelden."
+          ],
+          differentiation: "Werk eerst met twee duidelijke categorieen en voeg later een derde patroon toe.",
+          teacherTip: "Laat leerlingen pas blijven staan als zij hun patroon in woorden kunnen uitleggen.",
+          keywords: ["groep 3/4", "spellingmaatje", "korte klank", "lange klank", "tweetekenklank"]
+        }),
+        spellingDocTask(GROUP_56, {
+          key: "loopdictee-categorie-van-de-week",
+          visual: "dictation",
+          visualHint: "Tweetallen halen woorden of zinnen op en benoemen bij het opschrijven meteen de regel of categorie.",
+          title: "Loopdictee categorie van de week",
+          summary: "Een actief loopdictee om de categorie van de week in woorden of zinnen correct toe te passen.",
+          duration: "10-15 min",
+          setup: "Hang 8 tot 10 woord- of zinstrippen op en leg per tweetal een schrijfplek klaar.",
+          goal: "De centrale categorie van de week correct schrijven en uitleggen in context.",
+          movementFocus: "Lopen, onthouden, samen schrijven en hardop de regel benoemen.",
+          materials: ["Kaartjes", "Schrift of wisbordje"],
+          steps: [
+            "Werk in tweetallen.",
+            "Eén leerling loopt naar een kaartje en leest het woord of de korte zin.",
+            "Terug bij de tafel schrijft het tweetal het woord of de zin op en benoemt de regel.",
+            "Daarna wisselen de rollen."
+          ],
+          differentiation: "Gebruik korte zinnen in plaats van losse woorden als je transfer naar schrijven wilt oefenen.",
+          teacherTip: "Laat leerlingen na elke zin eerst samen de categorie of regel noemen; dan blijft het geen overschrijfoefening.",
+          keywords: ["groep 5/6", "loopdictee", "categorie van de week", "regeluitleg", "context"]
+        }),
+        spellingDocTask(GROUP_56, {
+          key: "categoriecircuit",
+          visual: "stations",
+          visualHint: "Korte spellingposten laten leerlingen in tempo oefenen met verschillende categorieen uit Staal 2.",
+          title: "Categoriecircuit",
+          summary: "Een actief circuit waarin leerlingen meerdere spellingcategorieen kort en afwisselend inoefenen.",
+          duration: "10-15 min",
+          setup: "Maak 4 tot 6 posten met verschillende categorieen en leg schrijfmateriaal klaar.",
+          goal: "Luister-, lettergroep-, regel- en weetwoorden in afwisselende oefenvormen herhalen.",
+          movementFocus: "Tussen posten lopen, kort werken en na een signaal doorwisselen.",
+          materials: ["Postkaartjes", "Potlood", "Schrift"],
+          steps: [
+            "Zet in elk hoekje van het lokaal een post neer.",
+            "Per post maken leerlingen 2 of 3 woorden of kiezen ze de goede spelling.",
+            "Na twee minuten schuiven ze door.",
+            "Sluit af met een korte nabespreking van lastige woorden."
+          ],
+          differentiation: "Laat sterke spellers op één post ook zelf een extra voorbeeld bedenken.",
+          teacherTip: "Houd iedere post heel compact; zo blijft het tempo hoog en wordt de circuitvorm echt helpend.",
+          keywords: ["groep 5/6", "circuit", "spellingcategorieen", "luisterwoorden", "weetwoorden"]
+        }),
+        spellingDocTask(GROUP_56, {
+          key: "zoek-de-juiste-spellingpartner",
+          visual: "circle",
+          visualHint: "Leerlingen zoeken al lopend een woord, regel of categoriekaart die bij hun spellingkaart hoort.",
+          title: "Zoek de juiste spellingpartner",
+          summary: "Leerlingen vergelijken spellingvormen actief en leggen daarna uit waarom hun match klopt.",
+          duration: "10 min",
+          setup: "Maak kaartjes met correcte spellingen, categorieen en regeluitleg die bij elkaar horen.",
+          goal: "Woordbeeld, regeluitleg en foutenanalyse verbinden in een actieve matchopdracht.",
+          movementFocus: "Rondlopen, vergelijken en pas stoppen als de match ook inhoudelijk uitgelegd kan worden.",
+          materials: ["Kaartjes"],
+          steps: [
+            "Geef iedere leerling één kaartje.",
+            "De klas loopt rond en zoekt de partner of matchgroep die erbij hoort, bijvoorbeeld een woord en de juiste categorie.",
+            "Als leerlingen denken dat hun kaarten bij elkaar horen, leggen ze dat aan elkaar uit.",
+            "Controleer klassikaal enkele matches."
+          ],
+          differentiation: "Werk in trio's of matchgroepen met woord, categorie en uitleg als uitbreiding.",
+          teacherTip: "Laat leerlingen pas verder zoeken als ze eerst hebben verteld waarom een kaart niet past; dat scherpt het denken.",
+          keywords: ["groep 5/6", "spellingpartner", "woordbeeld", "regeluitleg", "foutenanalyse"]
+        }),
+        spellingDocTask(GROUP_78, {
+          key: "loopdictee-werkwoordspelling",
+          visual: "dictation",
+          visualHint: "Tweetallen halen zinnen op met een ontbrekende of te controleren werkwoordsvorm en vullen die samen in.",
+          title: "Loopdictee werkwoordspelling",
+          summary: "Een bewegende werkvorm om werkwoordsvormen in zinnen actief te kiezen en meteen met de regel te onderbouwen.",
+          duration: "10-15 min",
+          setup: "Hang zinnen op waarin werkwoordsvormen ontbreken of gecontroleerd moeten worden.",
+          goal: "Tegenwoordige tijd, verleden tijd en voltooid deelwoord actief toepassen in zinnen.",
+          movementFocus: "Lopen, onthouden en daarna samen de juiste vorm kiezen en beargumenteren.",
+          materials: ["Kaartjes", "Schrift of wisbordje"],
+          steps: [
+            "Werk in tweetallen.",
+            "Eén leerling leest een zin aan de muur, bijvoorbeeld: Morgen ... hij de wedstrijd.",
+            "Terug bij de tafel vullen de leerlingen de juiste vorm in en leggen de regel uit.",
+            "Daarna wisselen ze."
+          ],
+          differentiation: "Gebruik ook zinnen met onderwerp achter de persoonsvorm voor extra uitdaging.",
+          teacherTip: "Laat leerlingen eerst samen benoemen wat de persoonsvorm en de tijd zijn voordat ze schrijven.",
+          keywords: ["groep 7/8", "werkwoordspelling", "loopdictee", "persoonsvorm", "voltooid deelwoord"]
+        }),
+        spellingDocTask(GROUP_78, {
+          key: "leestekenroute",
+          visual: "path",
+          visualHint: "Een route langs korte tekststroken zonder leestekens dwingt leerlingen tot actief corrigeren en toelichten.",
+          title: "Leestekenroute",
+          summary: "Leerlingen lopen langs tekststroken, vullen leestekens in en verantwoorden daarna hun keuzes.",
+          duration: "10 min",
+          setup: "Hang korte zinnen of tekststroken op zonder leestekens en leg schrijfmateriaal klaar.",
+          goal: "Punt, komma, vraagteken, uitroepteken, aanhalingstekens en dubbele punt bewust toepassen.",
+          movementFocus: "Van strook naar strook lopen, kort observeren en daarna gericht noteren of bespreken.",
+          materials: ["Tekststroken", "Potlood", "Schrift"],
+          steps: [
+            "Leerlingen lopen langs tekststroken.",
+            "Per strook noteren ze welke leestekens ontbreken.",
+            "Bij terugkomst bespreken ze waarom die leestekens daar horen.",
+            "Laat twee stroken klassikaal corrigeren."
+          ],
+          differentiation: "Gebruik in groep 8 directe rede als extra moeilijkheid.",
+          teacherTip: "Bespreek niet alleen welk leesteken past, maar ook welk leesteken juist niet past en waarom.",
+          keywords: ["groep 7/8", "leestekens", "route", "directe rede", "correctie"]
+        }),
+        spellingDocTask(GROUP_78, {
+          key: "spellingcircuit-bovenbouw",
+          visual: "stations",
+          visualHint: "Korte bovenbouwposten laten leerlingen rouleren tussen werkwoorden, weetwoorden, leenwoorden en leestekens.",
+          title: "Spellingcircuit bovenbouw",
+          summary: "Leerlingen oefenen verschillende bovenbouwonderdelen in een korte circuitvorm met veel herhaling.",
+          duration: "10-15 min",
+          setup: "Maak 4 of 5 korte opdrachtenposten en leg per post een schrijf- of controleblad klaar.",
+          goal: "Werkwoorden, weetwoorden, leenwoorden en leestekens afwisselend herhalen.",
+          movementFocus: "Tussen korte opdrachtenposten lopen en per post snel kiezen, verbeteren of uitleggen.",
+          materials: ["Postkaartjes", "Schrift of wisbordje"],
+          steps: [
+            "Verdeel de klas over meerdere posten.",
+            "Per post maken leerlingen een korte opdracht: kies de juiste spelling, verbeter een zin of verklaar de regel.",
+            "Na twee of drie minuten schuiven ze door.",
+            "Sluit af met een gezamenlijke foutenanalyse."
+          ],
+          differentiation: "Laat snelle leerlingen een extra controlevraag formuleren voor de volgende groep.",
+          teacherTip: "Zorg dat per post maar één kernvaardigheid centraal staat; dat houdt het circuit overzichtelijk.",
+          keywords: ["groep 7/8", "spellingcircuit", "werkwoorden", "leenwoorden", "leestekens"]
+        })
+      ],
+      bewegend: [
+        spellingDocTask(GROUP_34, {
+          key: "hakkenpad-op-de-vloer",
+          visual: "line",
+          visualHint: "Een pad met vakken laat leerlingen per klank stappen en daarna het woord weer aan elkaar plakken.",
+          title: "Hakkenpad op de vloer",
+          summary: "Leerlingen stappen per klank over een vloervak en maken zo fonemen en woorden letterlijk zichtbaar.",
+          duration: "10 min",
+          setup: "Leg met hoepels of tape een pad met drie, vier of vijf vakken op de vloer.",
+          goal: "Fonemisch bewustzijn, hakken en plakken en luisterwoorden concreet maken.",
+          movementFocus: "Per klank in een vak stappen en daarna het woord weer vloeiend uitspreken.",
+          materials: ["Hoepels of tape"],
+          steps: [
+            "Maak op de vloer een pad met drie, vier of vijf vakken.",
+            "Noem een woord, bijvoorbeeld vis of bomen.",
+            "Een leerling stapt per klank in een vak en zegt de klanken hardop.",
+            "Daarna plakken de leerlingen het woord weer aan elkaar en schrijven het op."
+          ],
+          differentiation: "Gebruik in groep 4 ook woorden met twee medeklinkers of langere woorden.",
+          teacherTip: "Laat leerlingen eerst hardop voorspellen hoeveel vakken ze nodig hebben; dat maakt het hakken bewuster.",
+          keywords: ["groep 3/4", "fonemisch bewustzijn", "hakken", "plakken", "vloerpad"]
+        }),
+        spellingDocTask(GROUP_34, {
+          key: "korte-klank-lange-stap",
+          visual: "line",
+          visualHint: "Twee kanten in het lokaal maken het verschil tussen korte en lange klanken direct zichtbaar.",
+          title: "Korte klank, lange stap",
+          summary: "Leerlingen kiezen lichamelijk tussen korte en lange klank en koppelen die keuze aan de spelling van het woord.",
+          duration: "10 min",
+          setup: "Maak twee kanten in het lokaal: korte klank en lange klank.",
+          goal: "Het verschil tussen korte en lange klanken in open en gesloten lettergrepen begrijpen.",
+          movementFocus: "Naar een kant lopen die past bij de klank en die keuze daarna toelichten.",
+          materials: ["Eventueel twee kaartjes met de labels"],
+          steps: [
+            "Noem een woord, bijvoorbeeld zon, bomen, kippen of ramen.",
+            "Laat leerlingen naar de kant lopen die past: korte klank of lange klank.",
+            "Bespreek daarna hoe je dat hoort en ziet in het woord.",
+            "Schrijf een paar woorden klassikaal op en laat leerlingen het verschil benoemen."
+          ],
+          differentiation: "Maak het moeilijker met woorden waarin de spelling verandert, zoals bomen en bommen.",
+          teacherTip: "Gebruik eerst duidelijke tegenhangers zoals zon en zoon, zodat het verschil snel voelbaar wordt.",
+          keywords: ["groep 3/4", "korte klank", "lange klank", "open lettergreep", "gesloten lettergreep"]
+        }),
+        spellingDocTask(GROUP_34, {
+          key: "woord-bouwen-met-lichaamsletters",
+          visual: "circle",
+          visualHint: "Leerlingen vormen samen een woord met hun lichaam en controleren daarna de lettervolgorde.",
+          title: "Woord bouwen met lichaamsletters",
+          summary: "Een beweegvorm waarin leerlingen letters en woordbeelden zichtbaar maken door zelf het woord te vormen.",
+          duration: "10-12 min",
+          setup: "Geen voorbereiding. Spreek af hoe leerlingen letters uitbeelden of verdeel letterrollen.",
+          goal: "Lettervolgorde, woordbeeld en de categorie van de week zichtbaar maken.",
+          movementFocus: "Met het lichaam of in een opstelling letters en de volgorde van een woord laten zien.",
+          materials: ["Geen extra materiaal", "Eventueel letterkaartjes"],
+          steps: [
+            "Geef een woord uit de les, bijvoorbeeld maan, vis of boek.",
+            "Leerlingen spreken af wie welke letter is of gebruiken letterkaartjes.",
+            "Ze gaan in de juiste volgorde staan en zeggen samen het woord.",
+            "Bespreek welke letters je hoort en welke je schrijft."
+          ],
+          differentiation: "Laat groep 4 ook foutgeschreven woorden verbeteren door de goede volgorde te bouwen.",
+          teacherTip: "Gebruik korte woorden in het begin; zo blijft de focus op het spellingpatroon in plaats van op organiseren.",
+          keywords: ["groep 3/4", "woordbeeld", "lichaamsletters", "lettervolgorde", "categorie van de week"]
+        }),
+        spellingDocTask(GROUP_56, {
+          key: "lettergroepstraat",
+          visual: "line",
+          visualHint: "Twee stroken op de vloer maken open en gesloten lettergrepen letterlijk beloopbaar.",
+          title: "Lettergroepstraat",
+          summary: "Leerlingen lopen een woord in lettergrepen en koppelen elke stap aan open of gesloten spelling.",
+          duration: "10-12 min",
+          setup: "Maak twee stroken op de vloer: open lettergreep en gesloten lettergreep.",
+          goal: "Lettergroepwoorden en het verschil tussen lange en korte klank in meerlettergrepige woorden concreet maken.",
+          movementFocus: "Per lettergreep lopen en bewust kiezen in welke strook de lettergreep hoort.",
+          materials: ["Tape of twee kaarten"],
+          steps: [
+            "Noem of toon een woord, bijvoorbeeld apen, boten, kippen of ratten.",
+            "Een leerling loopt het woord in lettergrepen en gaat bij elke lettergreep in de juiste strook staan.",
+            "Bespreek wat er met de klinker gebeurt en waarom je één of twee medeklinkers schrijft.",
+            "Laat daarna het woord opschrijven."
+          ],
+          differentiation: "Gebruik later ook uitzonderingen en woorden uit teksten die leerlingen zelf lezen.",
+          teacherTip: "Laat leerlingen eerst de lettergrepen klappen voordat ze de straat inlopen; dat maakt de overstap duidelijker.",
+          keywords: ["groep 5/6", "lettergroepwoorden", "open lettergreep", "gesloten lettergreep", "stroken"]
+        }),
+        spellingDocTask(GROUP_56, {
+          key: "weetwoordmuur",
+          visual: "path",
+          visualHint: "Een muur met weetwoorden laat leerlingen gericht kiezen, lezen en daarna zonder voorbeeld opschrijven.",
+          title: "Weetwoordmuur",
+          summary: "Leerlingen koppelen klank en woordbeeld aan een muur met weetwoorden en schrijven daarna het woord uit het hoofd.",
+          duration: "10 min",
+          setup: "Hang weetwoorden op verschillende plekken in het lokaal.",
+          goal: "Woordbeelden van weetwoorden zoals ei/ij en au/ou actief onthouden.",
+          movementFocus: "Naar het juiste woord lopen, het hardop lezen en daarna zonder voorbeeld reproduceren.",
+          materials: ["Woordkaartjes"],
+          steps: [
+            "Hang kaartjes op met woorden uit dezelfde weetwoordcategorie.",
+            "Noem de klank of het woordbeeld dat centraal staat, bijvoorbeeld ei/ij.",
+            "Leerlingen lopen naar een woord dat past en lezen het hardop.",
+            "Laat ze daarna het woord zonder kaartje opschrijven."
+          ],
+          differentiation: "Maak twee wanden, bijvoorbeeld ei en ij, en laat leerlingen steeds de juiste kant kiezen.",
+          teacherTip: "Laat leerlingen na het opschrijven nog één keer teruglopen om hun woordbeeld zelf te controleren.",
+          keywords: ["groep 5/6", "weetwoorden", "ei ij", "au ou", "woordbeeld"]
+        }),
+        spellingDocTask(GROUP_56, {
+          key: "regelroute",
+          visual: "path",
+          visualHint: "Leerlingen zoeken al lopend woorden, regels en voorbeelden die als set bij elkaar horen.",
+          title: "Regelroute",
+          summary: "Een routeopdracht waarin leerlingen verband leggen tussen woord, regel en voorbeeld.",
+          duration: "10-15 min",
+          setup: "Verspreid woorden, regelkaartjes en voorbeeldkaartjes door het lokaal.",
+          goal: "Regelwoorden en net-als-woorden verbinden aan de juiste uitleg en voorbeelden.",
+          movementFocus: "Lopen, setjes samenstellen en hardop benoemen welke regel je toepast.",
+          materials: ["Kaartjes"],
+          steps: [
+            "Verspreid woorden, regelkaartjes en voorbeeldkaartjes door het lokaal.",
+            "Leerlingen lopen in tweetallen en zoeken steeds een set van drie die bij elkaar hoort.",
+            "Bij elk setje spreken ze hardop uit welke regel wordt toegepast.",
+            "Bespreek klassikaal twee of drie complete sets."
+          ],
+          differentiation: "Laat leerlingen zelf een extra voorbeeldwoord toevoegen aan een gevonden set.",
+          teacherTip: "Leg de nadruk op de uitlegzin; juist het verwoorden van de regel maakt deze opdracht sterk.",
+          keywords: ["groep 5/6", "regelroute", "regelwoorden", "net als woorden", "uitleg"]
+        }),
+        spellingDocTask(GROUP_78, {
+          key: "werkwoordschema-op-de-vloer",
+          visual: "line",
+          visualHint: "Een schema op de vloer laat leerlingen de vaste controlevolgorde van werkwoordspelling letterlijk doorlopen.",
+          title: "Werkwoordschema op de vloer",
+          summary: "Leerlingen lopen stap voor stap door het werkwoordschema en zeggen hardop welke controle ze uitvoeren.",
+          duration: "10-15 min",
+          setup: "Leg stappen op de vloer: onderwerp zoeken, tijd bepalen, stam maken, uitgang kiezen en controleren.",
+          goal: "Het controle-algoritme van werkwoordspelling zichtbaar en herhaalbaar maken.",
+          movementFocus: "Per stap door het schema lopen en de controle hardop benoemen.",
+          materials: ["Stapkaarten of tapevakken"],
+          steps: [
+            "Lees een zin voor met een werkwoordsvorm die gekozen moet worden.",
+            "Een leerling loopt stap voor stap door het schema en zegt hardop wat hij of zij controleert.",
+            "De klas vult aan waar nodig.",
+            "Schrijf daarna samen de juiste vorm op."
+          ],
+          differentiation: "Laat tweetallen later zelf een zin kiezen en het schema samen doorlopen.",
+          teacherTip: "Gebruik steeds dezelfde volgorde en taal; zo wordt het schema echt een vaste denkroute.",
+          keywords: ["groep 7/8", "werkwoordschema", "werkwoordspelling", "controlevolgorde", "algoritme"]
+        }),
+        spellingDocTask(GROUP_78, {
+          key: "zin-in-delen",
+          visual: "line",
+          visualHint: "Zinsdeelkaartjes maken onderwerp, persoonsvorm en andere delen zichtbaar in een levende zin.",
+          title: "Zin in delen",
+          summary: "Leerlingen bouwen met zinsdelen een zin op en koppelen grammatica direct aan de juiste werkwoordsvorm.",
+          duration: "10 min",
+          setup: "Maak kaartjes met onderwerp, persoonsvorm en andere zinsdelen.",
+          goal: "Onderwerp en persoonsvorm herkennen als basis voor werkwoordspelling.",
+          movementFocus: "Fysiek in de juiste volgorde gaan staan en daarna onderdelen aanwijzen en benoemen.",
+          materials: ["Zinsdeelkaartjes"],
+          steps: [
+            "Geef leerlingen kaartjes met delen van een zin.",
+            "Ze moeten fysiek in de goede volgorde gaan staan.",
+            "Daarna wijzen ze onderwerp en persoonsvorm aan.",
+            "Bespreek welke werkwoordsvorm daarbij hoort en waarom."
+          ],
+          differentiation: "Wissel van woordvolgorde om inversie te oefenen.",
+          teacherTip: "Laat na het opstellen van de zin eerst de persoonsvorm zoeken; dat maakt de koppeling naar spelling het sterkst.",
+          keywords: ["groep 7/8", "zinsdelen", "onderwerp", "persoonsvorm", "inversie"]
+        }),
+        spellingDocTask(GROUP_78, {
+          key: "foutenjacht",
+          visual: "path",
+          visualHint: "Tweetallen lopen langs foutzinnen, verbeteren die en koppelen de correctie aan de juiste regel of het juiste woordbeeld.",
+          title: "Foutenjacht",
+          summary: "Leerlingen speuren actief naar spelfouten en verantwoorden daarna hoe de zin verbeterd moet worden.",
+          duration: "10-12 min",
+          setup: "Hang zinnen of korte alinea's op met bewuste spelfouten.",
+          goal: "Revisievaardigheden, weetwoorden, werkwoorden en leestekens bewust controleren en verbeteren.",
+          movementFocus: "Van zin naar zin lopen, fouten signaleren en de verbetering mondeling onderbouwen.",
+          materials: ["Foutzinnen op kaart of papier"],
+          steps: [
+            "Leerlingen lopen in tweetallen langs de foutzinnen.",
+            "Ze noteren welke fout ze zien en hoe het goed moet.",
+            "Daarna leggen ze uit welke regel of welk woordbeeld daarbij hoort.",
+            "Sluit af met een korte klassikale check."
+          ],
+          differentiation: "Laat leerlingen zelf een foutzin maken voor een ander tweetal als extra ronde.",
+          teacherTip: "Gebruik verschillende foutsoorten door elkaar, zodat leerlingen echt moeten controleren in plaats van raden.",
+          keywords: ["groep 7/8", "foutenjacht", "revisie", "werkwoorden", "leestekens"]
+        })
+      ]
+    },
     rekenen: {
       energizers: [
         docTask(GROUP_34, {
@@ -630,9 +1211,9 @@ function buildTaskBlueprintsFromDoc() {
         docTask(GROUP_78, {
           key: "breuk-decimaal-procent-match",
           visual: "circle",
-          visualHint: "Leerlingen zoeken al lopend de twee notaties die bij hun breuk, decimaal of percentage horen.",
+          visualHint: "Leerlingen zoeken al lopend alle notaties die bij hun breuk, decimaal of percentage horen.",
           title: "Breuk - decimaal - procent match",
-          summary: "Leerlingen vormen trio's van gelijkwaardige notaties en lichten samen toe waarom die match klopt.",
+          summary: "Leerlingen vormen complete matchgroepen van gelijkwaardige notaties en lichten samen toe waarom die match klopt.",
           duration: "10 min",
           setup: "Maak setjes met breuken, decimalen en procenten en deel 1 kaart per leerling uit.",
           goal: "Relaties tussen breuken, decimalen en procenten begrijpen en verwoorden.",
@@ -640,8 +1221,8 @@ function buildTaskBlueprintsFromDoc() {
           materials: ["Kaartjes"],
           steps: [
             "Geef iedere leerling een kaartje met een breuk, decimaal getal of percentage.",
-            "Leerlingen lopen rond en zoeken de 2 kaartjes die bij hun kaart horen.",
-            "Als trio blijven zij samen staan en lichten hun match toe.",
+            "Leerlingen lopen rond en zoeken de andere kaartjes die bij hun waarde horen.",
+            "Als matchgroep blijven zij samen staan en lichten hun match toe.",
             "Bespreek klassikaal een paar combinaties."
           ],
           differentiation: "Voeg lastigere percentages toe, zoals 12,5% of 62,5%.",
@@ -737,9 +1318,6 @@ function buildTaskBlueprintsFromDoc() {
   };
 }
 
-const library = buildLibrary();
-const allTasks = flattenTasks();
-
 const initialState = {
   groupId: null,
   subjectId: null,
@@ -802,9 +1380,6 @@ bindIfPresent(ui.taskDetail, "click", handleTaskDetailClick);
 bindIfPresent(ui.taskGrid, "click", handleTaskGridClick);
 window.addEventListener("popstate", handlePopState);
 
-initializeHistory();
-commitState("replace");
-
 function bindIfPresent(element, eventName, handler) {
   if (element) {
     element.addEventListener(eventName, handler);
@@ -826,6 +1401,79 @@ function buildLibrary() {
   }));
 }
 
+const taskPrintProfiles = {
+  "klap-stamp-of-stil": { enabled: false },
+  "waar-hoor-je-de-klank": { enabled: false },
+  "letterflits-in-beweging": { enabled: false },
+  "waar-of-niet-waar-spelling": { enabled: false },
+  "spellingsprint": { enabled: false },
+  "waar-of-niet-waar-werkwoorden": { enabled: false },
+  "spellingscan-in-beweging": { enabled: false },
+  "woord-bouwen-met-lichaamsletters": { enabled: false },
+  "loopdictee-luisterwoorden": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: true, includeTeacherSheets: true },
+  "woordkaartjes-estafette": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: true, includeTeacherSheets: true },
+  "zoek-je-spellingmaatje": { enabled: true, expandWorkCardsToClassSize: true, includeSupportCards: false, includeTeacherSheets: false },
+  "hakkenpad-op-de-vloer": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  "korte-klank-lange-stap": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  "hoeken-kiezen-bij-spelling": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  "loopdictee-categorie-van-de-week": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: true, includeTeacherSheets: true },
+  categoriecircuit: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: true, includeTeacherSheets: true },
+  "zoek-de-juiste-spellingpartner": { enabled: true, expandWorkCardsToClassSize: true, includeSupportCards: false, includeTeacherSheets: false },
+  lettergroepstraat: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  weetwoordmuur: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  regelroute: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  "vier-hoeken-categorie-of-regel": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  "loopdictee-werkwoordspelling": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: true, includeTeacherSheets: true },
+  leestekenroute: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: true },
+  "spellingcircuit-bovenbouw": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: true, includeTeacherSheets: true },
+  "werkwoordschema-op-de-vloer": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  "zin-in-delen": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  foutenjacht: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: true },
+  "tel-en-spring": { enabled: false },
+  "waar-of-niet-waar-34": { enabled: false },
+  rekenbevries: { enabled: false },
+  "hoeken-kiezen": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: true, includeTeacherSheets: false },
+  "klap-als-het-klopt": { enabled: false },
+  "waar-niet-waar-bovenbouw": { enabled: false },
+  "keuzehoeken-rekenen": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: true, includeTeacherSheets: false },
+  sommenwandeling: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: true },
+  "staand-flitsen": { enabled: false },
+  "rekenen-estafette": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: true, includeTeacherSheets: true },
+  "loopdictee-rekenen": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: true, includeTeacherSheets: true },
+  "rekencircuit-56": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: true, includeTeacherSheets: true },
+  "zoek-iemand-die": { enabled: true, expandWorkCardsToClassSize: true, includeSupportCards: false, includeTeacherSheets: false },
+  "rekencircuit-bovenbouw": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: true, includeTeacherSheets: true },
+  "wandel-en-leg-uit": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: true },
+  antwoordestafette: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: true, includeTeacherSheets: true },
+  "getallenlijn-lopen": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: true, includeTeacherSheets: false },
+  "splitsen-met-je-lichaam": { enabled: false },
+  "tafels-springen": { enabled: false },
+  "breukenlijn-op-de-vloer": { enabled: true, expandWorkCardsToClassSize: true, includeSupportCards: true, includeTeacherSheets: false },
+  "kommagetallen-op-volgorde": { enabled: true, expandWorkCardsToClassSize: true, includeSupportCards: true, includeTeacherSheets: false },
+  "omtrek-of-oppervlakte": { enabled: false },
+  coordinatenraster: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  "breuk-decimaal-procent-match": { enabled: true, expandWorkCardsToClassSize: true, includeSupportCards: false, includeTeacherSheets: false },
+  "verhoudingentabel-op-de-vloer": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  grafiekenwandeling: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: true },
+  schaalwandeling: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: true },
+  "hoeken-en-lijnen-met-je-lichaam": { enabled: false }
+};
+
+function getTaskPrintProfile(taskKey) {
+  return taskPrintProfiles[taskKey] ?? {
+    enabled: false,
+    expandWorkCardsToClassSize: false,
+    includeSupportCards: false,
+    includeTeacherSheets: false
+  };
+}
+
+const library = buildLibrary();
+const allTasks = flattenTasks();
+
+initializeHistory();
+commitState("replace");
+
 function materializeTask(group, subject, moment, blueprint) {
   const title = readGroupValue(blueprint.title, group.id);
   const summary = readGroupValue(blueprint.summary, group.id);
@@ -835,8 +1483,9 @@ function materializeTask(group, subject, moment, blueprint) {
     return null;
   }
 
-  const usesCards = true;
-  const cardPack = buildCardPack(group, subject, moment, blueprint, title);
+  const printProfile = getTaskPrintProfile(blueprint.key);
+  const usesCards = printProfile.enabled;
+  const cardPack = usesCards ? buildCardPack(group, subject, moment, blueprint, title, printProfile) : null;
 
   return {
     id: `${group.id}-${subject.id}-${moment.id}-${blueprint.key}`,
@@ -862,6 +1511,7 @@ function materializeTask(group, subject, moment, blueprint) {
     visualHint: blueprint.visualHint,
     usesCards,
     cardPack,
+    printProfile,
     keywords: blueprint.keywords,
     searchText: normalize(
       [
@@ -890,30 +1540,26 @@ function readGroupValue(value, groupId) {
 }
 
 function taskNeedsCards(blueprint) {
-  const haystack = normalize(
-    [blueprint.setup, blueprint.materials.join(" "), blueprint.keywords.join(" "), blueprint.visualHint].join(" ")
-  );
-
-  return haystack.includes("kaart");
+  return getTaskPrintProfile(blueprint.key).enabled;
 }
 
-function buildCardPack(group, subject, moment, blueprint, title) {
-  const cards = getStarterCards(subject.id, group.id, blueprint.visual, blueprint.key, title);
-  const supportCards = getSupportCards(group, subject, moment, blueprint, title);
-  const teacherSheets = getTeacherSheets(group, subject, moment, blueprint, title);
+function buildCardPack(group, subject, moment, blueprint, title, printProfile) {
+  const cards = getStarterCards(subject.id, group.id, blueprint.visual, blueprint.key, title, printProfile);
+  const supportCards = printProfile.includeSupportCards ? getSupportCards(group, subject, moment, blueprint, title) : [];
+  const teacherSheets = printProfile.includeTeacherSheets ? getTeacherSheets(group, subject, moment, blueprint, title) : [];
 
   return {
     title: `Printset voor ${title}`,
-    intro: buildCardIntro(subject, moment, group, title, cards.length),
+    intro: buildCardIntro(subject, moment, group, title, cards.length, printProfile),
     note: buildCardNote(subject.id, group.id, blueprint.visual, blueprint.key),
     cards,
     supportCards,
     teacherSheets,
-    printChecklist: buildPrintChecklist(subject, cards, supportCards, teacherSheets)
+    printChecklist: buildPrintChecklist(subject, cards, supportCards, teacherSheets, printProfile)
   };
 }
 
-function buildCardIntro(subject, moment, group, title, cardCount) {
+function buildCardIntro(subject, moment, group, title, cardCount, printProfile) {
   const methodLine =
     subject.id === "spelling"
       ? "De inhoud volgt de lijn van Staal 2 met herkenbare categorieen, klankgroepen en waar nodig het werkwoordschema."
@@ -921,10 +1567,46 @@ function buildCardIntro(subject, moment, group, title, cardCount) {
         ? "De inhoud sluit aan bij Getal & Ruimte Junior met automatiseren, rekentaal, vaste strategieen en duidelijke modellen."
         : "De inhoud sluit aan bij de taaldoelen van deze werkvorm.";
 
-  return `Deze printset sluit direct aan bij ${title} voor ${group.label}. Je krijgt ${cardCount} werkkaartjes, uitgewerkt voor een klas van ${CLASS_SIZE} leerlingen. Verdeel ze los of in ${CLASS_GROUP_COUNT} setjes van ${CLASS_GROUP_SIZE} voor ${moment.label.toLowerCase()} binnen ${subject.label.toLowerCase()}. ${methodLine}`;
+  const distributionLine = printProfile.expandWorkCardsToClassSize
+    ? `Je krijgt ${cardCount} leerlingkaartjes, passend voor een klas van ${CLASS_SIZE} leerlingen.`
+    : `Je krijgt ${cardCount} gerichte opdrachtkaarten of bladen voor deze werkvorm.`;
+
+  return `Deze printset sluit direct aan bij ${title} voor ${group.label}. ${distributionLine} Gebruik ze binnen ${moment.label.toLowerCase()} voor ${subject.label.toLowerCase()}. ${methodLine}`;
 }
 
 function buildCardNote(subjectId, groupId, visual, taskKey) {
+  if (taskKey === "zoek-je-spellingmaatje" || taskKey === "zoek-de-juiste-spellingpartner") {
+    return [
+      "Geef iedere leerling één kaart en laat leerlingen pas stoppen als zij hun match of matchgroep kunnen uitleggen.",
+      "Leg vooraf kort voor hoe een goede uitleg klinkt: noem het patroon, de categorie of de regel.",
+      "Gebruik de klassikale nabespreking om één of twee twijfelgevallen samen te verklaren."
+    ];
+  }
+
+  if (taskKey === "werkwoordschema-op-de-vloer") {
+    return [
+      "Leg de vijf stapkaarten in vaste volgorde op de vloer en gebruik steeds dezelfde denkrichting.",
+      "Kies per ronde één zinkaart en laat één leerling hardop door het schema lopen.",
+      "Bespreek pas na het lopen welke werkwoordsvorm je opschrijft; zo blijft de controlevolgorde centraal."
+    ];
+  }
+
+  if (taskKey === "zin-in-delen") {
+    return [
+      "Print de zinsdeelkaarten per set in één kleur zodat leerlingen sneller complete zinnen kunnen bouwen.",
+      "Laat leerlingen eerst de zin leggen en pas daarna onderwerp en persoonsvorm aanwijzen.",
+      "Gebruik een extra ronde met omgedraaide volgorde als je inversie wilt oefenen."
+    ];
+  }
+
+  if (taskKey === "lettergroepstraat" || taskKey === "korte-klank-lange-stap") {
+    return [
+      "Leg de labelkaarten eerst goed zichtbaar neer voordat je met de woordkaarten start.",
+      "Gebruik per ronde maar één woordkaart tegelijk zodat de aandacht volledig naar de klank en de spelling gaat.",
+      "Bespreek na elke ronde kort wat je hoort én wat je daarom opschrijft."
+    ];
+  }
+
   if (taskKey === "praatcarrousel" || taskKey === "spreekspoor") {
     return [
       "Leg de gesprekskaartjes op tafel of op de route zodat leerlingen steeds met een nieuwe startzin beginnen.",
@@ -1078,6 +1760,12 @@ function buildCardNote(subjectId, groupId, visual, taskKey) {
 
 function card(label, text, hint) {
   return { label, text, hint };
+}
+
+function cardSeries(label, items, hint) {
+  return items.map((text, index) =>
+    card(`${label} ${index + 1}`, text, typeof hint === "function" ? hint(text, index) : hint)
+  );
 }
 
 function getCardPackOverrides() {
@@ -1561,13 +2249,423 @@ function getCardPackOverrides() {
       card("Vergelijk", "0,75 = 3/4 = 75%", "Gebruik als driekwart-anker."),
       card("Rekentaal", "dichterbij of verder", "Laat leerlingen hun positie verklaren.")
     ]
-  )
+  ),
+  ...buildDocSpellingCardOverrides(),
+  ...buildDocRekenenCardOverrides()
   };
 
   return getCardPackOverrides.cache;
 }
 
-function getStarterCards(subjectId, groupId, visual, taskKey, title) {
+function buildDocSpellingCardOverrides() {
+  return {
+    "loopdictee-luisterwoorden": cardSeries(
+      "Woordkaart",
+      ["maan", "vis", "raam", "pen", "boom", "teen", "sok", "boek"],
+      "Hang deze woordkaart op loopafstand op. Laat tweetallen het woord ophalen, hakken en daarna opschrijven."
+    ),
+    "woordkaartjes-estafette": cardSeries(
+      "Woordkaart",
+      ["maan", "roos", "vis", "boek", "teen", "raam", "pen", "muis", "sok", "deur"],
+      "Gebruik deze woordkaart in de estafette en laat het team eerst het patroon of de klank benoemen."
+    ),
+    "zoek-je-spellingmaatje": [
+      ...cardSeries("Patroon korte klank a/o", ["kat", "tak", "zon", "bos", "rok"], "Zoek woorden met hetzelfde korte-klankpatroon."),
+      ...cardSeries("Patroon korte klank e/i/u", ["vis", "pen", "bus", "kin", "lip"], "Zoek woorden met hetzelfde korte-klankpatroon."),
+      ...cardSeries("Patroon lange klank aa", ["maan", "raam", "kaas", "taak", "haas"], "Zoek woorden met hetzelfde lange-klankpatroon."),
+      ...cardSeries("Patroon lange klank ee/oo", ["teen", "been", "boom", "noot", "roos"], "Zoek woorden met hetzelfde lange-klankpatroon."),
+      ...cardSeries("Patroon tweetekenklank", ["boek", "deur", "muis", "reus", "nieuw"], "Zoek woorden met een tweetekenklank.")
+    ],
+    "hakkenpad-op-de-vloer": cardSeries(
+      "Woordkaart",
+      ["vis", "pen", "maan", "boek", "teen", "sok", "raam", "roos", "bomen", "kippen"],
+      "Noem of trek dit woord en laat een leerling per klank over het pad stappen."
+    ),
+    "korte-klank-lange-stap": [
+      card("Labelkaart", "Korte klank", "Leg deze kaart aan één kant van het lokaal."),
+      card("Labelkaart", "Lange klank", "Leg deze kaart aan de andere kant van het lokaal."),
+      ...cardSeries(
+        "Woordkaart",
+        ["zon", "bomen", "kippen", "ramen", "boten", "bommen", "takken", "vuren"],
+        "Lees dit woord voor of laat het zien en laat leerlingen naar de juiste kant lopen."
+      )
+    ],
+    "hoeken-kiezen-bij-spelling": [
+      card("Hoekkaart", "Luisterwoord", "Hang deze hoekkaart zichtbaar op."),
+      card("Hoekkaart", "Lettergroepwoord", "Hang deze hoekkaart zichtbaar op."),
+      card("Hoekkaart", "Regelwoord", "Hang deze hoekkaart zichtbaar op."),
+      card("Hoekkaart", "Weetwoord", "Hang deze hoekkaart zichtbaar op."),
+      ...cardSeries(
+        "Woordkaart",
+        ["boom", "apen", "kippen", "geit", "circus", "boompje", "trein", "honden"],
+        "Lees het woord voor en laat leerlingen naar de juiste categoriehoek lopen."
+      )
+    ],
+    "loopdictee-categorie-van-de-week": cardSeries(
+      "Woord- of zinstrook",
+      [
+        "apen",
+        "kippen",
+        "geit",
+        "circus",
+        "Wij lopen naar buiten.",
+        "De honden rennen naar huis.",
+        "Ik zie een schilderij.",
+        "De trein rijdt op tijd."
+      ],
+      "Hang deze strook op voor het loopdictee en laat tweetallen bij terugkomst de categorie of regel benoemen."
+    ),
+    categoriecircuit: [
+      card("Station 1", "Luisterwoorden\nSchrijf: boom, vis, raam.\nZeg de klanken eerst hardop.", "Gebruik als eerste post."),
+      card("Station 2", "Lettergroepwoorden\nKies de goede spelling: apen / aapen, kippen / kipen.", "Gebruik als tweede post."),
+      card("Station 3", "Weetwoorden\nSchrijf de goede vorm: geit, trein, circus.", "Gebruik als derde post."),
+      card("Station 4", "Regelwoorden\nMaak het verkleinwoord van: boom, ring, kip.", "Gebruik als vierde post."),
+      card("Station 5", "Controle\nLees de woorden terug en noem de categorie.", "Gebruik als vijfde post."),
+      card("Station 6", "Pluspost\nBedenk zelf nog één woord dat in dezelfde categorie past.", "Gebruik als zesde post of plusronde.")
+    ],
+    "zoek-de-juiste-spellingpartner": [
+      ...cardSeries("Matchgroep A", ["apen", "lettergroepwoord", "lange klank in open lettergreep", "één klinker", "ramen"], "Zoek de kaarten die bij deze spellingcategorie horen."),
+      ...cardSeries("Matchgroep B", ["kippen", "lettergroepwoord", "korte klank in gesloten lettergreep", "dubbele medeklinker", "ratten"], "Zoek de kaarten die bij deze spellingcategorie horen."),
+      ...cardSeries("Matchgroep C", ["geit", "weetwoord", "ei of ij onthouden", "woordbeeld opslaan", "trein"], "Zoek de kaarten die bij deze spellingcategorie horen."),
+      ...cardSeries("Matchgroep D", ["circus", "weetwoord", "leenwoord of bijzonder woordbeeld", "je hoort niet alles precies", "bureau"], "Zoek de kaarten die bij deze spellingcategorie horen."),
+      ...cardSeries("Matchgroep E", ["boompje", "regelwoord", "verkleinwoord", "let op de verandering in het woord", "ringetje"], "Zoek de kaarten die bij deze spellingcategorie horen.")
+    ],
+    lettergroepstraat: [
+      card("Strookkaart", "Open lettergreep", "Leg deze kaart bij de eerste strook."),
+      card("Strookkaart", "Gesloten lettergreep", "Leg deze kaart bij de tweede strook."),
+      ...cardSeries(
+        "Woordkaart",
+        ["apen", "boten", "kippen", "ratten", "benen", "mannen", "ramen", "sokken"],
+        "Laat leerlingen het woord in lettergrepen lopen en de delen in de juiste strook plaatsen."
+      )
+    ],
+    weetwoordmuur: [
+      card("Wandkaart", "ei", "Hang deze wandkaart boven de ei-woorden."),
+      card("Wandkaart", "ij", "Hang deze wandkaart boven de ij-woorden."),
+      card("Wandkaart", "au", "Hang deze wandkaart boven de au-woorden."),
+      card("Wandkaart", "ou", "Hang deze wandkaart boven de ou-woorden."),
+      ...cardSeries("Woordkaart", ["trein", "geit", "plein", "eiland"], "Laat leerlingen naar de juiste wand lopen en het woord daarna zonder voorbeeld opschrijven."),
+      ...cardSeries("Woordkaart", ["ijs", "blij", "schilderij", "bijl"], "Laat leerlingen naar de juiste wand lopen en het woord daarna zonder voorbeeld opschrijven."),
+      ...cardSeries("Woordkaart", ["pauw", "saus", "blauw"], "Laat leerlingen naar de juiste wand lopen en het woord daarna zonder voorbeeld opschrijven."),
+      ...cardSeries("Woordkaart", ["touw", "goud", "hout", "koud"], "Laat leerlingen naar de juiste wand lopen en het woord daarna zonder voorbeeld opschrijven.")
+    ],
+    regelroute: [
+      card("Set 1", "Woord: apen", "Zoek hier de regel en het voorbeeld bij."),
+      card("Set 1", "Regel: lange klank in open lettergreep = één klinker", "Koppel deze regel aan het juiste woord."),
+      card("Set 1", "Voorbeeld: ramen", "Gebruik dit als extra voorbeeld in dezelfde set."),
+      card("Set 2", "Woord: kippen", "Zoek hier de regel en het voorbeeld bij."),
+      card("Set 2", "Regel: korte klank in gesloten lettergreep = dubbele medeklinker", "Koppel deze regel aan het juiste woord."),
+      card("Set 2", "Voorbeeld: ratten", "Gebruik dit als extra voorbeeld in dezelfde set."),
+      card("Set 3", "Woord: geit", "Zoek hier de regel en het voorbeeld bij."),
+      card("Set 3", "Regel: weetwoord, woordbeeld onthouden", "Koppel deze regel aan het juiste woord."),
+      card("Set 3", "Voorbeeld: trein", "Gebruik dit als extra voorbeeld in dezelfde set."),
+      card("Set 4", "Woord: boompje", "Zoek hier de regel en het voorbeeld bij."),
+      card("Set 4", "Regel: verkleinwoord, let op de klank en de letterverandering", "Koppel deze regel aan het juiste woord."),
+      card("Set 4", "Voorbeeld: ringetje", "Gebruik dit als extra voorbeeld in dezelfde set.")
+    ],
+    "vier-hoeken-categorie-of-regel": [
+      card("Hoekkaart", "Werkwoordspelling", "Hang deze hoekkaart zichtbaar op."),
+      card("Hoekkaart", "Weetwoord", "Hang deze hoekkaart zichtbaar op."),
+      card("Hoekkaart", "Leesteken", "Hang deze hoekkaart zichtbaar op."),
+      card("Hoekkaart", "Leenwoord", "Hang deze hoekkaart zichtbaar op."),
+      ...cardSeries(
+        "Vraagkaart",
+        ["gebeurde", "cappuccino", "'Kom je?', vroeg Noor.", "chauffeur", "wordt", "pizza", "komma nodig", "veranderd / verandert"],
+        "Lees dit woord of deze zin voor en laat leerlingen naar de juiste categoriehoek lopen."
+      )
+    ],
+    "loopdictee-werkwoordspelling": cardSeries(
+      "Zinstrook",
+      [
+        "Morgen ... hij de wedstrijd. (spelen)",
+        "Gisteren ... zij de beker. (winnen)",
+        "Heb jij het formulier al ... ? (invullen)",
+        "Loop jij straks mee of ... je thuis? (blijven)",
+        "De trainer ... dat goed. (bedoelen)",
+        "Zij ... iedere dag op tijd. (fietsen)",
+        "Vanmorgen ... hij te laat. (komen)",
+        "Het verslag is al ... . (verbeteren)"
+      ],
+      "Hang deze zinstrook op voor het loopdictee en laat tweetallen de juiste werkwoordsvorm invullen en verklaren."
+    ),
+    leestekenroute: cardSeries(
+      "Tekststrook",
+      [
+        "Kom je morgen mee vroeg Noor",
+        "Wat een prachtig doelpunt riep Milan",
+        "We nemen brood fruit en drinken mee",
+        "De meester zei vandaag oefenen we leestekens",
+        "Waar ligt mijn schrift vroeg Noor",
+        "Pas op daar komt de bal"
+      ],
+      "Hang deze tekststrook op zonder leestekens en laat leerlingen noteren wat ontbreekt."
+    ),
+    "spellingcircuit-bovenbouw": [
+      card("Station 1", "Werkwoorden\nKies: hij verandert / veranderd.\nLeg de regel uit.", "Gebruik als eerste post."),
+      card("Station 2", "Weetwoorden\nSchrijf correct: cappuccino, chauffeur, bureau.", "Gebruik als tweede post."),
+      card("Station 3", "Leestekens\nZet de juiste leestekens in: Kom je mee vroeg Noor", "Gebruik als derde post."),
+      card("Station 4", "Leenwoorden\nKies de juiste spelling en leg uit waarom het een weetwoord is.", "Gebruik als vierde post."),
+      card("Station 5", "Controlepost\nVerbeter één foutzin en noem de regel of het woordbeeld.", "Gebruik als vijfde post.")
+    ],
+    "werkwoordschema-op-de-vloer": [
+      card("Stap 1", "Zoek het onderwerp", "Leg deze stap als eerste op de vloer."),
+      card("Stap 2", "Bepaal de tijd", "Leg deze stap als tweede op de vloer."),
+      card("Stap 3", "Zoek de persoonsvorm of infinitief", "Leg deze stap als derde op de vloer."),
+      card("Stap 4", "Maak de stam", "Leg deze stap als vierde op de vloer."),
+      card("Stap 5", "Kies de uitgang en controleer", "Leg deze stap als vijfde op de vloer."),
+      ...cardSeries(
+        "Zinkaart",
+        [
+          "Morgen ... hij de wedstrijd. (spelen)",
+          "Jij ... elke dag op tijd. (fietsen)",
+          "Gisteren ... zij te laat. (komen)",
+          "Heb je dat al ... ? (controleren)",
+          "Waarom ... hij zo hard? (rennen)"
+        ],
+        "Lees deze zin voor en laat een leerling het schema stap voor stap doorlopen."
+      )
+    ],
+    "zin-in-delen": [
+      card("Zinsdeel set 1", "Morgen", "Gebruik als eerste zinsdeelkaart."),
+      card("Zinsdeel set 1", "fietst", "Gebruik als persoonsvormkaart."),
+      card("Zinsdeel set 1", "Noor", "Gebruik als onderwerpskaart."),
+      card("Zinsdeel set 1", "naar school", "Gebruik als laatste zinsdeelkaart."),
+      card("Zinsdeel set 2", "Gisteren", "Gebruik als eerste zinsdeelkaart."),
+      card("Zinsdeel set 2", "speelden", "Gebruik als persoonsvormkaart."),
+      card("Zinsdeel set 2", "de kinderen", "Gebruik als onderwerpskaart."),
+      card("Zinsdeel set 2", "op het plein", "Gebruik als laatste zinsdeelkaart."),
+      card("Zinsdeel set 3", "Morgen", "Gebruik als eerste zinsdeelkaart."),
+      card("Zinsdeel set 3", "win", "Gebruik als persoonsvormkaart."),
+      card("Zinsdeel set 3", "jij", "Gebruik als onderwerpskaart."),
+      card("Zinsdeel set 3", "de wedstrijd", "Gebruik als laatste zinsdeelkaart.")
+    ],
+    foutenjacht: cardSeries(
+      "Foutzin",
+      [
+        "Morgen speeld hij de wedstrijd.",
+        "Heb jij dat al gebeurd?",
+        "Kom je mee vroeg Noor.",
+        "De chauffeur zij dat hij wacht.",
+        "Gisteren fietsde zij naar huis.",
+        "Wat leuk zei Milan!"
+      ],
+      "Hang deze foutzin op en laat tweetallen noteren wat fout is, hoe het goed moet en welke regel daarbij hoort."
+    )
+  };
+}
+
+function buildDocRekenenCardOverrides() {
+  return {
+    "hoeken-kiezen": [
+      card("Vraagkaart 1", "Welke uitkomst hoort bij 6 x 4?\nA. 20\nB. 24\nC. 28\nD. 34", "Goed antwoord: B. Laat leerlingen de tafelstrategie noemen."),
+      card("Vraagkaart 2", "Welke deelsom hoort bij 24 koekjes in 6 zakjes?\nA. 24 : 4\nB. 24 : 6\nC. 6 : 24\nD. 24 - 6", "Goed antwoord: B. Koppel delen aan eerlijk verdelen."),
+      card("Vraagkaart 3", "Welke breuk is groter?\nA. 1/2\nB. 1/4\nC. even groot\nD. niet te bepalen", "Goed antwoord: A. Laat leerlingen denken aan de breukenlijn."),
+      card("Vraagkaart 4", "Welk kommagetal is het grootst?\nA. 0,4\nB. 0,04\nC. 0,40\nD. A en C", "Goed antwoord: D. Bespreek waarom 0,4 en 0,40 gelijk zijn."),
+      card("Vraagkaart 5", "Welke som heeft uitkomst 56?\nA. 7 x 6\nB. 8 x 7\nC. 9 x 6\nD. 6 x 6", "Goed antwoord: B. Laat leerlingen de tafel hardop maken."),
+      card("Vraagkaart 6", "Welke som past bij halveren?\nA. 36 : 2\nB. 36 + 2\nC. 36 x 2\nD. 36 - 2", "Goed antwoord: A. Verbind halveren met delen door 2."),
+      card("Vraagkaart 7", "Wat ligt tussen 3/4 en 1?\nA. 1/2\nB. 5/6\nC. 1/4\nD. 2/4", "Goed antwoord: B. Laat leerlingen vergelijken op de lijn."),
+      card("Vraagkaart 8", "Welke uitkomst is redelijk voor 39 + 19?\nA. 48\nB. 58\nC. 68\nD. 78", "Goed antwoord: B. Laat leerlingen schatten via 40 + 20.")
+    ],
+    "keuzehoeken-rekenen": [
+      card("Vraagkaart 1", "Welke notatie past bij 75%?\nA. 1/2\nB. 3/4\nC. 1/4\nD. 4/3", "Goed antwoord: B. Laat leerlingen de koppeling tussen procent en breuk toelichten."),
+      card("Vraagkaart 2", "Welke verhouding hoort bij 2 rode blokken op 6 totaal?\nA. 2/6\nB. 4/6\nC. 6/2\nD. 2/4", "Goed antwoord: A. Bespreek deel van het geheel."),
+      card("Vraagkaart 3", "Wat is 25% van 200?\nA. 25\nB. 40\nC. 50\nD. 75", "Goed antwoord: C. Laat leerlingen hun strategie noemen."),
+      card("Vraagkaart 4", "Welke grafiek past bij steeds sneller groeien?\nA. dalende lijn\nB. stijgende kromme\nC. horizontale lijn\nD. losse stip", "Goed antwoord: B. Bespreek wat snelle groei laat zien."),
+      card("Vraagkaart 5", "Welke schaal past bij 1 cm = 100 cm?\nA. 1 : 10\nB. 1 : 50\nC. 1 : 100\nD. 1 : 1000", "Goed antwoord: C. Koppel centimeters aan de schaalnotatie."),
+      card("Vraagkaart 6", "Welke uitkomst hoort bij 3/5 van 25?\nA. 10\nB. 12\nC. 15\nD. 20", "Goed antwoord: C. Laat leerlingen via 1/5 redeneren."),
+      card("Vraagkaart 7", "Welke decimale notatie hoort bij 1/4?\nA. 0,25\nB. 0,4\nC. 0,75\nD. 2,5", "Goed antwoord: A. Gebruik de koppeling breuk-decimaal."),
+      card("Vraagkaart 8", "Welke uitspraak klopt?\nA. 0,6 is kleiner dan 0,59\nB. 0,60 is gelijk aan 0,6\nC. 60% is kleiner dan 0,6\nD. 3/5 is groter dan 0,6", "Goed antwoord: B. Laat leerlingen meerdere notaties vergelijken.")
+    ],
+    sommenwandeling: cardSeries(
+      "Somkaart",
+      ["8 + 7", "13 - 5", "9 + 6", "15 - 8", "17 - 9", "6 + 8", "14 + 5", "18 - 7", "12 + 9", "20 - 6"],
+      "Hang deze som op de route. Leerlingen onthouden de som, lopen terug en rekenen die samen uit."
+    ),
+    "rekenen-estafette": [
+      ...cardSeries("Somkaart", ["7 + 6", "14 - 8", "9 + 8", "16 - 7", "5 + 9", "18 - 9", "8 + 7", "13 - 4"], "Leg deze somkaart aan de overkant van het lokaal."),
+      ...cardSeries("Antwoordkaart", ["13", "6", "17", "9", "14", "9", "15", "9"], "Gebruik deze antwoordkaart om de som te koppelen en direct te controleren.")
+    ],
+    "loopdictee-rekenen": cardSeries(
+      "Opgavekaart",
+      [
+        "Noa heeft 24 knikkers en krijgt er 18 bij. Hoeveel heeft zij nu?",
+        "Er liggen 42 koekjes. Ze gaan in 6 gelijke bakjes. Hoeveel koekjes per bakje?",
+        "Een lint is 36 cm lang. Je knipt er 9 cm af. Hoeveel cm blijft over?",
+        "In 1 doos zitten 8 stiften. Hoeveel stiften zijn er in 7 dozen?",
+        "Sara leest 15 bladzijden op maandag en 17 op dinsdag. Hoeveel samen?",
+        "Een bus vertrekt met 63 kinderen. Bij de volgende stop stappen er 27 uit. Hoeveel blijven er over?",
+        "Een pakje kost 39 cent. Twee pakjes kosten samen hoeveel cent?",
+        "Je hebt 56 stickers en verdeelt die over 8 kinderen. Hoeveel per kind?"
+      ],
+      "Hang dit loopdictee op op loopafstand van de schrijfplek."
+    ),
+    "rekencircuit-56": [
+      card("Stationkaart 1", "Tafels en delen\nLos op: 6 x 7 en 42 : 6.\nControleer of de antwoorden bij elkaar passen.", "Gebruik als eerste station."),
+      card("Stationkaart 2", "Optellen en aftrekken\nLos op: 39 + 19 en 63 - 27.\nVertel welke strategie je kiest.", "Gebruik als tweede station."),
+      card("Stationkaart 3", "Breuken vergelijken\nZet op volgorde: 1/2, 3/4, 1/4.\nLeg uit hoe je dat weet.", "Gebruik als derde station."),
+      card("Stationkaart 4", "Kommagetallen\nWelke is groter: 0,5 of 0,05?\nNoteer waarom.", "Gebruik als vierde station."),
+      card("Stationkaart 5", "Getallenlijn\nWaar hoort 75 op een lijn van 0 tot 100?\nTeken of leg de sprongen uit.", "Gebruik als vijfde station."),
+      card("Stationkaart 6", "Schatten en controleren\nSchat eerst 48 - 17.\nReken daarna precies uit.", "Gebruik als zesde station.")
+    ],
+    "zoek-iemand-die": [
+      ...cardSeries("Matchgroep A", ["1/2", "0,5", "50%", "5/10", "de helft"], "Zoek de 4 andere kaarten die dezelfde waarde voorstellen."),
+      ...cardSeries("Matchgroep B", ["1/4", "0,25", "25%", "25/100", "een kwart"], "Zoek de 4 andere kaarten die dezelfde waarde voorstellen."),
+      ...cardSeries("Matchgroep C", ["3/4", "0,75", "75%", "75/100", "drie kwart"], "Zoek de 4 andere kaarten die dezelfde waarde voorstellen."),
+      ...cardSeries("Matchgroep D", ["1 hele", "1,0", "100%", "2/2", "10/10"], "Zoek de 4 andere kaarten die dezelfde waarde voorstellen."),
+      ...cardSeries("Matchgroep E", ["1,5", "1 1/2", "150%", "15/10", "anderhalf"], "Zoek de 4 andere kaarten die dezelfde waarde voorstellen.")
+    ],
+    "rekencircuit-bovenbouw": [
+      card("Stationkaart 1", "Procenten\nBereken 25% van 200.\nVertel waarom deze aanpak snel is.", "Gebruik als station procenten."),
+      card("Stationkaart 2", "Breuk - procent - decimaal\nMaak 1 set van 1/2, 0,5 en 50%.\nLeg uit waarom ze gelijk zijn.", "Gebruik als station notaties."),
+      card("Stationkaart 3", "Verhoudingen\nIn 3 glazen zit 750 ml. Hoeveel zit in 5 glazen?", "Gebruik als station verhoudingen."),
+      card("Stationkaart 4", "Schaal\nEen lijn is in het echt 8 meter. Hoe lang is dat op schaal 1 : 100?", "Gebruik als station schaal."),
+      card("Stationkaart 5", "Grafieken\nWelke grafiek laat de hoogste groei zien?\nNoem 1 aanwijzing.", "Gebruik als station grafieken."),
+      card("Stationkaart 6", "Controleren\nSchat eerst 35% van 200.\nReken daarna precies uit.", "Gebruik als controle- of plusstation.")
+    ],
+    "wandel-en-leg-uit": cardSeries(
+      "Strategiekaart",
+      [
+        "Los 48 - 19 op en vertel hardop welke handige tussenstap je gebruikt.",
+        "Bereken 3/4 van 20 en leg uit waarom je eerst naar 1/4 kijkt.",
+        "Leg uit hoe je 0,75 met 3/4 vergelijkt.",
+        "Bereken 25% van 80 en vertel hoe je controleert.",
+        "Los 63 : 9 op en benoem de bijbehorende tafelsom.",
+        "Bereken 1,2 + 0,85 en leg uit hoe je de komma bewaakt.",
+        "Vergelijk 2/3 en 3/4. Vertel welke groter is en waarom.",
+        "Leg uit hoe je 4 x 19 handig kunt uitrekenen."
+      ],
+      "Geef deze kaart aan een tweetal. 1 leerling legt de aanpak uit, de ander luistert en vraagt door."
+    ),
+    antwoordestafette: cardSeries(
+      "Opgavekaart",
+      [
+        "25% van 200",
+        "3/5 van 25",
+        "0,75 + 0,5",
+        "1,25 m + 75 cm",
+        "35% van 200",
+        "72 : 9",
+        "48 - 17",
+        "6 x 8",
+        "2/3 van 18",
+        "0,6 + 0,45"
+      ],
+      "Gebruik deze opgavekaart in de estafette. Laat de leerling het antwoord op een antwoordstrook noteren."
+    ),
+    "getallenlijn-lopen": [
+      ...cardSeries("Ankerkaart", ["0", "5", "10", "15", "20"], "Leg deze kaarten op de vloerlijn als vaste ankerpunten."),
+      ...cardSeries("Sprongkaart", ["1 vooruit", "2 terug", "5 meer", "10 minder", "verdubbel", "halveer"], "Trek of lees 1 opdracht en laat een leerling bewegen op de lijn.")
+    ],
+    "breukenlijn-op-de-vloer": cardSeries(
+      "Breukkaart",
+      [
+        "1/8",
+        "1/4",
+        "3/8",
+        "1/2",
+        "5/8",
+        "3/4",
+        "7/8",
+        "1",
+        "9/8",
+        "5/4",
+        "3/2",
+        "7/4",
+        "2/8",
+        "2/4",
+        "4/8",
+        "6/8",
+        "2/3",
+        "1/3",
+        "4/4",
+        "6/4",
+        "8/8",
+        "10/8",
+        "12/8",
+        "14/8",
+        "16/8"
+      ],
+      "Geef ieder kind 1 breukkaart en laat de klas samen de breukenlijn vullen."
+    ),
+    "kommagetallen-op-volgorde": cardSeries(
+      "Kommagetal",
+      [
+        "0,04",
+        "0,08",
+        "0,1",
+        "0,12",
+        "0,2",
+        "0,25",
+        "0,3",
+        "0,35",
+        "0,4",
+        "0,45",
+        "0,5",
+        "0,55",
+        "0,6",
+        "0,65",
+        "0,7",
+        "0,75",
+        "0,8",
+        "0,85",
+        "0,9",
+        "0,95",
+        "1,0",
+        "1,05",
+        "1,1",
+        "1,2",
+        "1,25"
+      ],
+      "Geef ieder kind 1 kaart en laat de klas in stilte op volgorde gaan staan."
+    ),
+    coordinatenraster: cardSeries(
+      "Coordinaatkaart",
+      ["1,1", "2,3", "3,2", "4,4", "5,1", "2,5", "4,2", "1,4", "3,5", "5,3", "2,2", "4,5"],
+      "Gebruik deze kaart om naar het juiste vak in het raster te lopen."
+    ),
+    "breuk-decimaal-procent-match": [
+      ...cardSeries("Matchset A", ["1/2", "0,5", "50%", "5/10", "50/100"], "Zoek alle kaarten die dezelfde waarde voorstellen."),
+      ...cardSeries("Matchset B", ["1/4", "0,25", "25%", "25/100", "2/8"], "Zoek alle kaarten die dezelfde waarde voorstellen."),
+      ...cardSeries("Matchset C", ["3/4", "0,75", "75%", "75/100", "6/8"], "Zoek alle kaarten die dezelfde waarde voorstellen."),
+      ...cardSeries("Matchset D", ["1/5", "0,2", "20%", "20/100", "2/10"], "Zoek alle kaarten die dezelfde waarde voorstellen."),
+      ...cardSeries("Matchset E", ["1 hele", "1,0", "100%", "10/10", "4/4"], "Zoek alle kaarten die dezelfde waarde voorstellen.")
+    ],
+    "verhoudingentabel-op-de-vloer": [
+      card("Tabelkaart 1", "1 glas", "Leg deze kaart in de bovenste rij."),
+      card("Tabelkaart 2", "250 ml", "Leg deze kaart in de onderste rij."),
+      card("Tabelkaart 3", "2 glazen", "Laat leerlingen de verhouding verdubbelen."),
+      card("Tabelkaart 4", "500 ml", "Koppel deze kaart aan 2 glazen."),
+      card("Tabelkaart 5", "4 glazen", "Gebruik dit als volgende stap in de tabel."),
+      card("Tabelkaart 6", "1000 ml", "Laat leerlingen benoemen welke factor is gebruikt."),
+      card("Tabelkaart 7", "6 glazen", "Gebruik voor verder doordenken in de tabel."),
+      card("Tabelkaart 8", "1500 ml", "Koppel deze waarde aan 6 glazen."),
+      card("Tabelkaart 9", "8 glazen", "Laat leerlingen zelf de volgende verhouding leggen."),
+      card("Tabelkaart 10", "2000 ml", "Gebruik als controle of eindkaart.")
+    ],
+    grafiekenwandeling: [
+      card("Grafiekblad 1", "Grafiek A\nMa 2\nDi 4\nWo 6\nDo 8", "Hang deze grafiek zichtbaar op."),
+      card("Grafiekblad 2", "Grafiek B\nMa 8\nDi 7\nWo 5\nDo 3", "Hang deze grafiek zichtbaar op."),
+      card("Grafiekblad 3", "Grafiek C\nMa 3\nDi 3\nWo 6\nDo 6", "Hang deze grafiek zichtbaar op."),
+      card("Grafiekblad 4", "Grafiek D\nMa 1\nDi 5\nWo 2\nDo 7", "Hang deze grafiek zichtbaar op."),
+      card("Vraagkaart 1", "Bij welke grafiek is de stijging steeds gelijk?", "Leg deze vraag bij een grafiek of laat leerlingen de beste grafiek kiezen."),
+      card("Vraagkaart 2", "Bij welke grafiek daalt de waarde?", "Gebruik als vergelijkvraag."),
+      card("Vraagkaart 3", "Welke dag heeft in Grafiek D de hoogste waarde?", "Gebruik als leesvraag."),
+      card("Vraagkaart 4", "Welke grafiek past het best bij een schoolplein dat steeds drukker wordt?", "Gebruik als interpretatievraag."),
+      card("Vraagkaart 5", "Welke grafiek heeft twee dagen dezelfde waarde?", "Gebruik als detailvraag."),
+      card("Vraagkaart 6", "Welke grafiek zou passen bij een rustige, stabiele week?", "Gebruik als redeneervraag.")
+    ],
+    schaalwandeling: [
+      card("Schaalkaart 1", "Loop 5 meter.\nVraag: hoeveel cm is dat op schaal 1 : 100?", "Gebruik als eerste schaalopgave."),
+      card("Schaalkaart 2", "Loop 8 meter.\nVraag: hoeveel cm is dat op schaal 1 : 200?", "Gebruik als tweede schaalopgave."),
+      card("Schaalkaart 3", "Loop 12 meter.\nVraag: hoeveel cm is dat op schaal 1 : 100?", "Gebruik als derde schaalopgave."),
+      card("Schaalkaart 4", "Loop 15 meter.\nVraag: hoeveel meter is dat in het echt bij 15 cm op schaal 1 : 100?", "Gebruik als omgekeerde schaalvraag."),
+      card("Schaalkaart 5", "Loop 20 meter.\nVraag: hoeveel cm is dat op schaal 1 : 250?", "Gebruik als plusopgave."),
+      card("Schaalkaart 6", "Loop 25 meter.\nVraag: welke schaal geeft dan 10 cm op de tekening?", "Gebruik als verdiepingskaart.")
+    ]
+  };
+}
+
+function getStarterCards(subjectId, groupId, visual, taskKey, title, printProfile) {
   const families = {
     taal_estafette: byGroup(
       ["m", "a", "a", "n", "v", "i", "s", "k"],
@@ -1671,7 +2769,7 @@ function getStarterCards(subjectId, groupId, visual, taskKey, title) {
     normalizeCardItem(item, `${title} ${index + 1}`, buildCardHint(subjectId, groupId, family, taskKey, index))
   );
 
-  return expandCardSet(normalizedItems, subjectId, groupId, family, taskKey, title);
+  return expandCardSet(normalizedItems, subjectId, groupId, family, taskKey, title, printProfile);
 }
 
 function getCardFamily(subjectId, taskKey, visual) {
@@ -1748,13 +2846,18 @@ function normalizeCardItem(item, defaultLabel, defaultHint) {
   };
 }
 
-function expandCardSet(cards, subjectId, groupId, family, taskKey, title) {
-  const extras = getExpansionCards(subjectId, groupId, family, taskKey, title).map((item, index) =>
-    normalizeCardItem(item, `${title} extra ${index + 1}`, item.hint || "Gebruik deze kaart als extra oefenkaart.")
-  );
-  const methodCards = getMethodWorkCards(subjectId, groupId, family, taskKey, title).map((item, index) =>
-    normalizeCardItem(item, `${title} methode ${index + 1}`, buildMethodWorkHint(subjectId, family, taskKey, index))
-  );
+function expandCardSet(cards, subjectId, groupId, family, taskKey, title, printProfile) {
+  const hasTaskSpecificOverride = Boolean(getCardPackOverrides()[taskKey]);
+  const extras = hasTaskSpecificOverride
+    ? []
+    : getExpansionCards(subjectId, groupId, family, taskKey, title).map((item, index) =>
+        normalizeCardItem(item, `${title} extra ${index + 1}`, item.hint || "Gebruik deze kaart als extra oefenkaart.")
+      );
+  const methodCards = hasTaskSpecificOverride
+    ? []
+    : getMethodWorkCards(subjectId, groupId, family, taskKey, title).map((item, index) =>
+        normalizeCardItem(item, `${title} methode ${index + 1}`, buildMethodWorkHint(subjectId, family, taskKey, index))
+      );
   const seenTexts = new Set();
   const merged = [];
 
@@ -1767,7 +2870,7 @@ function expandCardSet(cards, subjectId, groupId, family, taskKey, title) {
     }
   });
 
-  return fillCardsToClassSize(merged);
+  return printProfile.expandWorkCardsToClassSize ? fillCardsToClassSize(merged) : merged;
 }
 
 function getExpansionCards(subjectId, groupId, family, taskKey, title) {
@@ -2243,7 +3346,7 @@ function getMethodSupportCards(subjectId, groupId, momentId) {
   ];
 }
 
-function buildPrintChecklist(subject, cards, supportCards, teacherSheets) {
+function buildPrintChecklist(subject, cards, supportCards, teacherSheets, printProfile) {
   const methodLine =
     subject.id === "spelling"
       ? "Methodehulp uit Staal 2"
@@ -2251,14 +3354,33 @@ function buildPrintChecklist(subject, cards, supportCards, teacherSheets) {
         ? "Methodehulp uit Getal & Ruimte Junior"
         : "Leshulp voor de opdracht";
 
-  return [
-    `${cards.length} werkkaartjes: 1 leerlingkaart per leerling in een klas van ${CLASS_SIZE}`,
-    `Adviesverdeling: ${CLASS_GROUP_COUNT} setjes van ${CLASS_GROUP_SIZE} werkkaartjes`,
-    `${supportCards.length} organisatie- en hulpmateriaalkaartjes`,
-    `${teacherSheets.length} groeps-, antwoord- en controlebladen`,
-    `${methodLine}`,
-    "Print bij voorkeur 1 extra reserveset van de werkkaartjes voor een tweede ronde of een reservestapel"
-  ];
+  const checklist = [];
+
+  if (cards.length) {
+    checklist.push(
+      printProfile.expandWorkCardsToClassSize
+        ? `${cards.length} leerlingkaartjes of matchkaarten voor een klas van ${CLASS_SIZE}`
+        : `${cards.length} opdrachtkaarten of werkbladen voor deze werkvorm`
+    );
+  }
+
+  if (supportCards.length) {
+    checklist.push(`${supportCards.length} opstellings- of hulpmateriaalkaarten`);
+  }
+
+  if (teacherSheets.length) {
+    checklist.push(`${teacherSheets.length} antwoord-, groeps- of leerkrachtbladen`);
+  }
+
+  checklist.push(methodLine);
+
+  if (printProfile.expandWorkCardsToClassSize) {
+    checklist.push("Print de leerlingkaartjes enkelzijdig en geef ieder kind 1 kaart.");
+  } else {
+    checklist.push("Print de opdrachtkaarten groot genoeg voor gebruik in tweetallen, hoeken of stations.");
+  }
+
+  return checklist;
 }
 
 function getTeacherSheets(group, subject, moment, blueprint, title) {
@@ -2744,7 +3866,7 @@ function renderHeader() {
     ui.contentEyebrow.textContent = "Start";
     ui.contentTitle.textContent = "Kies eerst een bouw";
     ui.contentDescription.textContent =
-      "Werk stap voor stap: kies eerst de bouw, daarna het vak, vervolgens het lesmoment en open dan een opdracht met een complete printset en een duidelijke uitleg.";
+      "Werk stap voor stap: kies eerst de bouw, daarna het vak, vervolgens het lesmoment en open dan een opdracht met een duidelijke uitleg en waar nodig passend printmateriaal.";
   } else if (!selectedSubject) {
     ui.contentEyebrow.textContent = selectedGroup.label;
     ui.contentTitle.textContent = `Kies een vak voor ${selectedGroup.label}`;
@@ -2948,7 +4070,7 @@ function renderResultsSection() {
   }
 
   ui.resultsTitle.textContent = "Kies een opdracht";
-  ui.resultsMeta.textContent = `${filteredTasks.length} opdrachten in deze route. Klik een opdracht open voor doel, printmateriaal, benodigdheden en een heldere stap-voor-stap uitleg.`;
+  ui.resultsMeta.textContent = `${filteredTasks.length} opdrachten in deze route. Klik een opdracht open voor doel, eventuele printmaterialen, benodigdheden en een heldere stap-voor-stap uitleg.`;
 
   const selectedTask = getSelectedTask(filteredTasks);
 
@@ -2979,7 +4101,7 @@ function renderTaskCard(task, selectedTask) {
           ${showRouteBadges ? `<span class="pill">${escapeHtml(task.subjectLabel)}</span>` : ""}
           ${showRouteBadges ? `<span class="pill">${escapeHtml(task.momentLabel)}</span>` : ""}
           <span class="pill">${escapeHtml(task.duration)}</span>
-          <span class="pill">printset klaar</span>
+          ${task.usesCards ? `<span class="pill">print klaar</span>` : `<span class="pill">zonder print</span>`}
         </div>
       </div>
     </button>
@@ -2991,30 +4113,12 @@ function buildQuickOverview(task) {
 }
 
 function buildQuickStart(task) {
-  const startByVisual = {
-    relay: "Zet een startlijn klaar, leg de kaartjes of materialen aan de overkant en maak een duidelijke verzamelplek.",
-    dictation: "Maak een rustige schrijfplek en hang de tekst- of woordkaarten op loopafstand op.",
-    corners: "Maak vier duidelijke hoeken of vakken en hang in elke hoek een keuze- of regelkaart.",
-    stations: "Zet de stations klaar in een logische route en leg per station maar 1 duidelijke opdracht neer.",
-    path: "Leg de route zichtbaar uit met pijlen, nummers of kaartpunten.",
-    line: "Maak een vloerlijn of vakkenrij en leg de kaarten apart klaar zodat leerlingen kunnen ordenen.",
-    jump: "Leg antwoordvakken of springplekken klaar met genoeg loopruimte ertussen.",
-    mission: "Zet de missieposten in volgorde klaar en spreek af hoe leerlingen hun antwoord noteren."
-  };
-
-  return startByVisual[task.visual] || task.setup;
+  return task.setup;
 }
 
 function buildQuickPlay(task) {
-  if (task.steps.length === 1) {
-    return task.steps[0];
-  }
-
-  if (task.steps.length === 2) {
-    return task.steps[1];
-  }
-
-  return `${task.steps[1]} ${task.steps[2]}`;
+  const middleSteps = task.steps.slice(1, Math.max(2, task.steps.length - 1)).slice(0, 2);
+  return middleSteps.join(" ") || task.steps[0] || task.goal;
 }
 
 function buildQuickFinish(task) {
@@ -3037,35 +4141,22 @@ function getStepLabel(index, total) {
   return `Ronde ${index - 1}`;
 }
 
-function buildTeacherScript(task) {
-  const scripts = {
-    relay:
-      "Zeg bijvoorbeeld: Jullie starten achter de lijn. Per beurt haal je 1 kaartje op, je legt het op de verzamelplek en daarna lees of controleer je samen wat er al ligt.",
-    dictation:
-      "Zeg bijvoorbeeld: 1 leerling is de loper en 1 leerling is de schrijver. De loper kijkt, onthoudt een stukje, loopt terug en dicteert precies wat er op de kaart staat.",
-    corners:
-      "Zeg bijvoorbeeld: Ik lees steeds een woord, regel of som voor. Kies direct een hoek, overleg kort en zorg dat 1 leerling kan uitleggen waarom jullie daar staan.",
-    stations:
-      "Zeg bijvoorbeeld: Jullie starten elk bij een ander station. Werk rustig aan 1 opdracht, controleer samen en wissel pas als het signaal klinkt.",
-    path:
-      "Zeg bijvoorbeeld: Volg de route in de goede volgorde. Los bij elke stop eerst de opdracht op en ga pas door als jullie samen denken dat het klopt.",
-    mission:
-      "Zeg bijvoorbeeld: Jullie werken van post naar post. Elke goede uitkomst geeft een nieuwe stap, dus noteer netjes en controleer steeds voor je verdergaat.",
-    line:
-      "Zeg bijvoorbeeld: Leg of draag de kaarten naar de juiste plek op de lijn. Lees daarna alles hardop terug en verschuif alleen als jullie kunnen uitleggen waarom.",
-    jump:
-      "Zeg bijvoorbeeld: Luister goed naar de vraag en spring dan meteen naar het vak dat past. Daarna vertel je kort hoe je aan je keuze kwam.",
-    measure:
-      "Zeg bijvoorbeeld: Meet eerst rustig, noteer daarna de uitkomst en vergelijk pas dan met een maatje of met de voorbeeldkaart.",
-    bingo:
-      "Zeg bijvoorbeeld: Zoek steeds 1 passend antwoord of voorbeeld, kom terug naar je kaart en vink pas af nadat jullie samen hebben gecontroleerd."
-  };
+function buildClassExplanation(task) {
+  const middleStep = task.steps.slice(1, -1).join(" ");
 
-  return scripts[task.visual] || "Zeg vooraf kort wat het leerdoel is, waar leerlingen starten, wat zij per ronde doen en wanneer zij samen controleren.";
+  return [
+    task.steps[0] ? `Start zo: ${task.steps[0]}` : `Start zo: ${task.setup}`,
+    middleStep ? `Tijdens de opdracht: ${middleStep}` : `Tijdens de opdracht: ${task.goal}`,
+    task.steps[task.steps.length - 1] ? `Rond zo af: ${task.steps[task.steps.length - 1]}` : `Rond af met: ${task.goal}`
+  ];
 }
 
 function renderTaskDetail(task) {
-  const showCards = task.usesCards;
+  const showCards = Boolean(
+    task.usesCards &&
+      task.cardPack &&
+      (task.cardPack.cards.length || task.cardPack.supportCards.length || task.cardPack.teacherSheets.length)
+  );
 
   return `
     <div class="task-detail__top">
@@ -3150,12 +4241,18 @@ function renderTaskDetail(task) {
               <p>${escapeHtml(task.movementFocus)}</p>
             </section>
 
-            <section class="detail-box">
-              <h4>Wat print je vooraf uit?</h4>
-              <ul>
-                ${task.cardPack.printChecklist.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
-              </ul>
-            </section>
+            ${
+              showCards
+                ? `
+                  <section class="detail-box">
+                    <h4>Wat print je vooraf uit?</h4>
+                    <ul>
+                      ${task.cardPack.printChecklist.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+                    </ul>
+                  </section>
+                `
+                : ""
+            }
 
             <section class="detail-box">
               <h4>Wat heb je daarnaast nodig?</h4>
@@ -3166,7 +4263,11 @@ function renderTaskDetail(task) {
 
             <section class="detail-box">
               <h4>Zo leg je het uit aan de klas</h4>
-              <p>${escapeHtml(buildTeacherScript(task))}</p>
+              <ul class="quick-overview">
+                ${buildClassExplanation(task)
+                  .map((line) => `<li>${escapeHtml(line)}</li>`)
+                  .join("")}
+              </ul>
             </section>
 
             <section class="detail-box detail-box--wide">
@@ -3201,12 +4302,20 @@ function renderTaskDetail(task) {
 }
 
 function renderCardLayer(task) {
+  const cardDescription = task.printProfile.expandWorkCardsToClassSize
+    ? `Deze set is uitgewerkt voor ${CLASS_SIZE} leerlingen. Geef ieder kind 1 kaart.`
+    : "Deze set hoort direct bij de opdracht en is bedoeld voor hoeken, routepunten, stations of tweetallen.";
+
+  const printTip = task.printProfile.expandWorkCardsToClassSize
+    ? "Tip: print op A4, knip de leerlingkaartjes los en deel ze direct uit."
+    : "Tip: print op A4 of A3, knip alleen los wat je echt nodig hebt en hang of leg de kaarten daarna klaar.";
+
   return `
     <div class="card-layer">
       <div class="card-layer__intro">
         <strong>${escapeHtml(task.cardPack.title)}</strong>
         <p>${escapeHtml(task.cardPack.intro)}</p>
-        <p>Tip: print op A4 en snijd of knip de kaartjes los. Deze printset is opgebouwd voor een klas van ${CLASS_SIZE} leerlingen en blijft in printweergave als losse printpagina zichtbaar.</p>
+        <p>${escapeHtml(printTip)}</p>
         <ul class="card-layer__checklist">
           ${task.cardPack.printChecklist.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
         </ul>
@@ -3214,7 +4323,7 @@ function renderCardLayer(task) {
 
       ${renderPrintSection(
         `Werkkaartjes bij de opdracht (${task.cardPack.cards.length})`,
-        `Deze set is uitgewerkt voor ${CLASS_SIZE} leerlingen. Verdeel los of in ${CLASS_GROUP_COUNT} setjes van ${CLASS_GROUP_SIZE}.`,
+        cardDescription,
         task.cardPack.cards
       )}
 
@@ -3240,6 +4349,10 @@ function renderCardLayer(task) {
 }
 
 function renderPrintSection(title, description, items) {
+  if (!items.length) {
+    return "";
+  }
+
   return `
     <section class="card-layer__section">
       <div class="card-layer__section-head">
