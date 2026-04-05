@@ -4,6 +4,7 @@ const GROUP_78 = "groep-7-8";
 const CLASS_SIZE = 25;
 const CLASS_GROUP_COUNT = 5;
 const CLASS_GROUP_SIZE = 5;
+const PAIR_OR_TRIO_UNITS = buildPairOrTrioUnits();
 
 const byGroup = (groep34, groep56, groep78) => ({
   [GROUP_34]: groep34,
@@ -12,6 +13,25 @@ const byGroup = (groep34, groep56, groep78) => ({
 });
 
 const same = (value) => byGroup(value, value, value);
+
+function buildPairOrTrioUnits() {
+  if (CLASS_SIZE % 2 === 0) {
+    return Array.from({ length: CLASS_SIZE / 2 }, (_, index) => ({
+      label: `Tweetal ${index + 1}`,
+      size: 2
+    }));
+  }
+
+  const pairCount = Math.max(0, Math.floor((CLASS_SIZE - 3) / 2));
+
+  return [
+    ...Array.from({ length: pairCount }, (_, index) => ({
+      label: `Tweetal ${index + 1}`,
+      size: 2
+    })),
+    { label: "Drietal 1", size: 3 }
+  ];
+}
 
 const groups = [
   {
@@ -2151,27 +2171,153 @@ function taskNeedsCards(blueprint) {
   return getTaskPrintProfile(blueprint.key).enabled;
 }
 
+function getTaskOrganization(taskKey, visual) {
+  const pairTasks = new Set([
+    "praatmaatjes-in-beweging",
+    "loopdictee-woordenschat",
+    "loopdictee-kernzinnen",
+    "vraag-en-antwoordwandeling",
+    "wandel-en-vat-samen",
+    "loopdictee-luisterwoorden",
+    "loopdictee-categorie-van-de-week",
+    "regelroute",
+    "loopdictee-werkwoordspelling",
+    "foutenjacht",
+    "sommenwandeling",
+    "staand-flitsen",
+    "loopdictee-rekenen",
+    "wandel-en-leg-uit",
+    "rekencircuit-bovenbouw",
+    "splitsen-met-je-lichaam"
+  ]);
+  const rowPairTasks = new Set(["interviewcarrousel"]);
+  const teamTasks = new Set([
+    "verhaalestafette",
+    "woordkaartjes-estafette",
+    "rekenen-estafette",
+    "antwoordestafette",
+    "categoriecircuit",
+    "rekencircuit-56",
+    "spellingcircuit-bovenbouw"
+  ]);
+  const smallGroupTasks = new Set(["hoeken-en-lijnen-met-je-lichaam"]);
+  const individualTasks = new Set([
+    "zoek-je-spellingmaatje",
+    "zoek-de-juiste-spellingpartner",
+    "zoek-iemand-die",
+    "breukenlijn-op-de-vloer",
+    "kommagetallen-op-volgorde",
+    "breuk-decimaal-procent-match"
+  ]);
+
+  if (individualTasks.has(taskKey)) {
+    return {
+      type: "individual",
+      title: `${CLASS_SIZE} leerlingen werken individueel`,
+      hint: `Gebruik dit blad als organisatiesteun voor ${CLASS_SIZE} leerlingen, ieder met een eigen kaart.`,
+      workCardTarget: CLASS_SIZE,
+      units: Array.from({ length: CLASS_SIZE }, (_, index) => ({
+        label: `Leerling ${index + 1}`,
+        size: 1
+      }))
+    };
+  }
+
+  if (rowPairTasks.has(taskKey)) {
+    return {
+      type: "row-pairs",
+      title: `Werk met ${PAIR_OR_TRIO_UNITS.length - 1} tweetallen en 1 drietal`,
+      hint: `Gebruik dit blad als organisatiesteun voor ${PAIR_OR_TRIO_UNITS.length - 1} tweetallen en 1 drietal in twee rijen.`,
+      workCardTarget: PAIR_OR_TRIO_UNITS.length,
+      units: PAIR_OR_TRIO_UNITS
+    };
+  }
+
+  if (pairTasks.has(taskKey)) {
+    return {
+      type: "pairs",
+      title: `Werk met ${PAIR_OR_TRIO_UNITS.length - 1} tweetallen en 1 drietal`,
+      hint: `Gebruik dit blad als organisatiesteun voor ${PAIR_OR_TRIO_UNITS.length - 1} tweetallen en 1 drietal.`,
+      workCardTarget: PAIR_OR_TRIO_UNITS.length,
+      units: PAIR_OR_TRIO_UNITS
+    };
+  }
+
+  if (teamTasks.has(taskKey)) {
+    return {
+      type: "teams",
+      title: `${CLASS_GROUP_COUNT} teams van ${CLASS_GROUP_SIZE} leerlingen`,
+      hint: `Gebruik dit blad als organisatiesteun voor ${CLASS_GROUP_COUNT} teams van ${CLASS_GROUP_SIZE} leerlingen.`,
+      workCardTarget: null,
+      units: Array.from({ length: CLASS_GROUP_COUNT }, (_, index) => ({
+        label: `Team ${index + 1}`,
+        size: CLASS_GROUP_SIZE
+      }))
+    };
+  }
+
+  if (smallGroupTasks.has(taskKey)) {
+    return {
+      type: "small-groups",
+      title: `${CLASS_GROUP_COUNT} groepjes van ${CLASS_GROUP_SIZE} leerlingen`,
+      hint: `Gebruik dit blad als organisatiesteun voor ${CLASS_GROUP_COUNT} groepjes van ${CLASS_GROUP_SIZE} leerlingen.`,
+      workCardTarget: null,
+      units: Array.from({ length: CLASS_GROUP_COUNT }, (_, index) => ({
+        label: `Groep ${index + 1}`,
+        size: CLASS_GROUP_SIZE
+      }))
+    };
+  }
+
+  const wholeClassTitles = {
+    corners: "Klassikaal kiezen tussen vaste hoeken",
+    stations: "Klassikaal langs vaste posten",
+    path: "Klassikaal met een vaste looproute",
+    line: "Klassikaal op een lijn of vloeropstelling",
+    measure: "Klassikaal rond 1 meetplek of vloermodel",
+    circle: "Klassikaal rond een centrale plek"
+  };
+  const wholeClassHints = {
+    corners: "Gebruik dit blad als organisatiesteun voor een klassikale keuze-opstelling met duidelijke hoeken.",
+    stations: "Gebruik dit blad als organisatiesteun voor een klassikale postenvorm met vaste wisselmomenten.",
+    path: "Gebruik dit blad als organisatiesteun voor een klassikale route met vaste looprichting.",
+    line: "Gebruik dit blad als organisatiesteun voor een klassikale vloer- of lijnopstelling.",
+    measure: "Gebruik dit blad als organisatiesteun voor een klassikale meetplek of schaalopstelling.",
+    circle: "Gebruik dit blad als organisatiesteun voor een klassikale kring- of middenopstelling."
+  };
+
+  return {
+    type: "whole-class",
+    title: wholeClassTitles[visual] || "Klassikaal met vaste plekken in het lokaal",
+    hint: wholeClassHints[visual] || "Gebruik dit blad als organisatiesteun voor een klassikale opstelling met vaste plekken in het lokaal.",
+    workCardTarget: null,
+    units: []
+  };
+}
+
 function buildCardPack(group, subject, moment, blueprint, title, printProfile) {
-  const overviewSheets = buildOverviewSheets(group, subject, moment, blueprint, title, printProfile);
-  const cards = getStarterCards(subject.id, group.id, blueprint.visual, blueprint.key, title, printProfile);
+  const organization = getTaskOrganization(blueprint.key, blueprint.visual);
+  const overviewSheets = buildOverviewSheets(group, subject, moment, blueprint, title, printProfile, organization);
+  const cards = getStarterCards(subject.id, group.id, blueprint.visual, blueprint.key, title, printProfile, organization);
   const supportCards = printProfile.includeSupportCards
-    ? finalizeSupportCardsForClass(getSupportCards(group, subject, moment, blueprint, title), blueprint.visual)
+    ? finalizeSupportCardsForClass(getSupportCards(group, subject, moment, blueprint, title), blueprint.visual, organization)
     : [];
-  const teacherSheets = printProfile.includeTeacherSheets ? getTeacherSheets(group, subject, moment, blueprint, title) : [];
+  const teacherSheets = printProfile.includeTeacherSheets ? getTeacherSheets(group, subject, moment, blueprint, title, organization) : [];
 
   return {
     title: `Printset voor ${title}`,
-    intro: buildCardIntro(subject, moment, group, title, cards.length, printProfile),
+    intro: buildCardIntro(subject, moment, group, title, cards.length, printProfile, organization),
     note: buildCardNote(subject.id, group.id, blueprint.visual, blueprint.key),
+    organization,
     overviewSheets,
     cards,
     supportCards,
     teacherSheets,
-    printChecklist: buildPrintChecklist(subject, overviewSheets, cards, supportCards, teacherSheets, printProfile)
+    printChecklist: buildPrintChecklist(subject, overviewSheets, cards, supportCards, teacherSheets, printProfile, organization)
   };
 }
 
-function buildOverviewSheets(group, subject, moment, blueprint, title, printProfile) {
+function buildOverviewSheets(group, subject, moment, blueprint, title, printProfile, organization) {
   const previewTask = {
     key: blueprint.key,
     title,
@@ -2191,10 +2337,10 @@ function buildOverviewSheets(group, subject, moment, blueprint, title, printProf
     },
     {
       label: "Lesplaat 2",
-      title: `Klasindeling voor ${CLASS_SIZE} leerlingen`,
-      art: renderClassLayoutArt(blueprint.visual, subject.accent, moment.accent),
-      text: getPrintOrganizationLines(blueprint.visual, printProfile).join("\n"),
-      hint: `Gebruik dit blad als organisatiesteun voor ${CLASS_GROUP_COUNT} groepjes van ${CLASS_GROUP_SIZE} leerlingen.`
+      title: organization.title,
+      art: renderClassLayoutArt(blueprint.visual, organization, subject.accent, moment.accent),
+      text: getPrintOrganizationLines(blueprint.visual, printProfile, organization).join("\n"),
+      hint: organization.hint
     },
     {
       label: "Lesplaat 3",
@@ -2206,32 +2352,103 @@ function buildOverviewSheets(group, subject, moment, blueprint, title, printProf
   ];
 }
 
-function getPrintOrganizationLines(visual, printProfile) {
-  const lines = [`Verdeel de klas in ${CLASS_GROUP_COUNT} groepjes van ${CLASS_GROUP_SIZE} leerlingen.`];
-
-  if (printProfile.expandWorkCardsToClassSize) {
-    lines.push(`Gebruik ${CLASS_SIZE} leerlingkaartjes en geef ieder kind 1 kaart.`);
-  } else if (["dictation", "path", "relay", "stations", "corners", "line"].includes(visual)) {
-    lines.push(`Gebruik ${CLASS_GROUP_COUNT} werksets zodat alle groepjes tegelijk of in een rustige doorloop kunnen werken.`);
-  } else {
-    lines.push("Laat per groepje één leerling starten en laat de rest meedenken, overleggen of controleren.");
+function getPrintOrganizationLines(visual, printProfile, organization) {
+  if (organization.type === "individual") {
+    return [
+      `Geef ${CLASS_SIZE} leerlingen ieder 1 kaart of 1 eigen plek.`,
+      "Laat leerlingen tegelijk starten en gebruik daarna een korte klassikale controle."
+    ];
   }
 
-  if (visual === "dictation") {
-    lines.push("Laat binnen elk groepje rollen wisselen: loper, schrijver en controleur.");
-  } else if (visual === "stations") {
-    lines.push("Zet bij elk station één duidelijke opdracht en laat groepjes steeds doorwisselen op signaal.");
-  } else if (visual === "corners") {
-    lines.push("Gebruik de hoeken als vaste keuzeplekken en laat daarna per groepje kort uitleggen waarom die keuze past.");
-  } else {
-    lines.push("Gebruik het laatste moment om samen terug te lezen, te controleren of kort te laten presenteren.");
+  if (organization.type === "pairs") {
+    return [
+      `Werk met ${PAIR_OR_TRIO_UNITS.length - 1} tweetallen en 1 drietal.`,
+      printProfile.expandWorkCardsToClassSize
+        ? `Geef ieder duo of trio een passende set uit ${CLASS_SIZE} leerlingkaartjes.`
+        : `Gebruik ${organization.workCardTarget} werkkaartjes zodat elk duo of trio direct kan starten.`,
+      visual === "dictation"
+        ? "Wissel binnen elk duo of trio de rollen van loper, schrijver en controleur."
+        : visual === "stations"
+          ? "Laat ieder duo of trio bij een eigen post starten en schuif na elk signaal door naar de volgende post."
+        : "Laat de tweetallen tegelijk werken en wissel daarna kort van rol of looprichting."
+    ];
   }
 
-  return lines;
+  if (organization.type === "row-pairs") {
+    return [
+      `Zet de klas in twee rijen met ${PAIR_OR_TRIO_UNITS.length - 1} tweetallen en 1 drietal.`,
+      `Gebruik ${organization.workCardTarget} vraagkaartjes of gesprekskaarten zodat alle duo's tegelijk kunnen starten.`,
+      "Laat na elke ronde één rij doorschuiven en houd het drietal samen aan het uiteinde."
+    ];
+  }
+
+  if (organization.type === "teams" || organization.type === "small-groups") {
+    return [
+      `Werk met ${CLASS_GROUP_COUNT} groepjes van ${CLASS_GROUP_SIZE} leerlingen.`,
+      ["stations", "relay"].includes(visual)
+        ? "Laat alle groepjes tegelijk werken met vaste wisselmomenten of beurten."
+        : "Laat elk groepje dezelfde opdracht uitvoeren met een eigen rolverdeling.",
+      "Gebruik de groepskaarten om materialen en antwoorden per groep overzichtelijk te houden."
+    ];
+  }
+
+  if (visual === "corners") {
+    return [
+      "Werk klassikaal met vaste hoeken in het lokaal.",
+      "Laat leerlingen eerst een plek kiezen en daarna in de eigen woorden uitleggen waarom die keuze past.",
+      "Gebruik de middenplek voor twijfelgevallen of een korte nabespreking."
+    ];
+  }
+
+  if (visual === "stations") {
+    return [
+      "Werk met vaste posten in het lokaal en laat de klas verspreid starten.",
+      "Laat leerlingen individueel of per korte beurt werken en wissel na een duidelijk signaal door.",
+      "Leg per post het juiste kaartje of blad klaar, zodat iedereen meteen weet waar de volgende stap begint."
+    ];
+  }
+
+  if (visual === "path") {
+    return [
+      "Werk met een vaste route door lokaal of gang en houd de looprichting gelijk.",
+      "Laat leerlingen of duo's verspreid starten, zodat de route rustig en overzichtelijk blijft.",
+      "Gebruik per stop 1 duidelijke kaart of vraag en sluit af met een korte gezamenlijke check."
+    ];
+  }
+
+  if (visual === "line") {
+    return [
+      "Werk klassikaal met één duidelijke vloer- of lijnopstelling.",
+      "Laat steeds een paar leerlingen actief plaatsen, terwijl de rest mee controleert en hardop verwoordt.",
+      "Lees of controleer daarna samen de hele volgorde."
+    ];
+  }
+
+  if (visual === "measure") {
+    return [
+      "Werk met 1 duidelijke meetplek of vloermodel voor de hele klas.",
+      "Laat steeds een kleine beurtgroep uitvoeren, terwijl de rest observeert en meedenkt.",
+      "Wissel na iedere opdracht of meting van leerling of rol, zodat iedereen actief aan bod komt."
+    ];
+  }
+
+  if (visual === "circle") {
+    return [
+      "Werk klassikaal vanuit een kring, centrale plek of vrije vloer.",
+      "Laat steeds 1 duo, trio of leerling actief voordoen terwijl de rest meekijkt en mee benoemt.",
+      "Gebruik korte wisselmomenten, zodat veel leerlingen snel aan de beurt komen."
+    ];
+  }
+
+  return [
+    "Werk klassikaal met vaste plekken in het lokaal.",
+    "Laat een kleine groep actief uitvoeren en laat de rest observeren, meedenken of daarna wisselen.",
+    "Gebruik de laatste stap voor gezamenlijke controle of een korte nabespreking."
+  ];
 }
 
-function finalizeSupportCardsForClass(cards, visual) {
-  const merged = [...cards, ...getClassManagementSupportCards(visual)];
+function finalizeSupportCardsForClass(cards, visual, organization) {
+  const merged = [...cards, ...getClassManagementSupportCards(visual, organization)];
   const seen = new Set();
 
   return merged.filter((cardItem) => {
@@ -2246,23 +2463,49 @@ function finalizeSupportCardsForClass(cards, visual) {
   });
 }
 
-function getClassManagementSupportCards(visual) {
-  const groupCards = Array.from({ length: CLASS_GROUP_COUNT }, (_, index) =>
-    card("Groepskaart", `Groep ${index + 1}`, `Gebruik deze kaart bij groep ${index + 1} van ${CLASS_GROUP_SIZE} leerlingen.`)
+function getClassManagementSupportCards(visual, organization) {
+  const groupCards = organization.units.map((unit) =>
+    card("Groepskaart", unit.label, `Gebruik deze kaart bij ${unit.label.toLowerCase()} (${formatLearnerCount(unit.size)}).`)
   );
 
-  if (visual === "dictation") {
+  if (organization.type === "pairs" && visual === "dictation") {
     return [
       ...groupCards,
-      ...Array.from({ length: CLASS_GROUP_COUNT }, (_, index) =>
-        card("Rolkaart", `Loper ${index + 1}`, `Gebruik deze rolkaart bij groep ${index + 1}.`)
+      ...organization.units.map((unit) =>
+        card("Rolkaart", `Loper ${unit.label.replace("Tweetal ", "").replace("Drietal ", "")}`, `Gebruik deze rolkaart bij ${unit.label.toLowerCase()}.`)
       ),
-      ...Array.from({ length: CLASS_GROUP_COUNT }, (_, index) =>
-        card("Rolkaart", `Schrijver ${index + 1}`, `Gebruik deze rolkaart bij groep ${index + 1}.`)
+      ...organization.units.map((unit) =>
+        card("Rolkaart", `Schrijver ${unit.label.replace("Tweetal ", "").replace("Drietal ", "")}`, `Gebruik deze rolkaart bij ${unit.label.toLowerCase()}.`)
       ),
-      ...Array.from({ length: CLASS_GROUP_COUNT }, (_, index) =>
-        card("Rolkaart", `Controleur ${index + 1}`, `Gebruik deze rolkaart bij groep ${index + 1}.`)
+      ...organization.units.map((unit) =>
+        card("Rolkaart", `Controleur ${unit.label.replace("Tweetal ", "").replace("Drietal ", "")}`, `Gebruik deze rolkaart bij ${unit.label.toLowerCase()}.`)
       )
+    ];
+  }
+
+  if (organization.type === "pairs" && visual === "stations") {
+    return [
+      ...groupCards,
+      card("Hulpkaart", "Startsignaal", "Gebruik deze kaart om alle duo's en het drietal tegelijk te laten starten."),
+      card("Hulpkaart", "Postwissel", "Gebruik deze kaart bij elk wisselmoment tussen de posten."),
+      card("Hulpkaart", "Controle", "Gebruik deze kaart bij de gezamenlijke afronding of nabespreking.")
+    ];
+  }
+
+  if (organization.type === "pairs") {
+    return [
+      ...groupCards,
+      card("Hulpkaart", "Start", "Gebruik deze kaart voor een gezamenlijke start."),
+      card("Hulpkaart", "Wissel", "Gebruik deze kaart bij het wisselen van rol of kaart.")
+    ];
+  }
+
+  if (organization.type === "row-pairs") {
+    return [
+      ...groupCards,
+      card("Hulpkaart", "Rij A", "Gebruik deze kaart bij de eerste rij."),
+      card("Hulpkaart", "Rij B", "Gebruik deze kaart bij de tweede rij."),
+      card("Hulpkaart", "Doorschuiven", "Gebruik deze kaart bij elk wisselmoment.")
     ];
   }
 
@@ -2275,7 +2518,7 @@ function getClassManagementSupportCards(visual) {
     ];
   }
 
-  if (visual === "corners") {
+  if (visual === "corners" && organization.type !== "whole-class") {
     return [
       ...groupCards,
       card("Hulpkaart", "Twijfelplek", "Gebruik deze kaart als middenplek voor klassikale bespreking."),
@@ -2292,7 +2535,7 @@ function getClassManagementSupportCards(visual) {
     ];
   }
 
-  if (visual === "line") {
+  if (visual === "line" && organization.type !== "whole-class") {
     return [
       ...groupCards,
       card("Hulpkaart", "Set 1", "Gebruik deze kaart bij de eerste werkset."),
@@ -2342,7 +2585,7 @@ function shortenPrintText(text, maxLength = 78) {
   return `${text.slice(0, maxLength - 1).trimEnd()}…`;
 }
 
-function buildCardIntro(subject, moment, group, title, cardCount, printProfile) {
+function buildCardIntro(subject, moment, group, title, cardCount, printProfile, organization) {
   const methodLine =
     subject.id === "spelling"
       ? "De inhoud volgt de lijn van Staal 2 met herkenbare categorieen, klankgroepen en waar nodig het werkwoordschema."
@@ -2352,7 +2595,11 @@ function buildCardIntro(subject, moment, group, title, cardCount, printProfile) 
 
   const distributionLine = printProfile.expandWorkCardsToClassSize
     ? `Je krijgt ${cardCount} leerlingkaartjes, passend voor een klas van ${CLASS_SIZE} leerlingen.`
-    : `Je krijgt ${cardCount} werkkaarten, verdeeld over ${CLASS_GROUP_COUNT} werksets voor ongeveer ${CLASS_SIZE} leerlingen.`;
+    : organization.type === "pairs" || organization.type === "row-pairs"
+      ? `Je krijgt ${cardCount} werkkaarten, passend voor ${PAIR_OR_TRIO_UNITS.length - 1} tweetallen en 1 drietal.`
+      : organization.type === "teams" || organization.type === "small-groups"
+        ? `Je krijgt ${cardCount} werkkaarten of werksets, passend voor ${CLASS_GROUP_COUNT} groepjes van ${CLASS_GROUP_SIZE}.`
+        : `Je krijgt ${cardCount} gerichte opdrachtkaarten of bladen voor deze werkvorm.`;
 
   return `Deze printset sluit direct aan bij ${title} voor ${group.label}. ${distributionLine} Gebruik ze binnen ${moment.label.toLowerCase()} voor ${subject.label.toLowerCase()}. ${methodLine}`;
 }
@@ -3738,7 +3985,7 @@ function buildDocRekenenCardOverrides() {
   };
 }
 
-function getStarterCards(subjectId, groupId, visual, taskKey, title, printProfile) {
+function getStarterCards(subjectId, groupId, visual, taskKey, title, printProfile, organization) {
   const families = {
     taal_estafette: byGroup(
       ["m", "a", "a", "n", "v", "i", "s", "k"],
@@ -3842,7 +4089,7 @@ function getStarterCards(subjectId, groupId, visual, taskKey, title, printProfil
     normalizeCardItem(item, `${title} ${index + 1}`, buildCardHint(subjectId, groupId, family, taskKey, index))
   );
 
-  return expandCardSet(normalizedItems, subjectId, groupId, family, taskKey, title, visual, printProfile);
+  return expandCardSet(normalizedItems, subjectId, groupId, family, taskKey, title, visual, printProfile, organization);
 }
 
 function getCardFamily(subjectId, taskKey, visual) {
@@ -3939,7 +4186,7 @@ function normalizeCardItem(item, defaultLabel, defaultHint) {
   };
 }
 
-function expandCardSet(cards, subjectId, groupId, family, taskKey, title, visual, printProfile) {
+function expandCardSet(cards, subjectId, groupId, family, taskKey, title, visual, printProfile, organization) {
   const hasTaskSpecificOverride = Boolean(getCardPackOverrides()[taskKey]);
   const extras = hasTaskSpecificOverride
     ? []
@@ -3963,10 +4210,10 @@ function expandCardSet(cards, subjectId, groupId, family, taskKey, title, visual
     }
   });
 
-  return finalizeWorkCardsForClass(merged, visual, printProfile);
+  return finalizeWorkCardsForClass(merged, visual, printProfile, organization);
 }
 
-function finalizeWorkCardsForClass(cards, visual, printProfile) {
+function finalizeWorkCardsForClass(cards, visual, printProfile, organization) {
   if (printProfile.expandWorkCardsToClassSize) {
     return fillCardsToClassSize(cards);
   }
@@ -3975,37 +4222,72 @@ function finalizeWorkCardsForClass(cards, visual, printProfile) {
     return [];
   }
 
-  const copyCount = getWorkSetCopyCount(visual);
+  if (organization.workCardTarget) {
+    return fillCardsToTarget(cards, organization.workCardTarget, organization.units);
+  }
+
+  const copyCount = getWorkSetCopyCount(visual, organization);
 
   if (copyCount > 1) {
-    return duplicateCardsForGroups(cards, copyCount);
+    return duplicateCardsForGroups(cards, copyCount, organization.units);
   }
 
   return cards;
 }
 
-function getWorkSetCopyCount(visual) {
-  if (["dictation", "stations", "path", "mission", "relay", "corners", "line"].includes(visual)) {
+function getWorkSetCopyCount(visual, organization) {
+  if (organization.type === "teams") {
     return CLASS_GROUP_COUNT;
   }
 
   return 1;
 }
 
-function duplicateCardsForGroups(cards, copies) {
+function duplicateCardsForGroups(cards, copies, units = []) {
   const duplicated = [];
 
   for (let groupNumber = 1; groupNumber <= copies; groupNumber += 1) {
+    const unit = units[groupNumber - 1];
+    const unitLabel = unit?.label ?? `Set ${groupNumber}`;
     cards.forEach((source) => {
       duplicated.push({
         ...source,
-        label: `${source.label} • groep ${groupNumber}`,
-        hint: `${source.hint} Werkset voor groep ${groupNumber} van ${CLASS_GROUP_SIZE} leerlingen.`
+        label: `${source.label} • ${unitLabel.toLowerCase()}`,
+        hint: `${source.hint} Werkset voor ${unitLabel.toLowerCase()}.`
       });
     });
   }
 
   return duplicated;
+}
+
+function fillCardsToTarget(cards, targetCount, units = []) {
+  const completed = cards.slice(0, targetCount);
+
+  if (completed.length === targetCount || cards.length === 0) {
+    return completed.map((item, index) => relabelCardForUnit(item, units[index]));
+  }
+
+  let index = 0;
+
+  while (completed.length < targetCount) {
+    completed.push(cards[index % cards.length]);
+    index += 1;
+  }
+
+  return completed.map((item, cardIndex) => relabelCardForUnit(item, units[cardIndex]));
+}
+
+function relabelCardForUnit(cardItem, unit) {
+  if (!unit) {
+    return cardItem;
+  }
+
+  return {
+    ...cardItem,
+    label: `${cardItem.label} • ${unit.label.toLowerCase()}`,
+    hint: `${cardItem.hint} Gebruik deze kaart bij ${unit.label.toLowerCase()} (${formatLearnerCount(unit.size)}).`
+  };
 }
 
 function getExpansionCards(subjectId, groupId, family, taskKey, title) {
@@ -4569,7 +4851,7 @@ function getMethodSupportCards(subjectId, groupId, momentId) {
   ];
 }
 
-function buildPrintChecklist(subject, overviewSheets, cards, supportCards, teacherSheets, printProfile) {
+function buildPrintChecklist(subject, overviewSheets, cards, supportCards, teacherSheets, printProfile, organization) {
   const methodLine =
     subject.id === "spelling"
       ? "Methodehulp uit Staal 2"
@@ -4587,7 +4869,11 @@ function buildPrintChecklist(subject, overviewSheets, cards, supportCards, teach
     checklist.push(
       printProfile.expandWorkCardsToClassSize
         ? `${cards.length} leerlingkaartjes of matchkaarten voor een klas van ${CLASS_SIZE}`
-        : `${cards.length} werkkaarten, verdeeld over ${CLASS_GROUP_COUNT} werksets`
+        : organization.type === "pairs" || organization.type === "row-pairs"
+          ? `${cards.length} werkkaartjes voor ${PAIR_OR_TRIO_UNITS.length - 1} tweetallen en 1 drietal`
+          : organization.type === "teams" || organization.type === "small-groups"
+            ? `${cards.length} werkkaarten of werksets voor ${CLASS_GROUP_COUNT} groepjes`
+            : `${cards.length} opdrachtkaarten of werkbladen voor deze werkvorm`
     );
   }
 
@@ -4610,7 +4896,43 @@ function buildPrintChecklist(subject, overviewSheets, cards, supportCards, teach
   return checklist;
 }
 
-function getTeacherSheets(group, subject, moment, blueprint, title) {
+function formatLearnerCount(count) {
+  return `${count} ${count === 1 ? "leerling" : "leerlingen"}`;
+}
+
+function getTeacherSheetUnits(organization, visual) {
+  if (organization.units.length) {
+    return organization.units;
+  }
+
+  if (["stations", "path", "measure"].includes(visual)) {
+    return Array.from({ length: CLASS_SIZE }, (_, index) => ({
+      label: `Leerling ${index + 1}`,
+      size: 1
+    }));
+  }
+
+  return [
+    {
+      label: "Klas",
+      size: CLASS_SIZE
+    }
+  ];
+}
+
+function getTeacherOverviewLines(sheetUnits) {
+  if (sheetUnits.every((unit) => unit.size === 1) && sheetUnits.length > 12) {
+    return Array.from({ length: Math.ceil(sheetUnits.length / 5) }, (_, index) => {
+      const start = index * 5 + 1;
+      const end = Math.min(start + 4, sheetUnits.length);
+      return `Leerling ${start}-${end} klaar: ____________________`;
+    });
+  }
+
+  return sheetUnits.map((unit) => `${unit.label} klaar: ____________________`);
+}
+
+function getTeacherSheets(group, subject, moment, blueprint, title, organization) {
   const roundCount = Math.max(3, Math.min(6, blueprint.steps.length));
   const roundLines = Array.from({ length: roundCount }, (_, index) => `Ronde ${index + 1}: ____________________`).join("\n");
   const answerBlock =
@@ -4620,11 +4942,13 @@ function getTeacherSheets(group, subject, moment, blueprint, title) {
         ? "Som / opgave: ____________________\nModel of strategie: ____________________\nAntwoord: ____________________\nControle: ____________________"
         : "Antwoord: ____________________\nUitleg: ____________________\nControle: hardop teruglezen";
 
-  const groupSheets = Array.from({ length: CLASS_GROUP_COUNT }, (_, index) =>
+  const sheetUnits = getTeacherSheetUnits(organization, blueprint.visual);
+
+  const groupSheets = sheetUnits.map((unit) =>
     card(
-      `Groepsblad ${index + 1}`,
-      `${title}\nGroep ${index + 1} (${CLASS_GROUP_SIZE} leerlingen)\n${roundLines}\n${answerBlock}`,
-      `Print 1 blad voor groep ${index + 1} van ${CLASS_GROUP_SIZE} leerlingen.`
+      `Werkblad ${unit.label}`,
+      `${title}\n${unit.label} (${formatLearnerCount(unit.size)})\n${roundLines}\n${answerBlock}`,
+      `Print 1 blad voor ${unit.label.toLowerCase()} van ${formatLearnerCount(unit.size)}.`
     )
   );
 
@@ -4632,7 +4956,7 @@ function getTeacherSheets(group, subject, moment, blueprint, title) {
     ...groupSheets,
     card(
       "Klasoverzicht",
-      `Klascheck ${title}\nGroep 1 klaar: ____________________\nGroep 2 klaar: ____________________\nGroep 3 klaar: ____________________\nGroep 4 klaar: ____________________\nGroep 5 klaar: ____________________\nMateriaal compleet terug: ja / nee`,
+      `Klascheck ${title}\n${getTeacherOverviewLines(sheetUnits).join("\n")}\nMateriaal compleet terug: ja / nee`,
       `Print 1 klasoverzicht voor de leerkracht tijdens ${moment.label.toLowerCase()}.`
     ),
     card(
@@ -5552,11 +5876,27 @@ function renderTaskDetail(task) {
 function renderCardLayer(task) {
   const cardDescription = task.printProfile.expandWorkCardsToClassSize
     ? `Deze set is uitgewerkt voor ${CLASS_SIZE} leerlingen. Geef ieder kind 1 kaart.`
-    : `Deze set hoort direct bij de opdracht en is logisch geordend in ${CLASS_GROUP_COUNT} werksets voor een klas van ongeveer ${CLASS_SIZE} leerlingen.`;
+    : task.cardPack.organization.type === "pairs" || task.cardPack.organization.type === "row-pairs"
+      ? `Deze set is uitgewerkt voor ${PAIR_OR_TRIO_UNITS.length - 1} tweetallen en 1 drietal in een klas van ongeveer ${CLASS_SIZE} leerlingen.`
+      : task.cardPack.organization.type === "teams" || task.cardPack.organization.type === "small-groups"
+        ? `Deze set is uitgewerkt voor ${CLASS_GROUP_COUNT} groepjes van ${CLASS_GROUP_SIZE} leerlingen.`
+        : `Deze set hoort direct bij de opdracht en is logisch geordend voor een klas van ongeveer ${CLASS_SIZE} leerlingen.`;
 
   const printTip = task.printProfile.expandWorkCardsToClassSize
     ? "Tip: print op A4, knip de leerlingkaartjes los en deel ze direct uit."
-    : `Tip: print op A4 of A3, begin met de lesplaten en gebruik daarna de overige printvellen voor ${CLASS_GROUP_COUNT} groepjes van ${CLASS_GROUP_SIZE}.`;
+    : task.cardPack.organization.type === "pairs" || task.cardPack.organization.type === "row-pairs"
+      ? "Tip: print op A4 of A3, begin met de lesplaten en geef daarna per duo of trio 1 werkset of 1 duidelijk startblad."
+      : task.cardPack.organization.type === "teams" || task.cardPack.organization.type === "small-groups"
+        ? `Tip: print op A4 of A3, begin met de lesplaten en gebruik daarna de overige printvellen per groepje van ${CLASS_GROUP_SIZE}.`
+        : "Tip: print op A4 of A3, begin met de lesplaten en leg daarna de route-, post- of leerlingbladen in dezelfde volgorde klaar als in de opdracht.";
+
+  const teacherDescription = task.cardPack.organization.type === "pairs" || task.cardPack.organization.type === "row-pairs"
+    ? "Deze bladen kun je direct uitprinten per duo of trio, plus een compact klasoverzicht en controleblad."
+    : task.cardPack.organization.type === "teams" || task.cardPack.organization.type === "small-groups"
+      ? `Deze bladen kun je direct uitprinten per groepje van ${CLASS_GROUP_SIZE}, plus registratie en controle.`
+      : ["stations", "path", "measure"].includes(task.visual)
+        ? `Deze bladen kun je direct uitprinten als leerlingbladen voor een klas van ${CLASS_SIZE} leerlingen, plus een leerkrachtoverzicht.`
+        : "Deze bladen kun je direct uitprinten als klasblad, registratieblad en controleblad.";
 
   return `
     <div class="card-layer">
@@ -5589,7 +5929,7 @@ function renderCardLayer(task) {
 
       ${renderPrintSection(
         `Groepsbladen en controlebladen (${task.cardPack.teacherSheets.length})`,
-        "Deze bladen kun je direct uitprinten voor 5 groepjes, registratie en controle.",
+        teacherDescription,
         task.cardPack.teacherSheets
       )}
 
@@ -5858,26 +6198,88 @@ function renderIllustrationScene(task, subjectAccent, momentAccent, stroke) {
   `;
 }
 
-function renderClassLayoutArt(visual, subjectAccent, momentAccent) {
-  if (visual === "dictation") {
+function renderClassLayoutArt(visual, organization, subjectAccent, momentAccent) {
+  if (organization.type === "pairs" && visual === "dictation") {
     return `
       <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor loopdictee of kaartwandeling">
         <rect width="360" height="180" rx="22" fill="#f7fbff" />
         ${renderCardRack(274, 32, "Wandkaarten", subjectAccent, "#19424a")}
-        ${renderZone(28, 26, 104, 36, "5 groepjes", "#ffffff", "#19424a", 12)}
-        ${renderZone(28, 86, 70, 30, "Groep 1", "#ffffff", "#19424a", 10.5)}
-        ${renderZone(112, 86, 70, 30, "Groep 2", "#ffffff", "#19424a", 10.5)}
-        ${renderZone(196, 86, 70, 30, "Groep 3", "#ffffff", "#19424a", 10.5)}
-        ${renderZone(70, 132, 70, 30, "Groep 4", "#ffffff", "#19424a", 10.5)}
-        ${renderZone(154, 132, 70, 30, "Groep 5", "#ffffff", "#19424a", 10.5)}
+        ${renderZone(24, 26, 132, 36, "11 tweetallen", "#ffffff", "#19424a", 12)}
+        ${renderZone(188, 26, 116, 36, "1 drietal", "#ffffff", "#19424a", 12)}
+        ${renderZone(24, 86, 96, 30, "Tweetallen A-D", "#ffffff", "#19424a", 10)}
+        ${renderZone(132, 86, 96, 30, "Tweetallen E-H", "#ffffff", "#19424a", 10)}
+        ${renderZone(24, 132, 96, 30, "Tweetallen I-K", "#ffffff", "#19424a", 10)}
+        ${renderZone(132, 132, 96, 30, "Drietal L", "#ffffff", "#19424a", 10)}
         ${renderMiniSign(28, 62, "LOPER", momentAccent)}
         ${renderMiniSign(90, 62, "SCHRIJVER", subjectAccent)}
-        ${renderMiniSign(170, 62, "WISSEL", momentAccent)}
+        ${renderMiniSign(188, 62, "WISSEL", momentAccent)}
       </svg>
     `;
   }
 
-  if (visual === "stations") {
+  if (organization.type === "row-pairs") {
+    return `
+      <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor twee rijen">
+        <rect width="360" height="180" rx="22" fill="#f7fbff" />
+        ${renderZone(30, 24, 126, 34, "Rij A", "#ffffff", "#19424a", 12)}
+        ${renderZone(204, 24, 126, 34, "Rij B", "#ffffff", "#19424a", 12)}
+        ${renderZone(24, 86, 98, 28, "Tweetal 1-4", "#ffffff", "#19424a", 10)}
+        ${renderZone(130, 86, 98, 28, "Tweetal 5-8", "#ffffff", "#19424a", 10)}
+        ${renderZone(236, 86, 98, 28, "Tweetal 9-11", "#ffffff", "#19424a", 10)}
+        ${renderZone(130, 130, 98, 28, "Drietal 12", "#ffffff", "#19424a", 10)}
+        ${renderTrack(
+          [
+            [70, 58],
+            [70, 82],
+            [70, 120]
+          ],
+          subjectAccent
+        )}
+        ${renderTrack(
+          [
+            [290, 58],
+            [290, 82],
+            [290, 120]
+          ],
+          momentAccent
+        )}
+        ${renderMiniSign(128, 58, "SCHUIF DOOR", momentAccent)}
+      </svg>
+    `;
+  }
+
+  if (organization.type === "pairs" && visual === "stations") {
+    return `
+      <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor tweetallen langs posten">
+        <rect width="360" height="180" rx="22" fill="#f7fbff" />
+        ${renderZone(20, 20, 76, 34, "Post 1", "#ffffff", "#19424a", 11)}
+        ${renderZone(110, 20, 76, 34, "Post 2", "#ffffff", "#19424a", 11)}
+        ${renderZone(200, 20, 76, 34, "Post 3", "#ffffff", "#19424a", 11)}
+        ${renderZone(290, 20, 50, 34, "Post 4", "#ffffff", "#19424a", 10)}
+        ${renderZone(22, 122, 96, 30, "Tweetallen 1-3", "#ffffff", "#19424a", 10)}
+        ${renderZone(130, 122, 96, 30, "Tweetallen 4-6", "#ffffff", "#19424a", 10)}
+        ${renderZone(238, 122, 96, 30, "Tweetallen 7-9", "#ffffff", "#19424a", 10)}
+        ${renderZone(108, 78, 144, 28, "Tweetallen 10-11 + drietal", "#ffffff", "#19424a", 10)}
+        ${renderTrack(
+          [
+            [58, 54],
+            [58, 118],
+            [148, 54],
+            [148, 118],
+            [238, 54],
+            [238, 118],
+            [314, 54],
+            [314, 118]
+          ],
+          momentAccent
+        )}
+        ${renderMiniSign(114, 154, "START PER POST", subjectAccent)}
+        ${renderMiniSign(232, 154, "WISSEL", momentAccent)}
+      </svg>
+    `;
+  }
+
+  if (organization.type === "teams" && visual === "stations") {
     return `
       <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor stationswerk">
         <rect width="360" height="180" rx="22" fill="#f7fbff" />
@@ -5904,7 +6306,7 @@ function renderClassLayoutArt(visual, subjectAccent, momentAccent) {
     `;
   }
 
-  if (visual === "corners") {
+  if (organization.type === "whole-class" && visual === "corners") {
     return `
       <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor hoekenwerk">
         <rect width="360" height="180" rx="22" fill="#f7fbff" />
@@ -5912,29 +6314,123 @@ function renderClassLayoutArt(visual, subjectAccent, momentAccent) {
         ${renderZone(260, 22, 82, 34, "Hoek B", "#ffffff", "#19424a", 11)}
         ${renderZone(18, 124, 82, 34, "Hoek C", "#ffffff", "#19424a", 11)}
         ${renderZone(260, 124, 82, 34, "Hoek D", "#ffffff", "#19424a", 11)}
-        ${renderZone(126, 70, 108, 42, "Midden en uitleg", "#ffffff", "#19424a", 11)}
-        ${renderMiniSign(122, 122, "5 groepjes", subjectAccent)}
+        ${renderZone(126, 70, 108, 42, "Klassikaal kiezen", "#ffffff", "#19424a", 11)}
+        ${renderMiniSign(122, 122, "EERST KIES", subjectAccent)}
         ${renderMiniSign(208, 122, "KIES", momentAccent)}
       </svg>
     `;
   }
 
-  if (visual === "line") {
+  if (organization.type === "whole-class" && visual === "stations") {
     return `
-      <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor lijn- of vloeropdracht">
+      <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor klassikaal postenwerk">
         <rect width="360" height="180" rx="22" fill="#f7fbff" />
-        <path d="M34 104 H326" stroke="#19424a" stroke-width="6" stroke-linecap="round" />
-        ${renderZone(24, 34, 96, 34, "Werkset 1", "#ffffff", "#19424a", 11)}
-        ${renderZone(132, 34, 96, 34, "Werkset 2", "#ffffff", "#19424a", 11)}
-        ${renderZone(240, 34, 96, 34, "Werkset 3", "#ffffff", "#19424a", 11)}
-        ${renderZone(78, 124, 96, 34, "Werkset 4", "#ffffff", "#19424a", 11)}
-        ${renderZone(186, 124, 96, 34, "Werkset 5", "#ffffff", "#19424a", 11)}
-        ${renderMiniSign(134, 84, "LEG OP VOLGORDE", subjectAccent)}
+        ${renderZone(24, 20, 80, 34, "Post 1", "#ffffff", "#19424a", 11)}
+        ${renderZone(140, 20, 80, 34, "Post 2", "#ffffff", "#19424a", 11)}
+        ${renderZone(256, 20, 80, 34, "Post 3", "#ffffff", "#19424a", 11)}
+        ${renderZone(82, 122, 90, 34, "Post 4", "#ffffff", "#19424a", 11)}
+        ${renderZone(188, 122, 90, 34, "Controle", "#ffffff", "#19424a", 11)}
+        ${renderZone(116, 70, 128, 36, "25 leerlingen", "#ffffff", "#19424a", 11)}
+        ${renderMiniSign(98, 156, "START GESPREID", subjectAccent)}
+        ${renderMiniSign(218, 156, "WISSEL", momentAccent)}
       </svg>
     `;
   }
 
-  if (visual === "path" || visual === "mission" || visual === "relay") {
+  if (organization.type === "whole-class" && visual === "path") {
+    return `
+      <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor een klassikale looproute">
+        <rect width="360" height="180" rx="22" fill="#f7fbff" />
+        ${renderMiniSign(24, 26, "START", subjectAccent)}
+        ${renderRouteStop(90, 138, "A", momentAccent, "#19424a")}
+        ${renderRouteStop(150, 118, "B", momentAccent, "#19424a")}
+        ${renderRouteStop(210, 98, "C", momentAccent, "#19424a")}
+        ${renderRouteStop(270, 78, "D", momentAccent, "#19424a")}
+        ${renderTrack(
+          [
+            [48, 34],
+            [86, 130],
+            [146, 110],
+            [206, 90],
+            [266, 70]
+          ],
+          momentAccent
+        )}
+        ${renderZone(208, 128, 124, 32, "25 leerlingen", "#ffffff", "#19424a", 11)}
+        ${renderZone(208, 92, 124, 28, "start gespreid", "#ffffff", "#19424a", 10.5)}
+      </svg>
+    `;
+  }
+
+  if (organization.type === "whole-class" && visual === "line") {
+    return `
+      <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor lijn- of vloeropdracht">
+        <rect width="360" height="180" rx="22" fill="#f7fbff" />
+        <path d="M34 104 H326" stroke="#19424a" stroke-width="6" stroke-linecap="round" />
+        ${renderZone(24, 34, 120, 34, "Vloer of lijn", "#ffffff", "#19424a", 11)}
+        ${renderZone(214, 34, 122, 34, "Klassikaal", "#ffffff", "#19424a", 11)}
+        ${renderMiniSign(96, 126, "LEG", subjectAccent)}
+        ${renderMiniSign(158, 126, "LEES", momentAccent)}
+        ${renderMiniSign(220, 126, "CHECK", subjectAccent)}
+      </svg>
+    `;
+  }
+
+  if (organization.type === "whole-class" && visual === "measure") {
+    return `
+      <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor een meet- of schaalopdracht">
+        <rect width="360" height="180" rx="22" fill="#f7fbff" />
+        <rect x="30" y="58" width="148" height="74" rx="14" fill="#ffffff" stroke="#19424a" stroke-width="3" stroke-dasharray="8 6" />
+        <path d="M212 104 H324" stroke="#19424a" stroke-width="6" stroke-linecap="round" />
+        ${renderZone(30, 20, 148, 30, "Meetplek of vorm", "#ffffff", "#19424a", 11)}
+        ${renderZone(212, 20, 112, 30, "25 leerlingen", "#ffffff", "#19424a", 11)}
+        ${renderMiniSign(220, 70, "BEURTEN", subjectAccent)}
+        ${renderMiniSign(220, 118, "MEET", momentAccent)}
+      </svg>
+    `;
+  }
+
+  if (organization.type === "whole-class" && visual === "circle") {
+    return `
+      <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor een klassikale kringopdracht">
+        <rect width="360" height="180" rx="22" fill="#f7fbff" />
+        <circle cx="180" cy="92" r="50" fill="#ffffff" stroke="#19424a" stroke-width="3" />
+        ${renderZone(132, 76, 96, 32, "Middenplek", "#ffffff", "#19424a", 11)}
+        ${renderZone(34, 24, 110, 30, "25 leerlingen", "#ffffff", "#19424a", 11)}
+        ${renderZone(216, 24, 110, 30, "om de kring", "#ffffff", "#19424a", 11)}
+        ${renderMiniSign(64, 140, "KIJK", subjectAccent)}
+        ${renderMiniSign(146, 140, "DOE", momentAccent)}
+        ${renderMiniSign(228, 140, "WISSEL", subjectAccent)}
+      </svg>
+    `;
+  }
+
+  if (organization.type === "pairs" && (visual === "path" || visual === "mission")) {
+    return `
+      <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor looproute in tweetallen">
+        <rect width="360" height="180" rx="22" fill="#f7fbff" />
+        ${renderMiniSign(24, 26, "START", subjectAccent)}
+        ${renderRouteStop(88, 138, "A", momentAccent, "#19424a")}
+        ${renderRouteStop(140, 120, "B", momentAccent, "#19424a")}
+        ${renderRouteStop(192, 102, "C", momentAccent, "#19424a")}
+        ${renderRouteStop(244, 84, "D", momentAccent, "#19424a")}
+        ${renderTrack(
+          [
+            [48, 34],
+            [84, 130],
+            [136, 112],
+            [188, 94],
+            [240, 76]
+          ],
+          momentAccent
+        )}
+        ${renderZone(212, 128, 118, 32, "11 tweetallen", "#ffffff", "#19424a", 10.5)}
+        ${renderZone(212, 92, 118, 28, "1 drietal", "#ffffff", "#19424a", 10.5)}
+      </svg>
+    `;
+  }
+
+  if (organization.type === "teams" && visual === "relay") {
     return `
       <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor routeopdracht">
         <rect width="360" height="180" rx="22" fill="#f7fbff" />
@@ -5961,19 +6457,45 @@ function renderClassLayoutArt(visual, subjectAccent, momentAccent) {
     `;
   }
 
+  if (organization.type === "small-groups") {
+    return `
+      <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor kleine groepjes">
+        <rect width="360" height="180" rx="22" fill="#f7fbff" />
+        ${renderZone(24, 22, 110, 34, "Groep 1", "#ffffff", "#19424a", 11)}
+        ${renderZone(140, 22, 110, 34, "Groep 2", "#ffffff", "#19424a", 11)}
+        ${renderZone(256, 22, 80, 34, "Groep 3", "#ffffff", "#19424a", 11)}
+        ${renderZone(82, 120, 110, 34, "Groep 4", "#ffffff", "#19424a", 11)}
+        ${renderZone(198, 120, 110, 34, "Groep 5", "#ffffff", "#19424a", 11)}
+        ${renderMiniSign(106, 78, "5 LEERL.", subjectAccent)}
+        ${renderMiniSign(210, 78, "EIGEN SET", momentAccent)}
+      </svg>
+    `;
+  }
+
+  if (organization.type === "individual") {
+    return `
+      <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor individueel werken">
+        <rect width="360" height="180" rx="22" fill="#f7fbff" />
+        ${renderZone(28, 22, 128, 34, "25 leerlingen", "#ffffff", "#19424a", 12)}
+        ${renderZone(204, 22, 128, 34, "ieder 1 kaart", "#ffffff", "#19424a", 12)}
+        ${renderZone(40, 84, 60, 26, "1-5", "#ffffff", "#19424a", 10)}
+        ${renderZone(110, 84, 60, 26, "6-10", "#ffffff", "#19424a", 10)}
+        ${renderZone(180, 84, 60, 26, "11-15", "#ffffff", "#19424a", 10)}
+        ${renderZone(250, 84, 60, 26, "16-20", "#ffffff", "#19424a", 10)}
+        ${renderZone(145, 124, 70, 26, "21-25", "#ffffff", "#19424a", 10)}
+        ${renderMiniSign(126, 154, "GELIJK STARTEN", subjectAccent)}
+      </svg>
+    `;
+  }
+
   return `
     <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor 25 leerlingen">
       <rect width="360" height="180" rx="22" fill="#f7fbff" />
-      <rect x="0" y="116" width="360" height="64" fill="#eef8fb" />
-      ${renderZone(24, 24, 104, 38, "Klas van 25", "#ffffff", "#19424a", 12)}
-      ${renderZone(232, 24, 104, 38, "5 groepjes", "#ffffff", "#19424a", 12)}
-      ${renderZone(34, 86, 80, 34, "Groep 1", "#ffffff", "#19424a", 11)}
-      ${renderZone(140, 86, 80, 34, "Groep 2", "#ffffff", "#19424a", 11)}
-      ${renderZone(246, 86, 80, 34, "Groep 3", "#ffffff", "#19424a", 11)}
-      ${renderZone(88, 132, 80, 34, "Groep 4", "#ffffff", "#19424a", 11)}
-      ${renderZone(194, 132, 80, 34, "Groep 5", "#ffffff", "#19424a", 11)}
-      ${renderMiniSign(42, 64, "5 LEERL.", subjectAccent)}
-      ${renderMiniSign(250, 64, "WISSEL", momentAccent)}
+      ${renderZone(36, 30, 124, 36, "Klassikaal", "#ffffff", "#19424a", 12)}
+      ${renderZone(200, 30, 124, 36, "vaste plekken", "#ffffff", "#19424a", 12)}
+      ${renderMiniSign(102, 96, "KIES", subjectAccent)}
+      ${renderMiniSign(166, 96, "DOE", momentAccent)}
+      ${renderMiniSign(230, 96, "CHECK", subjectAccent)}
     </svg>
   `;
 }
