@@ -56,7 +56,7 @@ const subjects = [
     id: "spelling",
     label: "Spelling",
     marker: "Sp",
-    accent: "#f28f27",
+    accent: "#00abc8",
     description:
       "Oefen spellingregels, klanken, woordbeelden, werkwoorden en foutenanalyse."
   },
@@ -64,7 +64,7 @@ const subjects = [
     id: "rekenen",
     label: "Rekenen",
     marker: "12",
-    accent: "#2d8f5a",
+    accent: "#1d1060",
     description:
       "Gebruik beweging bij automatiseren, getalbegrip, meten, verhoudingen en probleemoplossen."
   }
@@ -75,7 +75,7 @@ const moments = [
     id: "energizers",
     label: "Tussen het leren",
     subtitle: "Energizers bij het wisselen van een vak",
-    accent: "#f28f27",
+    accent: "#00abc8",
     description:
       "Korte opdrachten om energie te richten, de aandacht te pakken en soepel over te stappen naar de volgende les."
   },
@@ -91,1446 +91,651 @@ const moments = [
     id: "bewegend",
     label: "Bewegen om te leren",
     subtitle: "Leren door het bewegen zelf",
-    accent: "#2d8f5a",
+    accent: "#1188a8",
     description:
       "Werkvormen waarbij de beweging niet alleen motiveert, maar echt helpt om te begrijpen, oefenen en onthouden."
   }
 ];
 
-const taskBlueprints = {
-  taal: {
-    energizers: [
-      {
-        key: "letterestafette",
-        visual: "relay",
-        visualHint:
-          "Een estafettevorm met kaartjes op afstand en een verzamelplek waar taal samen wordt gebouwd.",
-        title: byGroup("Letterestafette", "Woordsoorten-estafette", "Zinsbouw-estafette"),
-        summary: byGroup(
-          "Leerlingen halen letters op en bouwen samen een doelwoord voordat de volgende les start.",
-          "Leerlingen rennen naar woordkaartjes en sorteren ze actief op woordsoort.",
-          "Teams verzamelen zinsdelen en bouwen onder tempo een kloppende zin."
-        ),
-        duration: byGroup("7 min", "8 min", "10 min"),
-        setup:
-          "Maak een startlijn en leg kaartjes aan de overkant van het lokaal of plein. Gebruik een bord, magneetstrip of vloerplek als verzamelpunt.",
-        goal: byGroup(
-          "Letters herkennen, klank koppelen en eenvoudige woorden lezen.",
-          "Woordsoorten herhalen en kort uitleggen waarom een woord ergens hoort.",
-          "Zinsbouw bewust maken met onderwerp, persoonsvorm en zinsdelen."
-        ),
-        movementFocus: "Korte sprintjes, ophalen, teruglopen en samen hardop verwoorden.",
-        materials: [
-          "Letter-, woord- of zinsdeelkaartjes",
-          "Pionnen of een zichtbare startlijn",
-          "Bord, vloerplek of magneetstrip"
-        ],
-        steps: [
-          "Leg de kaartjes aan de overkant van de ruimte en maak teams van twee tot vier leerlingen.",
-          "Noem het doel van de ronde: een woord bouwen, woordsoorten sorteren of een zin maken.",
-          "Leerlingen halen om de beurt één kaartje en leggen dat op de verzamelplek.",
-          "Na iedere ronde leest of bespreekt het team hardop wat er al ligt en wat nog ontbreekt."
-        ],
-        differentiation: byGroup(
-          "Gebruik woorden met plaatjes of laat kinderen eerst de klank hakken en plakken.",
-          "Werk met twee woordsoorten voor extra rust of voeg verwijswoorden toe voor uitdaging.",
-          "Voeg bijzinnen of signaalwoorden toe voor verdieping."
-        ),
-        teacherTip: byGroup(
-          "Kies woorden uit de komende les zodat de overgang logisch voelt.",
-          "Houd de rondes kort en laat steeds één leerling de uitleg geven.",
-          "Vraag regelmatig welke kaart de persoonsvorm of kern van de zin is."
-        ),
-        keywords: ["taal", "estafette", "letters", "woordsoorten", "zinnen"]
-      },
-      {
-        key: "rijmren",
-        visual: "jump",
-        visualHint:
-          "Een snelle keuzevorm met kaartjes op de grond waarbij leerlingen springen of rennen naar het goede antwoord.",
-        title: byGroup("Rijm-ren", "Synoniemen-sprint", "Betekenis-battle"),
-        summary: byGroup(
-          "Leerlingen rennen naar het rijmwoord en springen terug naar hun plek.",
-          "Leerlingen zoeken al bewegend het best passende synoniem.",
-          "Leerlingen kiezen tussen woorden met nuanceverschil en verdedigen kort hun keuze."
-        ),
-        duration: byGroup("5 min", "7 min", "8 min"),
-        setup:
-          "Leg drie tot vier keuzevakken of kaartjes op de vloer. Houd tussen de vakken loopruimte vrij.",
-        goal: byGroup(
-          "Rijmwoorden auditief herkennen en snel koppelen aan schrift.",
-          "Woordenschat vergroten en betekenis verwant maken.",
-          "Nadenken over nuance, context en precieze woordkeuze."
-        ),
-        movementFocus: "Snel kiezen, springen naar een antwoord en weer terugkomen naar de groep.",
-        materials: ["Woordkaartjes", "Hoepels of vloervakken", "Timer of belsignaal"],
-        steps: [
-          "Noem een woord of lees een contextzin voor.",
-          "Leerlingen bewegen naar het juiste kaartje of juiste vak.",
-          "Laat na elke ronde één leerling verwoorden waarom deze keuze past.",
-          "Herhaal met nieuwe woorden en houd het tempo hoog."
-        ],
-        differentiation: byGroup(
-          "Werk met plaatjes en woorden die in de klas al bekend zijn.",
-          "Voeg één afleider toe die lijkt maar net niet past.",
-          "Laat leerlingen ook uitleggen waarom de andere keuzes minder passend zijn."
-        ),
-        teacherTip: byGroup(
-          "Zeg woorden langzaam en duidelijk voor auditieve steun.",
-          "Gebruik woorden uit het thema van de week voor extra transfer.",
-          "Kies contextzinnen uit actualiteit of klassenteksten voor meer betekenis."
-        ),
-        keywords: ["rijm", "synoniemen", "betekenis", "woordenschat", "energizer"]
-      },
-      {
-        key: "vertelbal",
-        visual: "circle",
-        visualHint:
-          "Een kringvorm met een zachte bal; wie vangt, vult de zin of het verhaal mondeling aan.",
-        title: byGroup("Vertelbal", "Woordkettingbal", "Vertel- en betoogbal"),
-        summary: byGroup(
-          "In de kring vangen leerlingen een bal en noemen een passend woord of een volgende zin.",
-          "Leerlingen bouwen met een overgooi-bal een woordketting of korte uitleg op.",
-          "Leerlingen vullen al bewegend een betoog, standpunt of samenvatting aan."
-        ),
-        duration: byGroup("6 min", "7 min", "8 min"),
-        setup:
-          "Maak een ruime kring of halve kring. Gebruik één zachte bal en een startzin, themawoord of stelling.",
-        goal: byGroup(
-          "Spreekdurf vergroten en woorden actief ophalen.",
-          "Mondelinge taal verbinden aan samenwerken en logisch aanvullen.",
-          "Redeneren, samenvatten en standpunten mondeling aanscherpen."
-        ),
-        movementFocus: "Overgooien, vangen, snel reageren en eventueel van plek wisselen.",
-        materials: ["Zachte bal", "Themawoorden of praatkaartjes"],
-        steps: [
-          "Start met een woord, zin of vraag die past bij het lesthema.",
-          "Gooi de bal naar een leerling; die vult aan met één woord, zin of argument.",
-          "Na het antwoord gooit de leerling door naar iemand anders.",
-          "Na een ronde vat de groep samen wat er samen is opgebouwd."
-        ],
-        differentiation: byGroup(
-          "Werk met vaste zinsstarters zoals Ik zie of Eerst gebeurt.",
-          "Laat leerlingen kiezen uit twee soorten aanvullingen: woord of uitleg.",
-          "Laat leerlingen verplicht een voorbeeld of tegenargument toevoegen."
-        ),
-        teacherTip: byGroup(
-          "Gebruik een zachte bal en spreek duidelijke beurtritmes af.",
-          "Zet kernwoorden zichtbaar op het bord voor extra steun.",
-          "Gebruik deze vorm ook kort als activerende start van een spreekopdracht."
-        ),
-        keywords: ["kring", "vertellen", "mondeling", "bal", "spreken"]
-      },
-      {
-        key: "themawoordtikkertje",
-        visual: "mission",
-        visualHint:
-          "Leerlingen bewegen tussen themaplekken en tikken het juiste woord of beeld aan.",
-        title: byGroup("Themawoord-tikkertje", "Woordveld-tikspel", "Taalroute met kernwoorden"),
-        summary: byGroup(
-          "Kinderen tikken het plaatje of woord aan dat bij het thema hoort.",
-          "Leerlingen zoeken bewegend de juiste woorden in een woordveld.",
-          "Leerlingen lopen een route langs kernwoorden en koppelen die aan betekenis of context."
-        ),
-        duration: byGroup("6 min", "7 min", "8 min"),
-        setup:
-          "Hang themawoorden of afbeeldingen verspreid op. Maak een vrije route zodat leerlingen veilig kunnen bewegen.",
-        goal: byGroup(
-          "Woorden herkennen binnen een vertrouwd thema.",
-          "Woordvelden activeren en begrippen snel terughalen.",
-          "Kernwoorden koppelen aan een tekst, onderwerp of argument."
-        ),
-        movementFocus: "Zoeken, tikken, teruglopen en woorden hardop benoemen.",
-        materials: ["Themawoorden of afbeeldingen", "Pionnen of routepijlen", "Eventueel een tikkerkaart"],
-        steps: [
-          "Verspreid de woorden of afbeeldingen over de ruimte.",
-          "Noem een categorie, kenmerk of omschrijving.",
-          "Leerlingen bewegen naar het woord of beeld dat volgens hen past en tikken dit aan.",
-          "Bespreek kort waarom dit woord past en geef direct een nieuwe opdracht."
-        ],
-        differentiation: byGroup(
-          "Werk met minder woorden en veel visuele steun.",
-          "Laat leerlingen ook een eigen voorbeeld noemen uit hetzelfde woordveld.",
-          "Vraag om contextzinnen of laat leerlingen verbanden tussen twee kernwoorden leggen."
-        ),
-        teacherTip: byGroup(
-          "Gebruik bekende themawoorden om succeservaringen te creëren.",
-          "Maak clusters in kleur voor extra overzicht.",
-          "Koppel de route aan de kernwoorden van begrijpend lezen of wereldoriëntatie."
-        ),
-        keywords: ["thema", "woordenschat", "tikspel", "kernwoorden", "taalroute"]
-      }
-    ],
-    tijdens: [
-      {
-        key: "prentenloopdictee",
-        visual: "dictation",
-        visualHint:
-          "Een duo-opstelling met tekst of prenten aan de wand en een schrijfplek verderop.",
-        title: byGroup("Prenten-loopdictee", "Taal-loopdictee", "Signaalwoorden-loopdictee"),
-        summary: byGroup(
-          "Een leerling haalt een korte zin met beeldsteun op en dicteert die aan de schrijver.",
-          "Duo's halen zinnen of antwoorden op en schrijven die samen terug.",
-          "Leerlingen verwerken al lopend kernzinnen en signaalwoorden uit een tekst."
-        ),
-        duration: byGroup("12 min", "14 min", "15 min"),
-        setup:
-          "Hang de tekstkaartjes of prenten op afstand van de tafels. Werk in duo's met een schrijver en een loper.",
-        goal: byGroup(
-          "Lezen, onthouden en nazeggen in korte zinnen.",
-          "Taalinhoud actief verwerken door te lezen, dicteren en schrijven.",
-          "Signaalwoorden en kernzinnen gericht herkennen en toepassen."
-        ),
-        movementFocus: "Heen en weer lopen, tekst onthouden en samen terugkoppelen.",
-        materials: ["Tekst- of prentkaartjes", "Schrijfblad of wisbord", "Potlood of stift"],
-        steps: [
-          "Laat de loper één kaartje bekijken en alleen onthouden wat nodig is voor de eerste ronde.",
-          "De loper komt terug en dicteert aan de schrijver.",
-          "Samen controleren ze of het klopt en wat nog ontbreekt.",
-          "Na enkele rondes wisselen de rollen."
-        ],
-        differentiation: byGroup(
-          "Gebruik korte zinnen of losse woorden met plaatjes.",
-          "Laat sterke duo's ook een verbindingszin toevoegen.",
-          "Laat leerlingen na afloop hun tekst samenvatten in één kernzin."
-        ),
-        teacherTip: byGroup(
-          "Houd de loopafstand kort genoeg om succes te houden.",
-          "Werk met duidelijke rollenkaartjes voor rust in de klas.",
-          "Benadruk eerst inhoud en pas daarna netheid of formulering."
-        ),
-        keywords: ["loopdictee", "duo", "schrijven", "dictee", "taal"]
-      },
-      {
-        key: "luisterhoeken",
-        visual: "corners",
-        visualHint:
-          "Vier herkenbare hoeken in het lokaal waar leerlingen op basis van een vraag of stelling naartoe bewegen.",
-        title: byGroup("Luister-en-kies hoeken", "Taalkeuze-hoeken", "Standpunt-hoeken"),
-        summary: byGroup(
-          "Kinderen bewegen naar de hoek met de juiste klank, letter of betekenis.",
-          "Leerlingen kiezen actief de beste taaloptie en lichten die kort toe.",
-          "Leerlingen positioneren zich bij een standpunt en oefenen mondelinge argumentatie."
-        ),
-        duration: byGroup("10 min", "12 min", "12 min"),
-        setup:
-          "Richt vier hoeken in met een kaart of keuzeoptie. Zorg dat de looproutes vrij blijven.",
-        goal: byGroup(
-          "Actief luisteren en een betekenisvolle keuze maken.",
-          "Taalinhoud combineren met kiezen en uitleggen.",
-          "Standpunten formuleren en van elkaar leren."
-        ),
-        movementFocus: "Naar een hoek bewegen, overleggen en indien nodig van plek wisselen.",
-        materials: ["Hoekkaarten", "Vragen of stellingen", "Eventueel mini-whiteboards"],
-        steps: [
-          "Lees een taalvraag, woord of stelling voor.",
-          "Leerlingen bewegen naar de hoek die volgens hen past.",
-          "In de hoek bespreken ze kort waarom ze daar staan.",
-          "Laat één leerling per hoek de keuze toelichten voordat je doorgaat."
-        ],
-        differentiation: byGroup(
-          "Werk met twee hoeken als vier keuzes nog te veel is.",
-          "Laat leerlingen eerst kort in tweetallen overleggen.",
-          "Vraag om bewijs uit een tekst of lesonderdeel."
-        ),
-        teacherTip: byGroup(
-          "Gebruik vaste hoekkleuren voor herkenning.",
-          "Wissel letterlijke en denkvragen af zodat het tempo hoog blijft.",
-          "Vraag soms bewust of iemand van hoek wil wisselen na de argumenten."
-        ),
-        keywords: ["hoeken", "kiezen", "stelling", "luisteren", "taal"]
-      },
-      {
-        key: "praatcarrousel",
-        visual: "circle",
-        visualHint:
-          "Twee rijen of een binnen- en buitenkring waarbij leerlingen na korte gesprekjes doorschuiven.",
-        title: byGroup("Praatcarrousel", "Praatcarrousel met kernwoorden", "Spreekcarrousel"),
-        summary: byGroup(
-          "Leerlingen praten in korte beurten over een woord, afbeelding of verhaal.",
-          "Leerlingen wisselen snel van partner en verwerken kernwoorden in een gesprek.",
-          "Leerlingen oefenen spreken, samenvatten en argumenteren met steeds nieuwe gesprekspartners."
-        ),
-        duration: byGroup("10 min", "12 min", "12 min"),
-        setup:
-          "Zet een binnen- en buitenkring of twee tegenover elkaar staande rijen klaar met voldoende loopruimte.",
-        goal: byGroup(
-          "Spreekdurf en woordgebruik vergroten in korte veilige rondes.",
-          "Kernwoorden actief gebruiken in gesprek.",
-          "Vlot formuleren, luisteren en samenvatten."
-        ),
-        movementFocus: "Kort spreken, doorschuiven en opnieuw starten met een nieuwe partner.",
-        materials: ["Praatkaartjes", "Eventueel timer of muzieksignaal"],
-        steps: [
-          "Geef een vraag, afbeelding of kernwoord passend bij de les.",
-          "Laat leerlingen dertig tot zestig seconden met hun partner praten.",
-          "Na het signaal schuift één kring of rij door.",
-          "Herhaal met een nieuwe vraag of laat dezelfde vraag verdiepen."
-        ],
-        differentiation: byGroup(
-          "Gebruik vaste zinsstarters en praatplaatjes.",
-          "Laat leerlingen ook een voorbeeld geven uit hun eigen ervaring.",
-          "Voeg de opdracht toe om de vorige spreker eerst samen te vatten."
-        ),
-        teacherTip: byGroup(
-          "Oefen het doorschuiven eerst droog.",
-          "Gebruik zichtbare kernwoorden op het bord.",
-          "Kies een duidelijke tijdsduur per ronde om tempo te houden."
-        ),
-        keywords: ["carrousel", "spreken", "partners", "kernwoorden", "taal"]
-      },
-      {
-        key: "kernwoordstations",
-        visual: "stations",
-        visualHint:
-          "Een reeks kleine stations waar leerlingen steeds een nieuw taalonderdeel actief verwerken.",
-        title: byGroup("Kernwoord-stations", "Taalstations", "Argumentenstations"),
-        summary: byGroup(
-          "Leerlingen bewegen langs stations met woorden, plaatjes en korte taalopdrachten.",
-          "Leerlingen verwerken kernwoorden en taalstrategieën in korte actieve blokken.",
-          "Leerlingen bouwen langs verschillende stations aan uitleg, tekstbegrip of argumentatie."
-        ),
-        duration: byGroup("12 min", "14 min", "15 min"),
-        setup:
-          "Richt drie tot vier stations in met elk een korte opdracht en laat groepjes om de paar minuten doorwisselen.",
-        goal: byGroup(
-          "Nieuwe woorden en zinnen herhalen met veel afwisseling.",
-          "Kernwoorden en strategieën actief toepassen.",
-          "Complexere taalverwerking opdelen in overzichtelijke stappen."
-        ),
-        movementFocus: "Van station naar station bewegen en bij elk punt kort actief werken.",
-        materials: ["Opdrachtkaartjes", "Eventueel wisborden", "Pionnen of stationborden"],
-        steps: [
-          "Leg per station één duidelijke opdracht klaar.",
-          "Laat leerlingen in kleine groepjes starten bij verschillende stations.",
-          "Werk met een tijdsignaal waarna iedereen doorschuift.",
-          "Sluit af met een korte terugblik: welk station hielp het meest?"
-        ],
-        differentiation: byGroup(
-          "Werk met twee eenvoudige stations en veel visuele steun.",
-          "Geef keuze-opdrachten met basis en extra.",
-          "Laat leerlingen per station één kernzin of argument formuleren."
-        ),
-        teacherTip: byGroup(
-          "Houd de opdrachten klein en concreet.",
-          "Gebruik vaste stationnummers en kleuren.",
-          "Kies stations die echt aansluiten bij je lesdoel, niet alleen bij beweging."
-        ),
-        keywords: ["stations", "kernwoorden", "taal", "actieve les", "doorschuiven"]
-      }
-    ],
-    bewegend: [
-      {
-        key: "levendezinnen",
-        visual: "line",
-        visualHint:
-          "Leerlingen staan zelf op een lijn of plek in de ruimte en vormen samen letters, woorden of zinsdelen.",
-        title: byGroup("Levende letters", "Levende zinnen", "Tekststructuur in beweging"),
-        summary: byGroup(
-          "Kinderen vormen letters of korte woorden met hun lichaam en hardop lezen wat er staat.",
-          "Leerlingen bouwen fysieke zinnen en voelen zo de volgorde van de zin.",
-          "Leerlingen zetten tekstonderdelen in een fysieke volgorde en bespreken de structuur."
-        ),
-        duration: byGroup("12 min", "15 min", "15 min"),
-        setup:
-          "Gebruik tape of een vloerlijn als opstelplek. Deel letters, woorden of tekstonderdelen uit aan leerlingen.",
-        goal: byGroup(
-          "Lettervorm en klank koppelen.",
-          "Zinsvolgorde en grammaticale functies begrijpen.",
-          "Tekststructuur en samenhang bewust maken."
-        ),
-        movementFocus: "Lopen naar een positie, herschikken en de taalstructuur letterlijk neerzetten.",
-        materials: ["Letter-, woord- of tekstkaarten", "Tape of vloerlijn", "Eventueel hesjes"],
-        steps: [
-          "Deel de kaartjes uit en laat leerlingen eerst lezen wat zij hebben.",
-          "Vraag de groep om zich in de juiste volgorde op te stellen.",
-          "Lees samen hardop wat er nu staat en bespreek of het klopt.",
-          "Laat leerlingen wisselen, verbeteren of uitbreiden voor een nieuwe ronde."
-        ],
-        differentiation: byGroup(
-          "Start met korte woorden of vaste klankcombinaties.",
-          "Voeg leestekens of bijzinnen toe voor uitdaging.",
-          "Gebruik echte tekstfragmenten uit een thema of bron."
-        ),
-        teacherTip: byGroup(
-          "Fotografeer geslaagde voorbeelden als geheugensteun.",
-          "Vraag steeds welk woord de zin laat kloppen.",
-          "Bespreek expliciet waarom de volgorde van de onderdelen ertoe doet."
-        ),
-        keywords: ["levende letters", "levende zinnen", "lichaam", "volgorde", "structuur"]
-      },
-      {
-        key: "verhaalpad",
-        visual: "path",
-        visualHint:
-          "Een uitgezette route met prenten, tekststroken of argumentkaarten die in volgorde worden afgelegd.",
-        title: byGroup("Verhaalpad met plaatjes", "Verhaalroute", "Argumentenpad"),
-        summary: byGroup(
-          "Leerlingen lopen langs prenten en vertellen al bewegend wat eerst, daarna en tenslotte gebeurt.",
-          "Duo's bouwen tijdens het lopen stap voor stap een verhaal of uitleg op.",
-          "Leerlingen verzamelen al bewegend argumenten en ordenen ze tot een betoog."
-        ),
-        duration: byGroup("10 min", "14 min", "14 min"),
-        setup:
-          "Leg een route uit met pijlen of stations. Plaats prenten, tekststroken of argumentkaarten in de juiste volgorde.",
-        goal: byGroup(
-          "Volgordewoorden en navertellen oefenen.",
-          "Verhaallijn of uitleg logisch opbouwen.",
-          "Argumenten ordenen en opbouw van een tekst voelen."
-        ),
-        movementFocus: "Rustig door een route bewegen en per station kort mondeling of schriftelijk reageren.",
-        materials: ["Prenten of tekstkaartjes", "Routepijlen", "Eventueel opnamekaartjes"],
-        steps: [
-          "Laat leerlingen de hele route eerst bekijken zonder te reageren.",
-          "Loop daarna de route nogmaals en laat leerlingen per station iets benoemen of aanvullen.",
-          "Aan het einde vertellen zij de hele lijn terug.",
-          "Herhaal met nieuwe kaartjes of laat leerlingen de route zelf opnieuw leggen."
-        ],
-        differentiation: byGroup(
-          "Gebruik drie eenvoudige stations met veel visuele steun.",
-          "Laat leerlingen een extra verbindingszin toevoegen per station.",
-          "Voeg een tegenargument of conclusie toe aan het eind van de route."
-        ),
-        teacherTip: byGroup(
-          "Gebruik bekende prentenboeken of klassenthema's.",
-          "Werk met vaste signaalwoorden die zichtbaar in de ruimte hangen.",
-          "Gebruik de route ook als voorbereiding op schrijfonderwijs."
-        ),
-        keywords: ["verhaalpad", "route", "navertellen", "argumenten", "taal"]
-      },
-      {
-        key: "spreekspoor",
-        visual: "path",
-        visualHint:
-          "Een spoor met korte stopplekken waar leerlingen steeds een mondelinge stap zetten.",
-        title: byGroup("Spreekspoor", "Spreekspoor met zinsstarters", "Presentatiespoor"),
-        summary: byGroup(
-          "Leerlingen lopen een spoor met zinsstarters en spreken bij iedere stop een stukje uit.",
-          "Leerlingen bouwen al bewegend een uitleg op met hulp van kernzinnen.",
-          "Leerlingen oefenen een mini-presentatie via een route met vaste onderdelen."
-        ),
-        duration: byGroup("10 min", "12 min", "14 min"),
-        setup:
-          "Leg een spoor met vier tot vijf stopplekken neer. Zet bij iedere plek een zinsstarter of opdrachtkaart.",
-        goal: byGroup(
-          "Mondelinge taal structureren met steun.",
-          "Samenhangende uitleg opbouwen.",
-          "Presenteren met opbouw en zelfvertrouwen."
-        ),
-        movementFocus: "Lopen, stoppen, hardop formuleren en doorgaan naar een volgende stap.",
-        materials: ["Zinsstarters", "Stopkaarten", "Eventueel microfoonkaart of pratensymbool"],
-        steps: [
-          "Leerlingen starten bij een eerste stopplek en lezen de zinsstarter.",
-          "Ze spreken de opdracht hardop uit of vullen de zin aan.",
-          "Daarna lopen ze door naar de volgende plek in het spoor.",
-          "Aan het eind spreken ze de hele uitleg of presentatie in één keer uit."
-        ],
-        differentiation: byGroup(
-          "Gebruik vaste woorden zoals Ik zie, Eerst en Daarna.",
-          "Laat duo's elkaar helpen met het afmaken van zinnen.",
-          "Voeg een reflectievraag toe zoals Waarom is dit overtuigend?"
-        ),
-        teacherTip: byGroup(
-          "Werk met pictogrammen naast de zinsstarters.",
-          "Laat leerlingen eerst fluisteren en daarna harder spreken.",
-          "Gebruik het spreekspoor als voorbereiding op een echte presentatie."
-        ),
-        keywords: ["spreekspoor", "presenteren", "mondeling", "zinnen", "route"]
-      },
-      {
-        key: "argumentencircuit",
-        visual: "stations",
-        visualHint:
-          "Verschillende actieve stations waar leerlingen stukjes informatie of argumenten verzamelen en verwerken.",
-        title: byGroup("Praatcircuit", "Kernwoordcircuit", "Argumentencircuit"),
-        summary: byGroup(
-          "Leerlingen bewegen langs praatstations en benoemen steeds een passend woord of zin.",
-          "Leerlingen koppelen kernwoorden aan voorbeelden in een actief circuit.",
-          "Leerlingen bouwen bij elk station een deel van een overtuigend betoog."
-        ),
-        duration: byGroup("12 min", "14 min", "15 min"),
-        setup:
-          "Zet drie tot vier stations klaar met ieder een korte taalopdracht. Laat leerlingen in kleine groepen rouleren.",
-        goal: byGroup(
-          "Woorden en zinnen mondeling herhalen in meerdere contexten.",
-          "Kernwoorden aan inhoud verbinden.",
-          "Argumenteren opdelen in overzichtelijke beweegstappen."
-        ),
-        movementFocus: "Stations doorlopen, kort uitvoeren en weer doorbewegen.",
-        materials: ["Stationkaarten", "Eventueel wisbordjes", "Pionnen of routekaart"],
-        steps: [
-          "Introduceer kort alle stations en laat zien wat de verwachte output is.",
-          "Laat groepjes starten bij verschillende punten in het circuit.",
-          "Na iedere ronde schuift het groepje door naar het volgende station.",
-          "Bespreek aan het einde welke inzichten of woorden overal terugkwamen."
-        ],
-        differentiation: byGroup(
-          "Houd elk station bij één vraag of één beeld.",
-          "Laat leerlingen een antwoord eerst spreken en daarna eventueel noteren.",
-          "Voeg bronverwijzing of weerlegging toe voor meer diepgang."
-        ),
-        teacherTip: byGroup(
-          "Laat de groep eerst één oefenstation samen doen.",
-          "Zet de kernwoorden groot zichtbaar neer.",
-          "Gebruik inhoud uit wereldoriëntatie voor rijke taal."
-        ),
-        keywords: ["circuit", "argumenten", "kernwoorden", "stations", "spreken"]
-      }
-    ]
-  },
-  spelling: {
-    energizers: [
-      {
-        key: "klankklapren",
-        visual: "relay",
-        visualHint:
-          "Een korte renvorm met woordkaartjes en een centrale plek om klanken of regels snel te koppelen.",
-        title: byGroup("Klank-klap-ren", "Regel-ren", "Werkwoordensprint"),
-        summary: byGroup(
-          "Leerlingen klappen de klanken en rennen naar het juiste woord.",
-          "Leerlingen rennen naar de spellingregel die bij een woord past.",
-          "Leerlingen kiezen onder tempo de juiste werkwoordsvorm."
-        ),
-        duration: byGroup("6 min", "7 min", "8 min"),
-        setup:
-          "Leg of hang woordkaartjes en regelkaarten aan de overkant. Houd een duidelijke startlijn vrij.",
-        goal: byGroup(
-          "Klank en woordbeeld snel koppelen.",
-          "Spellingregels herhalen in een energieke vorm.",
-          "Werkwoordspelling automatiseren in zinscontext."
-        ),
-        movementFocus: "Klappen, sprinten, kiezen en direct terugkoppelen.",
-        materials: ["Woordkaartjes", "Regelkaarten", "Pionnen of startlijn"],
-        steps: [
-          "Noem een woord of lees een zin voor.",
-          "Leerlingen bepalen kort waar zij naartoe moeten.",
-          "Zij rennen naar het juiste kaartje en tikken het aan.",
-          "Bespreek kort waarom het kaartje of de regel klopt."
-        ],
-        differentiation: byGroup(
-          "Werk eerst met klankzuivere woorden.",
-          "Gebruik twee regels tegelijk of voeg een afleider toe.",
-          "Werk met sterke en zwakke werkwoorden door elkaar."
-        ),
-        teacherTip: byGroup(
-          "Laat kinderen eerst samen de klank horen voor ze gaan rennen.",
-          "Herhaal dezelfde regel meerdere keren voor automatiseren.",
-          "Zet zinnen in alledaagse context zodat regels betekenis houden."
-        ),
-        keywords: ["spelling", "regels", "werkwoorden", "klanken", "rennen"]
-      },
-      {
-        key: "goedoffout",
-        visual: "jump",
-        visualHint:
-          "Een snelle goed-of-fout keuzevorm met hoepels of vakken op de vloer.",
-        title: byGroup("Goed of fout-hoepels", "Spelling-check sprint", "Redactie-race"),
-        summary: byGroup(
-          "Leerlingen springen in de juiste hoepel bij een goed of fout geschreven woord.",
-          "Leerlingen zoeken actief naar de fout en verbeteren die samen.",
-          "Leerlingen reageren als redacteur en herstellen woorden of zinnen."
-        ),
-        duration: byGroup("5 min", "7 min", "8 min"),
-        setup:
-          "Leg twee of drie hoepels neer: goed, fout en eventueel twijfel. Zorg voor voldoende springruimte.",
-        goal: byGroup(
-          "Goed en fout woordbeeld onderscheiden.",
-          "Spellingfouten herkennen en benoemen.",
-          "Fouten analyseren en gericht verbeteren."
-        ),
-        movementFocus: "Springen of lopen naar een keuzevak en terugkomen naar de klas.",
-        materials: ["Hoepels of vloervakken", "Woorden of korte zinnen", "Eventueel stiften"],
-        steps: [
-          "Toon kort een woord of lees een zin voor.",
-          "Leerlingen bewegen naar goed, fout of twijfel.",
-          "Vraag één leerling om de keuze uit te leggen.",
-          "Laat de groep eventueel het woord verbeteren."
-        ],
-        differentiation: byGroup(
-          "Gebruik maar twee keuzes en veel hardop herhalen.",
-          "Laat leerlingen ook de regel erbij noemen.",
-          "Werk met zinnen waarin meerdere fouten kunnen zitten."
-        ),
-        teacherTip: byGroup(
-          "Spreek het woord en toon het woordbeeld kort achter elkaar.",
-          "Gebruik woorden uit de actuele spellingles.",
-          "Laat leerlingen niet alleen verbeteren, maar ook verantwoorden."
-        ),
-        keywords: ["goed of fout", "woordbeeld", "redactie", "fouten", "spelling"]
-      },
-      {
-        key: "letterflitsestafette",
-        visual: "relay",
-        visualHint:
-          "Een estafette met losse letters of lettergroepen die snel op de juiste plek moeten belanden.",
-        title: byGroup("Letterflits-estafette", "Woordbeeld-estafette", "Spellingflits-estafette"),
-        summary: byGroup(
-          "Kinderen halen letters op om samen een woord uit het woordpakket te bouwen.",
-          "Leerlingen vullen snel ontbrekende lettergroepen in een woord aan.",
-          "Leerlingen reconstrueren woorden met lastige spellingpatronen."
-        ),
-        duration: byGroup("7 min", "8 min", "9 min"),
-        setup:
-          "Maak per team een bouwplek en leg letters of lettergroepen op afstand in bakken of op kaartjes.",
-        goal: byGroup(
-          "Klanken en letters koppelen tijdens het bouwen van woorden.",
-          "Woordbeeld versterken door actieve herhaling.",
-          "Spellingpatronen herkennen en bewust reconstrueren."
-        ),
-        movementFocus: "Letters ophalen, terugrennen en snel samenleggen.",
-        materials: ["Losse letterkaartjes of lettergroepen", "Bakken of pionnen", "Voorbeeldwoorden"],
-        steps: [
-          "Geef per ronde één doelwoord of woordcategorie.",
-          "Leerlingen halen om de beurt letters of lettergroepen op.",
-          "Het team bouwt het woord en controleert of het compleet is.",
-          "Na een goede ronde volgt direct een nieuw woord."
-        ],
-        differentiation: byGroup(
-          "Gebruik korte woorden van drie of vier letters.",
-          "Werk met categorieën als au/ou of ei/ij.",
-          "Voeg werkwoorduitgangen of leenwoorddelen toe."
-        ),
-        teacherTip: byGroup(
-          "Laat leerlingen het doelwoord eerst hardop verklanken.",
-          "Gebruik kleur voor lastige lettergroepen.",
-          "Bespreek na afloop welke lettergroep vaak voor verwarring zorgde."
-        ),
-        keywords: ["letterflits", "woordbeeld", "lettergroepen", "estafette", "woordpakket"]
-      },
-      {
-        key: "woordmuurtikspel",
-        visual: "mission",
-        visualHint:
-          "Verspreide woordkaartjes in de ruimte die leerlingen moeten aantikken en categoriseren.",
-        title: byGroup("Woordmuur-tikspel", "Regelmuur-tikspel", "Werkwoordmuur-race"),
-        summary: byGroup(
-          "Leerlingen tikken het juiste woord op de woordmuur aan.",
-          "Leerlingen zoeken al bewegend woorden die bij dezelfde regel horen.",
-          "Leerlingen tikken de juiste werkwoordsvorm of uitgang aan."
-        ),
-        duration: byGroup("6 min", "7 min", "8 min"),
-        setup:
-          "Maak een woordmuur of plak kaartjes verspreid op ramen, wanden of borden. Laat voldoende loopruimte.",
-        goal: byGroup(
-          "Bekende spellingwoorden snel herkennen.",
-          "Regels koppelen aan concrete voorbeelden.",
-          "Werkwoorduitgangen en vormen sneller onderscheiden."
-        ),
-        movementFocus: "Zoeken, aantikken, teruglopen en kort verwoorden.",
-        materials: ["Woordkaartjes", "Plakgum of tape", "Eventueel categoriekaartjes"],
-        steps: [
-          "Verspreid de kaartjes zichtbaar in de ruimte.",
-          "Noem een regel, klank of categorie.",
-          "Leerlingen zoeken het passende woord en tikken het aan.",
-          "Bespreek welke kenmerken in het woord de keuze verklaren."
-        ],
-        differentiation: byGroup(
-          "Gebruik minder kaartjes en duidelijke visuele verschillen.",
-          "Laat leerlingen na het tikken ook een extra woord uit dezelfde categorie noemen.",
-          "Voeg twijfelwoorden toe die om uitleg vragen."
-        ),
-        teacherTip: byGroup(
-          "Hang de woorden op ooghoogte van de leerlingen.",
-          "Werk met kleurcodes voor categorieën.",
-          "Gebruik deze vorm ook als snelle herhaling aan het begin van een les."
-        ),
-        keywords: ["woordmuur", "tikspel", "regels", "werkwoorden", "spelling"]
-      }
-    ],
-    tijdens: [
-      {
-        key: "woordpakketloopdictee",
-        visual: "dictation",
-        visualHint:
-          "Duo's halen woorden of zinnen op uit de ruimte en schrijven die terug op hun eigen plek.",
-        title: byGroup("Woordpakket-loopdictee", "Regel-loopdictee", "Werkwoord-loopdictee"),
-        summary: byGroup(
-          "Leerlingen halen woorden uit het woordpakket op en schrijven die samen na.",
-          "Duo's halen woorden met verschillende spellingregels op en benoemen de aanpak.",
-          "Leerlingen verwerken zinnen waarin werkwoordspelling bewust toegepast moet worden."
-        ),
-        duration: byGroup("12 min", "15 min", "15 min"),
-        setup:
-          "Hang woorden of zinnen verspreid op. Werk in duo's met een loper en een schrijver.",
-        goal: byGroup(
-          "Woordbeeld versterken en woorden actief opschrijven.",
-          "Spellingregels toepassen tijdens het schrijven.",
-          "Werkwoordspelling koppelen aan zinscontext."
-        ),
-        movementFocus: "Lopen, onthouden, terugdicteren en direct controleren.",
-        materials: ["Woord- of zinkaarten", "Schrijfbladen of wisborden", "Potloden"],
-        steps: [
-          "De loper bekijkt één woord of zin en onthoudt een haalbaar deel.",
-          "Terug aan tafel dicteert de loper het woord of de zin aan de schrijver.",
-          "Samen controleren ze spelling en regelgebruik.",
-          "Na een paar rondes wisselen de rollen."
-        ],
-        differentiation: byGroup(
-          "Laat kinderen woorden eventueel eerst met letterkaartjes leggen.",
-          "Vraag steeds welke regel of aanpak is gebruikt.",
-          "Laat leerlingen de grammaticale uitleg in één korte zin noteren."
-        ),
-        teacherTip: byGroup(
-          "Gebruik woorden uit de les van die week.",
-          "Houd de loopafstand overzichtelijk zodat de focus op spelling blijft.",
-          "Kies zinnen met inhoud uit andere vakken voor meer betekenis."
-        ),
-        keywords: ["loopdictee", "woordpakket", "regel", "werkwoorden", "spelling"]
-      },
-      {
-        key: "lettergrepenspringen",
-        visual: "jump",
-        visualHint:
-          "Springvakken of hoepels helpen leerlingen het woord in delen of categorieën te verdelen.",
-        title: byGroup("Lettergrepen springen", "Woordpakket-sprongen", "Spellingstrategie-circuit"),
-        summary: byGroup(
-          "Kinderen springen per lettergreep en bouwen daarna het woord na.",
-          "Leerlingen koppelen springvakken aan spellingcategorieën.",
-          "Leerlingen kiezen in beweging een passende spellingstrategie."
-        ),
-        duration: byGroup("10 min", "12 min", "14 min"),
-        setup:
-          "Leg springvakken of hoepels klaar. Combineer deze met kaartjes voor woorden of strategieën.",
-        goal: byGroup(
-          "Lettergrepen horen en koppelen aan woordopbouw.",
-          "Patronen in woordpakketten herkennen.",
-          "Bewust kiezen welke spellingstrategie helpt."
-        ),
-        movementFocus: "Springen, hardop verdelen en woorden indelen of uitleggen.",
-        materials: ["Hoepels of vakken", "Woordkaartjes", "Strategie- of categoriekaarten"],
-        steps: [
-          "Noem of toon een woord en laat leerlingen kort denken.",
-          "Leerlingen springen de lettergrepen, categorie of strategie.",
-          "Na het springen benoemen ze waarom deze indeling klopt.",
-          "Werk daarna met een nieuw woord of nieuwe categorie."
-        ],
-        differentiation: byGroup(
-          "Werk met woorden van twee lettergrepen.",
-          "Laat leerlingen een extra woord uit dezelfde categorie bedenken.",
-          "Gebruik twijfelwoorden waar meerdere strategieën mogelijk lijken."
-        ),
-        teacherTip: byGroup(
-          "Gebruik een vast ritme in de sprongen.",
-          "Laat leerlingen eerst voorspellen en daarna controleren.",
-          "Benadruk dat uitleg belangrijker is dan alleen snel springen."
-        ),
-        keywords: ["lettergrepen", "springen", "strategie", "woordpakket", "spelling"]
-      },
-      {
-        key: "regelhoeken",
-        visual: "corners",
-        visualHint:
-          "Vier hoeken staan voor verschillende spellingregels of aanpakken waar leerlingen bewust voor kiezen.",
-        title: byGroup("Klankhoeken", "Regelhoeken", "Werkwoordhoeken"),
-        summary: byGroup(
-          "Leerlingen kiezen de hoek met de juiste klank of lettergroep.",
-          "Leerlingen bewegen naar de spellingregel die past bij het woord.",
-          "Leerlingen kiezen de juiste werkwoordsaanpak in een hoek."
-        ),
-        duration: byGroup("10 min", "12 min", "12 min"),
-        setup:
-          "Label vier hoeken met spellingcategorieën of strategieën. Zorg dat de hoeken duidelijk zichtbaar zijn.",
-        goal: byGroup(
-          "Klanken en letters sorteren.",
-          "Spellingregels actief herkennen.",
-          "Werkwoordaanpak koppelen aan concrete zinnen."
-        ),
-        movementFocus: "Naar een hoek bewegen, overleggen en samen controleren.",
-        materials: ["Hoekkaarten", "Woordkaartjes of zinnen", "Eventueel whiteboards"],
-        steps: [
-          "Lees een woord of zin voor of toon deze kort op het bord.",
-          "Leerlingen kiezen individueel of in duo's een hoek.",
-          "In de hoek bespreken zij waarom de keuze past.",
-          "Vraag één leerling per hoek om de regel of aanpak te verwoorden."
-        ],
-        differentiation: byGroup(
-          "Gebruik twee hoeken en sterk contrasterende klanken.",
-          "Laat leerlingen een tweede passend woord noemen.",
-          "Voeg twijfelgevallen toe die om grammaticale uitleg vragen."
-        ),
-        teacherTip: byGroup(
-          "Werk met vaste kleuren per regel.",
-          "Wissel makkelijke en lastige voorbeelden af.",
-          "Laat leerlingen soms van hoek wisselen als een ander argument sterker is."
-        ),
-        keywords: ["hoeken", "regels", "werkwoord", "klanken", "spelling"]
-      },
-      {
-        key: "foutenjachtduo",
-        visual: "dictation",
-        visualHint:
-          "Duo's zoeken foutieve woorden of zinnen op in de ruimte en verbeteren die op hun eigen werkplek.",
-        title: byGroup("Foutenjacht duo", "Spelfout-speurtocht", "Redactie-duo"),
-        summary: byGroup(
-          "Duo's zoeken woorden met een fout en verbeteren die samen.",
-          "Leerlingen speuren naar spellingfouten in kaartjes of zinnen.",
-          "Leerlingen redigeren korte teksten in duo's door fouten actief op te halen."
-        ),
-        duration: byGroup("12 min", "14 min", "15 min"),
-        setup:
-          "Hang foutieve woord- of zinkaarten op. Laat duo's bij een schrijfplek werken en om de beurt op speurtocht gaan.",
-        goal: byGroup(
-          "Fouten zien en corrigeren in bekende woorden.",
-          "Spellingbewustzijn gebruiken tijdens het redigeren.",
-          "Systematisch fouten opsporen en verantwoorden."
-        ),
-        movementFocus: "Zoeken, onthouden, teruglopen en samen verbeteren.",
-        materials: ["Foutieve woord- of zinkaarten", "Schrijfmateriaal", "Eventueel vergrootkaarten"],
-        steps: [
-          "Laat één leerling een foutkaart opzoeken en onthouden of noteren.",
-          "Terug aan tafel verbeteren de leerlingen samen het woord of de zin.",
-          "Ze koppelen de correctie aan een regel of aanpak.",
-          "Daarna vertrekt de andere leerling voor de volgende fout."
-        ],
-        differentiation: byGroup(
-          "Werk met losse woorden in plaats van zinnen.",
-          "Voeg meerdere foutsoorten toe voor meer uitdaging.",
-          "Laat leerlingen ook benoemen welk type fout het was."
-        ),
-        teacherTip: byGroup(
-          "Gebruik een vaste structuur: zoek, herstel, verklaar.",
-          "Kies eerst maar één foutsoort per ronde.",
-          "Werk met korte teksten uit andere lessen voor rijke toepassing."
-        ),
-        keywords: ["foutenjacht", "redactie", "speurtocht", "spelfouten", "duo"]
-      }
-    ],
-    bewegend: [
-      {
-        key: "letterparcours",
-        visual: "mission",
-        visualHint:
-          "Een beweegroute met meerdere punten waar letters, woorden of werkwoorddelen verzameld worden.",
-        title: byGroup("Letterparcours", "Spellingparcours", "Werkwoordenparcours"),
-        summary: byGroup(
-          "Kinderen doorlopen een route en verzamelen letters voor een woord.",
-          "Leerlingen koppelen hindernissen aan spellingkeuzes en woordbeelden.",
-          "Leerlingen werken via beweegposten naar de juiste werkwoordsvorm toe."
-        ),
-        duration: byGroup("15 min", "18 min", "18 min"),
-        setup:
-          "Richt een klein parcours in met drie tot vier beweegpunten. Koppel bij ieder punt een letter, woorddeel of regelvraag.",
-        goal: byGroup(
-          "Woordvorming koppelen aan concreet bewegen.",
-          "Spellingregels in een actieve context toepassen.",
-          "Werkwoordspelling automatiseren in een doorlopende route."
-        ),
-        movementFocus: "Springen, klimmen of slalommen en daarna direct taal verwerken.",
-        materials: ["Pionnen, banken of springvakken", "Letter- of woordkaartjes", "Opdrachtkaarten"],
-        steps: [
-          "Leg bij elk onderdeel van het parcours een taalopdracht klaar.",
-          "Leerlingen voltooien eerst de beweegactie en pakken daarna het kaartje of antwoord.",
-          "Aan het eind van de route bouwen of controleren zij het woord of de zin.",
-          "Herhaal het parcours met nieuwe woorden of regels."
-        ],
-        differentiation: byGroup(
-          "Werk met korte woorden en weinig beweegpunten.",
-          "Voeg jokerkaarten toe voor steun of bonuswoorden voor uitdaging.",
-          "Gebruik zinnen met tijdsprongen of samengestelde werkwoorden."
-        ),
-        teacherTip: byGroup(
-          "Oefen het parcours eerst zonder taalopdracht.",
-          "Laat leerlingen pas praten op de verzamelplek; dat houdt de route veilig.",
-          "Kies woorden die echt aansluiten bij de instructie van die dag."
-        ),
-        keywords: ["parcours", "letterparcours", "werkwoorden", "bewegen", "spelling"]
-      },
-      {
-        key: "woordbouwcircuit",
-        visual: "stations",
-        visualHint:
-          "Verschillende stations richten zich elk op een deel van het woordbeeld of een spellingaanpak.",
-        title: byGroup("Woordbouw-circuit", "Spellingmix-circuit", "Redactie-circuit"),
-        summary: byGroup(
-          "Kinderen werken langs stations aan begin-, midden- en eindklank.",
-          "Leerlingen oefenen verschillende spellingproblemen in een gevarieerd circuit.",
-          "Leerlingen verbeteren en verantwoorden schrijfkeuzes in een redactiecircuit."
-        ),
-        duration: byGroup("12 min", "16 min", "16 min"),
-        setup:
-          "Zet drie tot vier stations klaar met elk een eigen focus. Laat groepjes op signaal doorwisselen.",
-        goal: byGroup(
-          "Woordopbouw ervaren via meerdere klankdelen.",
-          "Meerdere spellingcategorieën herhalen binnen één les.",
-          "Teksten systematisch nalopen op fouten en regels."
-        ),
-        movementFocus: "Kort werken, doorschuiven en opnieuw actief starten.",
-        materials: ["Stations met kaarten", "Schrijf- of legmateriaal", "Tijdsignaal"],
-        steps: [
-          "Introduceer ieder station kort en doe één voorbeeld samen.",
-          "Groepjes werken twee tot vier minuten per station.",
-          "Na het signaal schuiven zij door naar het volgende onderdeel.",
-          "Aan het einde kiest ieder groepje één inzicht of lastig woord om te delen."
-        ],
-        differentiation: byGroup(
-          "Gebruik vaste lettersets of geluidsondersteuning.",
-          "Geef keuze-opdrachten met basis en extra.",
-          "Laat leerlingen fouttypes vergelijken en rubriceren."
-        ),
-        teacherTip: byGroup(
-          "Zorg voor rustige, herkenbare stations.",
-          "Laat leerlingen eerst ontdekken en daarna pas opschrijven.",
-          "Zet de meest foutgevoelige categorieën op aparte stations."
-        ),
-        keywords: ["circuit", "woordbouw", "redactie", "stations", "spelling"]
-      },
-      {
-        key: "werkwoordlijn",
-        visual: "line",
-        visualHint:
-          "Een lijn op de vloer helpt leerlingen werkwoordsvormen en functies letterlijk van elkaar te scheiden.",
-        title: byGroup("Woordenlijn", "Werkwoordlijn", "Werkwoordlijn met uitleg"),
-        summary: byGroup(
-          "Leerlingen zetten woorden op een lijn van klank naar schrift.",
-          "Leerlingen plaatsen werkwoorden of uitgangen op de juiste plek.",
-          "Leerlingen ordenen werkwoordsvormen en leggen de grammaticale keuze uit."
-        ),
-        duration: byGroup("10 min", "12 min", "14 min"),
-        setup:
-          "Maak een vloerlijn met meerdere vakken of labels. Gebruik kaartjes met woorden, uitgangen of vormen.",
-        goal: byGroup(
-          "Woorddelen en volgorde bewust ervaren.",
-          "Werkwoorduitgangen en functies onderscheiden.",
-          "Werkwoordspelling koppelen aan onderwerp, tijd en functie."
-        ),
-        movementFocus: "Naar een plek lopen, verschuiven en samen controleren.",
-        materials: ["Vloerlijn of tape", "Kaartjes met woorden of vormen", "Eventueel markeerkaarten"],
-        steps: [
-          "Leg de lijn uit en benoem de betekenis van de verschillende plekken.",
-          "Leerlingen leggen of dragen een kaartje naar de juiste positie.",
-          "De groep controleert samen of de plaatsing klopt en waarom.",
-          "Laat leerlingen daarna een nieuwe kaart of een hele zin toevoegen."
-        ],
-        differentiation: byGroup(
-          "Gebruik alleen begin en eind van een woord of eenvoudige werkwoorden.",
-          "Werk met tegenstellingen zoals stam, persoonsvorm en voltooid deelwoord.",
-          "Voeg tijdsprongen of samengestelde vormen toe."
-        ),
-        teacherTip: byGroup(
-          "Gebruik duidelijke pictogrammen bij de lijn.",
-          "Laat leerlingen hardop denken voor ze verschuiven.",
-          "Koppel de lijn aan zinnen die al in de les zijn besproken."
-        ),
-        keywords: ["werkwoordlijn", "vloerlijn", "uitgangen", "persoonsvorm", "spelling"]
-      },
-      {
-        key: "spellingbingo",
-        visual: "bingo",
-        visualHint:
-          "Een bingokaart met beweegopdrachten en spellingcategorieën laat leerlingen actief zoeken, leggen en afvinken.",
-        title: byGroup("Spellingbingo in beweging", "Spellingmix-bingo", "Redactie-bingo"),
-        summary: byGroup(
-          "Kinderen vullen een bingokaart door goede woorden te vinden en te bewegen.",
-          "Leerlingen combineren spellingcategorieën met korte beweegopdrachten.",
-          "Leerlingen vinken categorieën, foutsoorten of werkwoordvormen af in een actieve bingo."
-        ),
-        duration: byGroup("12 min", "14 min", "14 min"),
-        setup:
-          "Geef groepjes een bingokaart. Verspreid woorden, zinnen of categoriekaartjes in de ruimte.",
-        goal: byGroup(
-          "Veel woorden op een speelse manier herhalen.",
-          "Spellingcategorieën breed en actief herhalen.",
-          "Foutsoorten of werkwoordvormen gericht onderscheiden."
-        ),
-        movementFocus: "Zoeken, lopen, kiezen en terugkomen om af te vinken.",
-        materials: ["Bingokaarten", "Woord- of zinkaarten", "Stiften of fiches"],
-        steps: [
-          "Leg uit wat er op de bingokaart gezocht of opgelost moet worden.",
-          "Leerlingen bewegen door de ruimte en halen telkens één passend voorbeeld op.",
-          "Terug bij de tafel vinken ze het vak af of leggen een fiche.",
-          "Het eerste groepje met een rij legt uit waarom hun woorden of zinnen passen."
-        ],
-        differentiation: byGroup(
-          "Werk met kleinere bingokaarten en bekende woorden.",
-          "Laat leerlingen per vak ook de regel benoemen.",
-          "Gebruik bingo met fouttypes, werkwoordsvormen of taalredactie."
-        ),
-        teacherTip: byGroup(
-          "Maak de bingokaart rustig en goed leesbaar.",
-          "Kies niet te veel categorieën tegelijk.",
-          "Laat de uitleg na een bingo altijd deel van het spel zijn."
-        ),
-        keywords: ["bingo", "spellingmix", "redactie", "werkwoorden", "bewegen"]
-      }
-    ]
-  },
-  rekenen: {
-    energizers: [
-      {
-        key: "springnaarantwoord",
-        visual: "jump",
-        visualHint:
-          "Een snelle rekensprint met antwoorden op de vloer waar leerlingen naartoe springen.",
-        title: byGroup("Spring naar het antwoord", "Strategie-sprong", "Rekenkeuze-run"),
-        summary: byGroup(
-          "Leerlingen springen naar het juiste antwoord bij een korte som.",
-          "Leerlingen kiezen al bewegend de handigste strategie bij een som.",
-          "Leerlingen rennen naar de oplossing of aanpak die het best past."
-        ),
-        duration: byGroup("6 min", "8 min", "8 min"),
-        setup:
-          "Leg antwoorden of strategiekaarten verspreid op de vloer. Zorg dat de vakken voldoende uit elkaar liggen.",
-        goal: byGroup(
-          "Optellen en aftrekken automatiseren.",
-          "Rekenstrategieën bewust kiezen.",
-          "Aanpakken vergelijken en verantwoorden."
-        ),
-        movementFocus: "Springen, tikken, terugkomen en opnieuw reageren.",
-        materials: ["Getalkaarten of antwoordvakken", "Somkaartjes", "Timer"],
-        steps: [
-          "Noem een som, strategie of contextvraag.",
-          "Leerlingen bewegen naar het antwoord of de aanpak die volgens hen past.",
-          "Laat één leerling uitleggen waarom die keuze slim is.",
-          "Ga direct door met de volgende vraag."
-        ],
-        differentiation: byGroup(
-          "Werk met sommen tot 10 of 20.",
-          "Gebruik strategiekaarten zoals rijgen, splitsen of compenseren.",
-          "Voeg contextopgaven toe met meerdere denkwegen."
-        ),
-        teacherTip: byGroup(
-          "Houd de rondes heel kort.",
-          "Vraag niet alleen het antwoord, maar ook hoe iemand dacht.",
-          "Gebruik deze vorm als actieve herhaling na een instructie."
-        ),
-        keywords: ["springen", "antwoord", "strategie", "energizer", "rekenen"]
-      },
-      {
-        key: "sommenflitsestafette",
-        visual: "relay",
-        visualHint:
-          "Somkaartjes liggen op afstand en worden in estafettevorm opgehaald en opgelost.",
-        title: byGroup("Sommenflits-estafette", "Tafels-estafette", "Breuken-estafette"),
-        summary: byGroup(
-          "Teams halen somkaartjes op en lossen ze snel samen op.",
-          "Leerlingen automatiseren tafels en deelsommen in een estafette.",
-          "Leerlingen oefenen breuken, procenten of verhoudingen in een beweegvorm."
-        ),
-        duration: byGroup("7 min", "8 min", "10 min"),
-        setup:
-          "Maak teams, leg kaartjes aan de overkant en geef elk team een wisbord of antwoordblad.",
-        goal: byGroup(
-          "Sommen vlot terughalen.",
-          "Tafels automatiseren met tempo en samenwerking.",
-          "Verschillende getalrepresentaties sneller herkennen."
-        ),
-        movementFocus: "Ophalen, terugrennen, oplossen en doorgeven aan de volgende.",
-        materials: ["Somkaartjes", "Wisborden", "Stiften of potloden"],
-        steps: [
-          "Een leerling haalt een kaartje op en brengt dit terug naar het team.",
-          "Samen zeggen of schrijven ze het antwoord op.",
-          "Pas na controle vertrekt de volgende leerling.",
-          "Bespreek aan het einde welke sommen direct gingen en welke denkstappen nodig hadden."
-        ],
-        differentiation: byGroup(
-          "Werk met sommen tot 20 en telmateriaal op tafel.",
-          "Kies per ronde één tafel of bewerking.",
-          "Werk met breuken, procenten en verhoudingen door elkaar."
-        ),
-        teacherTip: byGroup(
-          "Maak de estafette kort maar krachtig.",
-          "Gebruik verschillende kleuren kaartjes per categorie.",
-          "Laat leerlingen na elke ronde hun strategie kort benoemen."
-        ),
-        keywords: ["estafette", "tafels", "breuken", "automatiseren", "rekenen"]
-      },
-      {
-        key: "dobbelren",
-        visual: "relay",
-        visualHint:
-          "Dobbelstenen en loopopdrachten zorgen voor snelle rekenrondes met veel actie.",
-        title: byGroup("Dobbel-ren", "Rekendobbel-race", "Strategiedobbel-run"),
-        summary: byGroup(
-          "Leerlingen gooien, rennen en lossen direct een som op.",
-          "Leerlingen combineren dobbelsteenuitkomsten met een gekozen strategie.",
-          "Leerlingen maken op basis van gegooide getallen een passende rekenopgave en lossen die op."
-        ),
-        duration: byGroup("6 min", "8 min", "8 min"),
-        setup:
-          "Leg een gooi- en een rekenzone klaar. Gebruik grote dobbelstenen of cijferkaarten.",
-        goal: byGroup(
-          "Getallen snel combineren tot een som.",
-          "Strategisch rekenen met gegooide getallen.",
-          "Flexibel omgaan met getallen en bewerkingen."
-        ),
-        movementFocus: "Gooien, naar de rekenplek rennen en terugkomen voor een nieuwe ronde.",
-        materials: ["Grote dobbelstenen", "Wisborden of kaartjes", "Eventueel bewerkingskaarten"],
-        steps: [
-          "Leerlingen gooien één of twee dobbelstenen.",
-          "Ze rennen naar de rekenplek en maken of kiezen een som met die getallen.",
-          "Samen of individueel lossen ze de som op.",
-          "Na controle start direct de volgende leerling of het volgende duo."
-        ],
-        differentiation: byGroup(
-          "Gebruik één dobbelsteen en laat optellen met een vast getal.",
-          "Werk met twee dobbelstenen en meerdere strategieën.",
-          "Laat leerlingen zelf kiezen welke bewerking het slimst is."
-        ),
-        teacherTip: byGroup(
-          "Gebruik zachte dobbelstenen op een vaste plek.",
-          "Zorg voor duidelijke afspraken over wanneer iemand mag vertrekken.",
-          "Laat leerlingen na afloop één slimme strategie delen."
-        ),
-        keywords: ["dobbel", "race", "som", "strategie", "rekenen"]
-      },
-      {
-        key: "rekenhoekenspel",
-        visual: "corners",
-        visualHint:
-          "Hoeken staan voor antwoorden of aanpakken zodat leerlingen door de ruimte bewegen om hun keuze te laten zien.",
-        title: byGroup("Rekenhoekenspel", "Strategie-hoeken", "Oploshoeken"),
-        summary: byGroup(
-          "Leerlingen kiezen een hoek met het goede antwoord.",
-          "Leerlingen bewegen naar de strategie die het best past.",
-          "Leerlingen kiezen tussen meerdere oplosroutes voor een complexere som."
-        ),
-        duration: byGroup("6 min", "8 min", "9 min"),
-        setup:
-          "Label vier hoeken met antwoorden, strategieën of modellen. Houd de hoeken duidelijk zichtbaar.",
-        goal: byGroup(
-          "Getallen en antwoorden sneller herkennen.",
-          "Aanpakken bewust vergelijken.",
-          "Oplosroutes verantwoorden."
-        ),
-        movementFocus: "Naar een hoek bewegen, kort overleggen en uitleggen.",
-        materials: ["Hoekkaarten", "Sommen of contextopgaven", "Eventueel modelkaarten"],
-        steps: [
-          "Lees een som of opgave voor.",
-          "Leerlingen kiezen een hoek en bewegen daarheen.",
-          "In de hoek bespreken zij kort waarom dit antwoord of deze aanpak past.",
-          "Laat één leerling per hoek de keuze toelichten."
-        ],
-        differentiation: byGroup(
-          "Gebruik antwoorden die duidelijk uit elkaar liggen.",
-          "Werk met strategiehoeken zoals rijgen of splitsen.",
-          "Gebruik contextproblemen met meerdere denkwegen."
-        ),
-        teacherTip: byGroup(
-          "Wissel makkelijke en uitdagende sommen af.",
-          "Laat leerlingen soms eerst individueel kiezen en daarna pas overleggen.",
-          "Gebruik modellen zichtbaar op het bord als geheugensteun."
-        ),
-        keywords: ["hoeken", "strategie", "antwoorden", "modellen", "rekenen"]
-      }
-    ],
-    tijdens: [
-      {
-        key: "getallencircuit",
-        visual: "stations",
-        visualHint:
-          "Een stationencircuit waarbij leerlingen meerdere rekenvormen in korte actieve blokken verwerken.",
-        title: byGroup("Getallen-circuit", "Strategiecircuit", "Rekenroute met modellen"),
-        summary: byGroup(
-          "Leerlingen draaien langs stations voor tellen, splitsen en vergelijken.",
-          "Leerlingen oefenen meerdere rekenstrategieën in een actief circuit.",
-          "Leerlingen gebruiken modellen zoals tabel of getallenlijn terwijl ze door een route bewegen."
-        ),
-        duration: byGroup("14 min", "16 min", "18 min"),
-        setup:
-          "Maak drie tot vier stations met elk één rekendoel. Geef per station een duidelijke instructiekaart.",
-        goal: byGroup(
-          "Basisgetalbegrip in verschillende vormen versterken.",
-          "Flexibel leren schakelen tussen rekenstrategieën.",
-          "Passende modellen gebruiken bij een opgave."
-        ),
-        movementFocus: "Van station naar station bewegen en bij ieder punt opnieuw starten.",
-        materials: ["Stationkaarten", "Getalkaarten of modelkaarten", "Eventueel blokjes of fiches"],
-        steps: [
-          "Introduceer ieder station kort en laat zien wat het product van de ronde is.",
-          "Groepjes starten bij verschillende stations.",
-          "Na het tijdsignaal schuiven ze door naar het volgende punt.",
-          "Sluit af met een korte terugkoppeling op welke strategie of welk model hielp."
-        ],
-        differentiation: byGroup(
-          "Gebruik concreet materiaal en kleine getallen.",
-          "Laat sterke leerlingen ook een tweede strategie noteren.",
-          "Voeg open opdrachten toe waarin meerdere modellen mogelijk zijn."
-        ),
-        teacherTip: byGroup(
-          "Houd ieder station overzichtelijk en rustig.",
-          "Gebruik vaste kleuren of nummers voor de stations.",
-          "Laat leerlingen eerst voorspellen welk model ze nodig hebben."
-        ),
-        keywords: ["circuit", "getallen", "strategieën", "modellen", "rekenen"]
-      },
-      {
-        key: "meetrondje",
-        visual: "measure",
-        visualHint:
-          "Leerlingen lopen rond met meetmateriaal en verwerken onderweg directe meetopdrachten.",
-        title: byGroup("Meetrondje", "Rekenwandeling", "Datawandeling"),
-        summary: byGroup(
-          "Leerlingen meten, tellen en vergelijken objecten in de klas.",
-          "Leerlingen verzamelen al wandelend lengtes, aantallen of gegevens.",
-          "Leerlingen lopen langs meet- en datapunten en analyseren hun uitkomsten."
-        ),
-        duration: byGroup("12 min", "14 min", "16 min"),
-        setup:
-          "Geef duo's een meetblad en laat hen via een route verschillende objecten of meetpunten bezoeken.",
-        goal: byGroup(
-          "Meten en vergelijken concreet ervaren.",
-          "Meetgegevens verzamelen en gebruiken in berekeningen.",
-          "Gegevens analyseren en conclusies trekken."
-        ),
-        movementFocus: "Wandelen, meten, noteren en door naar een nieuw meetpunt.",
-        materials: ["Meetlinten of stapkaarten", "Klemboards", "Opdrachtbladen"],
-        steps: [
-          "Geef ieder duo een route of lijst met meetopdrachten.",
-          "Laat leerlingen per meetpunt kort meten of tellen.",
-          "Terug op de werkplek verwerken zij de uitkomst in een som, vergelijking of conclusie.",
-          "Bespreek klassikaal één opvallend verschil of inzicht."
-        ],
-        differentiation: byGroup(
-          "Werk met stappen tellen en vergelijken groot of klein.",
-          "Laat leerlingen verschil, totaal of schatting uitrekenen.",
-          "Voeg percentages, gemiddelden of meetnauwkeurigheid toe."
-        ),
-        teacherTip: byGroup(
-          "Kies herkenbare objecten uit de ruimte.",
-          "Werk met een routeblad met vaste kolommen.",
-          "Laat leerlingen ook nadenken over meetfouten of onnauwkeurigheid."
-        ),
-        keywords: ["meten", "wandeling", "data", "tellen", "rekenen"]
-      },
-      {
-        key: "tafelslooproute",
-        visual: "path",
-        visualHint:
-          "Een uitgezette looproute met tafelsommen of rekenstappen die onderweg hardop of schriftelijk verwerkt worden.",
-        title: byGroup("Sommenroute", "Tafels-looproute", "Rekenroute met stappen"),
-        summary: byGroup(
-          "Leerlingen lopen een route en lossen onderweg korte sommen op.",
-          "Leerlingen automatiseren tafels en deelsommen in een vaste looproute.",
-          "Leerlingen verwerken tussenstappen van complexere bewerkingen via een route."
-        ),
-        duration: byGroup("12 min", "14 min", "15 min"),
-        setup:
-          "Leg een route met kaartjes neer. Werk individueel of in duo's en gebruik een controleplek.",
-        goal: byGroup(
-          "Sommen tot een vast bereik herhalen met tempo.",
-          "Tafels en delen automatiseren.",
-          "Tussenstappen van grotere bewerkingen zichtbaar maken."
-        ),
-        movementFocus: "Door een route lopen, kort oplossen en doorgaan naar de volgende stop.",
-        materials: ["Somkaartjes", "Routepijlen", "Controleblad of wisbord"],
-        steps: [
-          "Laat leerlingen de route in volgorde volgen.",
-          "Bij ieder kaartje lossen zij de som op of noemen het antwoord hardop.",
-          "Na meerdere stops controleren zij hun antwoorden bij een controlepunt.",
-          "Werk daarna met een tweede ronde of een andere route."
-        ],
-        differentiation: byGroup(
-          "Gebruik sommen met vaste getallen en visuele steun.",
-          "Werk per ronde aan één tafel of bewerking.",
-          "Gebruik routekaarten met meerdere tussenstappen of context."
-        ),
-        teacherTip: byGroup(
-          "Maak de route visueel heel duidelijk op de vloer.",
-          "Kies eerst één tempo: rustig en nauwkeurig of snel automatiseren.",
-          "Gebruik deze vorm goed na een korte instructie of opfrisronde."
-        ),
-        keywords: ["tafels", "looproute", "automatiseren", "sommen", "rekenen"]
-      },
-      {
-        key: "rekenschattocht",
-        visual: "mission",
-        visualHint:
-          "Leerlingen volgen een schatroute waarbij iedere juiste rekenstap naar een volgende aanwijzing leidt.",
-        title: byGroup("Rekenschattocht", "Strategische schattocht", "Probleemoplos-schattocht"),
-        summary: byGroup(
-          "Leerlingen lossen al bewegend rekenopdrachten op om een schat te vinden.",
-          "Leerlingen combineren meerdere sommen en aanwijzingen in een schatroute.",
-          "Leerlingen werken via rekenstappen naar een groter oplossingsprobleem toe."
-        ),
-        duration: byGroup("14 min", "16 min", "18 min"),
-        setup:
-          "Verstop aanwijzingen op verschillende plekken. Iedere juiste som of berekening leidt naar het volgende station.",
-        goal: byGroup(
-          "Rekenopdrachten betekenis geven in een spelvorm.",
-          "Strategisch werken en uitkomsten koppelen aan een route.",
-          "Probleemoplossend denken in een grotere context."
-        ),
-        movementFocus: "Zoeken, rekenen, controleren en door naar de volgende aanwijzing.",
-        materials: ["Aanwijzingen", "Somkaartjes", "Eventueel slotkaart of schatkist"],
-        steps: [
-          "Geef leerlingen de eerste aanwijzing en leg uit hoe een goede uitkomst naar de volgende stap leidt.",
-          "Leerlingen lossen de som of opdracht op en zoeken daarna de nieuwe plek.",
-          "Onderweg noteren of onthouden zij hun uitkomsten.",
-          "Aan het einde gebruiken zij alle uitkomsten voor de eindopdracht of schat."
-        ],
-        differentiation: byGroup(
-          "Werk met korte aanwijzingen en eenvoudige sommen.",
-          "Voeg keuze-opgaven toe voor verschillende strategieën.",
-          "Gebruik een grotere context zoals budget, planning of score."
-        ),
-        teacherTip: byGroup(
-          "Test de route van tevoren even zelf.",
-          "Maak de eindopdracht zichtbaar aantrekkelijk.",
-          "Laat leerlingen achteraf uitleggen welke aanwijzing het lastigst was."
-        ),
-        keywords: ["schattocht", "probleemoplossen", "aanwijzingen", "strategieën", "rekenen"]
-      }
-    ],
-    bewegend: [
-      {
-        key: "levendegetallenlijn",
-        visual: "line",
-        visualHint:
-          "Een grote getallenlijn op de vloer waarop leerlingen zelf gaan staan en bewegen.",
-        title: byGroup("Levende getallenlijn", "Rekenlijn in beweging", "Getallenlijn met breuken en procenten"),
-        summary: byGroup(
-          "Kinderen stappen op een grote getallenlijn en zien waar een getal hoort.",
-          "Leerlingen bewegen over een getallenlijn om sprongen en afronden te ervaren.",
-          "Leerlingen positioneren zichzelf op een lijn met breuken, decimalen en procenten."
-        ),
-        duration: byGroup("12 min", "14 min", "15 min"),
-        setup:
-          "Maak met tape of stoepkrijt een grote getallenlijn. Kies ankerpunten passend bij het niveau.",
-        goal: byGroup(
-          "Getalpositie en sprongen concreet ervaren.",
-          "De getallenlijn als denkmodel gebruiken.",
-          "Verschillende notaties aan dezelfde plek koppelen."
-        ),
-        movementFocus: "Stappen, springen, verschuiven en met het lichaam afstand voelen.",
-        materials: ["Tape of stoepkrijt", "Getalkaarten", "Eventueel kaarten met breuken en procenten"],
-        steps: [
-          "Introduceer de ankerpunten en laat leerlingen eerst rustig de lijn verkennen.",
-          "Geef daarna een getal of notatie en laat leerlingen de juiste plek zoeken.",
-          "Laat leerlingen sprongen maken zoals plus twee, afronden of halveren.",
-          "Bespreek waarom een plek klopt en wat dichtbij of ver weg ligt."
-        ],
-        differentiation: byGroup(
-          "Werk met een korte lijn tot 20.",
-          "Gebruik grotere intervallen, schatten of afronden.",
-          "Werk met 0 tot 1 of 0 tot 100 voor breuken, decimalen en procenten."
-        ),
-        teacherTip: byGroup(
-          "Gebruik vaste startpunten voor rust.",
-          "Vraag altijd waarom een leerling op die plek gaat staan.",
-          "Laat leerlingen soms hun eigen ankerpunt toevoegen."
-        ),
-        keywords: ["getallenlijn", "breuken", "procenten", "springen", "rekenen"]
-      },
-      {
-        key: "rekenmissie",
-        visual: "mission",
-        visualHint:
-          "Een missiekaart en verschillende posten helpen leerlingen al bewegend meerdere rekenstappen te doorlopen.",
-        title: byGroup("Rekenmissie", "Rekenexpeditie", "Probleemoplosmissie"),
-        summary: byGroup(
-          "Een speelse route met rekenstappen die naar een einddoel leidt.",
-          "Groepjes volgen een expeditiekaart en lossen onderweg verschillende rekenproblemen op.",
-          "Leerlingen verzamelen via beweegstations de tussenstappen voor een groter probleem."
-        ),
-        duration: byGroup("15 min", "18 min", "18 min"),
-        setup:
-          "Maak een missiekaart met meerdere posten. Iedere post levert een deeloplossing, code of aanwijzing op.",
-        goal: byGroup(
-          "Rekenvaardigheden inzetten binnen een verhaal of opdracht.",
-          "Meerdere strategieën combineren in een doorlopende opdracht.",
-          "Tussenstappen plannen en probleemoplossend denken zichtbaar maken."
-        ),
-        movementFocus: "Van post naar post bewegen, informatie ophalen en doorwerken naar een einddoel.",
-        materials: ["Missiekaarten", "Stations met opgaven", "Klemboards of wisborden"],
-        steps: [
-          "Introduceer het missieprobleem en de routekaart.",
-          "Leerlingen werken per station een deelstap uit.",
-          "De uitkomst bepaalt de volgende aanwijzing of code.",
-          "Aan het einde presenteren zij hun volledige route en oplossing."
-        ],
-        differentiation: byGroup(
-          "Maak de missie kort en visueel.",
-          "Voeg bonusstations toe voor snelle groepen.",
-          "Werk met open contextproblemen waarin meerdere antwoorden mogelijk zijn."
-        ),
-        teacherTip: byGroup(
-          "Kies een verhaallijn die motiveert maar niet afleidt.",
-          "Geef ieder groepje één routeblad.",
-          "Bespreek achteraf niet alleen de uitkomst, maar ook de gekozen aanpak."
-        ),
-        keywords: ["missie", "expeditie", "probleemoplossen", "rekenroute", "rekenen"]
-      },
-      {
-        key: "meetenbouw",
-        visual: "measure",
-        visualHint:
-          "Leerlingen meten, bouwen en vergelijken door materiaal actief te verplaatsen en neer te zetten.",
-        title: byGroup("Meet-en-bouw", "Meet-en-bouw challenge", "Ontwerp-en-meet challenge"),
-        summary: byGroup(
-          "Kinderen meten blokken of voorwerpen en bouwen iets op maat.",
-          "Leerlingen combineren meten en construeren in een actieve challenge.",
-          "Leerlingen ontwerpen een oplossing en toetsen die aan maat, schaal of verhouding."
-        ),
-        duration: byGroup("14 min", "16 min", "18 min"),
-        setup:
-          "Leg bouwmateriaal, meetlinten en voorbeeldopdrachten klaar. Werk bij voorkeur in kleine teams.",
-        goal: byGroup(
-          "Lengte, hoogte en vergelijken concreet maken.",
-          "Meten direct toepassen in bouwen.",
-          "Rekenkundig ontwerpen en controleren."
-        ),
-        movementFocus: "Materiaal halen, neerzetten, meten, aanpassen en opnieuw proberen.",
-        materials: ["Blokken, pionnen of losse materialen", "Meetlinten", "Opdrachtkaarten"],
-        steps: [
-          "Geef een bouwopdracht met een maat of eis, bijvoorbeeld precies 60 cm hoog.",
-          "Leerlingen halen materiaal en bouwen een eerste versie.",
-          "Daarna meten en vergelijken zij het resultaat en passen het ontwerp aan.",
-          "Laat hen kort presenteren hoe zij tot hun maat kwamen."
-        ],
-        differentiation: byGroup(
-          "Werk met directe vergelijkingen als hoger, lager of even lang.",
-          "Voeg omtrek, verschil of totale lengte toe.",
-          "Werk met schaal, verhouding of meerdere eisen tegelijk."
-        ),
-        teacherTip: byGroup(
-          "Gebruik materiaal dat snel neer te zetten en weer op te ruimen is.",
-          "Laat leerlingen eerst schatten en daarna meten.",
-          "Koppel de challenge aan samenwerken en uitleggen."
-        ),
-        keywords: ["meten", "bouwen", "challenge", "ontwerpen", "rekenen"]
-      },
-      {
-        key: "grafiekspel",
-        visual: "bingo",
-        visualHint:
-          "Gegevens worden verzameld in beweging en daarna zichtbaar gemaakt in een grafiek of tabel.",
-        title: byGroup("Grafiekspel", "Gegevensspel in beweging", "Grafiekspel met analyse"),
-        summary: byGroup(
-          "Kinderen verzamelen al bewegend gegevens en maken daar een eenvoudige grafiek van.",
-          "Leerlingen turven, lopen en zetten hun gegevens om in een tabel of staafgrafiek.",
-          "Leerlingen analyseren bewegend verzamelde data en trekken conclusies."
-        ),
-        duration: byGroup("12 min", "14 min", "16 min"),
-        setup:
-          "Maak een korte verzamelopdracht waarbij leerlingen in beweging data ophalen. Zorg daarna voor een verwerkingsplek.",
-        goal: byGroup(
-          "Tellen en vergelijken koppelen aan een eenvoudige grafiek.",
-          "Gegevens verzamelen, structureren en aflezen.",
-          "Data interpreteren en verklaren."
-        ),
-        movementFocus: "Tellen, turven, verzamelen en daarna gegevens verwerken.",
-        materials: ["Turfbladen", "Stickervellen of fiches", "Grafiekpapier of bord"],
-        steps: [
-          "Laat leerlingen tijdens een route of spel gegevens verzamelen, zoals aantallen, keuzes of scores.",
-          "Terug op de werkplek zetten zij de gegevens in een tabel of grafiek.",
-          "Daarna vergelijken zij de uitkomsten en beantwoorden korte vragen.",
-          "Sluit af met een conclusie in één zin."
-        ],
-        differentiation: byGroup(
-          "Werk met eenvoudige turfstreepjes en pictogrammen.",
-          "Gebruik staafgrafieken en vergelijkvragen.",
-          "Voeg gemiddelden, trends of verklaringen toe."
-        ),
-        teacherTip: byGroup(
-          "Kies data die leerlingen direct begrijpen.",
-          "Gebruik grote visuele grafieken voor het digibord.",
-          "Laat de verwerking altijd volgen op de beweging zodat de link helder blijft."
-        ),
-        keywords: ["grafiek", "data", "tellen", "analyseren", "rekenen"]
-      }
-    ]
-  }
-};
+const taskBlueprints = buildTaskBlueprintsFromDoc();
+
+function emptyTaskMoments() {
+  return {
+    energizers: [],
+    tijdens: [],
+    bewegend: []
+  };
+}
+
+function onlyGroup(groupId, value) {
+  return {
+    [GROUP_34]: groupId === GROUP_34 ? value : null,
+    [GROUP_56]: groupId === GROUP_56 ? value : null,
+    [GROUP_78]: groupId === GROUP_78 ? value : null
+  };
+}
+
+function docTask(groupId, config) {
+  return {
+    key: config.key,
+    visual: config.visual,
+    visualHint: config.visualHint,
+    title: onlyGroup(groupId, config.title),
+    summary: onlyGroup(groupId, config.summary),
+    duration: onlyGroup(groupId, config.duration),
+    setup: config.setup,
+    goal: onlyGroup(groupId, config.goal),
+    movementFocus: config.movementFocus,
+    materials: config.materials,
+    steps: config.steps,
+    differentiation: onlyGroup(groupId, config.differentiation),
+    teacherTip: onlyGroup(groupId, config.teacherTip),
+    keywords: [...config.keywords, "getal en ruimte junior", "dynamische schooldag", "rekenen"]
+  };
+}
+
+function buildTaskBlueprintsFromDoc() {
+  return {
+    taal: emptyTaskMoments(),
+    spelling: emptyTaskMoments(),
+    rekenen: {
+      energizers: [
+        docTask(GROUP_34, {
+          key: "tel-en-spring",
+          visual: "jump",
+          visualHint: "Een korte springset bij de eigen plek waarbij leerlingen de telrij letterlijk meebewegen.",
+          title: "Tel en spring",
+          summary: "Een korte beweegstart waarbij leerlingen tellen en op elk getal een sprong maken.",
+          duration: "3-5 min",
+          setup: "Geen voorbereiding. Laat leerlingen achter hun stoel staan met genoeg ruimte om veilig te springen.",
+          goal: "Telrij, sprongen en automatiseren oefenen met vooruit tellen, terugtellen en sprongen van 2 of 5.",
+          movementFocus: "Kleine sprongen op elk getal en het ritme van de telrij samen vasthouden.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat leerlingen recht achter hun stoel staan en spreek af dat iedereen op zijn eigen plek blijft.",
+            "Noem een telrij, bijvoorbeeld vooruit tellen, terugtellen of tellen met sprongen van 2 of 5.",
+            "Leerlingen maken bij elk genoemd getal precies 1 sprong.",
+            "Sluit af met 1 controlevraag, zoals: welk getal komt na 18?"
+          ],
+          differentiation: "Maak het eenvoudiger met tellen tot 10 of 20. Maak het moeilijker met terugtellen of sprongen van 5.",
+          teacherTip: "Doe de eerste telrij hardop voor en houd het tempo gelijk, zodat de klas meteen in het ritme komt.",
+          keywords: ["groep 3/4", "telrij", "sprongen", "automatiseren", "getalbegrip"]
+        }),
+        docTask(GROUP_34, {
+          key: "waar-of-niet-waar-34",
+          visual: "jump",
+          visualHint: "Een snelle waar-of-niet-waar energizer met springen of hurken als direct antwoord.",
+          title: "Waar of niet waar?",
+          summary: "Leerlingen reageren lichamelijk op korte rekenstellingen en leggen daarna kort uit waarom.",
+          duration: "5 min",
+          setup: "Geen voorbereiding. Laat leerlingen naast hun tafel staan met genoeg ruimte om te springen of te hurken.",
+          goal: "Optellen, aftrekken en vergelijken van getallen snel herkennen en controleren.",
+          movementFocus: "Springen bij waar en hurken bij niet waar, gevolgd door een korte mondelinge uitleg.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat leerlingen naast hun tafel staan en leg het antwoordgebaar uit: springen bij waar, hurken bij niet waar.",
+            "Noem een stelling, zoals: 7 + 5 = 12 of 14 is groter dan 17.",
+            "Laat de klas direct reageren met springen of hurken.",
+            "Vraag na een paar rondes steeds kort: waarom klopt dit wel of niet?"
+          ],
+          differentiation: "Gebruik in groep 3 sommen tot 10 of 20. Gebruik in groep 4 sommen tot 100 of eenvoudige tafels.",
+          teacherTip: "Wissel juiste en onjuiste stellingen snel af en laat steeds 1 leerling de redenering hardop maken.",
+          keywords: ["groep 3/4", "optellen", "aftrekken", "vergelijken", "waar of niet waar"]
+        }),
+        docTask(GROUP_34, {
+          key: "rekenbevries",
+          visual: "path",
+          visualHint: "Leerlingen bewegen vrij door het lokaal en bevriezen bij een korte rekenvraag.",
+          title: "Rekenbevries",
+          summary: "Een snelle stop-en-denk opdracht waarbij leerlingen direct een antwoord geven op een rekenvraag.",
+          duration: "5 min",
+          setup: "Geen voorbereiding. Zorg voor een duidelijke looproute door het lokaal en spreek een stopteken af.",
+          goal: "Buurgetallen, hoofdrekenen en getalbegrip snel ophalen in een korte beweegronde.",
+          movementFocus: "Rustig bewegen, direct stilvallen op signaal en meteen mentaal schakelen naar een som of getalvraag.",
+          materials: ["Geen extra materiaal", "Eventueel vingers of antwoordkaartjes"],
+          steps: [
+            "Laat leerlingen rustig door het lokaal bewegen.",
+            "Roep stop en noem direct een rekenvraag, zoals: wat is 8 + 6 of wat is het buurgetal van 39?",
+            "Laat leerlingen het antwoord met vingers zien of fluister het naar een maatje.",
+            "Herhaal dit met 5 tot 8 korte vragen."
+          ],
+          differentiation: "Werk met vingers, antwoordkaartjes of mondelinge antwoorden.",
+          teacherTip: "Gebruik vooral korte vragen die leerlingen direct moeten ophalen, zodat de overgang naar de volgende les energiek blijft.",
+          keywords: ["groep 3/4", "buurgetallen", "hoofdrekenen", "stopspel", "getalbegrip"]
+        }),
+        docTask(GROUP_56, {
+          key: "hoeken-kiezen",
+          visual: "corners",
+          visualHint: "Vier antwoordhoeken maken een snelle formatieve rekencheck actief en zichtbaar.",
+          title: "Hoeken kiezen",
+          summary: "Leerlingen lopen naar de hoek met het juiste antwoord en lichten die keuze kort toe.",
+          duration: "5 min",
+          setup: "Label 4 hoeken met A, B, C en D en zorg dat iedere hoek goed zichtbaar is.",
+          goal: "Snelle rekencheck en activering met antwoordkeuzes bij tafels, deelsommen, breuken of kommagetallen.",
+          movementFocus: "Snel kiezen, naar een hoek lopen en daarna samen verwoorden waarom het antwoord klopt.",
+          materials: ["Eventueel hoekkaartjes"],
+          steps: [
+            "Markeer 4 hoeken in het lokaal met A, B, C en D.",
+            "Geef een vraag met 4 antwoordmogelijkheden.",
+            "Laat leerlingen naar de hoek lopen met het juiste antwoord.",
+            "Laat steeds 1 leerling uitleggen waarom die hoek klopt en herhaal dit met 5 tot 8 vragen."
+          ],
+          differentiation: "Gebruik tafels en deelsommen in groep 5 en meer breuken of kommagetallen in groep 6.",
+          teacherTip: "Zet antwoorden zo neer dat leerlingen echt moeten nadenken en niet alleen hun buur volgen.",
+          keywords: ["groep 5/6", "antwoordhoeken", "tafels", "deelsommen", "kommagetallen", "breuken"]
+        }),
+        docTask(GROUP_56, {
+          key: "klap-als-het-klopt",
+          visual: "jump",
+          visualHint: "Een ritmische rekenenergizer waarbij leerlingen klappen of stil blijven op basis van een stelling.",
+          title: "Klap als het klopt",
+          summary: "Leerlingen reageren ritmisch op korte rekenstellingen en lichten hun keuze toe.",
+          duration: "3-5 min",
+          setup: "Geen voorbereiding. Laat leerlingen staan op hun eigen plek zodat zij goed kunnen klappen of hurken.",
+          goal: "Breuken vergelijken, kommagetallen beoordelen en deelsommen controleren in een korte formatieve check.",
+          movementFocus: "Klapbewegingen of een korte hurkreactie gekoppeld aan snelle denkvragen.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Spreek af: 1 klap als het klopt, stil blijven of hurken als het niet klopt.",
+            "Noem korte stellingen, zoals: 3/4 is groter dan 1/2 of 36 : 6 = 7.",
+            "Laat de klas direct reageren met klappen of stilte.",
+            "Vraag na enkele rondes om uitleg en houd het tempo hoog."
+          ],
+          differentiation: "Gebruik eenvoudige breuken bij een basisgroep en combineer verschillende domeinen bij een sterke groep.",
+          teacherTip: "Kondig niet vooraf aan of de ronde makkelijk of lastig wordt; zo blijft iedereen scherp luisteren.",
+          keywords: ["groep 5/6", "breuken", "kommagetallen", "deelsommen", "stellingen", "energizer"]
+        }),
+        docTask(GROUP_78, {
+          key: "waar-niet-waar-bovenbouw",
+          visual: "jump",
+          visualHint: "Een snelle bovenbouwcheck met staan of hurken bij stellingen over breuken, procenten en decimalen.",
+          title: "Waar / niet waar bovenbouw",
+          summary: "Leerlingen reageren direct op stellingen over procenten, breuken en schalen en verwoorden daarna hun redenering.",
+          duration: "5 min",
+          setup: "Geen voorbereiding. Laat leerlingen verspreid staan met genoeg ruimte om te staan of te hurken.",
+          goal: "Denkstart en snelle begripcheck bij procenten, schaal en relaties tussen breuken en decimalen.",
+          movementFocus: "Staand of hurkend reageren op elke stelling en daarna heel kort redeneren.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Spreek af: waar betekent staan, niet waar betekent hurken.",
+            "Noem stellingen zoals: 0,75 = 3/4 of 25% = 1/5.",
+            "Laat leerlingen direct reageren en vraag geregeld om een korte uitleg.",
+            "Houd het tempo hoog met 6 tot 10 stellingen."
+          ],
+          differentiation: "Gebruik voor sterke leerlingen meer samengestelde stellingen met procenten en schaal.",
+          teacherTip: "Gebruik expres ook 1 veelgemaakte denkfout, zodat je misvattingen meteen zichtbaar maakt.",
+          keywords: ["groep 7/8", "procenten", "breuken", "decimalen", "schaal", "begripcheck"]
+        }),
+        docTask(GROUP_78, {
+          key: "keuzehoeken-rekenen",
+          visual: "corners",
+          visualHint: "Vier antwoordhoeken helpen om denkfouten bij procenten, verhoudingen en grafieken zichtbaar te maken.",
+          title: "Keuzehoeken rekenen",
+          summary: "Leerlingen kiezen een antwoordhoek, overleggen kort en verantwoorden daarna hun keuze.",
+          duration: "5-10 min",
+          setup: "Markeer 4 antwoordhoeken en leg of hang per hoek een duidelijk antwoord neer.",
+          goal: "Activeren en formatief checken bij vragen over procenten, verhoudingen en grafieken.",
+          movementFocus: "Lopen naar een keuzehoek, kort overleggen en daarna gericht verwoorden.",
+          materials: ["Hoekkaartjes of geprinte antwoorden"],
+          steps: [
+            "Geef een vraag met 4 antwoordmogelijkheden.",
+            "Laat leerlingen naar de hoek lopen die volgens hen klopt.",
+            "Laat leerlingen kort overleggen in hun hoek.",
+            "Bespreek klassikaal waarom een hoek klopt en gebruik vooral vragen over procenten, verhoudingen of grafieken."
+          ],
+          differentiation: "Bied in 1 hoek expres een veelgemaakte fout aan om denkfouten zichtbaar te maken.",
+          teacherTip: "Vraag niet alleen om het juiste antwoord, maar vooral om de strategie waarmee leerlingen tot die keuze kwamen.",
+          keywords: ["groep 7/8", "antwoordhoeken", "procenten", "verhoudingen", "grafieken", "formatief"]
+        })
+      ],
+      tijdens: [
+        docTask(GROUP_34, {
+          key: "sommenwandeling",
+          visual: "path",
+          visualHint: "Een rekenroute langs somkaartjes waarbij leerlingen steeds teruglopen om samen uit te rekenen.",
+          title: "Sommenwandeling",
+          summary: "Tweetallen lopen langs somkaartjes, onthouden de som en rekenen die samen uit.",
+          duration: "10 min",
+          setup: "Hang 6 tot 10 somkaartjes verspreid op in het lokaal en maak ruimte om veilig heen en weer te lopen.",
+          goal: "Optellen en aftrekken oefenen via een vaste looproute en korte samenwerkmomenten.",
+          movementFocus: "Rustig lopen naar een kaart, onthouden, teruglopen en pas aan tafel uitwerken.",
+          materials: ["Somkaartjes", "Wisbordje of kladpapier"],
+          steps: [
+            "Hang somkaartjes verspreid op in het lokaal.",
+            "Laat leerlingen in tweetallen naar een kaartje lopen en de som lezen.",
+            "Leerlingen lopen terug naar hun plek en rekenen samen de som uit op een wisbordje of kladpapier.",
+            "Daarna lopen zij naar het volgende kaartje."
+          ],
+          differentiation: "Maak 2 routes met verschillende moeilijkheidsgraden.",
+          teacherTip: "Gebruik vaste looprichtingen, zodat tweetallen elkaar niet in de weg lopen.",
+          keywords: ["groep 3/4", "sommenwandeling", "optellen", "aftrekken", "tweetallen"]
+        }),
+        docTask(GROUP_34, {
+          key: "staand-flitsen",
+          visual: "circle",
+          visualHint: "Tweetallen staan tegenover elkaar en flitsen snel sommen of splitsingen naar elkaar.",
+          title: "Staand flitsen",
+          summary: "Leerlingen oefenen sommen en splitsingen mondeling in een snelle staande duo-opdracht.",
+          duration: "5-10 min",
+          setup: "Geen uitgebreide voorbereiding. Zet eventueel flitskaartjes klaar per niveau.",
+          goal: "Sommen, splitsingen en basisautomatisering snel en herhaald ophalen.",
+          movementFocus: "Staand werken, direct reageren en na elke korte serie van rol wisselen.",
+          materials: ["Geen extra materiaal of flitskaartjes"],
+          steps: [
+            "Laat leerlingen in tweetallen tegenover elkaar staan.",
+            "1 leerling noemt een som of laat een kaartje zien.",
+            "De ander antwoordt direct.",
+            "Na 5 sommen wisselen de rollen."
+          ],
+          differentiation: "Gebruik kaartjes per niveau: splitsingen, plus- en minsommen of tafels van 2, 5 en 10.",
+          teacherTip: "Houd de rondes kort, zodat het tempo hoog blijft en alle leerlingen veel beurten krijgen.",
+          keywords: ["groep 3/4", "flitsen", "splitsingen", "plus", "min", "automatiseren"]
+        }),
+        docTask(GROUP_34, {
+          key: "rekenen-estafette",
+          visual: "relay",
+          visualHint: "Teams rennen om de beurt naar een somkaart en koppelen die aan het juiste antwoord.",
+          title: "Rekenen-estafette",
+          summary: "Kleine teams oefenen sommen onder tempo en koppelen elke som aan het juiste antwoord.",
+          duration: "10-15 min",
+          setup: "Leg somkaartjes en antwoordkaartjes klaar aan de overkant van het lokaal of de gang.",
+          goal: "Herhalen, tempo maken en samenwerken bij basisrekenen.",
+          movementFocus: "Korte estafetteloopjes, snel terugkoppelen en direct de volgende leerling laten starten.",
+          materials: ["Somkaartjes", "Antwoordkaartjes"],
+          steps: [
+            "Verdeel de groep in kleine teams.",
+            "Leg aan de overkant somkaartjes en antwoordkaartjes klaar.",
+            "Een leerling rent, pakt een kaartje en rekent de som uit.",
+            "De leerling koppelt de som aan het juiste antwoordkaartje en daarna start de volgende leerling."
+          ],
+          differentiation: "Gebruik voor sommige teams minder kaartjes of eenvoudigere sommen.",
+          teacherTip: "Leg de antwoorden overzichtelijk neer en gebruik per team een eigen kleur, zodat de controle snel blijft.",
+          keywords: ["groep 3/4", "estafette", "sommen", "samenwerken", "tempo"]
+        }),
+        docTask(GROUP_56, {
+          key: "loopdictee-rekenen",
+          visual: "dictation",
+          visualHint: "Een rekenloopdictee waarbij 1 leerling de opgave ophaalt en het tweetal die samen oplost.",
+          title: "Loopdictee rekenen",
+          summary: "Tweetallen halen opgaven op, onthouden deze kort en maken de som daarna samen.",
+          duration: "10-15 min",
+          setup: "Hang opgaven op verschillende plekken op en leg per tweetal papier of een wisbordje klaar.",
+          goal: "Sommen en contextopgaven inoefenen met bewegen, samenwerken en onthouden.",
+          movementFocus: "Lopen, onthouden, terugkeren en samen verwerken aan de tafel of schrijfplek.",
+          materials: ["Opgaven", "Papier of wisbordje"],
+          steps: [
+            "Werk in tweetallen.",
+            "1 leerling loopt naar een opgave, leest en onthoudt die en loopt terug.",
+            "Samen noteren en maken zij de opgave.",
+            "Daarna wisselen de rollen."
+          ],
+          differentiation: "Maak een basisset en een uitdagende set in verschillende kleuren.",
+          teacherTip: "Laat leerlingen eerst herhalen wat zij hebben onthouden voordat zij gaan schrijven; dat houdt de opdracht echt actief.",
+          keywords: ["groep 5/6", "loopdictee", "contextopgaven", "tweetallen", "inoefenen"]
+        }),
+        docTask(GROUP_56, {
+          key: "rekencircuit-56",
+          visual: "stations",
+          visualHint: "Een circuit met korte rekenposten voor veel herhaling in een actieve ronde.",
+          title: "Rekencircuit",
+          summary: "Leerlingen rouleren langs rekenposten en maken per post 1 of 2 korte opdrachten.",
+          duration: "10-15 min",
+          setup: "Maak 6 tot 8 posten met kaartjes en leg per post een antwoordblad of werkplek klaar.",
+          goal: "Veel oefenherhaling in meerdere rekendomeinen met een vaste stationsroute.",
+          movementFocus: "Tussen posten lopen, kort werken en doorschuiven op een signaal.",
+          materials: ["Postkaartjes", "Antwoordblad"],
+          steps: [
+            "Verspreid 6 tot 8 posten door het lokaal of de gang.",
+            "Leerlingen lopen langs de posten en maken per post 1 of 2 opdrachten.",
+            "Na een signaal schuiven zij door naar de volgende post.",
+            "Bespreek de antwoorden kort na."
+          ],
+          differentiation: "Richt een deel van het circuit in met ondersteuning, zoals voorbeeldkaartjes of hulpschema's.",
+          teacherTip: "Maak de posten klein en helder, zodat de beweegtijd niet ten koste gaat van de rekentijd.",
+          keywords: ["groep 5/6", "rekencircuit", "stations", "herhalen", "hulpschema"]
+        }),
+        docTask(GROUP_56, {
+          key: "zoek-iemand-die",
+          visual: "circle",
+          visualHint: "Leerlingen lopen rond met een opdracht en zoeken een match met dezelfde uitkomst of notatie.",
+          title: "Zoek iemand die...",
+          summary: "Leerlingen zoeken al lopend een passende rekenmatch en lichten die daarna aan elkaar toe.",
+          duration: "10 min",
+          setup: "Maak kaartjes of een zoekblad met uitkomsten, breuken, kommagetallen of gelijkwaardige representaties.",
+          goal: "Vergelijkingen maken, samenwerken en representaties herkennen in beweging.",
+          movementFocus: "Rondlopen, contact maken, matchen en mondeling uitleggen waarom iets bij elkaar hoort.",
+          materials: ["Kaartjes of werkblad"],
+          steps: [
+            "Geef leerlingen een kaartje of opdrachtblad.",
+            "Laat hen rondlopen en iemand zoeken met bijvoorbeeld dezelfde uitkomst, een gelijkwaardige breuk of een passend kommagetal.",
+            "Als zij een match hebben gevonden, leggen zij aan elkaar uit waarom het past.",
+            "Na enkele matches volgt een korte klassikale terugkoppeling."
+          ],
+          differentiation: "Laat sterke leerlingen hun match ook in een andere notatie geven.",
+          teacherTip: "Laat leerlingen pas verder lopen nadat zij hun match aan elkaar hebben uitgelegd; zo blijft de inhoud centraal.",
+          keywords: ["groep 5/6", "match", "breuken", "kommagetallen", "vergelijkingen", "samenwerken"]
+        }),
+        docTask(GROUP_78, {
+          key: "rekencircuit-bovenbouw",
+          visual: "stations",
+          visualHint: "Een actief bovenbouwcircuit langs posten over procenten, schaal, verhoudingen en grafieken.",
+          title: "Rekencircuit bovenbouw",
+          summary: "Tweetallen oefenen verschillende bovenbouwdomeinen in een korte actieve circuitvorm.",
+          duration: "10-15 min",
+          setup: "Maak 6 tot 8 posten met opgaven rond procenten, schaal, verhoudingen en grafieken.",
+          goal: "Actieve inoefening van verschillende rekenonderdelen met nadruk op strategie en redenering.",
+          movementFocus: "Rondlopen tussen posten, kort registreren en daarna door naar een nieuwe inhoudelijke focus.",
+          materials: ["Postkaartjes", "Antwoordblad"],
+          steps: [
+            "Richt posten in rond procenten, schaal, verhoudingen, breuken-decimalen-procenten en grafieken.",
+            "Laat leerlingen in tweetallen langs de posten lopen.",
+            "Zij noteren hun antwoorden en controleren na afloop gezamenlijk.",
+            "Bespreek vooral de gekozen strategieen."
+          ],
+          differentiation: "Geef een extra uitdaging bij elke post, bijvoorbeeld een verdiepingsvraag.",
+          teacherTip: "Gebruik per post 1 kernvraag en 1 optionele plusvraag, zodat alle leerlingen tempo houden.",
+          keywords: ["groep 7/8", "rekencircuit", "procenten", "verhoudingen", "grafieken", "schaal"]
+        }),
+        docTask(GROUP_78, {
+          key: "wandel-en-leg-uit",
+          visual: "path",
+          visualHint: "Tweetallen lopen een korte route terwijl 1 leerling hardop een aanpak uitlegt.",
+          title: "Wandel en leg uit",
+          summary: "Leerlingen verwoorden hun strategie al lopend aan een maatje en krijgen direct vragen terug.",
+          duration: "10 min",
+          setup: "Maak kaartjes met opgaven en spreek een korte wandelroute door lokaal of gang af.",
+          goal: "Strategie verwoorden, redeneren en elkaars aanpak kritisch beluisteren.",
+          movementFocus: "Rustig lopen, hardop uitleggen en na een wisselmoment van rol veranderen.",
+          materials: ["Opgavekaartjes"],
+          steps: [
+            "Laat leerlingen in tweetallen een klein rondje door lokaal of gang lopen.",
+            "1 leerling legt hardop uit hoe hij of zij de som zou aanpakken.",
+            "De ander luistert, stelt vragen en vult aan.",
+            "Na een wisselmoment draaien de rollen om."
+          ],
+          differentiation: "Geef sommige tweetallen een hulpschema en andere tweetallen open contextopgaven.",
+          teacherTip: "Kies opgaven waarbij meerdere aanpakken mogelijk zijn, zodat de gesprekken rijker worden.",
+          keywords: ["groep 7/8", "strategie", "redeneren", "uitleg", "tweetallen"]
+        }),
+        docTask(GROUP_78, {
+          key: "antwoordestafette",
+          visual: "relay",
+          visualHint: "Teams lossen om de beurt een opgave op en brengen het antwoord in estafettevorm naar voren.",
+          title: "Antwoordestafette",
+          summary: "Teams oefenen tempo, samenwerken en foutcontrole in een estafette met bovenbouwopgaven.",
+          duration: "10 min",
+          setup: "Maak opgaven en antwoordstroken klaar en richt voor elk team een eigen looplijn in.",
+          goal: "Tempo maken, herhalen en samenwerken bij complexere rekenopgaven.",
+          movementFocus: "Om de beurt sprinten, terugkoppelen aan het team en snel wisselen van beurt.",
+          materials: ["Opgaven", "Antwoordstroken"],
+          steps: [
+            "Verdeel de klas in teams.",
+            "Elk teamlid lost om de beurt 1 opgave op en brengt het antwoord naar voren.",
+            "Daarna is de volgende leerling aan de beurt.",
+            "Controleer de antwoorden klassikaal en bespreek veelgemaakte fouten."
+          ],
+          differentiation: "Gebruik basis- en plusstroken per team.",
+          teacherTip: "Laat teams pas de volgende beurt starten als de vorige leerling kort heeft uitgelegd hoe het antwoord is gevonden.",
+          keywords: ["groep 7/8", "estafette", "samenwerken", "bovenbouw", "fouten bespreken"]
+        })
+      ],
+      bewegend: [
+        docTask(GROUP_34, {
+          key: "getallenlijn-lopen",
+          visual: "line",
+          visualHint: "Een grote vloerlijn maakt sprongen, meer en minder en plaatswaarde letterlijk zichtbaar.",
+          title: "Getallenlijn lopen",
+          summary: "Leerlingen bewegen over een vloerlijn en ervaren letterlijk wat vooruit, terug en meer betekent.",
+          duration: "10 min",
+          setup: "Leg met tape een getallenlijn op de vloer, bijvoorbeeld 0-20 of 0-100.",
+          goal: "Getalbegrip, meer en minder en sprongen op de getallenlijn concreet maken.",
+          movementFocus: "Stapbewegingen en sprongen op de lijn koppelen aan wat er met het getal gebeurt.",
+          materials: ["Tape of getalkaarten"],
+          steps: [
+            "Maak een getallenlijn op de vloer, bijvoorbeeld van 0 tot 20 of van 0 tot 100.",
+            "Laat een leerling op een getal gaan staan.",
+            "Geef opdrachten zoals: stap 1 vooruit, spring 2 terug of ga naar het getal dat 10 meer is.",
+            "Bespreek telkens wat er op de getallenlijn gebeurt."
+          ],
+          differentiation: "Gebruik 0-20 in groep 3 en 0-100 in groep 4.",
+          teacherTip: "Laat leerlingen eerst voorspellen waar zij uitkomen en pas daarna bewegen.",
+          keywords: ["groep 3/4", "getallenlijn", "meer en minder", "sprongen", "getalbegrip"]
+        }),
+        docTask(GROUP_34, {
+          key: "splitsen-met-je-lichaam",
+          visual: "circle",
+          visualHint: "Tweetallen vormen met hun lichaam verschillende splitsingen van hetzelfde getal.",
+          title: "Splitsen met je lichaam",
+          summary: "Leerlingen laten splitsingen van een getal zien met hun eigen lichaam en vergelijken verschillende oplossingen.",
+          duration: "5-10 min",
+          setup: "Geen voorbereiding. Zorg voor genoeg ruimte voor tweetallen om naast elkaar te staan.",
+          goal: "Splitsingen, getalstructuur en voorbereidende optelstrategien zichtbaar maken.",
+          movementFocus: "In tweetallen een getal verdelen en dat fysiek aan de groep laten zien.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Noem een getal, bijvoorbeeld 8.",
+            "Laat 2 leerlingen samen een splitsing vormen, bijvoorbeeld 5 en 3.",
+            "Laat meerdere tweetallen verschillende splitsingen laten zien.",
+            "Bespreek welke splitsingen hetzelfde totaal geven."
+          ],
+          differentiation: "Laat sterke leerlingen meerdere splitsingen achter elkaar noemen zonder hulp.",
+          teacherTip: "Werk vlot achter elkaar door, zodat leerlingen meerdere voorbeelden van hetzelfde getal zien.",
+          keywords: ["groep 3/4", "splitsingen", "getalstructuur", "tweetallen", "optelstrategien"]
+        }),
+        docTask(GROUP_34, {
+          key: "tafels-springen",
+          visual: "jump",
+          visualHint: "Leerlingen springen langs de veelvouden van 1 tafel en voorspellen het volgende getal.",
+          title: "Tafels springen",
+          summary: "Leerlingen bewegen mee met de veelvouden van een tafel en koppelen sprongen aan herhaald optellen.",
+          duration: "5-10 min",
+          setup: "Geen voorbereiding nodig, of leg eventueel een vloergetallenlijn klaar.",
+          goal: "Tafelstructuur, herhaald optellen en veelvouden concreet oefenen.",
+          movementFocus: "Bij elk veelvoud springen en hardop voorspellen welk getal hierna komt.",
+          materials: ["Geen extra materiaal of vloergetallenlijn"],
+          steps: [
+            "Kies 1 tafel, bijvoorbeeld de tafel van 2 of 5.",
+            "Leerlingen springen steeds naar het volgende veelvoud terwijl de klas de rij hardop mee zegt.",
+            "Laat leerlingen voorspellen op welk getal zij na de volgende sprong komen.",
+            "Sluit af met een paar losse tafelvragen."
+          ],
+          differentiation: "Werk in groep 4 vooral met 2, 5 en 10. Voeg later 3 of 4 toe.",
+          teacherTip: "Start met een paar gezamenlijke sprongen en laat daarna individuele leerlingen de volgende stap voorspellen.",
+          keywords: ["groep 3/4", "tafels", "veelvouden", "herhaald optellen", "springen"]
+        }),
+        docTask(GROUP_56, {
+          key: "breukenlijn-op-de-vloer",
+          visual: "line",
+          visualHint: "Een vloerlijn van 0 tot 1 of 2 helpt leerlingen breuken plaatsen en vergelijken.",
+          title: "Breukenlijn op de vloer",
+          summary: "Leerlingen plaatsen breukkaartjes op een grote lijn en bespreken hun positie ten opzichte van 1.",
+          duration: "10-15 min",
+          setup: "Leg een lijn op de vloer en maak breukkaartjes, eventueel doorlopend van 0 naar 2.",
+          goal: "Breuken plaatsen, vergelijken en ordenen met een concrete lijn als model.",
+          movementFocus: "Naar een plek op de lijn lopen en lichamelijk ervaren hoe dicht een breuk bij 1 of 2 ligt.",
+          materials: ["Tape", "Breukkaartjes"],
+          steps: [
+            "Maak een lijn van 0 naar 1, eventueel doorlopend naar 2.",
+            "Geef leerlingen een breukkaartje, zoals 1/2, 3/4 of 5/4.",
+            "Laat hen op de juiste plek op de lijn staan.",
+            "Bespreek wie het dichtst bij 1 staat, welke breuken even groot zijn en welke tussen 1/2 en 1 liggen."
+          ],
+          differentiation: "Begin met eenvoudige breuken en voeg later onechte breuken toe.",
+          teacherTip: "Laat leerlingen eerst schatten waar hun kaart hoort en pas daarna verplaatsen of bijstellen.",
+          keywords: ["groep 5/6", "breuken", "breukenlijn", "vergelijken", "ordenen"]
+        }),
+        docTask(GROUP_56, {
+          key: "kommagetallen-op-volgorde",
+          visual: "line",
+          visualHint: "Leerlingen vormen zonder praten een levende rij van kommagetallen van klein naar groot.",
+          title: "Kommagetallen op volgorde",
+          summary: "Leerlingen ordenen kommagetallen lichamelijk in een rij en verantwoorden daarna hun plek.",
+          duration: "10 min",
+          setup: "Maak kaartjes met kommagetallen en zorg voor een vrije lijn in het lokaal.",
+          goal: "Plaatswaarde begrijpen en kommagetallen ordenen van klein naar groot.",
+          movementFocus: "Lopen, positie kiezen in een rij en pas daarna hardop uitleggen.",
+          materials: ["Kaartjes met kommagetallen"],
+          steps: [
+            "Geef iedere leerling of ieder tweetal een kaartje met een kommagetal.",
+            "Laat leerlingen zonder praten op volgorde gaan staan van klein naar groot.",
+            "Daarna lichten zij toe waarom hun plek klopt.",
+            "Bespreek lastige paren, zoals 0,5 en 0,05."
+          ],
+          differentiation: "Gebruik alleen tienden in een basisronde en voeg honderdsten toe in een vervolgronde.",
+          teacherTip: "Laat leerlingen eerst alleen kijken naar de kaartjes en pas daarna overleggen; zo zie je hun eerste redenering beter.",
+          keywords: ["groep 5/6", "kommagetallen", "plaatswaarde", "ordenen", "rij"]
+        }),
+        docTask(GROUP_56, {
+          key: "omtrek-of-oppervlakte",
+          visual: "measure",
+          visualHint: "Een getapete vorm op de vloer maakt het verschil tussen eromheen en erin direct zichtbaar.",
+          title: "Omtrek of oppervlakte?",
+          summary: "Leerlingen lopen eerst de rand en vullen daarna het vlak, zodat omtrek en oppervlakte duidelijk uit elkaar gaan.",
+          duration: "10 min",
+          setup: "Maak met tape een vorm op de vloer, bijvoorbeeld een rechthoek of eenvoudige samengestelde vorm.",
+          goal: "Het verschil tussen omtrek en oppervlakte concreet begrijpen.",
+          movementFocus: "Eerst de rand volgen met stappen en daarna het vlak vullen of afdekken.",
+          materials: ["Tape", "Eventueel blaadjes of tegels"],
+          steps: [
+            "Maak met tape een rechthoek of andere vorm op de vloer.",
+            "Laat leerlingen eerst de rand lopen: dit is de omtrek.",
+            "Laat daarna leerlingen het vlak vullen met stappen, blaadjes of tegels: dit is de oppervlakte.",
+            "Bespreek het verschil tussen eromheen en erin."
+          ],
+          differentiation: "Werk eerst met eenvoudige rechthoeken en later met samengestelde vormen.",
+          teacherTip: "Gebruik steeds dezelfde vorm voor beide begrippen; dat maakt het contrast tussen rand en vlak extra helder.",
+          keywords: ["groep 5/6", "omtrek", "oppervlakte", "meten", "meetkunde"]
+        }),
+        docTask(GROUP_56, {
+          key: "coordinatenraster",
+          visual: "measure",
+          visualHint: "Een vloerrooster met tape helpt leerlingen coordinaten letterlijk te lopen en te benoemen.",
+          title: "Coordinatenraster",
+          summary: "Leerlingen lopen naar coordinaten in een raster en ervaren zo horizontaal en verticaal lezen.",
+          duration: "10 min",
+          setup: "Maak een eenvoudig raster met tape op de vloer en leg kaartjes met coordinaten klaar.",
+          goal: "Plaatsbepaling en roosterlezen oefenen in een concrete ruimte.",
+          movementFocus: "Lopen naar vakken in het raster en bewust kiezen wat eerst komt: horizontaal of verticaal.",
+          materials: ["Tape", "Kaartjes met coordinaten"],
+          steps: [
+            "Maak een eenvoudig raster op de vloer.",
+            "Noem een coordinaat, bijvoorbeeld 3,4, en laat leerlingen naar het juiste vak lopen.",
+            "Laat daarna leerlingen elkaar een coordinaat geven.",
+            "Sluit af met een korte reflectie: wat komt eerst, horizontaal of verticaal?"
+          ],
+          differentiation: "Gebruik eerst alleen positieve getallen en breid later uit met complexere routes of opdrachten.",
+          teacherTip: "Laat leerlingen na elke route het coordinaat hardop terugzeggen; dat helpt om de volgorde vast te zetten.",
+          keywords: ["groep 5/6", "coordinaten", "raster", "rooster", "plaatsbepaling"]
+        }),
+        docTask(GROUP_78, {
+          key: "breuk-decimaal-procent-match",
+          visual: "circle",
+          visualHint: "Leerlingen zoeken al lopend de twee notaties die bij hun breuk, decimaal of percentage horen.",
+          title: "Breuk - decimaal - procent match",
+          summary: "Leerlingen vormen trio's van gelijkwaardige notaties en lichten samen toe waarom die match klopt.",
+          duration: "10 min",
+          setup: "Maak setjes met breuken, decimalen en procenten en deel 1 kaart per leerling uit.",
+          goal: "Relaties tussen breuken, decimalen en procenten begrijpen en verwoorden.",
+          movementFocus: "Rondlopen, vergelijken en pas stoppen zodra een complete match is gevonden.",
+          materials: ["Kaartjes"],
+          steps: [
+            "Geef iedere leerling een kaartje met een breuk, decimaal getal of percentage.",
+            "Leerlingen lopen rond en zoeken de 2 kaartjes die bij hun kaart horen.",
+            "Als trio blijven zij samen staan en lichten hun match toe.",
+            "Bespreek klassikaal een paar combinaties."
+          ],
+          differentiation: "Voeg lastigere percentages toe, zoals 12,5% of 62,5%.",
+          teacherTip: "Neem bewust ook lastige combinaties op en laat leerlingen eerst onderling redeneren voordat jij het bevestigt.",
+          keywords: ["groep 7/8", "breuk", "decimaal", "procent", "notaties", "match"]
+        }),
+        docTask(GROUP_78, {
+          key: "verhoudingentabel-op-de-vloer",
+          visual: "line",
+          visualHint: "Een grote verhoudingstabel op de vloer laat leerlingen letterlijk zien hoe 2 rijen bij elkaar horen.",
+          title: "Verhoudingentabel op de vloer",
+          summary: "Leerlingen vullen een grote verhoudingstabel met hun positie of kaartjes en bespreken hoe de rijen samenhangen.",
+          duration: "10-15 min",
+          setup: "Maak met tape of kaartjes een grote tabel op de vloer met 2 rijen.",
+          goal: "Verhoudingen inzichtelijk maken en verbanden tussen 2 rijen begrijpen.",
+          movementFocus: "Naar het juiste vak lopen, een verhouding opbouwen en redeneren over vermenigvuldigen of delen.",
+          materials: ["Tape", "Kaartjes"],
+          steps: [
+            "Maak 2 rijen op de vloer, bijvoorbeeld aantal glazen en aantal milliliter.",
+            "Leerlingen vullen de vakken door met kaartjes op de juiste plaats te gaan staan.",
+            "Bespreek hoe je van 1 rij naar de andere rekent en welke vermenigvuldiging of deling erbij hoort.",
+            "Laat leerlingen daarna een nieuwe verhouding zelf opbouwen."
+          ],
+          differentiation: "Gebruik eenvoudige hele verhoudingen of lastiger kommagetallen en schaalwaarden.",
+          teacherTip: "Vraag bij elke ingevulde verhouding expliciet welke factor of deling is gebruikt; zo blijft het model betekenisvol.",
+          keywords: ["groep 7/8", "verhoudingentabel", "verhoudingen", "model", "samenhang"]
+        }),
+        docTask(GROUP_78, {
+          key: "grafiekenwandeling",
+          visual: "path",
+          visualHint: "Een route langs grafieken helpt leerlingen verbanden al lopend te interpreteren.",
+          title: "Grafiekenwandeling",
+          summary: "Leerlingen lopen langs meerdere grafieken en beantwoorden per grafiek 1 of 2 gerichte vragen.",
+          duration: "10-15 min",
+          setup: "Hang 4 tot 6 grafieken op in het lokaal en leg bij elke grafiek vraagkaartjes klaar.",
+          goal: "Verbanden interpreteren en grafieken lezen met aandacht voor stijging, hoogste waarde en koppeling aan tabellen.",
+          movementFocus: "Van grafiek naar grafiek lopen, kort observeren en daarna gericht noteren of bespreken.",
+          materials: ["Grafieken", "Vraagkaartjes"],
+          steps: [
+            "Hang verschillende grafieken op in het lokaal.",
+            "Leerlingen lopen langs de grafieken en beantwoorden bij elke grafiek 1 of 2 vragen.",
+            "Laat vragen gaan over stijging, hoogste waarde, verband of koppeling aan een tabel.",
+            "Bespreek na afloop de antwoorden en redeneringen."
+          ],
+          differentiation: "Laat sterke leerlingen zelf een passende vraag formuleren bij een grafiek.",
+          teacherTip: "Gebruik verschillende grafieksoorten door elkaar, zodat leerlingen niet alleen een vast trucje toepassen.",
+          keywords: ["groep 7/8", "grafieken", "verbanden", "tabellen", "interpreteren"]
+        }),
+        docTask(GROUP_78, {
+          key: "schaalwandeling",
+          visual: "measure",
+          visualHint: "Een gelopen afstand in het lokaal wordt direct gekoppeld aan een schaalberekening.",
+          title: "Schaalwandeling",
+          summary: "Leerlingen lopen een echte afstand en rekenen die meteen om naar een schaalvraag.",
+          duration: "10-15 min",
+          setup: "Bepaal een afstand in het lokaal of op het plein en zorg dat die vooraf is gemeten.",
+          goal: "Schaal en omrekenen concreet maken met echte afstanden.",
+          movementFocus: "Een afstand echt lopen en die beweging direct vertalen naar een berekening op schaal.",
+          materials: ["Meetlint of vooraf gemeten afstand"],
+          steps: [
+            "Laat leerlingen een afstand lopen, bijvoorbeeld 8 meter.",
+            "Koppel daar direct een schaalvraag aan, zoals: hoeveel centimeter is dit op schaal 1 : 100?",
+            "Laat leerlingen hun berekening mondeling toelichten.",
+            "Herhaal met 2 of 3 andere afstanden."
+          ],
+          differentiation: "Gebruik in een vervolgronde een plattegrond of een omgekeerde schaalvraag.",
+          teacherTip: "Werk met afstanden die leerlingen echt net gelopen hebben; dat maakt de schaalvraag veel concreter.",
+          keywords: ["groep 7/8", "schaal", "omrekenen", "afstand", "meten"]
+        }),
+        docTask(GROUP_78, {
+          key: "hoeken-en-lijnen-met-je-lichaam",
+          visual: "line",
+          visualHint: "Tweetallen of groepjes beelden meetkundige begrippen uit met hun eigen lichaam.",
+          title: "Hoeken en lijnen met je lichaam",
+          summary: "Leerlingen maken hoeken en lijnen met hun lichaam en benoemen daarna samen de eigenschappen.",
+          duration: "10 min",
+          setup: "Geen voorbereiding. Zorg voor genoeg ruimte voor tweetallen of kleine groepjes.",
+          goal: "Meetkundige begrippen zoals rechte hoek, scherpe hoek, stompe hoek en evenwijdige lijnen begrijpen.",
+          movementFocus: "Lichaamshoudingen gebruiken om vormen en richtingen zichtbaar te maken.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat leerlingen in tweetallen of groepjes werken.",
+            "Zij maken met hun lichaam een rechte hoek, scherpe hoek, stompe hoek of evenwijdige lijnen.",
+            "De klas benoemt wat zij ziet en onderbouwt dat.",
+            "Sluit af met een snelle quizvraag over eigenschappen."
+          ],
+          differentiation: "Laat sterke leerlingen ook symmetrie of lijnstukken uitbeelden.",
+          teacherTip: "Laat 1 groepje de vorm maken en een ander groepje de eigenschappen benoemen; zo blijft iedereen actief kijken.",
+          keywords: ["groep 7/8", "meetkunde", "hoeken", "lijnen", "symmetrie"]
+        })
+      ]
+    }
+  };
+}
 
 const library = buildLibrary();
 const allTasks = flattenTasks();
@@ -1613,9 +818,9 @@ function buildLibrary() {
       ...subject,
       moments: moments.map((moment) => ({
         ...moment,
-        tasks: taskBlueprints[subject.id][moment.id].map((blueprint) =>
-          materializeTask(group, subject, moment, blueprint)
-        )
+        tasks: taskBlueprints[subject.id][moment.id]
+          .map((blueprint) => materializeTask(group, subject, moment, blueprint))
+          .filter(Boolean)
       }))
     }))
   }));
@@ -1625,6 +830,11 @@ function materializeTask(group, subject, moment, blueprint) {
   const title = readGroupValue(blueprint.title, group.id);
   const summary = readGroupValue(blueprint.summary, group.id);
   const goal = readGroupValue(blueprint.goal, group.id);
+
+  if (!title || !summary || !goal) {
+    return null;
+  }
+
   const usesCards = true;
   const cardPack = buildCardPack(group, subject, moment, blueprint, title);
 
@@ -2490,6 +1700,28 @@ function getCardFamily(subjectId, taskKey, visual) {
   }
 
   if (subjectId === "rekenen") {
+    if (key.includes("hoeken-kiezen") || key.includes("keuzehoeken-rekenen")) return "rekenen_hoeken";
+    if (
+      key.includes("getallenlijn-lopen") ||
+      key.includes("breukenlijn-op-de-vloer") ||
+      key.includes("kommagetallen-op-volgorde") ||
+      key.includes("verhoudingentabel-op-de-vloer") ||
+      key.includes("hoeken-en-lijnen-met-je-lichaam")
+    ) {
+      return "rekenen_lijn";
+    }
+    if (
+      key.includes("rekenen-estafette") ||
+      key.includes("antwoordestafette") ||
+      key.includes("sommenwandeling") ||
+      key.includes("loopdictee-rekenen") ||
+      key.includes("grafiekenwandeling") ||
+      key.includes("schaalwandeling") ||
+      key.includes("wandel-en-leg-uit")
+    ) {
+      return "rekenen_route";
+    }
+    if (key.includes("rekencircuit")) return "rekenen_strategie";
     if (key.includes("rekenhoekenspel")) return "rekenen_hoeken";
     if (key.includes("levendegetallenlijn")) return "rekenen_lijn";
     if (key.includes("tafelslooproute") || key.includes("rekenschattocht") || key.includes("rekenmissie")) return "rekenen_route";
@@ -3477,7 +2709,7 @@ function renderFilters() {
 }
 
 function renderFilterButton({ id, level, title, description, count, active }) {
-  const disabled = count === 0 && state.search.trim();
+  const disabled = count === 0;
 
   return `
     <button
@@ -3610,7 +2842,7 @@ function renderStepCards(nextStep) {
     return groups
       .map((group) => {
         const count = countForGroup(group.id);
-        const disabled = count === 0 && hasSearch();
+        const disabled = count === 0;
 
         return `
           <button
@@ -3636,7 +2868,7 @@ function renderStepCards(nextStep) {
     return subjects
       .map((subject) => {
         const count = countForSubject(subject.id);
-        const disabled = count === 0 && hasSearch();
+        const disabled = count === 0;
 
         return `
           <button
@@ -3661,7 +2893,7 @@ function renderStepCards(nextStep) {
   return moments
     .map((moment) => {
       const count = countForMoment(moment.id);
-      const disabled = count === 0 && hasSearch();
+      const disabled = count === 0;
 
       return `
         <button
@@ -4039,7 +3271,7 @@ function renderIllustration(task, compact) {
   const subject = getSubject(task.subjectId);
   const moment = getMoment(task.momentId);
   const sky = compact ? "#f4f8ff" : "#f7fbff";
-  const field = compact ? "#eef7ef" : "#e9f5eb";
+  const field = compact ? "#eef8fb" : "#e9f6fb";
   const stroke = "#19424a";
   const scene = renderIllustrationScene(task, subject.accent, moment.accent, stroke);
 

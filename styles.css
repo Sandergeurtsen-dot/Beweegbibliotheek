@@ -1,18 +1,18 @@
 :root {
-  --bg: #eef3eb;
-  --bg-2: #f8faf5;
+  --bg: #eef6fb;
+  --bg-2: #f7fbff;
   --surface: #ffffff;
-  --surface-soft: #f5f8f2;
-  --line: #d5e1d5;
-  --ink: #163033;
-  --ink-soft: #537174;
+  --surface-soft: #f2f8fb;
+  --line: #d4e3ef;
+  --ink: #17314a;
+  --ink-soft: #5a748e;
   --blue: #1d1060;
   --teal: #00abc8;
-  --green: #1c8c37;
-  --green-deep: #176e2b;
-  --orange: #f28f27;
-  --yellow: #f8cb4a;
-  --shadow: 0 18px 38px rgba(12, 44, 53, 0.12);
+  --green: #00abc8;
+  --green-deep: #0e7e99;
+  --orange: #48c8dd;
+  --yellow: #82e4f2;
+  --shadow: 0 18px 38px rgba(20, 59, 134, 0.12);
   --radius-xl: 28px;
   --radius-lg: 22px;
   --radius-md: 16px;
@@ -38,7 +38,7 @@ body {
   background:
     radial-gradient(circle at top left, rgba(0, 171, 200, 0.12), transparent 25%),
     radial-gradient(circle at 100% 10%, rgba(29, 16, 96, 0.1), transparent 28%),
-    linear-gradient(180deg, #f8fbf6 0%, #edf4eb 100%);
+    linear-gradient(180deg, #f8fbff 0%, #edf5fb 100%);
 }
 
 body::before {
@@ -228,7 +228,7 @@ body::before {
   padding: 18px;
   border-radius: 20px;
   background: var(--surface-soft);
-  border: 1px solid #e1eadf;
+  border: 1px solid #dce8f1;
 }
 
 .finder__section--search {
@@ -278,7 +278,7 @@ body::before {
   min-height: 54px;
   padding: 0 16px;
   border-radius: 16px;
-  border: 1px solid #c9d8ca;
+  border: 1px solid #c8dced;
   background: #ffffff;
   font: inherit;
   font-size: 1rem;
@@ -333,8 +333,8 @@ body::before {
   border: 0;
   border-radius: 999px;
   padding: 10px 14px;
-  background: #e9f2ea;
-  color: var(--green-deep);
+  background: #eaf6fb;
+  color: var(--blue);
   font: inherit;
   font-weight: 800;
   cursor: pointer;
@@ -376,9 +376,9 @@ body::before {
   width: 100%;
   text-align: left;
   padding: 18px;
-  border: 1px solid #d7e5d8;
+  border: 1px solid #d7e4f1;
   border-radius: 22px;
-  background: linear-gradient(180deg, #ffffff, #f5f9f4);
+  background: linear-gradient(180deg, #ffffff, #f3f9ff);
   cursor: pointer;
   color: inherit;
   box-shadow: 0 12px 24px rgba(18, 48, 42, 0.07);
@@ -402,8 +402,8 @@ body::before {
   border-radius: 999px;
   font-size: 0.84rem;
   font-weight: 800;
-  background: #e9f5ec;
-  color: var(--green-deep);
+  background: #e9f8fb;
+  color: var(--teal);
   font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
 }
 
@@ -432,7 +432,7 @@ body::before {
   gap: 6px;
   padding: 8px 12px;
   border-radius: 999px;
-  background: #eff6ef;
+  background: #eef5fb;
   color: var(--ink);
   font-weight: 700;
   font-size: 0.85rem;
@@ -456,7 +456,7 @@ body::before {
   gap: 12px;
   align-items: center;
   padding: 14px 16px;
-  border: 1px solid #d7e5d8;
+  border: 1px solid #d7e4f1;
   border-radius: 18px;
   background: #ffffff;
   color: inherit;
@@ -489,16 +489,16 @@ body::before {
   min-width: 40px;
   padding: 8px 10px;
   border-radius: 999px;
-  background: #eef5ef;
-  color: var(--green-deep);
+  background: #eef7fb;
+  color: var(--teal);
   text-align: center;
   font-weight: 800;
   font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
 }
 
 .filter-button--active {
-  border-color: rgba(45, 143, 90, 0.42);
-  background: #edf7ef;
+  border-color: rgba(0, 171, 200, 0.38);
+  background: #eef8fb;
 }
 
 .task-grid {
@@ -514,9 +514,9 @@ body::before {
   gap: 16px;
   align-items: start;
   padding: 16px;
-  border: 1px solid #d7e5d8;
+  border: 1px solid #d7e4f1;
   border-radius: 24px;
-  background: linear-gradient(180deg, #ffffff, #f7faf6);
+  background: linear-gradient(180deg, #ffffff, #f6fbff);
   color: inherit;
   cursor: pointer;
   transition:
@@ -558,8 +558,8 @@ body::before {
 .task-detail__art {
   border-radius: 18px;
   overflow: hidden;
-  background: #edf5ef;
-  border: 1px solid #d7e5d8;
+  background: #eef7fb;
+  border: 1px solid #d7e4f1;
 }
 
 .task-card__art svg,
@@ -577,12 +577,12 @@ body::before {
   display: grid;
   gap: 18px;
   padding: 20px;
-  border: 1px solid #d7e5d8;
+  border: 1px solid #d7e4f1;
   border-radius: 28px;
   background:
-    linear-gradient(180deg, rgba(45, 143, 90, 0.05), rgba(255, 255, 255, 0.98)),
+    linear-gradient(180deg, rgba(0, 171, 200, 0.06), rgba(255, 255, 255, 0.98)),
     #ffffff;
-  box-shadow: 0 16px 30px rgba(18, 48, 42, 0.08);
+  box-shadow: 0 16px 30px rgba(20, 59, 134, 0.08);
 }
 
 .task-detail__top {
@@ -612,7 +612,7 @@ body::before {
 
 .task-detail__tab {
   appearance: none;
-  border: 1px solid #d7e5d8;
+  border: 1px solid #d7e4f1;
   border-radius: 999px;
   padding: 11px 16px;
   background: #ffffff;
@@ -624,9 +624,9 @@ body::before {
 }
 
 .task-detail__tab--active {
-  background: #edf7ef;
-  border-color: rgba(45, 143, 90, 0.42);
-  color: var(--green-deep);
+  background: #eef8fb;
+  border-color: rgba(0, 171, 200, 0.38);
+  color: var(--blue);
 }
 
 .task-detail__tab:focus-visible {
@@ -842,8 +842,8 @@ body::before {
 .empty-state {
   padding: 24px;
   border-radius: 22px;
-  border: 1px dashed #c5d7c7;
-  background: #f8fbf7;
+  border: 1px dashed #c9dcec;
+  background: #f7fbff;
   color: var(--ink-soft);
   line-height: 1.7;
 }
@@ -870,8 +870,8 @@ body::before {
 }
 
 .button--secondary {
-  background: #eef5ef;
-  color: var(--green-deep);
+  background: #eef7fb;
+  color: var(--blue);
 }
 
 .button--small {
@@ -891,7 +891,7 @@ body::before {
   letter-spacing: 0.14em;
   font-size: 0.78rem;
   font-weight: 800;
-  color: var(--yellow);
+  color: var(--teal);
 }
 
 .eyebrow--small {
