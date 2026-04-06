@@ -4673,7 +4673,8 @@ function fillCardsToClassSize(cards) {
 
 function getSupportCards(group, subject, moment, blueprint, title) {
   const visualCards = getVisualSupportCards(blueprint.visual, title);
-  const methodCards = getMethodSupportCards(subject.id, group.id, moment.id);
+  const family = getCardFamily(subject.id, blueprint.key, blueprint.visual);
+  const methodCards = getMethodSupportCards(subject.id, group.id, moment.id, blueprint.key, blueprint.visual, family);
 
   return [...visualCards, ...methodCards];
 }
@@ -4786,7 +4787,146 @@ function getVisualSupportCards(visual, title) {
   ];
 }
 
-function getMethodSupportCards(subjectId, groupId, momentId) {
+function getMethodSupportCards(subjectId, groupId, momentId, taskKey, visual, family) {
+  const taskSpecificSupportCards = {
+    "loopdictee-woordenschat": [
+      card("Taalhulp", "Zeg het woord", "Laat het tweetal het woord eerst samen hardop zeggen."),
+      card("Taalhulp", "Betekenis", "Laat leerlingen kort vertellen wat het woord betekent."),
+      card("Taalhulp", "Woord in een zin", "Laat het tweetal het woord meteen gebruiken in een zin."),
+      card("Taalhulp", "Controle", "Check samen uitspraak, betekenis en de geschreven vorm.")
+    ],
+    "loopdictee-kernzinnen": [
+      card("Taalhulp", "Kernzin", "Kies per strook de belangrijkste zin en schrijf alleen die op."),
+      card("Taalhulp", "Hoofdgedachte", "Vat na 2 of 3 stroken samen waar het stukje over gaat."),
+      card("Taalhulp", "Signaalwoord", "Gebruik een signaalwoord als je de samenvatting uitspreekt."),
+      card("Taalhulp", "Controle", "Lees terug of de hoofdgedachte nog klopt met alle kernzinnen.")
+    ],
+    "loopdictee-luisterwoorden": [
+      card("Spellinghulp", "Luister eerst", "Zeg het woord eerst langzaam in klanken of stukjes."),
+      card("Spellinghulp", "Noem de categorie", "Laat het tweetal de categorie of het patroon eerst benoemen."),
+      card("Spellinghulp", "Schrijf dan pas", "Schrijf het woord pas op nadat de categorie is gezegd."),
+      card("Spellinghulp", "Controle", "Lees het woord terug en check of het woordbeeld klopt.")
+    ],
+    "woordkaartjes-estafette": [
+      card("Spellinghulp", "Noem het patroon", "Laat het team eerst het klank- of spellingpatroon benoemen."),
+      card("Spellinghulp", "Lees hardop", "Lees het woord hardop voordat het wordt opgeschreven."),
+      card("Spellinghulp", "Teamcheck", "Laat een maatje direct controleren of het woord klopt."),
+      card("Spellinghulp", "Controle", "Bespreek aan het einde welke woorden extra lastig waren.")
+    ],
+    "loopdictee-categorie-van-de-week": [
+      card("Spellinghulp", "Categorie van de week", "Noem steeds welke categorie of regel bij de strook hoort."),
+      card("Spellinghulp", "Zoek het signaal", "Let op het stukje in het woord of de zin dat de regel verraadt."),
+      card("Spellinghulp", "Schrijf en verklaar", "Schrijf het antwoord pas op na een korte uitleg."),
+      card("Spellinghulp", "Controle", "Lees samen terug of woord en regel goed bij elkaar passen.")
+    ],
+    categoriecircuit: [
+      card("Spellinghulp", "Zeg de categorie", "Laat leerlingen per post eerst de categorie hardop noemen."),
+      card("Spellinghulp", "Gebruik de regelkaart", "Laat leerlingen de regelkaart pakken als steun bij twijfel."),
+      card("Spellinghulp", "Schrijf netjes", "Noteer per post alleen het eindantwoord en geen kladversies."),
+      card("Spellinghulp", "Controle", "Controleer aan het einde per post waarom het antwoord klopt.")
+    ],
+    "loopdictee-werkwoordspelling": [
+      card("Werkwoordschema", "Persoonsvorm", "Zoek eerst de persoonsvorm in de zin."),
+      card("Werkwoordschema", "Tijd en ik-vorm", "Bepaal de tijd en maak daarna de ik-vorm."),
+      card("Werkwoordschema", "Stam en uitgang", "Kies pas daarna de juiste uitgang of werkwoordsvorm."),
+      card("Werkwoordschema", "Controlezin", "Lees de zin terug en controleer of de vorm logisch klinkt.")
+    ],
+    "spellingcircuit-bovenbouw": [
+      card("Spellinghulp", "Werkwoordschema", "Gebruik dit schema bij elke werkwoordpost."),
+      card("Spellinghulp", "Weetwoord", "Herinner: sommige woorden controleer je op woordbeeld en niet op gehoor."),
+      card("Spellinghulp", "Leestekencheck", "Controleer aan het einde altijd hoofdletter, leesteken en aanhalingstekens."),
+      card("Spellinghulp", "Controle", "Laat leerlingen de regel of controlezin hardop noemen.")
+    ],
+    "hoeken-kiezen": [
+      card("Rekenhulp", "Eerst schatten", "Laat leerlingen eerst globaal schatten voordat zij een hoek kiezen."),
+      card("Rekenhulp", "Model kiezen", "Laat leerlingen bedenken of een getallenlijn of tekening helpt."),
+      card("Rekenhulp", "Leg uit", "Vraag in elke hoek om één korte uitleg waarom die keuze klopt."),
+      card("Rekenhulp", "Controle", "Controleer samen welke hoek het beste antwoord of model gaf.")
+    ],
+    "keuzehoeken-rekenen": [
+      card("Rekenhulp", "Breuk - procent - decimaal", "Laat leerlingen eerst bepalen in welke notatie de vraag denkt."),
+      card("Rekenhulp", "Model", "Kies bij twijfel een verhoudingstabel, breukmodel of schets."),
+      card("Rekenhulp", "Uitleg", "Laat leerlingen in de hoek verwoorden waarom die keuze past."),
+      card("Rekenhulp", "Controle", "Vergelijk de antwoorden kort klassikaal na.")
+    ],
+    "rekenen-estafette": [
+      card("Rekenhulp", "Los eerst op", "Laat de loper de som eerst samen met het team oplossen."),
+      card("Rekenhulp", "Antwoordstrook", "Schrijf pas daarna duidelijk het antwoord op de strook."),
+      card("Rekenhulp", "Teamcheck", "Het team checkt kort of antwoord en aanpak logisch zijn."),
+      card("Rekenhulp", "Nieuwe loper", "Pas na de check vertrekt de volgende loper.")
+    ],
+    "loopdictee-rekenen": [
+      card("Rekenhulp", "Lees de opgave", "Lees de hele contextopgave rustig hardop terug aan je maatje."),
+      card("Rekenhulp", "Kies de aanpak", "Laat het tweetal eerst de strategie of bewerking benoemen."),
+      card("Rekenhulp", "Reken en noteer", "Schrijf de berekening en het antwoord overzichtelijk op."),
+      card("Rekenhulp", "Controle", "Controleer of het antwoord past bij het verhaal van de opgave.")
+    ],
+    "rekencircuit-56": [
+      card("Strategiekaart", "Rijgen of splitsen", "Kies bewust een strategie voordat je begint."),
+      card("Strategiekaart", "Getallenlijn", "Gebruik de getallenlijn als model als dat helpt."),
+      card("Strategiekaart", "Rekentaal", "Laat leerlingen woorden als totaal, verschil of product gebruiken."),
+      card("Strategiekaart", "Controle", "Schat of het antwoord ongeveer kan kloppen.")
+    ],
+    "rekencircuit-bovenbouw": [
+      card("Strategiekaart", "Verhoudingstabel", "Gebruik dit model bij procenten, schaal en verhoudingen."),
+      card("Strategiekaart", "Breuk - procent - decimaal", "Laat leerlingen eerst notaties aan elkaar koppelen."),
+      card("Strategiekaart", "Schat eerst", "Maak eerst een redelijke schatting van de uitkomst."),
+      card("Strategiekaart", "Leg uit", "Laat leerlingen kort verwoorden waarom hun aanpak logisch is.")
+    ],
+    antwoordestafette: [
+      card("Rekenhulp", "Los op", "Bereken eerst samen het antwoord voordat de loper vertrekt."),
+      card("Rekenhulp", "Noem de strategie", "Laat de loper of het team de aanpak in één zin benoemen."),
+      card("Rekenhulp", "Controleer snel", "Check of de uitkomst redelijk is voordat de volgende beurt start."),
+      card("Rekenhulp", "Wissel door", "Laat daarna pas de volgende leerling aan de beurt komen.")
+    ],
+    "getallenlijn-lopen": [
+      card("Modelkaart", "Startgetal", "Laat steeds duidelijk zien vanaf welk getal je vertrekt."),
+      card("Modelkaart", "Vooruit", "Gebruik deze kaart bij erbij of meer."),
+      card("Modelkaart", "Terug", "Gebruik deze kaart bij eraf of minder."),
+      card("Modelkaart", "Waar kom je uit?", "Laat leerlingen eerst voorspellen en daarna pas lopen.")
+    ],
+    "breukenlijn-op-de-vloer": [
+      card("Ankerkaart", "0", "Leg deze kaart aan het begin van de breukenlijn."),
+      card("Ankerkaart", "1/2", "Gebruik dit anker om breuken te vergelijken."),
+      card("Ankerkaart", "1", "Gebruik dit anker om hele en onechte breuken te plaatsen."),
+      card("Ankerkaart", "Groter dan 1", "Gebruik deze kaart voor breuken die voorbij 1 liggen.")
+    ],
+    "kommagetallen-op-volgorde": [
+      card("Modelkaart", "Tienden", "Laat leerlingen eerst naar de tienden kijken."),
+      card("Modelkaart", "Honderdsten", "Gebruik deze kaart als de tienden gelijk zijn."),
+      card("Modelkaart", "Klein naar groot", "Gebruik deze kaart aan het begin van de rij."),
+      card("Modelkaart", "Controle", "Laat buren elkaar uitleggen waarom hun volgorde klopt.")
+    ]
+  };
+
+  if (taskSpecificSupportCards[taskKey]) {
+    return taskSpecificSupportCards[taskKey];
+  }
+
+  if (family.startsWith("taal_")) {
+    return [
+      card("Taalhulp", "Volledige zin", "Laat leerlingen in volledige zinnen antwoorden."),
+      card("Taalhulp", "Kernwoord", "Vraag steeds naar het belangrijkste woord of idee."),
+      card("Taalhulp", "Leg uit waarom", "Laat leerlingen hun keuze of antwoord toelichten.")
+    ];
+  }
+
+  if (family === "spelling_dictaat" || family === "spelling_woorden" || family === "spelling_regels" || family === "spelling_lijn") {
+    return [
+      card("Spellinghulp", "Categorie of regel", "Noem eerst de categorie of regel en schrijf daarna pas."),
+      card("Spellinghulp", "Controlezin", "Gebruik bij twijfel een controlezin of voorbeeldwoord."),
+      card("Spellinghulp", "Woordbeeld", "Lees het woord nog een keer hardop terug.")
+    ];
+  }
+
+  if (family === "rekenen_route" || family === "rekenen_lijn" || family === "rekenen_hoeken" || family === "rekenen_strategie") {
+    return [
+      card("Rekenhulp", "Kies een strategie", "Laat leerlingen eerst benoemen welke aanpak zij kiezen."),
+      card("Rekenhulp", "Gebruik een model", "Laat leerlingen een model pakken als dat helpt."),
+      card("Rekenhulp", "Controle", "Laat leerlingen schatten of hun antwoord logisch is.")
+    ];
+  }
+
   if (subjectId === "taal" && groupId === GROUP_34) {
     return [
       card("Methodehulp", "Woordkaart", "Print als steunkaart voor woordenschat en betekenis."),
@@ -4956,15 +5096,118 @@ function getTeacherOverviewLines(sheetUnits) {
   return sheetUnits.map((unit) => `${unit.label} klaar: ____________________`);
 }
 
+function getTeacherSheetPromptLines(taskKey, subjectId, visual) {
+  if (taskKey.includes("loopdictee")) {
+    return [
+      "Kaart of strook: ____________________",
+      subjectId === "rekenen" ? "Som of opgave: ____________________" : "Woord of zin: ____________________",
+      subjectId === "spelling" ? "Regel of categorie: ____________________" : "Uitleg of betekenis: ____________________",
+      subjectId === "rekenen" ? "Berekening en antwoord: ____________________" : "Controle: ____________________"
+    ];
+  }
+
+  if (taskKey === "schrijfronde-met-stopplaatsen" || taskKey === "schrijfposten") {
+    return [
+      "Post of plek: ____________________",
+      "Tekstdeel of zin: ____________________",
+      "Wat voeg je toe?: ____________________",
+      "Controle: klopt de opbouw? ____________________"
+    ];
+  }
+
+  if (taskKey === "foutenjacht") {
+    return [
+      "Foutzin: ____________________",
+      "Verbeterd: ____________________",
+      "Regel of controlezin: ____________________",
+      "Nog lastig?: ____________________"
+    ];
+  }
+
+  if (taskKey === "grafiekenwandeling") {
+    return [
+      "Grafiek: ____________________",
+      "Vraag: ____________________",
+      "Antwoord: ____________________",
+      "Aanwijzing uit de grafiek: ____________________"
+    ];
+  }
+
+  if (taskKey === "schaalwandeling") {
+    return [
+      "Echte afstand: ____________________",
+      "Schaal: ____________________",
+      "Berekening: ____________________",
+      "Uitkomst op tekening: ____________________"
+    ];
+  }
+
+  if (taskKey === "wandel-en-leg-uit") {
+    return [
+      "Opgave: ____________________",
+      "Aanpak stap 1: ____________________",
+      "Aanpak stap 2: ____________________",
+      "Vraag van maatje: ____________________"
+    ];
+  }
+
+  if (visual === "relay") {
+    return [
+      "Beurt: ____________________",
+      "Kaart of opgave: ____________________",
+      "Antwoord: ____________________",
+      "Controle door team: ____________________"
+    ];
+  }
+
+  if (visual === "stations") {
+    return [
+      "Station: ____________________",
+      "Opdracht: ____________________",
+      "Antwoord of tekstdeel: ____________________",
+      "Controle of uitleg: ____________________"
+    ];
+  }
+
+  if (visual === "path") {
+    return [
+      "Stop: ____________________",
+      "Vraag of opgave: ____________________",
+      "Antwoord: ____________________",
+      "Uitleg of controle: ____________________"
+    ];
+  }
+
+  if (subjectId === "spelling") {
+    return [
+      "Woord of zin: ____________________",
+      "Categorie of regel: ____________________",
+      "Controle: klopt het woordbeeld? ____________________",
+      "Opmerking: ____________________"
+    ];
+  }
+
+  if (subjectId === "rekenen") {
+    return [
+      "Som of opgave: ____________________",
+      "Model of strategie: ____________________",
+      "Antwoord: ____________________",
+      "Controle: ____________________"
+    ];
+  }
+
+  return [
+    "Antwoord: ____________________",
+    "Uitleg: ____________________",
+    "Controle: hardop teruglezen",
+    "Nog lastig?: ____________________"
+  ];
+}
+
 function getTeacherSheets(group, subject, moment, blueprint, title, organization) {
   const roundCount = Math.max(3, Math.min(6, blueprint.steps.length));
   const roundLines = Array.from({ length: roundCount }, (_, index) => `Ronde ${index + 1}: ____________________`).join("\n");
-  const answerBlock =
-    subject.id === "spelling"
-      ? "Woord / zin: ____________________\nCategorie of regel: ____________________\nControle: klopt het woordbeeld? ____________________"
-      : subject.id === "rekenen"
-        ? "Som / opgave: ____________________\nModel of strategie: ____________________\nAntwoord: ____________________\nControle: ____________________"
-        : "Antwoord: ____________________\nUitleg: ____________________\nControle: hardop teruglezen";
+  const answerBlock = getTeacherSheetPromptLines(blueprint.key, subject.id, blueprint.visual).join("\n");
 
   const sheetUnits = getTeacherSheetUnits(organization, blueprint.visual);
 
@@ -5735,7 +5978,11 @@ function renderTaskCard(task, selectedTask) {
 }
 
 function buildQuickOverview(task) {
-  return [buildQuickStart(task), buildQuickPlay(task), buildQuickFinish(task)];
+  return [
+    `Vooraf: ${buildQuickStart(task)}`,
+    `Kern van de opdracht: ${buildQuickPlay(task)}`,
+    `Belangrijk om te bewaken: ${buildQuickFinish(task)}`
+  ];
 }
 
 function buildQuickStart(task) {
@@ -5748,32 +5995,29 @@ function buildQuickPlay(task) {
 }
 
 function buildQuickFinish(task) {
-  return task.steps[task.steps.length - 1] || `Rond af met het leerdoel: ${task.goal}`;
+  return task.steps[task.steps.length - 1] || task.goal;
 }
 
 function getStepLabel(index, total) {
   if (index === 0) {
-    return "Klaarzetten";
-  }
-
-  if (index === 1) {
-    return "Starten";
+    return "Eerste stap";
   }
 
   if (index === total - 1) {
-    return "Afronden";
+    return "Laatste stap";
   }
 
-  return `Ronde ${index - 1}`;
+  return `Stap ${index + 1}`;
 }
 
 function buildClassExplanation(task) {
   const middleStep = task.steps.slice(1, -1).join(" ");
+  const closingStep = task.steps[task.steps.length - 1] || task.goal;
 
   return [
-    task.steps[0] ? `Start zo: ${task.steps[0]}` : `Start zo: ${task.setup}`,
-    middleStep ? `Tijdens de opdracht: ${middleStep}` : `Tijdens de opdracht: ${task.goal}`,
-    task.steps[task.steps.length - 1] ? `Rond zo af: ${task.steps[task.steps.length - 1]}` : `Rond af met: ${task.goal}`
+    `Leg de bedoeling uit: ${task.goal}`,
+    middleStep ? `Laat leerlingen dit doen: ${middleStep}` : `Laat leerlingen dit doen: ${task.steps[0] || task.setup}`,
+    `Benoem ook: ${closingStep}`
   ];
 }
 
@@ -5797,6 +6041,41 @@ function getMaterialsList(task) {
     .filter((item, index, collection) => collection.indexOf(item) === index);
 
   return cleaned.length ? cleaned : ["Geen extra materialen nodig"];
+}
+
+function getOrganizationSummary(task) {
+  const organization = task.cardPack?.organization ?? getTaskOrganization(task.key, task.visual);
+
+  if (organization.type === "individual") {
+    return `${CLASS_SIZE} leerlingen individueel`;
+  }
+
+  if (organization.type === "pairs") {
+    return `${PAIR_OR_TRIO_UNITS.length - 1} tweetallen en 1 drietal`;
+  }
+
+  if (organization.type === "row-pairs") {
+    return `2 rijen met ${PAIR_OR_TRIO_UNITS.length - 1} tweetallen en 1 drietal`;
+  }
+
+  if (organization.type === "teams") {
+    return `${CLASS_GROUP_COUNT} teams van ${CLASS_GROUP_SIZE}`;
+  }
+
+  if (organization.type === "small-groups") {
+    return `${CLASS_GROUP_COUNT} groepjes van ${CLASS_GROUP_SIZE}`;
+  }
+
+  const wholeClassLabels = {
+    corners: "Klassikaal in hoeken",
+    stations: "Klassikaal langs posten",
+    path: "Klassikaal op route",
+    line: "Klassikaal op lijn",
+    measure: "Klassikaal bij meetplek",
+    circle: "Klassikaal in kring"
+  };
+
+  return wholeClassLabels[task.visual] || "Klassikaal";
 }
 
 function getPrintSummary(task, showCards) {
@@ -5843,13 +6122,46 @@ function buildReadyInOneMinute(task, showCards) {
     },
     {
       label: "3",
-      title: "Zeg dit bij de start",
+      title: "Leg dit kort uit",
       lines: [explanation[0], explanation[1]]
     },
     {
       label: "4",
-      title: "Zo rond je af",
-      lines: [explanation[2], `Let op: ${task.movementFocus}`]
+      title: "Let hier extra op",
+      lines: [explanation[2], `Beweegfocus: ${task.movementFocus}`]
+    }
+  ];
+}
+
+function buildTeacherBriefItems(task, showCards) {
+  const materials = getMaterialsList(task);
+  const printSummary = getPrintSummary(task, showCards);
+  const startLine = task.steps[0] || task.setup || task.goal;
+
+  return [
+    {
+      label: "Doel",
+      value: shortenPrintText(task.goal, 92)
+    },
+    {
+      label: "Tijd",
+      value: task.duration
+    },
+    {
+      label: "Groepsvorm",
+      value: getOrganizationSummary(task)
+    },
+    {
+      label: "Benodigd",
+      value: shortenPrintText(materials.slice(0, 4).join(", "), 92)
+    },
+    {
+      label: "Print",
+      value: shortenPrintText(printSummary.slice(0, 3).join(", "), 92)
+    },
+    {
+      label: "Kerninstructie",
+      value: shortenPrintText(startLine, 108)
     }
   ];
 }
@@ -5886,29 +6198,28 @@ function renderTeacherToolbar(showCards) {
   `;
 }
 
-function renderTaskFacts(task, showCards) {
-  const materials = getMaterialsList(task);
-  const printSummary = getPrintSummary(task, showCards);
+function renderTeacherBrief(task, showCards) {
+  const items = buildTeacherBriefItems(task, showCards);
 
   return `
-    <div class="task-facts">
-      <section class="task-fact">
-        <span class="task-fact__label">Doel</span>
-        <p>${escapeHtml(task.goal)}</p>
-      </section>
-      <section class="task-fact">
-        <span class="task-fact__label">Benodigd</span>
-        <p>${escapeHtml(materials.slice(0, 4).join(", "))}</p>
-      </section>
-      <section class="task-fact">
-        <span class="task-fact__label">Print</span>
-        <p>${escapeHtml(printSummary.slice(0, 3).join(", "))}</p>
-      </section>
-      <section class="task-fact">
-        <span class="task-fact__label">Beweegfocus</span>
-        <p>${escapeHtml(task.movementFocus)}</p>
-      </section>
-    </div>
+    <section class="teacher-brief" aria-label="Korte leerkrachtkaart">
+      <div class="teacher-brief__lead">
+        <strong>Leerkrachtkaart</strong>
+        <p>Alles wat je direct nodig hebt om deze opdracht te starten, in één kort overzicht.</p>
+      </div>
+      <div class="teacher-brief__grid">
+        ${items
+          .map(
+            (item) => `
+              <article class="teacher-brief__item">
+                <span class="teacher-brief__label">${escapeHtml(item.label)}</span>
+                <p>${escapeHtml(item.value)}</p>
+              </article>
+            `
+          )
+          .join("")}
+      </div>
+    </section>
   `;
 }
 
@@ -6003,7 +6314,7 @@ function renderTaskDetail(task) {
               currentView === "quick"
                 ? renderOneMinuteView(task, showCards)
                 : `
-                  ${renderTaskFacts(task, showCards)}
+                  ${renderTeacherBrief(task, showCards)}
                   <div class="task-detail__grid">
                     <section class="detail-box detail-box--wide">
                       <h4>Zo voer je de opdracht uit</h4>

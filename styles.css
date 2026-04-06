@@ -908,13 +908,7 @@ body::before {
   margin-top: 8px;
 }
 
-.task-facts {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.task-fact,
+.teacher-brief,
 .minute-card,
 .task-print-preview__lead {
   padding: 18px;
@@ -924,7 +918,43 @@ body::before {
   box-shadow: 0 10px 22px rgba(20, 59, 134, 0.05);
 }
 
-.task-fact__label,
+.teacher-brief {
+  display: grid;
+  gap: 16px;
+}
+
+.teacher-brief__lead strong,
+.minute-view__lead strong,
+.task-print-preview__lead strong {
+  display: block;
+  color: var(--subject-accent);
+  font-size: 1.12rem;
+  font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
+}
+
+.teacher-brief__lead p,
+.minute-view__lead p,
+.task-print-preview__lead p {
+  margin: 10px 0 0;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.teacher-brief__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.teacher-brief__item {
+  padding: 16px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #ffffff, var(--subject-soft));
+  border: 1px solid var(--subject-line);
+  min-height: 112px;
+}
+
+.teacher-brief__label,
 .minute-card__count {
   display: inline-flex;
   align-items: center;
@@ -939,30 +969,16 @@ body::before {
   font-weight: 800;
 }
 
-.task-fact p {
+.teacher-brief__item p {
   margin: 12px 0 0;
-  color: var(--ink-soft);
-  line-height: 1.6;
+  color: var(--ink);
+  line-height: 1.55;
+  font-weight: 700;
 }
 
 .minute-view {
   display: grid;
   gap: 18px;
-}
-
-.minute-view__lead strong,
-.task-print-preview__lead strong {
-  display: block;
-  color: var(--subject-accent);
-  font-size: 1.12rem;
-  font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
-}
-
-.minute-view__lead p,
-.task-print-preview__lead p {
-  margin: 10px 0 0;
-  color: var(--ink-soft);
-  line-height: 1.6;
 }
 
 .minute-view__grid {
@@ -1116,7 +1132,7 @@ body::before {
   .hero,
   .task-detail__top,
   .task-detail__grid,
-  .task-facts,
+  .teacher-brief__grid,
   .minute-view__grid {
     grid-template-columns: 1fr;
   }
@@ -1230,7 +1246,7 @@ body::before {
 
   .task-detail__grid,
   .card-pack-grid,
-  .task-facts,
+  .teacher-brief__grid,
   .minute-view__grid {
     grid-template-columns: 1fr;
   }
@@ -1273,7 +1289,7 @@ body.app--print-view .task-detail__sheet {
   .task-detail__caption,
   .button,
   .teacher-toolbar,
-  .task-facts,
+  .teacher-brief,
   .minute-view,
   .task-print-preview__lead {
     display: none !important;
