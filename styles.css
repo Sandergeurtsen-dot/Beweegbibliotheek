@@ -429,6 +429,10 @@ body::before {
 .pill {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  width: fit-content;
+  max-width: 100%;
+  flex: 0 0 auto;
   gap: 6px;
   padding: 8px 12px;
   border-radius: 999px;
@@ -436,6 +440,9 @@ body::before {
   color: var(--ink);
   font-weight: 700;
   font-size: 0.85rem;
+  line-height: 1.1;
+  white-space: nowrap;
+  text-align: center;
 }
 
 .filter-list {

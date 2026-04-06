@@ -5990,14 +5990,10 @@ function renderIllustration(task, compact) {
     )}">
       <rect width="360" height="220" rx="24" fill="${sky}" />
       <rect x="0" y="150" width="360" height="70" fill="${field}" />
-      <rect x="18" y="16" width="118" height="32" rx="16" fill="${subject.accent}" opacity="0.14" />
-      <text x="34" y="36" fill="${subject.accent}" font-size="15" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
-        subject.label
-      )}</text>
-      <rect x="222" y="16" width="120" height="32" rx="16" fill="${moment.accent}" opacity="0.14" />
-      <text x="238" y="36" fill="${moment.accent}" font-size="15" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
-        moment.label
-      )}</text>
+      <rect x="18" y="16" width="122" height="34" rx="17" fill="${subject.accent}" opacity="0.14" />
+      ${renderSvgTextBlock(18, 16, 122, 34, subject.label, subject.accent, 13.5, 2)}
+      <rect x="206" y="16" width="136" height="34" rx="17" fill="${moment.accent}" opacity="0.14" />
+      ${renderSvgTextBlock(206, 16, 136, 34, moment.label, moment.accent, 13.5, 2)}
       ${scene}
     </svg>
   `;
@@ -6012,9 +6008,6 @@ function renderIllustrationScene(task, subjectAccent, momentAccent, stroke) {
 
   if (task.visual === "relay") {
     return `
-      ${renderZone(24, 74, 78, 44, "START", "#ffffff", stroke)}
-      ${renderZone(140, 120, 94, 48, task.usesCards ? "TEAM / BORD" : "TEAM", "#ffffff", stroke)}
-      ${renderCardRack(272, 78, task.usesCards ? "KAARTJES" : "MATERIAAL", subjectAccent, stroke)}
       ${renderTrack(
         [
           [92, 120],
@@ -6025,13 +6018,14 @@ function renderIllustrationScene(task, subjectAccent, momentAccent, stroke) {
         ],
         momentAccent
       )}
+      ${renderZone(24, 74, 78, 44, "START", "#ffffff", stroke)}
+      ${renderZone(140, 120, 94, 48, task.usesCards ? "TEAM / BORD" : "TEAM", "#ffffff", stroke)}
+      ${renderCardRack(272, 78, task.usesCards ? "KAARTJES" : "MATERIAAL", subjectAccent, stroke)}
     `;
   }
 
   if (task.visual === "dictation") {
     return `
-      ${renderZone(30, 138, 110, 40, "SCHRIJF", "#ffffff", stroke)}
-      ${renderCardRack(258, 62, task.usesCards ? "TEKSTKAARTEN" : "MUUR", subjectAccent, stroke)}
       ${renderTrack(
         [
           [142, 154],
@@ -6041,17 +6035,14 @@ function renderIllustrationScene(task, subjectAccent, momentAccent, stroke) {
         ],
         momentAccent
       )}
+      ${renderZone(30, 138, 110, 40, "SCHRIJF", "#ffffff", stroke)}
+      ${renderCardRack(258, 62, task.usesCards ? "TEKSTKAARTEN" : "MUUR", subjectAccent, stroke)}
       ${renderMiniSign(160, 74, "LOPER", momentAccent)}
     `;
   }
 
   if (task.visual === "corners") {
     return `
-      ${renderZone(24, 66, 74, 38, "HOEK A", "#ffffff", stroke)}
-      ${renderZone(262, 66, 74, 38, "HOEK B", "#ffffff", stroke)}
-      ${renderZone(24, 156, 74, 38, "HOEK C", "#ffffff", stroke)}
-      ${renderZone(262, 156, 74, 38, "HOEK D", "#ffffff", stroke)}
-      ${renderZone(132, 102, 96, 52, "KIES", "#ffffff", stroke)}
       ${renderTrack(
         [
           [180, 128],
@@ -6060,6 +6051,11 @@ function renderIllustrationScene(task, subjectAccent, momentAccent, stroke) {
         ],
         momentAccent
       )}
+      ${renderZone(24, 66, 74, 38, "HOEK A", "#ffffff", stroke)}
+      ${renderZone(262, 66, 74, 38, "HOEK B", "#ffffff", stroke)}
+      ${renderZone(24, 156, 74, 38, "HOEK C", "#ffffff", stroke)}
+      ${renderZone(262, 156, 74, 38, "HOEK D", "#ffffff", stroke)}
+      ${renderZone(132, 102, 96, 52, "KIES", "#ffffff", stroke)}
     `;
   }
 
@@ -6078,9 +6074,6 @@ function renderIllustrationScene(task, subjectAccent, momentAccent, stroke) {
 
   if (task.visual === "stations") {
     return `
-      ${renderZone(34, 96, 74, 44, "STATION 1", "#ffffff", stroke)}
-      ${renderZone(142, 72, 82, 44, "STATION 2", "#ffffff", stroke)}
-      ${renderZone(252, 112, 74, 44, "STATION 3", "#ffffff", stroke)}
       ${renderTrack(
         [
           [108, 118],
@@ -6091,6 +6084,9 @@ function renderIllustrationScene(task, subjectAccent, momentAccent, stroke) {
         ],
         momentAccent
       )}
+      ${renderZone(34, 96, 74, 44, "STATION 1", "#ffffff", stroke)}
+      ${renderZone(142, 72, 82, 44, "STATION 2", "#ffffff", stroke)}
+      ${renderZone(252, 112, 74, 44, "STATION 3", "#ffffff", stroke)}
     `;
   }
 
@@ -6123,9 +6119,6 @@ function renderIllustrationScene(task, subjectAccent, momentAccent, stroke) {
 
   if (task.visual === "jump") {
     return `
-      ${renderJumpPad(256, 152, "1", subjectAccent, stroke)}
-      ${renderJumpPad(302, 118, "2", subjectAccent, stroke)}
-      ${renderJumpPad(256, 84, "3", subjectAccent, stroke)}
       ${renderTrack(
         [
           [152, 164],
@@ -6134,6 +6127,9 @@ function renderIllustrationScene(task, subjectAccent, momentAccent, stroke) {
         ],
         momentAccent
       )}
+      ${renderJumpPad(256, 152, "1", subjectAccent, stroke)}
+      ${renderJumpPad(302, 118, "2", subjectAccent, stroke)}
+      ${renderJumpPad(256, 84, "3", subjectAccent, stroke)}
       ${renderZone(24, 126, 92, 38, "START / ANTWOORD", "#ffffff", stroke)}
     `;
   }
@@ -6151,9 +6147,6 @@ function renderIllustrationScene(task, subjectAccent, momentAccent, stroke) {
   if (task.visual === "mission") {
     return `
       ${renderMiniSign(34, 86, "START", subjectAccent)}
-      <circle cx="114" cy="162" r="11" fill="#ffffff" stroke="${stroke}" stroke-width="4" />
-      <circle cx="188" cy="126" r="11" fill="#ffffff" stroke="${stroke}" stroke-width="4" />
-      <circle cx="250" cy="100" r="11" fill="#ffffff" stroke="${stroke}" stroke-width="4" />
       ${renderTrack(
         [
           [54, 92],
@@ -6165,14 +6158,15 @@ function renderIllustrationScene(task, subjectAccent, momentAccent, stroke) {
         ],
         momentAccent
       )}
+      <circle cx="114" cy="162" r="11" fill="#ffffff" stroke="${stroke}" stroke-width="4" />
+      <circle cx="188" cy="126" r="11" fill="#ffffff" stroke="${stroke}" stroke-width="4" />
+      <circle cx="250" cy="100" r="11" fill="#ffffff" stroke="${stroke}" stroke-width="4" />
       ${renderFlag(304, 58, subjectAccent)}
     `;
   }
 
   if (task.visual === "bingo") {
     return `
-      ${renderBingoBoard(206, 72, stroke, subjectAccent)}
-      ${renderZone(34, 138, 100, 40, "VERZAMEL", "#ffffff", stroke)}
       ${renderTrack(
         [
           [134, 158],
@@ -6181,12 +6175,12 @@ function renderIllustrationScene(task, subjectAccent, momentAccent, stroke) {
         ],
         momentAccent
       )}
+      ${renderBingoBoard(206, 72, stroke, subjectAccent)}
+      ${renderZone(34, 138, 100, 40, "VERZAMEL", "#ffffff", stroke)}
     `;
   }
 
   return `
-    ${renderZone(34, 112, 118, 44, "STARTPUNT", "#ffffff", stroke)}
-    ${renderZone(210, 88, 116, 44, task.usesCards ? "KAARTJES" : "MATERIAAL", "#ffffff", stroke)}
     ${renderTrack(
       [
         [154, 134],
@@ -6195,6 +6189,8 @@ function renderIllustrationScene(task, subjectAccent, momentAccent, stroke) {
       ],
       momentAccent
     )}
+    ${renderZone(34, 112, 118, 44, "STARTPUNT", "#ffffff", stroke)}
+    ${renderZone(210, 88, 116, 44, task.usesCards ? "KAARTJES" : "MATERIAAL", "#ffffff", stroke)}
   `;
 }
 
@@ -6221,12 +6217,6 @@ function renderClassLayoutArt(visual, organization, subjectAccent, momentAccent)
     return `
       <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor twee rijen">
         <rect width="360" height="180" rx="22" fill="#f7fbff" />
-        ${renderZone(30, 24, 126, 34, "Rij A", "#ffffff", "#19424a", 12)}
-        ${renderZone(204, 24, 126, 34, "Rij B", "#ffffff", "#19424a", 12)}
-        ${renderZone(24, 86, 98, 28, "Tweetal 1-4", "#ffffff", "#19424a", 10)}
-        ${renderZone(130, 86, 98, 28, "Tweetal 5-8", "#ffffff", "#19424a", 10)}
-        ${renderZone(236, 86, 98, 28, "Tweetal 9-11", "#ffffff", "#19424a", 10)}
-        ${renderZone(130, 130, 98, 28, "Drietal 12", "#ffffff", "#19424a", 10)}
         ${renderTrack(
           [
             [70, 58],
@@ -6243,6 +6233,12 @@ function renderClassLayoutArt(visual, organization, subjectAccent, momentAccent)
           ],
           momentAccent
         )}
+        ${renderZone(30, 24, 126, 34, "Rij A", "#ffffff", "#19424a", 12)}
+        ${renderZone(204, 24, 126, 34, "Rij B", "#ffffff", "#19424a", 12)}
+        ${renderZone(24, 86, 98, 28, "Tweetal 1-4", "#ffffff", "#19424a", 10)}
+        ${renderZone(130, 86, 98, 28, "Tweetal 5-8", "#ffffff", "#19424a", 10)}
+        ${renderZone(236, 86, 98, 28, "Tweetal 9-11", "#ffffff", "#19424a", 10)}
+        ${renderZone(130, 130, 98, 28, "Drietal 12", "#ffffff", "#19424a", 10)}
         ${renderMiniSign(128, 58, "SCHUIF DOOR", momentAccent)}
       </svg>
     `;
@@ -6252,14 +6248,6 @@ function renderClassLayoutArt(visual, organization, subjectAccent, momentAccent)
     return `
       <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor tweetallen langs posten">
         <rect width="360" height="180" rx="22" fill="#f7fbff" />
-        ${renderZone(20, 20, 76, 34, "Post 1", "#ffffff", "#19424a", 11)}
-        ${renderZone(110, 20, 76, 34, "Post 2", "#ffffff", "#19424a", 11)}
-        ${renderZone(200, 20, 76, 34, "Post 3", "#ffffff", "#19424a", 11)}
-        ${renderZone(290, 20, 50, 34, "Post 4", "#ffffff", "#19424a", 10)}
-        ${renderZone(22, 122, 96, 30, "Tweetallen 1-3", "#ffffff", "#19424a", 10)}
-        ${renderZone(130, 122, 96, 30, "Tweetallen 4-6", "#ffffff", "#19424a", 10)}
-        ${renderZone(238, 122, 96, 30, "Tweetallen 7-9", "#ffffff", "#19424a", 10)}
-        ${renderZone(108, 78, 144, 28, "Tweetallen 10-11 + drietal", "#ffffff", "#19424a", 10)}
         ${renderTrack(
           [
             [58, 54],
@@ -6273,6 +6261,14 @@ function renderClassLayoutArt(visual, organization, subjectAccent, momentAccent)
           ],
           momentAccent
         )}
+        ${renderZone(20, 20, 76, 34, "Post 1", "#ffffff", "#19424a", 11)}
+        ${renderZone(110, 20, 76, 34, "Post 2", "#ffffff", "#19424a", 11)}
+        ${renderZone(200, 20, 76, 34, "Post 3", "#ffffff", "#19424a", 11)}
+        ${renderZone(290, 20, 50, 34, "Post 4", "#ffffff", "#19424a", 10)}
+        ${renderZone(22, 122, 96, 30, "Tweetallen 1-3", "#ffffff", "#19424a", 10)}
+        ${renderZone(130, 122, 96, 30, "Tweetallen 4-6", "#ffffff", "#19424a", 10)}
+        ${renderZone(238, 122, 96, 30, "Tweetallen 7-9", "#ffffff", "#19424a", 10)}
+        ${renderZone(108, 78, 144, 28, "Tweetallen 10-11 + drietal", "#ffffff", "#19424a", 10)}
         ${renderMiniSign(114, 154, "START PER POST", subjectAccent)}
         ${renderMiniSign(232, 154, "WISSEL", momentAccent)}
       </svg>
@@ -6283,11 +6279,6 @@ function renderClassLayoutArt(visual, organization, subjectAccent, momentAccent)
     return `
       <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor stationswerk">
         <rect width="360" height="180" rx="22" fill="#f7fbff" />
-        ${renderZone(20, 20, 80, 34, "Station 1", "#ffffff", "#19424a", 11)}
-        ${renderZone(140, 20, 80, 34, "Station 2", "#ffffff", "#19424a", 11)}
-        ${renderZone(260, 20, 80, 34, "Station 3", "#ffffff", "#19424a", 11)}
-        ${renderZone(58, 122, 80, 34, "Station 4", "#ffffff", "#19424a", 11)}
-        ${renderZone(222, 122, 80, 34, "Station 5", "#ffffff", "#19424a", 11)}
         ${renderTrack(
           [
             [100, 38],
@@ -6301,6 +6292,11 @@ function renderClassLayoutArt(visual, organization, subjectAccent, momentAccent)
           ],
           momentAccent
         )}
+        ${renderZone(20, 20, 80, 34, "Station 1", "#ffffff", "#19424a", 11)}
+        ${renderZone(140, 20, 80, 34, "Station 2", "#ffffff", "#19424a", 11)}
+        ${renderZone(260, 20, 80, 34, "Station 3", "#ffffff", "#19424a", 11)}
+        ${renderZone(58, 122, 80, 34, "Station 4", "#ffffff", "#19424a", 11)}
+        ${renderZone(222, 122, 80, 34, "Station 5", "#ffffff", "#19424a", 11)}
         ${renderMiniSign(142, 84, "WISSEL RONDE", subjectAccent)}
       </svg>
     `;
@@ -6342,10 +6338,6 @@ function renderClassLayoutArt(visual, organization, subjectAccent, momentAccent)
       <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor een klassikale looproute">
         <rect width="360" height="180" rx="22" fill="#f7fbff" />
         ${renderMiniSign(24, 26, "START", subjectAccent)}
-        ${renderRouteStop(90, 138, "A", momentAccent, "#19424a")}
-        ${renderRouteStop(150, 118, "B", momentAccent, "#19424a")}
-        ${renderRouteStop(210, 98, "C", momentAccent, "#19424a")}
-        ${renderRouteStop(270, 78, "D", momentAccent, "#19424a")}
         ${renderTrack(
           [
             [48, 34],
@@ -6356,6 +6348,10 @@ function renderClassLayoutArt(visual, organization, subjectAccent, momentAccent)
           ],
           momentAccent
         )}
+        ${renderRouteStop(90, 138, "A", momentAccent, "#19424a")}
+        ${renderRouteStop(150, 118, "B", momentAccent, "#19424a")}
+        ${renderRouteStop(210, 98, "C", momentAccent, "#19424a")}
+        ${renderRouteStop(270, 78, "D", momentAccent, "#19424a")}
         ${renderZone(208, 128, 124, 32, "25 leerlingen", "#ffffff", "#19424a", 11)}
         ${renderZone(208, 92, 124, 28, "start gespreid", "#ffffff", "#19424a", 10.5)}
       </svg>
@@ -6410,10 +6406,6 @@ function renderClassLayoutArt(visual, organization, subjectAccent, momentAccent)
       <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor looproute in tweetallen">
         <rect width="360" height="180" rx="22" fill="#f7fbff" />
         ${renderMiniSign(24, 26, "START", subjectAccent)}
-        ${renderRouteStop(88, 138, "A", momentAccent, "#19424a")}
-        ${renderRouteStop(140, 120, "B", momentAccent, "#19424a")}
-        ${renderRouteStop(192, 102, "C", momentAccent, "#19424a")}
-        ${renderRouteStop(244, 84, "D", momentAccent, "#19424a")}
         ${renderTrack(
           [
             [48, 34],
@@ -6424,6 +6416,10 @@ function renderClassLayoutArt(visual, organization, subjectAccent, momentAccent)
           ],
           momentAccent
         )}
+        ${renderRouteStop(88, 138, "A", momentAccent, "#19424a")}
+        ${renderRouteStop(140, 120, "B", momentAccent, "#19424a")}
+        ${renderRouteStop(192, 102, "C", momentAccent, "#19424a")}
+        ${renderRouteStop(244, 84, "D", momentAccent, "#19424a")}
         ${renderZone(212, 128, 118, 32, "11 tweetallen", "#ffffff", "#19424a", 10.5)}
         ${renderZone(212, 92, 118, 28, "1 drietal", "#ffffff", "#19424a", 10.5)}
       </svg>
@@ -6435,11 +6431,6 @@ function renderClassLayoutArt(visual, organization, subjectAccent, momentAccent)
       <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor routeopdracht">
         <rect width="360" height="180" rx="22" fill="#f7fbff" />
         ${renderMiniSign(24, 26, "START", subjectAccent)}
-        ${renderRouteStop(88, 138, "1", momentAccent, "#19424a")}
-        ${renderRouteStop(140, 120, "2", momentAccent, "#19424a")}
-        ${renderRouteStop(192, 102, "3", momentAccent, "#19424a")}
-        ${renderRouteStop(244, 84, "4", momentAccent, "#19424a")}
-        ${renderRouteStop(296, 66, "5", momentAccent, "#19424a")}
         ${renderTrack(
           [
             [48, 34],
@@ -6451,6 +6442,11 @@ function renderClassLayoutArt(visual, organization, subjectAccent, momentAccent)
           ],
           momentAccent
         )}
+        ${renderRouteStop(88, 138, "1", momentAccent, "#19424a")}
+        ${renderRouteStop(140, 120, "2", momentAccent, "#19424a")}
+        ${renderRouteStop(192, 102, "3", momentAccent, "#19424a")}
+        ${renderRouteStop(244, 84, "4", momentAccent, "#19424a")}
+        ${renderRouteStop(296, 66, "5", momentAccent, "#19424a")}
         ${renderMiniSign(38, 154, "Groep 1-5", subjectAccent)}
         ${renderMiniSign(226, 142, "Doorloop", momentAccent)}
       </svg>
@@ -6504,10 +6500,6 @@ function renderSequenceArt(labels, subjectAccent, momentAccent) {
   return `
     <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Stapvolgorde">
       <rect width="360" height="180" rx="22" fill="#f7fbff" />
-      ${renderZone(18, 62, 70, 44, labels[0], "#ffffff", "#19424a", 11)}
-      ${renderZone(102, 62, 70, 44, labels[1], "#ffffff", "#19424a", 11)}
-      ${renderZone(186, 62, 70, 44, labels[2], "#ffffff", "#19424a", 11)}
-      ${renderZone(270, 62, 70, 44, labels[3], "#ffffff", "#19424a", 11)}
       ${renderTrack(
         [
           [88, 84],
@@ -6519,6 +6511,10 @@ function renderSequenceArt(labels, subjectAccent, momentAccent) {
         ],
         momentAccent
       )}
+      ${renderZone(18, 62, 70, 44, labels[0], "#ffffff", "#19424a", 11)}
+      ${renderZone(102, 62, 70, 44, labels[1], "#ffffff", "#19424a", 11)}
+      ${renderZone(186, 62, 70, 44, labels[2], "#ffffff", "#19424a", 11)}
+      ${renderZone(270, 62, 70, 44, labels[3], "#ffffff", "#19424a", 11)}
       ${renderMiniSign(34, 120, "1", subjectAccent)}
       ${renderMiniSign(118, 120, "2", subjectAccent)}
       ${renderMiniSign(202, 120, "3", subjectAccent)}
@@ -6940,10 +6936,6 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
 
 function renderChoiceJumpScene(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderZone(28, 84, 124, 42, preset.prompt, "#ffffff", stroke, 12)}
-    ${renderChoicePad(248, 154, preset.actions[0], subjectAccent, stroke)}
-    ${renderChoicePad(296, 120, preset.actions[1], subjectAccent, stroke)}
-    ${renderChoicePad(248, 86, preset.actions[2], subjectAccent, stroke)}
     ${renderTrack(
       [
         [154, 144],
@@ -6952,16 +6944,16 @@ function renderChoiceJumpScene(preset, subjectAccent, momentAccent, stroke) {
       ],
       momentAccent
     )}
+    ${renderZone(28, 84, 124, 42, preset.prompt, "#ffffff", stroke, 12)}
+    ${renderChoicePad(248, 154, preset.actions[0], subjectAccent, stroke)}
+    ${renderChoicePad(296, 120, preset.actions[1], subjectAccent, stroke)}
+    ${renderChoicePad(248, 86, preset.actions[2], subjectAccent, stroke)}
     ${renderMiniSign(170, 92, "REAGEER DIRECT", momentAccent)}
   `;
 }
 
 function renderCountJumpScene(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderZone(28, 86, 120, 42, preset.prompt, "#ffffff", stroke, 12)}
-    ${renderChoicePad(222, 154, preset.numbers[0], subjectAccent, stroke)}
-    ${renderChoicePad(282, 120, preset.numbers[1], subjectAccent, stroke)}
-    ${renderChoicePad(222, 86, preset.numbers[2], subjectAccent, stroke)}
     ${renderTrack(
       [
         [148, 142],
@@ -6971,6 +6963,10 @@ function renderCountJumpScene(preset, subjectAccent, momentAccent, stroke) {
       ],
       momentAccent
     )}
+    ${renderZone(28, 86, 120, 42, preset.prompt, "#ffffff", stroke, 12)}
+    ${renderChoicePad(222, 154, preset.numbers[0], subjectAccent, stroke)}
+    ${renderChoicePad(282, 120, preset.numbers[1], subjectAccent, stroke)}
+    ${renderChoicePad(222, 86, preset.numbers[2], subjectAccent, stroke)}
     ${renderMiniSign(164, 92, preset.note, momentAccent)}
   `;
 }
@@ -6994,11 +6990,6 @@ function renderMoveStopScene(preset, subjectAccent, momentAccent, stroke) {
 
 function renderCornerChoiceScene(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderZone(24, 66, 88, 38, preset.corners[0], "#ffffff", stroke, 11)}
-    ${renderZone(248, 66, 88, 38, preset.corners[1], "#ffffff", stroke, 11)}
-    ${renderZone(24, 156, 88, 38, preset.corners[2], "#ffffff", stroke, 11)}
-    ${renderZone(248, 156, 88, 38, preset.corners[3], "#ffffff", stroke, 11)}
-    ${renderZone(122, 100, 116, 56, preset.center, "#ffffff", stroke, 12)}
     ${renderTrack(
       [
         [180, 128],
@@ -7007,13 +6998,16 @@ function renderCornerChoiceScene(preset, subjectAccent, momentAccent, stroke) {
       ],
       momentAccent
     )}
+    ${renderZone(24, 66, 88, 38, preset.corners[0], "#ffffff", stroke, 11)}
+    ${renderZone(248, 66, 88, 38, preset.corners[1], "#ffffff", stroke, 11)}
+    ${renderZone(24, 156, 88, 38, preset.corners[2], "#ffffff", stroke, 11)}
+    ${renderZone(248, 156, 88, 38, preset.corners[3], "#ffffff", stroke, 11)}
+    ${renderZone(122, 100, 116, 56, preset.center, "#ffffff", stroke, 12)}
   `;
 }
 
 function renderDictationSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderZone(26, 138, 116, 40, preset.write, "#ffffff", stroke, 12)}
-    ${renderCardRack(258, 62, preset.wall, subjectAccent, stroke)}
     ${renderTrack(
       [
         [142, 154],
@@ -7023,6 +7017,8 @@ function renderDictationSceneDetailed(preset, subjectAccent, momentAccent, strok
       ],
       momentAccent
     )}
+    ${renderZone(26, 138, 116, 40, preset.write, "#ffffff", stroke, 12)}
+    ${renderCardRack(258, 62, preset.wall, subjectAccent, stroke)}
     ${renderMiniSign(156, 72, preset.role, momentAccent)}
     ${renderWordCard(166, 178, 56, 26, preset.tags[0], subjectAccent, stroke, 10)}
     ${renderWordCard(230, 178, 56, 26, preset.tags[1], subjectAccent, stroke, 10)}
@@ -7031,9 +7027,6 @@ function renderDictationSceneDetailed(preset, subjectAccent, momentAccent, strok
 
 function renderRelaySceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderZone(24, 74, 78, 44, preset.start, "#ffffff", stroke)}
-    ${renderZone(136, 122, 106, 48, preset.team, "#ffffff", stroke, 12)}
-    ${renderCardRack(272, 74, preset.rack, subjectAccent, stroke)}
     ${renderTrack(
       [
         [92, 120],
@@ -7044,15 +7037,15 @@ function renderRelaySceneDetailed(preset, subjectAccent, momentAccent, stroke) {
       ],
       momentAccent
     )}
+    ${renderZone(24, 74, 78, 44, preset.start, "#ffffff", stroke)}
+    ${renderZone(136, 122, 106, 48, preset.team, "#ffffff", stroke, 12)}
+    ${renderCardRack(272, 74, preset.rack, subjectAccent, stroke)}
     ${renderMiniSign(148, 80, preset.chip, momentAccent)}
   `;
 }
 
 function renderStationsSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderZone(28, 102, 78, 42, preset.stations[0], "#ffffff", stroke, 12)}
-    ${renderZone(138, 70, 86, 42, preset.stations[1], "#ffffff", stroke, 12)}
-    ${renderZone(252, 112, 78, 42, preset.stations[2], "#ffffff", stroke, 12)}
     ${renderTrack(
       [
         [106, 122],
@@ -7063,6 +7056,9 @@ function renderStationsSceneDetailed(preset, subjectAccent, momentAccent, stroke
       ],
       momentAccent
     )}
+    ${renderZone(28, 102, 78, 42, preset.stations[0], "#ffffff", stroke, 12)}
+    ${renderZone(138, 70, 86, 42, preset.stations[1], "#ffffff", stroke, 12)}
+    ${renderZone(252, 112, 78, 42, preset.stations[2], "#ffffff", stroke, 12)}
     ${renderMiniSign(154, 152, preset.chip, subjectAccent)}
   `;
 }
@@ -7070,10 +7066,8 @@ function renderStationsSceneDetailed(preset, subjectAccent, momentAccent, stroke
 function renderMatchSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
     <circle cx="180" cy="124" r="46" fill="#ffffff" stroke="${stroke}" stroke-width="4" />
-    <rect x="138" y="109" width="84" height="30" rx="12" fill="${momentAccent}" opacity="0.9" />
-    <text x="180" y="128" text-anchor="middle" fill="#ffffff" font-size="12" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
-      preset.center
-    )}</text>
+    <rect x="132" y="106" width="96" height="36" rx="14" fill="${momentAccent}" opacity="0.9" />
+    ${renderSvgTextBlock(132, 106, 96, 36, preset.center, "#ffffff", 10.5, 2)}
     ${renderWordCard(150, 54, 60, 28, preset.cards[0], subjectAccent, stroke, 11)}
     ${renderWordCard(82, 92, 60, 28, preset.cards[1], subjectAccent, stroke, 11)}
     ${renderWordCard(82, 154, 60, 28, preset.cards[2], subjectAccent, stroke, 11)}
@@ -7084,9 +7078,6 @@ function renderMatchSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
 
 function renderDuoSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderLearnerIcon(92, 140, subjectAccent, stroke, preset.left)}
-    ${renderLearnerIcon(268, 140, momentAccent, stroke, preset.right)}
-    ${renderZone(128, 90, 104, 36, preset.middle, "#ffffff", stroke, 12)}
     ${renderTrack(
       [
         [116, 136],
@@ -7096,16 +7087,14 @@ function renderDuoSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
       ],
       momentAccent
     )}
+    ${renderLearnerIcon(92, 140, subjectAccent, stroke, preset.left)}
+    ${renderLearnerIcon(268, 140, momentAccent, stroke, preset.right)}
+    ${renderZone(128, 90, 104, 36, preset.middle, "#ffffff", stroke, 12)}
   `;
 }
 
 function renderWordBuildSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderWordCard(54, 128, 46, 46, preset.letters[0], subjectAccent, stroke, 18)}
-    ${renderWordCard(110, 128, 46, 46, preset.letters[1], subjectAccent, stroke, 18)}
-    ${renderWordCard(166, 128, 46, 46, preset.letters[2], subjectAccent, stroke, 18)}
-    ${renderWordCard(222, 128, 46, 46, preset.letters[3], subjectAccent, stroke, 18)}
-    ${renderMiniSign(120, 82, preset.note, momentAccent)}
     ${renderTrack(
       [
         [100, 118],
@@ -7115,6 +7104,11 @@ function renderWordBuildSceneDetailed(preset, subjectAccent, momentAccent, strok
       ],
       momentAccent
     )}
+    ${renderWordCard(54, 128, 46, 46, preset.letters[0], subjectAccent, stroke, 18)}
+    ${renderWordCard(110, 128, 46, 46, preset.letters[1], subjectAccent, stroke, 18)}
+    ${renderWordCard(166, 128, 46, 46, preset.letters[2], subjectAccent, stroke, 18)}
+    ${renderWordCard(222, 128, 46, 46, preset.letters[3], subjectAccent, stroke, 18)}
+    ${renderMiniSign(120, 82, preset.note, momentAccent)}
   `;
 }
 
@@ -7133,10 +7127,6 @@ function renderRouteSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
 
 function renderWallSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderWordCard(238, 54, 56, 30, preset.wall[0], subjectAccent, stroke, 11)}
-    ${renderWordCard(238, 94, 56, 30, preset.wall[1], subjectAccent, stroke, 11)}
-    ${renderWordCard(238, 134, 56, 30, preset.wall[2], subjectAccent, stroke, 11)}
-    ${renderZone(40, 136, 102, 40, preset.write, "#ffffff", stroke, 12)}
     ${renderTrack(
       [
         [142, 154],
@@ -7146,15 +7136,16 @@ function renderWallSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
       ],
       momentAccent
     )}
+    ${renderWordCard(238, 54, 56, 30, preset.wall[0], subjectAccent, stroke, 11)}
+    ${renderWordCard(238, 94, 56, 30, preset.wall[1], subjectAccent, stroke, 11)}
+    ${renderWordCard(238, 134, 56, 30, preset.wall[2], subjectAccent, stroke, 11)}
+    ${renderZone(40, 136, 102, 40, preset.write, "#ffffff", stroke, 12)}
     ${renderMiniSign(138, 78, preset.note, momentAccent)}
   `;
 }
 
 function renderTextRouteSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderWordCard(44, 90, 90, 28, preset.strips[0], subjectAccent, stroke, 11)}
-    ${renderWordCard(146, 124, 90, 28, preset.strips[1], subjectAccent, stroke, 11)}
-    ${renderWordCard(248, 90, 90, 28, preset.strips[2], subjectAccent, stroke, 11)}
     ${renderTrack(
       [
         [90, 118],
@@ -7164,6 +7155,9 @@ function renderTextRouteSceneDetailed(preset, subjectAccent, momentAccent, strok
       ],
       momentAccent
     )}
+    ${renderWordCard(44, 90, 90, 28, preset.strips[0], subjectAccent, stroke, 11)}
+    ${renderWordCard(146, 124, 90, 28, preset.strips[1], subjectAccent, stroke, 11)}
+    ${renderWordCard(248, 90, 90, 28, preset.strips[2], subjectAccent, stroke, 11)}
     ${renderZone(126, 170, 108, 30, preset.side, "#ffffff", stroke, 11)}
     ${renderMiniSign(132, 66, preset.note, momentAccent)}
   `;
@@ -7171,9 +7165,6 @@ function renderTextRouteSceneDetailed(preset, subjectAccent, momentAccent, strok
 
 function renderGraphRouteSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderMiniGraphCard(38, 88, preset.charts[0], subjectAccent, stroke)}
-    ${renderMiniGraphCard(140, 70, preset.charts[1], subjectAccent, stroke)}
-    ${renderMiniGraphCard(244, 96, preset.charts[2], subjectAccent, stroke)}
     ${renderTrack(
       [
         [90, 154],
@@ -7182,6 +7173,9 @@ function renderGraphRouteSceneDetailed(preset, subjectAccent, momentAccent, stro
       ],
       momentAccent
     )}
+    ${renderMiniGraphCard(38, 88, preset.charts[0], subjectAccent, stroke)}
+    ${renderMiniGraphCard(140, 70, preset.charts[1], subjectAccent, stroke)}
+    ${renderMiniGraphCard(244, 96, preset.charts[2], subjectAccent, stroke)}
     ${renderWordCard(56, 166, 72, 26, preset.prompts[0], momentAccent, stroke, 10)}
     ${renderWordCard(232, 166, 72, 26, preset.prompts[1], momentAccent, stroke, 10)}
     ${renderMiniSign(134, 164, preset.note, subjectAccent)}
@@ -7194,8 +7188,6 @@ function renderFloorStepsSceneDetailed(preset, subjectAccent, momentAccent, stro
     .join("");
 
   return `
-    ${boxes}
-    ${renderMiniSign(116, 74, preset.note, momentAccent)}
     ${renderTrack(
       [
         [58, 112],
@@ -7205,6 +7197,8 @@ function renderFloorStepsSceneDetailed(preset, subjectAccent, momentAccent, stro
       ],
       momentAccent
     )}
+    ${boxes}
+    ${renderMiniSign(116, 74, preset.note, momentAccent)}
   `;
 }
 
@@ -7294,7 +7288,7 @@ function renderTrack(points, color) {
   const [start, ...rest] = points;
   const path = rest.reduce((acc, [x, y]) => `${acc} L${x} ${y}`, `M${start[0]} ${start[1]}`);
 
-  return `<path d="${path}" fill="none" stroke="${color}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 10" />`;
+  return `<path d="${path}" fill="none" stroke="${color}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 10" opacity="0.78" />`;
 }
 
 function renderCardRack(x, y, label, accent, stroke) {
@@ -7322,9 +7316,12 @@ function renderWordCard(x, y, width, height, label, accent, stroke, fontSize = 1
 }
 
 function renderMiniSign(x, y, label, accent) {
+  const width = 72;
+  const height = 28;
+
   return `
-    <rect x="${x}" y="${y}" width="54" height="24" rx="10" fill="${accent}" opacity="0.15" />
-    ${renderSvgTextBlock(x, y, 54, 24, label, accent, 9.8, 2)}
+    <rect x="${x}" y="${y}" width="${width}" height="${height}" rx="11" fill="${accent}" opacity="0.15" />
+    ${renderSvgTextBlock(x, y, width, height, label, accent, 9.4, 2)}
   `;
 }
 
