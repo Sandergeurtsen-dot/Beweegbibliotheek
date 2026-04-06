@@ -18,6 +18,11 @@
   --radius-md: 16px;
   --radius-sm: 12px;
   --content-width: 1480px;
+  --subject-accent: #1d1060;
+  --subject-soft: #eef5fb;
+  --subject-line: #d4e3ef;
+  --subject-glow: rgba(20, 59, 134, 0.12);
+  --subject-print: #f7fbff;
 }
 
 *,
@@ -517,41 +522,58 @@ body::before {
 .task-card {
   width: 100%;
   display: grid;
-  grid-template-columns: 132px minmax(0, 1fr);
-  gap: 16px;
+  grid-template-columns: 148px minmax(0, 1fr);
+  gap: 18px;
   align-items: start;
-  padding: 16px;
-  border: 1px solid #d7e4f1;
+  padding: 20px;
+  border: 1px solid var(--subject-line);
   border-radius: 24px;
-  background: linear-gradient(180deg, #ffffff, #f6fbff);
+  background: linear-gradient(180deg, #ffffff, var(--subject-print));
   color: inherit;
   cursor: pointer;
   transition:
     transform 180ms ease,
     border-color 180ms ease,
     box-shadow 180ms ease;
-  box-shadow: 0 10px 24px rgba(18, 48, 42, 0.06);
+  box-shadow: 0 14px 28px var(--subject-glow);
+  position: relative;
+  overflow: hidden;
+}
+
+.task-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--subject-accent), transparent 88%);
 }
 
 .task-card--active {
-  border-color: rgba(20, 59, 134, 0.35);
-  box-shadow: 0 14px 30px rgba(20, 59, 134, 0.12);
+  border-color: var(--subject-accent);
+  box-shadow: 0 18px 34px var(--subject-glow);
 }
 
 .task-card__content {
   min-width: 0;
+  display: grid;
+  gap: 10px;
 }
 
 .task-card__title {
-  margin: 0 0 8px;
-  font-size: 1.25rem;
-  line-height: 1.16;
+  margin: 0;
+  font-size: 1.4rem;
+  line-height: 1.08;
 }
 
 .task-card__summary {
   margin: 0;
   color: var(--ink-soft);
-  line-height: 1.55;
+  line-height: 1.65;
+  font-size: 0.98rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .task-card__meta {
@@ -565,8 +587,8 @@ body::before {
 .task-detail__art {
   border-radius: 18px;
   overflow: hidden;
-  background: #eef7fb;
-  border: 1px solid #d7e4f1;
+  background: var(--subject-soft);
+  border: 1px solid var(--subject-line);
 }
 
 .task-card__art svg,
@@ -583,13 +605,18 @@ body::before {
 .task-detail--visible {
   display: grid;
   gap: 18px;
-  padding: 20px;
-  border: 1px solid #d7e4f1;
+}
+
+.task-detail__sheet {
+  display: grid;
+  gap: 22px;
+  padding: 22px;
+  border: 1px solid var(--subject-line);
   border-radius: 28px;
   background:
-    linear-gradient(180deg, rgba(0, 171, 200, 0.06), rgba(255, 255, 255, 0.98)),
+    linear-gradient(180deg, var(--subject-soft), rgba(255, 255, 255, 0.98)),
     #ffffff;
-  box-shadow: 0 16px 30px rgba(20, 59, 134, 0.08);
+  box-shadow: 0 18px 34px var(--subject-glow);
 }
 
 .task-detail__top {
@@ -608,48 +635,62 @@ body::before {
   margin: 12px 0 0;
   color: var(--ink-soft);
   line-height: 1.7;
-  font-size: 1.02rem;
+  font-size: 1.04rem;
 }
 
-.task-detail__tabs {
+.teacher-toolbar {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.task-detail__tab {
+.teacher-toolbar__button {
   appearance: none;
-  border: 1px solid #d7e4f1;
+  border: 1px solid var(--subject-line);
   border-radius: 999px;
-  padding: 11px 16px;
+  padding: 12px 18px;
   background: #ffffff;
   color: var(--ink);
   font: inherit;
   font-weight: 800;
   cursor: pointer;
   font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
+  box-shadow: 0 8px 18px rgba(20, 59, 134, 0.06);
 }
 
-.task-detail__tab--active {
-  background: #eef8fb;
-  border-color: rgba(0, 171, 200, 0.38);
-  color: var(--blue);
+.teacher-toolbar__button--active {
+  background: var(--subject-soft);
+  border-color: var(--subject-accent);
+  color: var(--subject-accent);
 }
 
-.task-detail__tab:focus-visible {
+.teacher-toolbar__button:focus-visible {
   outline: 3px solid rgba(20, 59, 134, 0.25);
   outline-offset: 3px;
+}
+
+.teacher-toolbar__button[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 .task-detail__badges {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
+}
+
+.task-card__meta .pill,
+.task-detail__badges .pill {
+  background: var(--subject-soft);
+  color: var(--subject-accent);
+  border: 1px solid var(--subject-line);
 }
 
 .task-detail__caption {
-  margin: 10px 0 0;
+  margin: 12px 0 0;
   color: var(--ink-soft);
   line-height: 1.5;
   font-size: 0.95rem;
@@ -658,7 +699,7 @@ body::before {
 .task-detail__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 20px;
 }
 
 .detail-box--intro {
@@ -682,14 +723,14 @@ body::before {
 
 .card-layer {
   display: grid;
-  gap: 18px;
+  gap: 20px;
 }
 
 .card-layer__intro {
-  padding: 18px;
+  padding: 20px;
   border-radius: 20px;
-  background: #f4f8ff;
-  border: 1px solid #d8e3f7;
+  background: var(--subject-soft);
+  border: 1px solid var(--subject-line);
   color: var(--ink-soft);
   line-height: 1.65;
 }
@@ -709,8 +750,8 @@ body::before {
 
 .card-layer__intro strong {
   font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
-  font-size: 1.1rem;
-  color: var(--blue);
+  font-size: 1.15rem;
+  color: var(--subject-accent);
 }
 
 .card-layer__section {
@@ -721,7 +762,7 @@ body::before {
 .card-layer__section-head h4 {
   margin: 0;
   font-size: 1.05rem;
-  color: var(--blue);
+  color: var(--subject-accent);
   font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
 }
 
@@ -740,7 +781,7 @@ body::before {
   padding: 14px 16px;
   border-radius: 18px;
   background: #ffffff;
-  border: 1px solid #dbe8dc;
+  border: 1px solid var(--subject-line);
   color: var(--ink-soft);
   line-height: 1.55;
 }
@@ -754,16 +795,25 @@ body::before {
 .card-pack-item {
   position: relative;
   min-height: 176px;
-  padding: 18px;
+  padding: 20px;
   border-radius: 20px;
   background:
-    linear-gradient(180deg, #ffffff, #f5f9ff),
+    linear-gradient(180deg, #ffffff, var(--subject-print)),
     #ffffff;
-  border: 1px solid #d9e3f3;
-  box-shadow: 0 10px 24px rgba(20, 59, 134, 0.06);
+  border: 1px solid var(--subject-line);
+  box-shadow: 0 12px 24px var(--subject-glow);
   display: grid;
   align-content: space-between;
-  gap: 12px;
+  gap: 14px;
+}
+
+.card-pack-item::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 6px;
+  border-radius: 20px 20px 0 0;
+  background: linear-gradient(90deg, var(--subject-accent), rgba(255, 255, 255, 0));
 }
 
 .card-pack-item--visual {
@@ -775,7 +825,7 @@ body::before {
   content: "";
   position: absolute;
   inset: 8px;
-  border: 1px dashed rgba(29, 16, 96, 0.14);
+  border: 1px dashed color-mix(in srgb, var(--subject-accent) 18%, transparent);
   border-radius: 16px;
   pointer-events: none;
 }
@@ -785,8 +835,8 @@ body::before {
   width: fit-content;
   padding: 6px 10px;
   border-radius: 999px;
-  background: #edf4ff;
-  color: var(--blue);
+  background: var(--subject-soft);
+  color: var(--subject-accent);
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.04em;
@@ -795,17 +845,17 @@ body::before {
 
 .card-pack-item__title {
   margin: 0;
-  font-size: 1rem;
-  line-height: 1.2;
-  color: var(--green-deep);
+  font-size: 1.12rem;
+  line-height: 1.12;
+  color: var(--subject-accent);
   font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
 }
 
 .card-pack-item__art {
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid #d7e4f1;
-  background: #f6fbff;
+  border: 1px solid var(--subject-line);
+  background: var(--subject-soft);
 }
 
 .card-pack-item__art svg {
@@ -815,29 +865,30 @@ body::before {
 }
 
 .card-pack-item__body {
-  font-size: 1.18rem;
+  font-size: 1.2rem;
   font-weight: 800;
-  line-height: 1.35;
+  line-height: 1.4;
   color: var(--ink);
   font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
 }
 
 .card-pack-item__hint {
   color: var(--ink-soft);
-  font-size: 0.88rem;
-  line-height: 1.45;
+  font-size: 0.92rem;
+  line-height: 1.55;
 }
 
 .detail-box {
-  padding: 18px;
+  padding: 20px;
   border-radius: 20px;
   background: #ffffff;
-  border: 1px solid #dbe8dc;
+  border: 1px solid var(--subject-line);
+  box-shadow: 0 10px 22px rgba(20, 59, 134, 0.05);
 }
 
 .detail-box h4 {
-  font-size: 1rem;
-  color: var(--green-deep);
+  font-size: 1.06rem;
+  color: var(--subject-accent);
 }
 
 .detail-box p,
@@ -857,13 +908,107 @@ body::before {
   margin-top: 8px;
 }
 
+.task-facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.task-fact,
+.minute-card,
+.task-print-preview__lead {
+  padding: 18px;
+  border-radius: 20px;
+  background: #ffffff;
+  border: 1px solid var(--subject-line);
+  box-shadow: 0 10px 22px rgba(20, 59, 134, 0.05);
+}
+
+.task-fact__label,
+.minute-card__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--subject-soft);
+  color: var(--subject-accent);
+  font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
+  font-weight: 800;
+}
+
+.task-fact p {
+  margin: 12px 0 0;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.minute-view {
+  display: grid;
+  gap: 18px;
+}
+
+.minute-view__lead strong,
+.task-print-preview__lead strong {
+  display: block;
+  color: var(--subject-accent);
+  font-size: 1.12rem;
+  font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
+}
+
+.minute-view__lead p,
+.task-print-preview__lead p {
+  margin: 10px 0 0;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.minute-view__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.minute-card h4 {
+  margin: 12px 0 0;
+  color: var(--subject-accent);
+  font-size: 1.08rem;
+  font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
+}
+
+.minute-card ul {
+  margin: 12px 0 0;
+  padding-left: 18px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.minute-card li + li {
+  margin-top: 8px;
+}
+
+.task-print-preview {
+  display: grid;
+  gap: 18px;
+}
+
+.task-print-preview__lead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
 .step-label {
   display: inline-flex;
   margin-right: 8px;
   padding: 4px 8px;
   border-radius: 999px;
-  background: #eef4ff;
-  color: var(--blue);
+  background: var(--subject-soft);
+  color: var(--subject-accent);
   font-size: 0.74rem;
   font-weight: 800;
   letter-spacing: 0.04em;
@@ -903,8 +1048,9 @@ body::before {
 }
 
 .button--secondary {
-  background: #eef7fb;
-  color: var(--blue);
+  background: var(--subject-soft);
+  color: var(--subject-accent);
+  border: 1px solid var(--subject-line);
 }
 
 .button--small {
@@ -969,7 +1115,9 @@ body::before {
 @media (max-width: 1240px) {
   .hero,
   .task-detail__top,
-  .task-detail__grid {
+  .task-detail__grid,
+  .task-facts,
+  .minute-view__grid {
     grid-template-columns: 1fr;
   }
 
@@ -1050,7 +1198,7 @@ body::before {
 
   .filter-list,
   .selection-chips,
-  .task-detail__tabs {
+  .teacher-toolbar {
     display: flex;
     overflow-x: auto;
     gap: 10px;
@@ -1081,9 +1229,30 @@ body::before {
   }
 
   .task-detail__grid,
-  .card-pack-grid {
+  .card-pack-grid,
+  .task-facts,
+  .minute-view__grid {
     grid-template-columns: 1fr;
   }
+}
+
+body.app--print-view .hero,
+body.app--print-view .content__header,
+body.app--print-view .step-section,
+body.app--print-view .results-section > .section-head,
+body.app--print-view .task-grid {
+  display: none !important;
+}
+
+body.app--print-view .task-detail--visible {
+  display: block;
+}
+
+body.app--print-view .task-detail__sheet {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 @media print {
@@ -1101,9 +1270,12 @@ body::before {
   .content__header,
   .step-section,
   .task-grid,
-  .task-detail__tabs,
   .task-detail__caption,
-  .button {
+  .button,
+  .teacher-toolbar,
+  .task-facts,
+  .minute-view,
+  .task-print-preview__lead {
     display: none !important;
   }
 
@@ -1119,7 +1291,8 @@ body::before {
 
   .task-detail,
   .task-detail--visible,
-  .card-layer {
+  .card-layer,
+  .task-detail__sheet {
     display: block !important;
     padding: 0;
     border: 0;

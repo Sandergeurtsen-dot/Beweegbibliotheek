@@ -117,6 +117,30 @@ const moments = [
   }
 ];
 
+const subjectThemes = {
+  taal: {
+    accent: "#118b74",
+    soft: "#ebf8f4",
+    line: "#b9e2d8",
+    glow: "rgba(17, 139, 116, 0.12)",
+    print: "#f4fcf9"
+  },
+  spelling: {
+    accent: "#00abc8",
+    soft: "#ebfaff",
+    line: "#b9e8f2",
+    glow: "rgba(0, 171, 200, 0.12)",
+    print: "#f4fcff"
+  },
+  rekenen: {
+    accent: "#1d1060",
+    soft: "#efedff",
+    line: "#cfc8ff",
+    glow: "rgba(29, 16, 96, 0.12)",
+    print: "#f7f5ff"
+  }
+};
+
 const taskBlueprints = buildTaskBlueprintsFromDoc();
 
 function emptyTaskMoments() {
@@ -5055,7 +5079,7 @@ function applyNavigationState(nextState = initialState) {
   state.momentId = nextState.momentId ?? null;
   state.taskId = nextState.taskId ?? null;
   state.search = nextState.search ?? "";
-  state.detailView = nextState.detailView === "cards" ? "cards" : "task";
+  state.detailView = normalizeDetailView(nextState.detailView);
   state.mobileFiltersOpen = false;
 
   if (ui.searchInput) {
@@ -5226,15 +5250,34 @@ function handleTaskDetailClick(event) {
   const tabButton = event.target.closest("[data-detail-view]");
 
   if (tabButton) {
-    state.detailView = tabButton.dataset.detailView;
+    state.detailView = normalizeDetailView(tabButton.dataset.detailView);
     commitState("push");
     return;
   }
 
-  const printButton = event.target.closest("[data-action='print-cards']");
+  const printButton = event.target.closest("[data-action='print-direct'], [data-action='print-now']");
 
   if (printButton) {
-    window.print();
+    const selectedTask = getSelectedTask(getFilteredTasks());
+    const canPrint =
+      selectedTask &&
+      selectedTask.usesCards &&
+      selectedTask.cardPack &&
+      (selectedTask.cardPack.cards.length || selectedTask.cardPack.supportCards.length || selectedTask.cardPack.teacherSheets.length);
+
+    if (!canPrint) {
+      return;
+    }
+
+    const historyMode = state.detailView === "print" ? "replace" : "push";
+    state.detailView = "print";
+    commitState(historyMode);
+
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        window.print();
+      });
+    });
   }
 }
 
@@ -5345,6 +5388,7 @@ function render() {
   renderHeader();
   renderStepSection();
   renderResultsSection();
+  document.body.classList.toggle("app--print-view", state.detailView === "print" && Boolean(state.taskId));
 }
 
 function renderMobileFinder() {
@@ -5642,9 +5686,18 @@ function renderResultsSection() {
   }
 
   ui.resultsTitle.textContent = "Kies een opdracht";
-  ui.resultsMeta.textContent = `${filteredTasks.length} opdrachten in deze route. Klik een opdracht open voor doel, eventuele printmaterialen, benodigdheden en een heldere stap-voor-stap uitleg.`;
+  ui.resultsMeta.textContent = `${filteredTasks.length} opdrachten in deze route. Open een opdracht voor de uitleg, klaarzetten in 1 minuut of direct printen.`;
 
   const selectedTask = getSelectedTask(filteredTasks);
+  const hasPrintView =
+    selectedTask &&
+    selectedTask.usesCards &&
+    selectedTask.cardPack &&
+    (selectedTask.cardPack.cards.length || selectedTask.cardPack.supportCards.length || selectedTask.cardPack.teacherSheets.length);
+
+  if (state.detailView === "print" && !hasPrintView) {
+    state.detailView = "task";
+  }
 
   ui.taskDetail.className = selectedTask ? "task-detail task-detail--visible" : "task-detail";
   ui.taskDetail.innerHTML = selectedTask ? renderTaskDetail(selectedTask) : "";
@@ -5659,8 +5712,9 @@ function renderTaskCard(task, selectedTask) {
   return `
     <button
       type="button"
-      class="task-card ${isActive ? "task-card--active" : ""}"
+      class="task-card ${isActive ? "task-card--active" : ""} task-card--${task.subjectId}"
       data-task-id="${task.id}"
+      style="${getSubjectThemeStyle(task.subjectId)}"
     >
       <div class="task-card__art" aria-hidden="true">
         ${renderIllustration(task, true)}
@@ -5723,153 +5777,294 @@ function buildClassExplanation(task) {
   ];
 }
 
+function getSubjectTheme(subjectId) {
+  return subjectThemes[subjectId] || subjectThemes.rekenen;
+}
+
+function getSubjectThemeStyle(subjectId) {
+  const theme = getSubjectTheme(subjectId);
+  return `--subject-accent:${theme.accent};--subject-soft:${theme.soft};--subject-line:${theme.line};--subject-glow:${theme.glow};--subject-print:${theme.print};`;
+}
+
+function normalizeDetailView(detailView) {
+  return ["task", "quick", "print"].includes(detailView) ? detailView : "task";
+}
+
+function getMaterialsList(task) {
+  const cleaned = task.materials
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .filter((item, index, collection) => collection.indexOf(item) === index);
+
+  return cleaned.length ? cleaned : ["Geen extra materialen nodig"];
+}
+
+function getPrintSummary(task, showCards) {
+  if (!showCards || !task.cardPack) {
+    return ["Geen apart printmateriaal nodig"];
+  }
+
+  const summary = [];
+
+  if (task.cardPack.overviewSheets.length) {
+    summary.push(`${task.cardPack.overviewSheets.length} lesplaten`);
+  }
+
+  if (task.cardPack.cards.length) {
+    summary.push(`${task.cardPack.cards.length} werkkaartjes`);
+  }
+
+  if (task.cardPack.supportCards.length) {
+    summary.push(`${task.cardPack.supportCards.length} hulplabels`);
+  }
+
+  if (task.cardPack.teacherSheets.length) {
+    summary.push(`${task.cardPack.teacherSheets.length} controlebladen`);
+  }
+
+  return summary.length ? summary : ["Print alleen de opdrachtdetail of gebruik de opdracht zonder printset"];
+}
+
+function buildReadyInOneMinute(task, showCards) {
+  const explanation = buildClassExplanation(task);
+  const materials = getMaterialsList(task);
+  const printSummary = getPrintSummary(task, showCards);
+
+  return [
+    {
+      label: "1",
+      title: "Print of pak klaar",
+      lines: printSummary.slice(0, 4)
+    },
+    {
+      label: "2",
+      title: "Leg dit neer",
+      lines: [task.setup, `Benodigd: ${materials.slice(0, 4).join(", ")}`]
+    },
+    {
+      label: "3",
+      title: "Zeg dit bij de start",
+      lines: [explanation[0], explanation[1]]
+    },
+    {
+      label: "4",
+      title: "Zo rond je af",
+      lines: [explanation[2], `Let op: ${task.movementFocus}`]
+    }
+  ];
+}
+
+function renderTeacherToolbar(showCards) {
+  return `
+    <div class="teacher-toolbar" role="toolbar" aria-label="Leerkrachtmodus">
+      <button
+        type="button"
+        class="teacher-toolbar__button ${state.detailView === "task" ? "teacher-toolbar__button--active" : ""}"
+        data-detail-view="task"
+        aria-pressed="${state.detailView === "task" ? "true" : "false"}"
+      >
+        Opdracht
+      </button>
+      <button
+        type="button"
+        class="teacher-toolbar__button ${state.detailView === "quick" ? "teacher-toolbar__button--active" : ""}"
+        data-detail-view="quick"
+        aria-pressed="${state.detailView === "quick" ? "true" : "false"}"
+      >
+        Klaarzetten in 1 minuut
+      </button>
+      <button
+        type="button"
+        class="teacher-toolbar__button ${state.detailView === "print" ? "teacher-toolbar__button--active" : ""}"
+        data-action="print-direct"
+        ${showCards ? "" : "disabled"}
+        aria-pressed="${state.detailView === "print" ? "true" : "false"}"
+      >
+        Direct printen
+      </button>
+    </div>
+  `;
+}
+
+function renderTaskFacts(task, showCards) {
+  const materials = getMaterialsList(task);
+  const printSummary = getPrintSummary(task, showCards);
+
+  return `
+    <div class="task-facts">
+      <section class="task-fact">
+        <span class="task-fact__label">Doel</span>
+        <p>${escapeHtml(task.goal)}</p>
+      </section>
+      <section class="task-fact">
+        <span class="task-fact__label">Benodigd</span>
+        <p>${escapeHtml(materials.slice(0, 4).join(", "))}</p>
+      </section>
+      <section class="task-fact">
+        <span class="task-fact__label">Print</span>
+        <p>${escapeHtml(printSummary.slice(0, 3).join(", "))}</p>
+      </section>
+      <section class="task-fact">
+        <span class="task-fact__label">Beweegfocus</span>
+        <p>${escapeHtml(task.movementFocus)}</p>
+      </section>
+    </div>
+  `;
+}
+
+function renderOneMinuteView(task, showCards) {
+  const blocks = buildReadyInOneMinute(task, showCards);
+
+  return `
+    <div class="minute-view">
+      <div class="minute-view__lead">
+        <strong>In 1 minuut klaar voor de les</strong>
+        <p>Gebruik deze snelle leerkrachtstand om direct te printen, klaar te leggen en de opdracht uit te leggen zonder lange tekst te hoeven lezen.</p>
+      </div>
+      <div class="minute-view__grid">
+        ${blocks
+          .map(
+            (block) => `
+              <section class="minute-card">
+                <span class="minute-card__count">${escapeHtml(block.label)}</span>
+                <h4>${escapeHtml(block.title)}</h4>
+                <ul>
+                  ${block.lines.map((line) => `<li>${escapeHtml(line)}</li>`).join("")}
+                </ul>
+              </section>
+            `
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderPrintView(task) {
+  return `
+    <div class="task-print-preview">
+      <div class="task-print-preview__lead">
+        <strong>Printweergave</strong>
+        <p>Je ziet hier alleen de lesplaten, kaartjes en bladen voor ${escapeHtml(task.title)}. Gebruik deze weergave voor snel printen zonder extra schermruis.</p>
+        <button type="button" class="button button--secondary button--small" data-action="print-now">
+          Print nu
+        </button>
+      </div>
+      ${renderCardLayer(task)}
+    </div>
+  `;
+}
+
 function renderTaskDetail(task) {
   const showCards = Boolean(
     task.usesCards &&
       task.cardPack &&
       (task.cardPack.cards.length || task.cardPack.supportCards.length || task.cardPack.teacherSheets.length)
   );
+  const currentView = state.detailView === "print" && !showCards ? "task" : state.detailView;
 
   return `
-    <div class="task-detail__top">
-      <div>
-        <div class="task-detail__art" aria-hidden="true">
-          ${renderIllustration(task, false)}
-        </div>
-        <p class="task-detail__caption">${escapeHtml(task.visualHint)}</p>
-      </div>
+    <div class="task-detail__sheet" style="${getSubjectThemeStyle(task.subjectId)}">
+      ${renderTeacherToolbar(showCards)}
 
-      <div>
-        <div class="task-detail__badges">
-          <span class="pill">${escapeHtml(task.groupLabel)}</span>
-          <span class="pill">${escapeHtml(task.subjectLabel)}</span>
-          <span class="pill">${escapeHtml(task.momentLabel)}</span>
-          <span class="pill">${escapeHtml(task.duration)}</span>
-        </div>
-        <h3 class="task-detail__title">${escapeHtml(task.title)}</h3>
-        <p class="task-detail__summary">${escapeHtml(task.summary)}</p>
-        <div class="detail-box detail-box--intro">
-          <h4>In 20 seconden uitgelegd</h4>
-          <ul class="quick-overview">
-            ${buildQuickOverview(task)
-              .map((line) => `<li>${escapeHtml(line)}</li>`)
-              .join("")}
-          </ul>
-        </div>
-      </div>
-    </div>
+      ${
+        currentView === "print" && showCards
+          ? renderPrintView(task)
+          : `
+            <div class="task-detail__top">
+              <div>
+                <div class="task-detail__art" aria-hidden="true">
+                  ${renderIllustration(task, false)}
+                </div>
+                <p class="task-detail__caption">${escapeHtml(task.visualHint)}</p>
+              </div>
 
-    ${
-      showCards
-        ? `
-          <div class="task-detail__tabs" role="tablist" aria-label="Opdrachtweergave">
-            <button
-              type="button"
-              class="task-detail__tab ${state.detailView === "task" ? "task-detail__tab--active" : ""}"
-              data-detail-view="task"
-              role="tab"
-              aria-selected="${state.detailView === "task" ? "true" : "false"}"
-            >
-              Opdracht
-            </button>
-            <button
-              type="button"
-              class="task-detail__tab ${state.detailView === "cards" ? "task-detail__tab--active" : ""}"
-              data-detail-view="cards"
-              role="tab"
-              aria-selected="${state.detailView === "cards" ? "true" : "false"}"
-            >
-              Printmateriaal
-            </button>
-            <button
-              type="button"
-              class="task-detail__tab"
-              data-action="print-cards"
-            >
-              Print printset
-            </button>
-          </div>
-        `
-        : ""
-    }
-
-    ${
-      state.detailView === "cards" && showCards
-        ? renderCardLayer(task)
-        : `
-          <div class="task-detail__grid">
-            <section class="detail-box">
-              <h4>Wat oefenen leerlingen?</h4>
-              <p>${escapeHtml(task.goal)}</p>
-            </section>
-
-            <section class="detail-box">
-              <h4>Zo zet je het klaar</h4>
-              <p>${escapeHtml(task.setup)}</p>
-            </section>
-
-            <section class="detail-box">
-              <h4>Waar let je op tijdens het bewegen?</h4>
-              <p>${escapeHtml(task.movementFocus)}</p>
-            </section>
+              <div>
+                <div class="task-detail__badges">
+                  <span class="pill">${escapeHtml(task.groupLabel)}</span>
+                  <span class="pill">${escapeHtml(task.subjectLabel)}</span>
+                  <span class="pill">${escapeHtml(task.momentLabel)}</span>
+                  <span class="pill">${escapeHtml(task.duration)}</span>
+                </div>
+                <h3 class="task-detail__title">${escapeHtml(task.title)}</h3>
+                <p class="task-detail__summary">${escapeHtml(task.summary)}</p>
+                <div class="detail-box detail-box--intro">
+                  <h4>In 20 seconden uitgelegd</h4>
+                  <ul class="quick-overview">
+                    ${buildQuickOverview(task)
+                      .map((line) => `<li>${escapeHtml(line)}</li>`)
+                      .join("")}
+                  </ul>
+                </div>
+              </div>
+            </div>
 
             ${
-              showCards
-                ? `
-                  <section class="detail-box">
-                    <h4>Wat print je vooraf uit?</h4>
-                    <ul>
-                      ${task.cardPack.printChecklist.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
-                    </ul>
-                  </section>
+              currentView === "quick"
+                ? renderOneMinuteView(task, showCards)
+                : `
+                  ${renderTaskFacts(task, showCards)}
+                  <div class="task-detail__grid">
+                    <section class="detail-box detail-box--wide">
+                      <h4>Zo voer je de opdracht uit</h4>
+                      <ol>
+                        ${task.steps
+                          .map(
+                            (step, index) => `
+                              <li>
+                                <span class="step-label">${escapeHtml(getStepLabel(index, task.steps.length))}</span>
+                                ${escapeHtml(step)}
+                              </li>
+                            `
+                          )
+                          .join("")}
+                      </ol>
+                    </section>
+
+                    <section class="detail-box">
+                      <h4>Zo leg je het uit aan de klas</h4>
+                      <ul class="quick-overview">
+                        ${buildClassExplanation(task)
+                          .map((line) => `<li>${escapeHtml(line)}</li>`)
+                          .join("")}
+                      </ul>
+                    </section>
+
+                    <section class="detail-box">
+                      <h4>Klaarzetten en organiseren</h4>
+                      <p>${escapeHtml(task.setup)}</p>
+                      ${
+                        showCards
+                          ? `
+                            <ul>
+                              ${task.cardPack.printChecklist
+                                .slice(0, 4)
+                                .map((item) => `<li>${escapeHtml(item)}</li>`)
+                                .join("")}
+                            </ul>
+                          `
+                          : ""
+                      }
+                    </section>
+
+                    <section class="detail-box">
+                      <h4>Benodigdheden</h4>
+                      <ul>
+                        ${getMaterialsList(task).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+                      </ul>
+                    </section>
+
+                    <section class="detail-box">
+                      <h4>Leerkrachttip en differentiatie</h4>
+                      <p>${escapeHtml(task.teacherTip)}</p>
+                      <p>${escapeHtml(task.differentiation)}</p>
+                    </section>
+                  </div>
                 `
-                : ""
             }
-
-            <section class="detail-box">
-              <h4>Wat heb je daarnaast nodig?</h4>
-              <ul>
-                ${task.materials.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
-              </ul>
-            </section>
-
-            <section class="detail-box">
-              <h4>Zo leg je het uit aan de klas</h4>
-              <ul class="quick-overview">
-                ${buildClassExplanation(task)
-                  .map((line) => `<li>${escapeHtml(line)}</li>`)
-                  .join("")}
-              </ul>
-            </section>
-
-            <section class="detail-box detail-box--wide">
-              <h4>Zo voer je de opdracht uit</h4>
-              <ol>
-                ${task.steps
-                  .map(
-                    (step, index) => `
-                      <li>
-                        <span class="step-label">${escapeHtml(getStepLabel(index, task.steps.length))}</span>
-                        ${escapeHtml(step)}
-                      </li>
-                    `
-                  )
-                  .join("")}
-              </ol>
-            </section>
-
-            <section class="detail-box">
-              <h4>Zo maak je het makkelijker of moeilijker</h4>
-              <p>${escapeHtml(task.differentiation)}</p>
-            </section>
-
-            <section class="detail-box">
-              <h4>Handige tip voor de leerkracht</h4>
-              <p>${escapeHtml(task.teacherTip)}</p>
-            </section>
-          </div>
-        `
-    }
+          `
+      }
+    </div>
   `;
 }
 
