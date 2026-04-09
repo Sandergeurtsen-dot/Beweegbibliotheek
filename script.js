@@ -7039,13 +7039,6 @@ function renderTaskCard(task, selectedTask) {
   `;
 }
 
-function buildQuickOverview(task) {
-  return [
-    `Doel: ${shortenPrintText(task.goal, 96)}`,
-    `Leerlingen: ${shortenPrintText(buildQuickPlay(task), 96)}`
-  ];
-}
-
 function buildQuickStart(task) {
   return task.setup;
 }
@@ -7444,14 +7437,6 @@ function renderTaskDetail(task) {
                 </div>
                 <h3 class="task-detail__title">${escapeHtml(task.title)}</h3>
                 <p class="task-detail__summary">${escapeHtml(task.summary)}</p>
-                <div class="detail-box detail-box--intro detail-box--compact">
-                  <h4>In 20 seconden uitgelegd</h4>
-                  <ul class="quick-overview">
-                    ${buildQuickOverview(task)
-                      .map((line) => `<li>${escapeHtml(line)}</li>`)
-                      .join("")}
-                  </ul>
-                </div>
               </div>
             </div>
 
@@ -7668,6 +7653,8 @@ function renderIllustration(task, compact) {
   const field = compact ? "#eef8fb" : "#e9f6fb";
   const stroke = "#19424a";
   const scene = renderIllustrationScene(task, subject.accent, moment.accent, stroke);
+  const subjectBadge = compact ? { x: 16, y: 14, width: 126, height: 34, fontSize: 12.5 } : { x: 18, y: 16, width: 126, height: 34, fontSize: 13 };
+  const momentBadge = compact ? { x: 198, y: 14, width: 146, height: 34, fontSize: 12.2 } : { x: 198, y: 16, width: 146, height: 34, fontSize: 12.8 };
 
   return `
     <svg viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${escapeHtml(
@@ -7675,10 +7662,10 @@ function renderIllustration(task, compact) {
     )}">
       <rect width="360" height="220" rx="24" fill="${sky}" />
       <rect x="0" y="150" width="360" height="70" fill="${field}" />
-      <rect x="18" y="16" width="122" height="34" rx="17" fill="${subject.accent}" opacity="0.14" />
-      ${renderSvgTextBlock(18, 16, 122, 34, subject.label, subject.accent, 13.5, 2)}
-      <rect x="206" y="16" width="136" height="34" rx="17" fill="${moment.accent}" opacity="0.14" />
-      ${renderSvgTextBlock(206, 16, 136, 34, moment.label, moment.accent, 13.5, 2)}
+      <rect x="${subjectBadge.x}" y="${subjectBadge.y}" width="${subjectBadge.width}" height="${subjectBadge.height}" rx="17" fill="${subject.accent}" opacity="0.14" />
+      ${renderSvgTextBlock(subjectBadge.x, subjectBadge.y, subjectBadge.width, subjectBadge.height, subject.label, subject.accent, subjectBadge.fontSize, 2)}
+      <rect x="${momentBadge.x}" y="${momentBadge.y}" width="${momentBadge.width}" height="${momentBadge.height}" rx="17" fill="${moment.accent}" opacity="0.14" />
+      ${renderSvgTextBlock(momentBadge.x, momentBadge.y, momentBadge.width, momentBadge.height, moment.label, moment.accent, momentBadge.fontSize, 2)}
       ${scene}
     </svg>
   `;
