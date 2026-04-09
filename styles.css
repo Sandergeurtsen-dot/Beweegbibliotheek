@@ -840,6 +840,25 @@ body::before {
 
 .detail-panel__head {
   padding: 16px 18px;
+  display: grid;
+  gap: 10px;
+  border-bottom: 1px solid color-mix(in srgb, var(--subject-line) 72%, white);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--subject-soft) 68%, white), #ffffff);
+}
+
+.detail-panel__chip {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: var(--subject-soft);
+  color: var(--subject-accent);
+  border: 1px solid var(--subject-line);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 .detail-fold__heading {
@@ -901,22 +920,36 @@ body::before {
   border-top: 1px solid color-mix(in srgb, var(--subject-line) 72%, white);
 }
 
+.detail-panel__body {
+  padding: 16px 18px 18px;
+  color: var(--ink-soft);
+}
+
 .detail-fold__body p,
 .detail-fold__body ul,
-.detail-fold__body ol {
+.detail-fold__body ol,
+.detail-panel__body p,
+.detail-panel__body ul,
+.detail-panel__body ol {
   margin: 0;
   line-height: 1.58;
 }
 
 .detail-fold__body ul,
-.detail-fold__body ol {
+.detail-fold__body ol,
+.detail-panel__body ul,
+.detail-panel__body ol {
   padding-left: 20px;
 }
 
 .detail-fold__body li + li,
 .detail-fold__body p + p,
 .detail-fold__body p + ul,
-.detail-fold__body ul + p {
+.detail-fold__body ul + p,
+.detail-panel__body li + li,
+.detail-panel__body p + p,
+.detail-panel__body p + ul,
+.detail-panel__body ul + p {
   margin-top: 8px;
 }
 
