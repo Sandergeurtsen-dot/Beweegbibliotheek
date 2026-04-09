@@ -159,6 +159,8 @@ const energizerMoment = {
     "Korte beweegpauzes voor tussen lessen in, zonder vakinhoud en direct inzetbaar op de eigen plek."
 };
 
+const taskTextOverrides = globalThis.taskTextOverrides || {};
+
 const subjectThemes = {
   taal: {
     accent: "#118b74",
@@ -2731,21 +2733,22 @@ initializeHistory();
 commitState("replace");
 
 function materializeTask(group, subject, moment, blueprint) {
-  const title = readGroupValue(blueprint.title, group.id);
-  const summary = readGroupValue(blueprint.summary, group.id);
-  const goal = readGroupValue(blueprint.goal, group.id);
+  const editableBlueprint = applyTaskTextOverrides(blueprint);
+  const title = readGroupValue(editableBlueprint.title, group.id);
+  const summary = readGroupValue(editableBlueprint.summary, group.id);
+  const goal = readGroupValue(editableBlueprint.goal, group.id);
 
   if (!title || !summary || !goal) {
     return null;
   }
 
-  const printProfile = getTaskPrintProfile(blueprint.key);
+  const printProfile = getTaskPrintProfile(editableBlueprint.key);
   const usesCards = printProfile.enabled;
-  const cardPack = usesCards ? buildCardPack(group, subject, moment, blueprint, title, printProfile) : null;
+  const cardPack = usesCards ? buildCardPack(group, subject, moment, editableBlueprint, title, printProfile) : null;
 
   return {
-    id: `${group.id}-${subject.id}-${moment.id}-${blueprint.key}`,
-    key: blueprint.key,
+    id: `${group.id}-${subject.id}-${moment.id}-${editableBlueprint.key}`,
+    key: editableBlueprint.key,
     groupId: group.id,
     subjectId: subject.id,
     momentId: moment.id,
@@ -2755,20 +2758,20 @@ function materializeTask(group, subject, moment, blueprint) {
     momentSubtitle: moment.subtitle,
     title,
     summary,
-    duration: readGroupValue(blueprint.duration, group.id),
-    setup: blueprint.setup,
+    duration: readGroupValue(editableBlueprint.duration, group.id),
+    setup: readGroupValue(editableBlueprint.setup, group.id),
     goal,
-    movementFocus: blueprint.movementFocus,
-    materials: blueprint.materials,
-    steps: blueprint.steps,
-    differentiation: readGroupValue(blueprint.differentiation, group.id),
-    teacherTip: readGroupValue(blueprint.teacherTip, group.id),
-    visual: blueprint.visual,
-    visualHint: blueprint.visualHint,
+    movementFocus: readGroupValue(editableBlueprint.movementFocus, group.id),
+    materials: readGroupValue(editableBlueprint.materials, group.id),
+    steps: readGroupValue(editableBlueprint.steps, group.id),
+    differentiation: readGroupValue(editableBlueprint.differentiation, group.id),
+    teacherTip: readGroupValue(editableBlueprint.teacherTip, group.id),
+    visual: editableBlueprint.visual,
+    visualHint: readGroupValue(editableBlueprint.visualHint, group.id),
     usesCards,
     cardPack,
     printProfile,
-    keywords: blueprint.keywords,
+    keywords: readGroupValue(editableBlueprint.keywords, group.id),
     searchText: normalize(
       [
         group.label,
@@ -2778,13 +2781,50 @@ function materializeTask(group, subject, moment, blueprint) {
         title,
         summary,
         goal,
-        blueprint.setup,
-        blueprint.movementFocus,
-        blueprint.keywords.join(" "),
-        blueprint.materials.join(" ")
+        readGroupValue(editableBlueprint.setup, group.id),
+        readGroupValue(editableBlueprint.movementFocus, group.id),
+        readGroupValue(editableBlueprint.keywords, group.id).join(" "),
+        readGroupValue(editableBlueprint.materials, group.id).join(" ")
       ].join(" ")
     )
   };
+}
+
+function applyTaskTextOverrides(blueprint) {
+  const override = taskTextOverrides[blueprint.key];
+
+  if (!override) {
+    return blueprint;
+  }
+
+  const mergedOverride = Object.fromEntries(
+    Object.entries(override).map(([field, value]) => [field, mergeEditableValue(blueprint[field], value)])
+  );
+
+  return {
+    ...blueprint,
+    ...mergedOverride,
+    key: blueprint.key,
+    visual: override.visual ?? blueprint.visual
+  };
+}
+
+function mergeEditableValue(baseValue, overrideValue) {
+  if (
+    baseValue &&
+    overrideValue &&
+    typeof baseValue === "object" &&
+    typeof overrideValue === "object" &&
+    !Array.isArray(baseValue) &&
+    !Array.isArray(overrideValue)
+  ) {
+    return {
+      ...baseValue,
+      ...overrideValue
+    };
+  }
+
+  return overrideValue;
 }
 
 function readGroupValue(value, groupId) {
