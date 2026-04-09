@@ -159,7 +159,22 @@ const energizerMoment = {
     "Korte beweegpauzes voor tussen lessen in, zonder vakinhoud en direct inzetbaar op de eigen plek."
 };
 
-const taskTextOverrides = globalThis.taskTextOverrides || {};
+const EDITABLE_TASK_FIELDS = new Set([
+  "title",
+  "summary",
+  "duration",
+  "setup",
+  "goal",
+  "movementFocus",
+  "materials",
+  "steps",
+  "differentiation",
+  "teacherTip",
+  "visualHint",
+  "keywords"
+]);
+
+const taskTextOverrides = flattenTaskTextOverrides(globalThis.taskTextOverrides || {});
 
 const subjectThemes = {
   taal: {
@@ -2825,6 +2840,34 @@ function mergeEditableValue(baseValue, overrideValue) {
   }
 
   return overrideValue;
+}
+
+function flattenTaskTextOverrides(source) {
+  const flat = {};
+
+  function visit(node, path = []) {
+    if (!node || typeof node !== "object" || Array.isArray(node)) {
+      return;
+    }
+
+    const keys = Object.keys(node);
+
+    if (keys.some((key) => EDITABLE_TASK_FIELDS.has(key))) {
+      const taskKey = path[path.length - 1];
+
+      if (taskKey) {
+        flat[taskKey] = node;
+      }
+      return;
+    }
+
+    Object.entries(node).forEach(([key, value]) => {
+      visit(value, [...path, key]);
+    });
+  }
+
+  visit(source);
+  return flat;
 }
 
 function readGroupValue(value, groupId) {
