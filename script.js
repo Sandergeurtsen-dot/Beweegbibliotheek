@@ -1,6 +1,11 @@
 const GROUP_34 = "groep-3-4";
 const GROUP_56 = "groep-5-6";
 const GROUP_78 = "groep-7-8";
+const GROUP_ENERGIZERS = "energizers";
+const ENERGIZER_ACTIVE = "energizer-activerend";
+const ENERGIZER_FOCUS = "energizer-focussend";
+const ENERGIZER_CALM = "energizer-kalmerend";
+const ENERGIZER_MOMENT_ID = "lesovergangen";
 const CLASS_SIZE = 25;
 const CLASS_GROUP_COUNT = 5;
 const CLASS_GROUP_SIZE = 5;
@@ -60,6 +65,15 @@ const groups = [
       "Werkvormen met meer zelfstandigheid, verdieping, reflectie en inhoudelijke keuzes.",
     focus:
       "Focus op uitleggen, redeneren, complexere opdrachten en transfer naar andere vakken."
+  },
+  {
+    id: GROUP_ENERGIZERS,
+    label: "Energizers",
+    shortLabel: "EZ",
+    description:
+      "Korte beweegactiviteiten voor lesovergangen die niet aan een vak vastzitten en direct inzetbaar zijn.",
+    focus:
+      "Focus op snel schakelen, energie sturen en binnen 1 minuut kunnen starten op de eigen plek."
   }
 ];
 
@@ -90,15 +104,34 @@ const subjects = [
   }
 ];
 
-const moments = [
+const energizerSubjects = [
   {
-    id: "energizers",
-    label: "Tussen het leren",
-    subtitle: "Energizers bij het wisselen van een vak",
+    id: ENERGIZER_ACTIVE,
+    label: "Activerend",
+    marker: "Go",
     accent: "#00abc8",
     description:
-      "Korte opdrachten om energie te richten, de aandacht te pakken en soepel over te stappen naar de volgende les."
+      "Kies een energizer die de klas wakker maakt en snel extra energie geeft."
   },
+  {
+    id: ENERGIZER_FOCUS,
+    label: "Focussend",
+    marker: "Fx",
+    accent: "#143b86",
+    description:
+      "Kies een energizer die luisteren, reageren en direct schakelen versterkt."
+  },
+  {
+    id: ENERGIZER_CALM,
+    label: "Kalmerend actief",
+    marker: "Ru",
+    accent: "#118b74",
+    description:
+      "Kies een rustige energizer om spanning te laten zakken en toch in beweging te blijven."
+  }
+];
+
+const moments = [
   {
     id: "tijdens",
     label: "Tijdens het leren",
@@ -116,6 +149,15 @@ const moments = [
       "Werkvormen waarbij de beweging niet alleen motiveert, maar echt helpt om te begrijpen, oefenen en onthouden."
   }
 ];
+
+const energizerMoment = {
+  id: ENERGIZER_MOMENT_ID,
+  label: "Lesovergangen",
+  subtitle: "Energizers voor lesovergangen",
+  accent: "#00abc8",
+  description:
+    "Korte beweegpauzes voor tussen lessen in, zonder vakinhoud en direct inzetbaar op de eigen plek."
+};
 
 const subjectThemes = {
   taal: {
@@ -138,10 +180,32 @@ const subjectThemes = {
     line: "#cfc8ff",
     glow: "rgba(29, 16, 96, 0.12)",
     print: "#f7f5ff"
+  },
+  [ENERGIZER_ACTIVE]: {
+    accent: "#00abc8",
+    soft: "#ebfaff",
+    line: "#b9e8f2",
+    glow: "rgba(0, 171, 200, 0.12)",
+    print: "#f4fcff"
+  },
+  [ENERGIZER_FOCUS]: {
+    accent: "#143b86",
+    soft: "#edf4ff",
+    line: "#c3d6f7",
+    glow: "rgba(20, 59, 134, 0.12)",
+    print: "#f5f9ff"
+  },
+  [ENERGIZER_CALM]: {
+    accent: "#118b74",
+    soft: "#ebf8f4",
+    line: "#b9e2d8",
+    glow: "rgba(17, 139, 116, 0.12)",
+    print: "#f4fcf9"
   }
 };
 
-const taskBlueprints = buildTaskBlueprintsFromDoc();
+const taskBlueprints = redistributeRegularTaskBlueprints(buildTaskBlueprintsFromDoc());
+const standaloneEnergizerBlueprints = buildStandaloneEnergizerBlueprints();
 
 function emptyTaskMoments() {
   return {
@@ -190,6 +254,25 @@ function taalDocTask(groupId, config) {
     ...config,
     methodKeywords: ["staal 2", "taal", "dynamische schooldag", "mondeling taalonderwijs"]
   });
+}
+
+function allGroupTask(config) {
+  return {
+    key: config.key,
+    visual: config.visual,
+    visualHint: config.visualHint,
+    title: same(config.title),
+    summary: same(config.summary),
+    duration: same(config.duration),
+    setup: config.setup,
+    goal: same(config.goal),
+    movementFocus: config.movementFocus,
+    materials: config.materials,
+    steps: config.steps,
+    differentiation: same(config.differentiation),
+    teacherTip: same(config.teacherTip),
+    keywords: [...config.keywords, ...(config.methodKeywords ?? ["energizer", "lesovergang", "dynamische schooldag"])]
+  };
 }
 
 function buildTaskBlueprintsFromDoc() {
@@ -1943,6 +2026,483 @@ function buildTaskBlueprintsFromDoc() {
   };
 }
 
+function redistributeRegularTaskBlueprints(source) {
+  const redistribution = {
+    "woord-of-geen-woord": "tijdens",
+    "zin-of-geen-zin": "tijdens",
+    "klank-en-gebaar": "bewegend",
+    "waar-hoort-het-woord": "tijdens",
+    "feit-of-mening": "tijdens",
+    synoniemensprint: "tijdens",
+    "standpunt-in-de-ruimte": "bewegend",
+    "kernwoord-kiezen": "bewegend",
+    "waar-twijfel-niet-waar": "bewegend",
+    "klap-stamp-of-stil": "bewegend",
+    "waar-hoor-je-de-klank": "bewegend",
+    "letterflits-in-beweging": "bewegend",
+    "waar-of-niet-waar-spelling": "tijdens",
+    "hoeken-kiezen-bij-spelling": "tijdens",
+    spellingsprint: "tijdens",
+    "waar-of-niet-waar-werkwoorden": "tijdens",
+    "vier-hoeken-categorie-of-regel": "tijdens",
+    "spellingscan-in-beweging": "tijdens",
+    "tel-en-spring": "bewegend",
+    "waar-of-niet-waar-34": "tijdens",
+    rekenbevries: "tijdens",
+    "hoeken-kiezen": "tijdens",
+    "klap-als-het-klopt": "tijdens",
+    "waar-niet-waar-bovenbouw": "tijdens",
+    "keuzehoeken-rekenen": "tijdens"
+  };
+
+  return Object.fromEntries(
+    Object.entries(source).map(([subjectId, subjectMoments]) => {
+      const redistributed = {
+        energizers: [],
+        tijdens: [...subjectMoments.tijdens],
+        bewegend: [...subjectMoments.bewegend]
+      };
+
+      subjectMoments.energizers.forEach((blueprint) => {
+        redistributed[redistribution[blueprint.key] || "tijdens"].push(blueprint);
+      });
+
+      return [subjectId, redistributed];
+    })
+  );
+}
+
+function buildStandaloneEnergizerBlueprints() {
+  return {
+    [ENERGIZER_ACTIVE]: [
+      allGroupTask({
+        key: "sta-zit-sprong",
+        visual: "jump",
+        visualHint: "Een korte reactie-energizer waarbij de klas direct schakelt tussen staan, zitten en springen.",
+        title: "Sta-zit-sprong",
+        summary: "Leerlingen reageren meteen op korte beweegopdrachten zoals staan, zitten, springen of draaien.",
+        duration: "1-2 min",
+        setup: "Geen voorbereiding. Laat leerlingen op hun eigen plek staan met genoeg ruimte voor een kleine sprong.",
+        goal: "Energie snel omhoog brengen en de klas in korte tijd fysiek activeren.",
+        movementFocus: "Direct reageren op een opdracht en snel terugkeren naar een rustige basisstand.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Laat iedereen op de eigen plek staan.",
+          "Noem korte opdrachten zoals sta, zit, spring, draai of tik je schouders aan.",
+          "Bouw het tempo rustig op en wissel de opdrachten snel af.",
+          "Stop na ongeveer een minuut met een duidelijk stopteken."
+        ],
+        differentiation: "Werk eerst met 2 bewegingen en voeg later extra opdrachten toe.",
+        teacherTip: "Gebruik steeds dezelfde stopzin, zodat de overgang naar de volgende les meteen rustig is.",
+        keywords: ["energizer", "lesovergang", "activerend", "reactiespel", "hele klas"]
+      }),
+      allGroupTask({
+        key: "dierenbewegingen",
+        visual: "path",
+        visualHint: "De klas doet dierbewegingen na, zoals springen als een kikker of waggelen als een pinguin.",
+        title: "Dierenbewegingen",
+        summary: "Leerlingen bootsen korte dierbewegingen na in een energieke overgang tussen twee lessen.",
+        duration: "1-3 min",
+        setup: "Geen voorbereiding. Zorg alleen voor genoeg ruimte op de eigen plek.",
+        goal: "Korte, speelse activatie geven zonder materiaal of lange uitleg.",
+        movementFocus: "Afwisselen tussen springen, kruipen, wiebelen en rekken in korte blokjes.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Noem een dier, zoals kikker, olifant, krab, vogel of slang.",
+          "Laat de klas die beweging 5 tot 10 seconden nadoen.",
+          "Wissel snel van dier zodat het tempo hoog blijft.",
+          "Sluit af met een stilstaand dier als stopmoment."
+        ],
+        differentiation: "Laat oudere groepen sneller wisselen of een dierbeweging combineren met een houding of richting.",
+        teacherTip: "Kies 3 tot 4 dieren die de klas goed kent; dan blijft de uitleg kort en de vaart hoog.",
+        keywords: ["energizer", "lesovergang", "activerend", "dieren", "bewegen"]
+      }),
+      allGroupTask({
+        key: "tien-seconden-challenge",
+        visual: "jump",
+        visualHint: "In korte blokken van 10 seconden doet de klas steeds een nieuwe actieve uitdaging.",
+        title: "10-seconden challenge",
+        summary: "Leerlingen doen achter elkaar een paar korte bewegingsopdrachten van 10 seconden.",
+        duration: "1-2 min",
+        setup: "Geen voorbereiding. Kies vooraf 3 of 4 korte opdrachten.",
+        goal: "Snel activeren met korte, duidelijke beweegblokken.",
+        movementFocus: "Korte pieken van energie via knieheffen, stampen, boksen of hakken-billen.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Noem de eerste opdracht, bijvoorbeeld 10 seconden knieheffen.",
+          "Laat de klas meteen starten en tel hardop af.",
+          "Schakel daarna direct door naar de volgende opdracht, zoals stampen of boksen in de lucht.",
+          "Sluit af met één rustige ademhaling en het stopteken."
+        ],
+        differentiation: "Gebruik 2 opdrachten voor een korte overgang of 4 opdrachten voor extra activering.",
+        teacherTip: "Zorg dat de opdrachten vooraf al klaarstaan in je hoofd; dan blijft het echt een snelle energizer.",
+        keywords: ["energizer", "lesovergang", "activerend", "challenge", "10 seconden"]
+      }),
+      allGroupTask({
+        key: "springparcours-zonder-materiaal",
+        visual: "path",
+        visualHint: "Een vaste reeks kleine en grote sprongen houdt de klas kort en krachtig in beweging.",
+        title: "Springparcours zonder materiaal",
+        summary: "Leerlingen doen op hun plek een afgesproken sprongreeks, zoals klein, groot, hurk en draai.",
+        duration: "1-2 min",
+        setup: "Geen voorbereiding. Spreek één vaste reeks af voordat je start.",
+        goal: "Leerlingen kort activeren met een duidelijke reeks die snel terugkomt.",
+        movementFocus: "Een vaste bewegingsvolgorde onthouden en direct uitvoeren.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Spreek de reeks af: 2 kleine sprongen, 1 grote sprong, hurk, strek en draai.",
+          "Doe de reeks één keer voor.",
+          "Laat de klas de reeks 3 tot 4 keer achter elkaar uitvoeren.",
+          "Stop met een vast stiltesignaal."
+        ],
+        differentiation: "Maak de reeks langer of laat leerlingen na 2 rondes de reeks zelf onthouden.",
+        teacherTip: "Houd de reeks steeds gelijk; dan zit de energie in het doen en niet in een lange uitleg.",
+        keywords: ["energizer", "lesovergang", "activerend", "sprongen", "beweegreeks"]
+      }),
+      allGroupTask({
+        key: "dansfreeze",
+        visual: "jump",
+        visualHint: "Leerlingen dansen kort op hun plek en bevriezen direct op het signaal.",
+        title: "Dansfreeze",
+        summary: "Een korte energizer waarbij leerlingen even vrij bewegen en daarna onmiddellijk stilvallen.",
+        duration: "1-2 min",
+        setup: "Geen voorbereiding. Gebruik eventueel een kort muzieksignaal, maar het kan ook zonder muziek.",
+        goal: "Spanning losmaken en daarna weer snel focus terughalen.",
+        movementFocus: "Vrij dansen op de plek en direct bevriezen op een afgesproken signaal.",
+        materials: ["Geen extra materiaal", "Eventueel muziek"],
+        steps: [
+          "Laat leerlingen 20 seconden dansen op hun plek.",
+          "Geef daarna het signaal freeze.",
+          "Iedereen bevriest direct en blijft 3 seconden stil staan.",
+          "Herhaal dit 2 of 3 keer."
+        ],
+        differentiation: "Maak de freeze langer voor extra focus of laat leerlingen in een grappige houding eindigen.",
+        teacherTip: "Gebruik altijd hetzelfde freeze-signaal; dan werkt de overgang straks sneller.",
+        keywords: ["energizer", "lesovergang", "activerend", "dans", "freeze"]
+      }),
+      allGroupTask({
+        key: "tel-samen-naar-20-met-beweging",
+        visual: "circle",
+        visualHint: "Bij elk getal hoort een vaste beweging, zodat tellen en ritme samenkomen.",
+        title: "Tel samen naar 20 met beweging",
+        summary: "De klas telt samen en koppelt elk getal aan klappen, stampen of springen.",
+        duration: "1-2 min",
+        setup: "Geen voorbereiding. Kies vooraf 1 of 2 bewegingen die je wilt gebruiken.",
+        goal: "De groep snel gelijk krijgen in ritme, energie en aandacht.",
+        movementFocus: "Tellen op tempo met een vaste beweging per tel of per telreeks.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Spreek af welke beweging bij het tellen hoort, bijvoorbeeld klappen of stampen.",
+          "Tel als klas samen naar 20.",
+          "Laat de klas bij elk getal of per reeks van 5 dezelfde beweging maken.",
+          "Herhaal eventueel met terugtellen of een andere beweging."
+        ],
+        differentiation: "Werk met kleinere telreeksen bij jonge groepen of wissel 2 bewegingen af bij oudere groepen.",
+        teacherTip: "Houd het tempo gelijk; dat geeft rust én energie tegelijk.",
+        keywords: ["energizer", "lesovergang", "activerend", "tellen", "ritme"]
+      }),
+      allGroupTask({
+        key: "wekkerenergizer",
+        visual: "jump",
+        visualHint: "De klas schakelt razendsnel tussen vaste bewegingsstanden op basis van een cijfer.",
+        title: "Wekkerenergizer",
+        summary: "Bij elk cijfer hoort een beweging, zoals wandelen, joggen, springen of sprintarmen.",
+        duration: "1-2 min",
+        setup: "Geen voorbereiding. Spreek vier standen af voor de cijfers 1 tot en met 4.",
+        goal: "Snel tempo en reactievermogen opbouwen in een korte lesovergang.",
+        movementFocus: "Onmiddellijk schakelen tussen verschillende energieniveaus.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Spreek de standen af: 1 wandelen, 2 joggen, 3 springen, 4 sprintarmen.",
+          "Roep een cijfer.",
+          "Laat de klas direct de bijbehorende beweging uitvoeren.",
+          "Wissel de cijfers snel af en eindig met stil staan."
+        ],
+        differentiation: "Gebruik eerst alleen 2 standen en voeg later extra cijfers toe.",
+        teacherTip: "Roep sommige cijfers expres twee keer achter elkaar; zo blijft de klas echt luisteren.",
+        keywords: ["energizer", "lesovergang", "activerend", "schakelen", "tempo"]
+      }),
+      allGroupTask({
+        key: "bewegingen-estafette-op-de-plek",
+        visual: "relay",
+        visualHint: "Rijen of tafelgroepen voeren om de beurt een korte beweegreeks uit op hun eigen plek.",
+        title: "Bewegingen estafette op de plek",
+        summary: "Leerlingen voeren rij voor rij of tafelgroep voor tafelgroep een korte bewegingsopdracht uit.",
+        duration: "2-3 min",
+        setup: "Geen voorbereiding. Spreek af in welke volgorde de rijen of tafelgroepen aan de beurt komen.",
+        goal: "De klas activeren met korte, overzichtelijke groepsbeurten.",
+        movementFocus: "Om de beurt een korte reeks uitvoeren en daarna snel wisselen.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Kies een korte reeks, zoals 5 sprongen, 5 knieheffen en 1 draai.",
+          "Laat rij voor rij of tafelgroep voor tafelgroep de reeks uitvoeren.",
+          "De rest kijkt mee en wacht tot het eigen moment.",
+          "Sluit af met één gezamenlijke herhaling."
+        ],
+        differentiation: "Maak de reeks langer voor oudere groepen of korter voor een snelle overgang.",
+        teacherTip: "Gebruik een vaste volgorde in de klas; dan is deze energizer zonder extra uitleg in te zetten.",
+        keywords: ["energizer", "lesovergang", "activerend", "estafette", "rijen"]
+      }),
+      allGroupTask({
+        key: "wiebelmix",
+        visual: "jump",
+        visualHint: "Een vaste mix van stappen, springen, draaien en strekken geeft in één minuut veel afwisseling.",
+        title: "Wiebelmix",
+        summary: "Leerlingen doen 4 korte blokken van 15 seconden: stappen, springen, draaien en strekken.",
+        duration: "1 min",
+        setup: "Geen voorbereiding. Kondig de vier blokken kort aan.",
+        goal: "In één minuut afwisselend activeren en weer landen.",
+        movementFocus: "Korte blokken met duidelijke overgangen tussen actief en rustiger bewegen.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Start met 15 seconden stappen op de plaats.",
+          "Ga door met 15 seconden springen.",
+          "Laat daarna 15 seconden draaien volgen.",
+          "Sluit af met 15 seconden strekken en één stiltesignaal."
+        ],
+        differentiation: "Gebruik een timer of tel hardop mee om het tempo gelijk te houden.",
+        teacherTip: "Juist de vaste volgorde maakt deze energizer toegankelijk; de klas weet snel wat er komt.",
+        keywords: ["energizer", "lesovergang", "activerend", "mix", "1 minuut"]
+      })
+    ],
+    [ENERGIZER_FOCUS]: [
+      allGroupTask({
+        key: "volg-de-leerkracht",
+        visual: "circle",
+        visualHint: "De klas spiegelt de bewegingen van de leerkracht en stemt zich zo snel af op één ritme.",
+        title: "Volg de leerkracht",
+        summary: "Leerlingen spiegelen jouw bewegingen, zoals knieheffen, hurken of stappen op de plaats.",
+        duration: "1-2 min",
+        setup: "Geen voorbereiding. Ga zelf goed zichtbaar voor de klas staan.",
+        goal: "De aandacht bundelen en de klas snel gelijk schakelen op één voorbeeld.",
+        movementFocus: "Spiegelen en direct reageren op wat wordt voorgedaan.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Ga zichtbaar voor de klas staan.",
+          "Doe korte bewegingen voor, zoals knieheffen, armen zwaaien, hurken of op één been staan.",
+          "Laat de klas je precies volgen.",
+          "Stop met één vaste eindhouding."
+        ],
+        differentiation: "Maak de bewegingen sneller of juist rustiger afhankelijk van wat de groep nodig heeft.",
+        teacherTip: "Wissel grote en kleine bewegingen af; zo blijft de klas scherp kijken.",
+        keywords: ["energizer", "lesovergang", "focussend", "spiegelen", "leerkracht volgt"]
+      }),
+      allGroupTask({
+        key: "beweegstop",
+        visual: "path",
+        visualHint: "Leerlingen bewegen vrij op hun plek en bevriezen direct bij het signaal stop.",
+        title: "Beweegstop",
+        summary: "De klas beweegt vrij en bevriest meteen wanneer jij stop zegt.",
+        duration: "1-2 min",
+        setup: "Geen voorbereiding. Spreek een duidelijk stopteken of stopwoord af.",
+        goal: "Luisteren, reageren en focus terughalen in een korte overgang.",
+        movementFocus: "Vrij bewegen en daarna direct volledig stilvallen.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Laat leerlingen vrij bewegen op hun plek, bijvoorbeeld joggen, marcheren of schaatsen.",
+          "Geef onverwacht het signaal stop.",
+          "Iedereen bevriest meteen.",
+          "Herhaal dit meerdere keren in een korte reeks."
+        ],
+        differentiation: "Laat oudere groepen na de freeze ook 2 seconden in stilte wachten.",
+        teacherTip: "Gebruik hetzelfde stopwoord als je later in de dag ook wilt inzetten; dat maakt het extra bruikbaar.",
+        keywords: ["energizer", "lesovergang", "focussend", "freeze", "stopspel"]
+      }),
+      allGroupTask({
+        key: "hoofd-schouders-knieen-tenen-plus",
+        visual: "jump",
+        visualHint: "De klas volgt een bekende reeks en reageert steeds sneller of op expres door elkaar gehaalde commando's.",
+        title: "Hoofd-schouders-knieën-tenen-plus",
+        summary: "Een klassieke reactiespel-energizer die je sneller maakt of bewust door elkaar haalt.",
+        duration: "1-2 min",
+        setup: "Geen voorbereiding. Spreek af dat leerlingen goed luisteren en niet alleen kopiëren.",
+        goal: "Luisteren, reageren en de aandacht aanscherpen in een bekende structuur.",
+        movementFocus: "Snel schakelen tussen bekende lichaamsaanwijzingen.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Start rustig met hoofd, schouders, knieën en tenen.",
+          "Voer daarna het tempo op of haal de aanwijzingen expres door elkaar.",
+          "Laat leerlingen zo precies mogelijk reageren.",
+          "Sluit af met één rustige correcte ronde."
+        ],
+        differentiation: "Voeg extra lichaamsdelen toe, zoals heupen, ellebogen of enkels.",
+        teacherTip: "De kracht zit in het verrassingseffect; kondig dus niet aan wanneer je gaat wisselen.",
+        keywords: ["energizer", "lesovergang", "focussend", "luisteren", "reactiespel"]
+      }),
+      allGroupTask({
+        key: "richtingenrace",
+        visual: "corners",
+        visualHint: "Leerlingen reageren direct op richtingen zoals voor, achter, links en rechts.",
+        title: "Richtingenrace",
+        summary: "De klas maakt direct de juiste beweging bij richtingen zoals voor, achter, links of rechts.",
+        duration: "1-2 min",
+        setup: "Geen voorbereiding. Spreek af welke beweging hoort bij voor, achter, links, rechts, omhoog en omlaag.",
+        goal: "Reactievermogen en focus versterken met eenvoudige richtingstaal.",
+        movementFocus: "Direct en precies reageren op verbale richtingaanwijzingen.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Noem een richting, zoals voor, achter, links, rechts, omhoog of omlaag.",
+          "Laat leerlingen direct de juiste beweging maken.",
+          "Verhoog daarna het tempo.",
+          "Eindig met één stiltesignaal en een laatste richting."
+        ],
+        differentiation: "Maak het moeilijker door snel twee richtingen achter elkaar te noemen.",
+        teacherTip: "Kijk of de klas dezelfde kant kiest; dat geeft je direct zicht op de gezamenlijke focus.",
+        keywords: ["energizer", "lesovergang", "focussend", "richtingen", "reactievermogen"]
+      }),
+      allGroupTask({
+        key: "klap-en-stap",
+        visual: "jump",
+        visualHint: "Leerlingen klappen een ritme na en zetten tegelijk stappen op de plaats.",
+        title: "Klap en stap",
+        summary: "De klas klapt een ritme na en koppelt dat aan stappen op de plaats.",
+        duration: "1-2 min",
+        setup: "Geen voorbereiding. Begin met een eenvoudig ritme van 3 of 4 tellen.",
+        goal: "Luisteren en ritmegevoel koppelen aan korte beweging.",
+        movementFocus: "Ritme nadoen en tegelijkertijd het lijf in beweging houden.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Klap een kort ritme voor.",
+          "Laat leerlingen het ritme nadoen terwijl ze stappen op de plaats.",
+          "Maak het ritme iets moeilijker.",
+          "Sluit af met één laatste gezamenlijke herhaling."
+        ],
+        differentiation: "Laat oudere groepen na 2 rondes zelf een ritme voordoen.",
+        teacherTip: "Houd de ritmes kort; dan blijft de focus op luisteren en reageren.",
+        keywords: ["energizer", "lesovergang", "focussend", "ritme", "klappen"]
+      }),
+      allGroupTask({
+        key: "spiegelspel-in-tweetallen",
+        visual: "circle",
+        visualHint: "In tweetallen beweegt één leerling langzaam en spiegelt de ander die precies.",
+        title: "Spiegelspel in tweetallen",
+        summary: "Tweetallen spiegelen elkaar kort en precies, daarna wisselen de rollen.",
+        duration: "1-2 min",
+        setup: "Geen voorbereiding. Laat leerlingen snel een maatje zoeken op of naast hun eigen plek.",
+        goal: "Rustige aandacht en afstemming op een ander opbouwen.",
+        movementFocus: "Nauwkeurig volgen en kleine bewegingen gecontroleerd spiegelen.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Laat leerlingen een maatje zoeken.",
+          "Leerling A beweegt langzaam, leerling B spiegelt precies.",
+          "Wissel na ongeveer 20 seconden van rol.",
+          "Sluit af met één gezamenlijke freeze."
+        ],
+        differentiation: "Werk eerst met alleen armbewegingen en voeg later grotere bewegingen toe.",
+        teacherTip: "Juist langzaam bewegen maakt deze energizer sterk; zo dwing je echt tot kijken en afstemmen.",
+        keywords: ["energizer", "lesovergang", "focussend", "tweetallen", "spiegelen"]
+      }),
+      allGroupTask({
+        key: "hoeken-zonder-lopen",
+        visual: "corners",
+        visualHint: "De klas reageert op hoeknummers met vaste bewegingen, zonder echt door het lokaal te lopen.",
+        title: "Hoeken zonder lopen",
+        summary: "Aan hoeknummers zijn vaste bewegingen gekoppeld, zoals hurken, springen, draaien of knieheffen.",
+        duration: "1-2 min",
+        setup: "Geen voorbereiding. Spreek vier nummers en vier bewegingen af.",
+        goal: "Snel schakelen tussen luisteren en reageren zonder verplaatsing door het lokaal.",
+        movementFocus: "Direct een vaste beweging koppelen aan een getal of signaal.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Spreek af: 1 hurken, 2 springen, 3 draaien, 4 knieheffen.",
+          "Roep een nummer.",
+          "Laat de klas meteen de juiste beweging maken.",
+          "Wissel de nummers in een hoog tempo af."
+        ],
+        differentiation: "Noem soms twee nummers achter elkaar voor een korte bewegingscombinatie.",
+        teacherTip: "Deze energizer werkt vooral goed als de afspraken kort en vast blijven.",
+        keywords: ["energizer", "lesovergang", "focussend", "nummers", "reactie"]
+      }),
+      allGroupTask({
+        key: "ja-nee-beweging",
+        visual: "jump",
+        visualHint: "Grappige stellingen zorgen voor snelle keuzes: ja is springen en nee is hurken.",
+        title: "Ja/nee-beweging",
+        summary: "Leerlingen reageren op korte, grappige stellingen met een vaste ja- of nee-beweging.",
+        duration: "1-2 min",
+        setup: "Geen voorbereiding. Spreek af: ja is springen en nee is hurken.",
+        goal: "De aandacht pakken met eenvoudige keuzes en snelle reactie.",
+        movementFocus: "Ja en nee direct lichamelijk zichtbaar maken.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Spreek af: ja betekent springen en nee betekent hurken.",
+          "Noem korte stellingen, zoals een banaan is blauw.",
+          "Laat leerlingen direct reageren.",
+          "Houd het tempo hoog en sluit af met één laatste stelling."
+        ],
+        differentiation: "Laat oudere groepen zelf één stelling bedenken voor een extra ronde.",
+        teacherTip: "Grappige voorbeelden werken het best; dan reageert de klas spontaan en snel.",
+        keywords: ["energizer", "lesovergang", "focussend", "ja nee", "stellingen"]
+      }),
+      allGroupTask({
+        key: "actie-op-signaal",
+        visual: "jump",
+        visualHint: "Verschillende klapsignalen sturen direct de beweging: springen, hurken of stil staan.",
+        title: "Actie op signaal",
+        summary: "De klas koppelt signalen, zoals één of twee klappen, aan een vaste beweging.",
+        duration: "1-2 min",
+        setup: "Geen voorbereiding. Spreek 3 signalen en 3 bewegingen af.",
+        goal: "Bewegen combineren met luisteren en reageren op auditieve signalen.",
+        movementFocus: "Snel reageren op klappen of een ander afgesproken signaal.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Spreek af: 1 klap is springen, 2 klappen is hurken, 3 klappen is stil staan.",
+          "Geef een signaal.",
+          "Laat leerlingen direct reageren.",
+          "Verhoog het tempo en sluit af met één laatste stille houding."
+        ],
+        differentiation: "Gebruik later ook andere signalen, zoals stemvolume of een tik op tafel.",
+        teacherTip: "Varieer in het tempo van je signalen; dan moet de klas echt blijven luisteren.",
+        keywords: ["energizer", "lesovergang", "focussend", "signaal", "luisteren"]
+      })
+    ],
+    [ENERGIZER_CALM]: [
+      allGroupTask({
+        key: "stoelyoga-in-beweging",
+        visual: "circle",
+        visualHint: "Grote en kleine rekoefeningen helpen om de overgang rustiger te maken zonder stil te vallen.",
+        title: "Stoelyoga in beweging",
+        summary: "Leerlingen maken rustige bewegingen zoals groot maken, schouders draaien en tenen aantikken.",
+        duration: "1-3 min",
+        setup: "Geen voorbereiding. Laat leerlingen naast of achter hun stoel staan.",
+        goal: "De groep rustig laten landen met lichte beweging en rekken.",
+        movementFocus: "Langzame, gecontroleerde bewegingen die spanning uit schouders en rug halen.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Laat leerlingen naast of achter hun stoel staan.",
+          "Doe rustige bewegingen voor, zoals groot maken, klein maken, schouders draaien en zijwaarts rekken.",
+          "Voeg tenen aantikken en armen omhoog toe.",
+          "Sluit af met één rustige houding en een diepe ademhaling."
+        ],
+        differentiation: "Kies 3 rustige bewegingen voor een korte overgang of 5 voor een iets langere reset.",
+        teacherTip: "Praat tijdens deze energizer rustiger en lager; dat helpt de klas mee landen.",
+        keywords: ["energizer", "lesovergang", "kalmerend actief", "stoelyoga", "rekken"]
+      }),
+      allGroupTask({
+        key: "adem-en-beweeg",
+        visual: "circle",
+        visualHint: "Diep in- en uitademen wordt gecombineerd met rustige arm- en schouderbewegingen.",
+        title: "Adem en beweeg",
+        summary: "Een rustige overgang met drie diepe ademhalingen, armen mee omhoog en schouders losmaken.",
+        duration: "1-2 min",
+        setup: "Geen voorbereiding. Laat leerlingen rechtop staan op hun eigen plek.",
+        goal: "Na een druk moment de klas rustig laten schakelen naar de volgende les.",
+        movementFocus: "Ademhaling koppelen aan lichte rek- en ontspanbewegingen.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Laat leerlingen rechtop staan.",
+          "Adem drie keer diep in en uit, met de armen mee omhoog en omlaag.",
+          "Maak daarna rustig de schouders los en rek even uit.",
+          "Sluit af met beide voeten stil op de grond."
+        ],
+        differentiation: "Laat oudere groepen de in- en uitademing iets langer volgen.",
+        teacherTip: "Kies dit vooral na een druk overgangsmoment of voor een rustigere les.",
+        keywords: ["energizer", "lesovergang", "kalmerend actief", "ademhaling", "rust"]
+      })
+    ]
+  };
+}
+
 const initialState = {
   groupId: null,
   subjectId: null,
@@ -1959,10 +2519,26 @@ const state = {
 
 let historyIndex = 0;
 
+function getAllSubjectOptions() {
+  return [...subjects, ...energizerSubjects];
+}
+
+function getAllMomentOptions() {
+  return [...moments, energizerMoment];
+}
+
+function isEnergizerGroup(groupId = state.groupId) {
+  return groupId === GROUP_ENERGIZERS;
+}
+
+function getSubjectOptionsForCurrentRoute(groupId = state.groupId) {
+  return isEnergizerGroup(groupId) ? energizerSubjects : subjects;
+}
+
 const orderMaps = {
   groups: new Map(groups.map((item, index) => [item.id, index])),
-  subjects: new Map(subjects.map((item, index) => [item.id, index])),
-  moments: new Map(moments.map((item, index) => [item.id, index]))
+  subjects: new Map(getAllSubjectOptions().map((item, index) => [item.id, index])),
+  moments: new Map(getAllMomentOptions().map((item, index) => [item.id, index]))
 };
 
 const ui = {
@@ -2004,6 +2580,8 @@ bindIfPresent(ui.stepCards, "click", handleStepCardClick);
 bindIfPresent(ui.taskDetail, "click", handleTaskDetailClick);
 bindIfPresent(ui.taskGrid, "click", handleTaskGridClick);
 window.addEventListener("popstate", handlePopState);
+window.addEventListener("afterprint", handleAfterPrint);
+document.body.dataset.printSection = "all";
 
 function bindIfPresent(element, eventName, handler) {
   if (element) {
@@ -2012,18 +2590,44 @@ function bindIfPresent(element, eventName, handler) {
 }
 
 function buildLibrary() {
-  return groups.map((group) => ({
-    ...group,
-    subjects: subjects.map((subject) => ({
-      ...subject,
-      moments: moments.map((moment) => ({
-        ...moment,
-        tasks: taskBlueprints[subject.id][moment.id]
-          .map((blueprint) => materializeTask(group, subject, moment, blueprint))
-          .filter(Boolean)
+  const regularGroups = groups
+    .filter((group) => !isEnergizerGroup(group.id))
+    .map((group) => ({
+      ...group,
+      subjects: subjects.map((subject) => ({
+        ...subject,
+        moments: moments.map((moment) => ({
+          ...moment,
+          tasks: taskBlueprints[subject.id][moment.id]
+            .map((blueprint) => materializeTask(group, subject, moment, blueprint))
+            .filter(Boolean)
+        }))
       }))
-    }))
-  }));
+    }));
+
+  const energizerGroup = groups.find((group) => isEnergizerGroup(group.id));
+
+  if (!energizerGroup) {
+    return regularGroups;
+  }
+
+  return [
+    ...regularGroups,
+    {
+      ...energizerGroup,
+      subjects: energizerSubjects.map((subject) => ({
+        ...subject,
+        moments: [
+          {
+            ...energizerMoment,
+            tasks: standaloneEnergizerBlueprints[subject.id]
+              .map((blueprint) => materializeTask(energizerGroup, subject, energizerMoment, blueprint))
+              .filter(Boolean)
+          }
+        ]
+      }))
+    }
+  ];
 }
 
 const taskPrintProfiles = {
@@ -2184,8 +2788,21 @@ function materializeTask(group, subject, moment, blueprint) {
 }
 
 function readGroupValue(value, groupId) {
-  if (typeof value === "object" && value !== null && value[groupId] !== undefined) {
-    return value[groupId];
+  if (Array.isArray(value)) {
+    return value;
+  }
+
+  if (typeof value === "object" && value !== null) {
+    if (Object.prototype.hasOwnProperty.call(value, groupId)) {
+      return value[groupId];
+    }
+
+    if (groupId === GROUP_ENERGIZERS) {
+      const fallback = Object.values(value).find((entry) => entry !== null && entry !== undefined);
+      return fallback ?? null;
+    }
+
+    return null;
   }
 
   return value;
@@ -2362,21 +2979,85 @@ function buildOverviewSheets(group, subject, moment, blueprint, title, printProf
     {
       label: "Lesplaat 2",
       title: organization.title,
-      art: renderClassLayoutArt(blueprint.visual, organization, subject.accent, moment.accent),
-      text: getPrintOrganizationLines(blueprint.visual, printProfile, organization).join("\n"),
+      art: renderClassLayoutArt(blueprint.key, blueprint.visual, organization, subject.accent, moment.accent),
+      text: getPrintOrganizationLines(blueprint.key, blueprint.visual, printProfile, organization).join("\n"),
       hint: organization.hint
     },
     {
       label: "Lesplaat 3",
       title: "Logische stapvolgorde",
-      art: renderSequenceArt(getPrintSequenceLabels(blueprint.visual), subject.accent, moment.accent),
+      art: renderSequenceArt(getPrintSequenceLabels(blueprint.key, blueprint.visual), subject.accent, moment.accent),
       text: getPrintSequenceText(blueprint.steps).join("\n"),
       hint: "Leg dit blad naast de werkkaarten zodat de volgorde voor iedereen duidelijk blijft."
     }
   ];
 }
 
-function getPrintOrganizationLines(visual, printProfile, organization) {
+function getPrintOrganizationLines(taskKey, visual, printProfile, organization) {
+  if (
+    [
+      "zoek-je-spellingmaatje",
+      "zoek-de-juiste-spellingpartner",
+      "zoek-iemand-die",
+      "breuk-decimaal-procent-match"
+    ].includes(taskKey)
+  ) {
+    return [
+      `Geef ${CLASS_SIZE} leerlingen ieder 1 kaart en laat iedereen tegelijk starten.`,
+      "Laat leerlingen vrij door het lokaal bewegen totdat zij een match of complete set hebben gevonden.",
+      "Laat iedere match of set hardop toelichten waarom de kaarten of notaties bij elkaar horen."
+    ];
+  }
+
+  if (["zinnenstraat", "alinea-opstelling", "argumentenlijn", "werkwoordschema-op-de-vloer", "zin-in-delen"].includes(taskKey)) {
+    return [
+      "Leg de vloer- of lijnkaarten eerst in de juiste volgorde klaar voordat leerlingen kaarten gaan leggen of verplaatsen.",
+      "Laat steeds een kleine beurtgroep actief leggen, terwijl de rest meekijkt en benoemt wat klopt.",
+      "Lees of controleer daarna samen de hele opbouw, zodat de structuur voor de hele klas zichtbaar blijft."
+    ];
+  }
+
+  if (
+    [
+      "waar-hoort-het-woord",
+      "tekstsoorten-hoeken",
+      "hoeken-kiezen-bij-spelling",
+      "vier-hoeken-categorie-of-regel",
+      "hoeken-kiezen",
+      "keuzehoeken-rekenen"
+    ].includes(taskKey)
+  ) {
+    return [
+      "Hang of leg vier duidelijke keuzevakken neer en houd eventueel een middenplek vrij voor twijfelgevallen.",
+      "Laat leerlingen eerst kiezen en daarna pas verwoorden waarom hun kaart, categorie of antwoord bij die hoek past.",
+      "Gebruik de laatste ronde voor een korte gezamenlijke check van lastige of verschillende keuzes."
+    ];
+  }
+
+  if (
+    [
+      "vraag-en-antwoordwandeling",
+      "wandel-en-vat-samen",
+      "presentatiepad",
+      "verhaalpad-drie-stappen",
+      "sommenwandeling",
+      "wandel-en-leg-uit",
+      "regelroute",
+      "signaalwoorden-route",
+      "weetwoordmuur",
+      "leestekenroute",
+      "grafiekenwandeling",
+      "schaalwandeling",
+      "foutenjacht"
+    ].includes(taskKey)
+  ) {
+    return [
+      "Leg de route of wandkaarten in een vaste volgorde neer en houd de looprichting voor iedereen gelijk.",
+      "Laat leerlingen of duo's steeds maar met 1 kaart, vraag of stop tegelijk werken.",
+      "Sluit af met een korte check waarin antwoorden, uitleg of keuzes samen worden teruggekoppeld."
+    ];
+  }
+
   if (organization.type === "individual") {
     return [
       `Geef ${CLASS_SIZE} leerlingen ieder 1 kaart of 1 eigen plek.`,
@@ -2573,7 +3254,61 @@ function getClassManagementSupportCards(visual, organization) {
   return groupCards;
 }
 
-function getPrintSequenceLabels(visual) {
+function getPrintSequenceLabels(taskKey, visual) {
+  if (
+    [
+      "loopdictee-woordenschat",
+      "loopdictee-kernzinnen",
+      "loopdictee-luisterwoorden",
+      "loopdictee-categorie-van-de-week",
+      "loopdictee-werkwoordspelling",
+      "loopdictee-rekenen"
+    ].includes(taskKey)
+  ) {
+    return ["HANG OP", "LOOP", "WERK SAMEN", "CHECK"];
+  }
+
+  if (["vraag-en-antwoordwandeling", "interviewcarrousel", "wandel-en-vat-samen", "wandel-en-leg-uit"].includes(taskKey)) {
+    return ["LEES", "BESPREEK", "WISSEL", "DEEL"];
+  }
+
+  if (["schrijfronde-met-stopplaatsen", "schrijfposten", "presentatiepad"].includes(taskKey)) {
+    return ["LEG NEER", "KIES", "WERK UIT", "LEES TERUG"];
+  }
+
+  if (["zinnenstraat", "alinea-opstelling", "argumentenlijn", "werkwoordschema-op-de-vloer", "zin-in-delen"].includes(taskKey)) {
+    return ["LEG", "ZET", "BENOEM", "CHECK"];
+  }
+
+  if (
+    [
+      "zoek-je-spellingmaatje",
+      "zoek-de-juiste-spellingpartner",
+      "zoek-iemand-die",
+      "breuk-decimaal-procent-match"
+    ].includes(taskKey)
+  ) {
+    return ["DEEL UIT", "ZOEK", "KOPPEL", "LEG UIT"];
+  }
+
+  if (["woordkaartjes-estafette", "rekenen-estafette", "antwoordestafette"].includes(taskKey)) {
+    return ["REN", "HAAL", "WERK", "WISSEL"];
+  }
+
+  if (["categoriecircuit", "spellingcircuit-bovenbouw", "rekencircuit-56", "rekencircuit-bovenbouw"].includes(taskKey)) {
+    return ["START", "WERK", "WISSEL", "CHECK"];
+  }
+
+  if (
+    ["verhaalpad-drie-stappen", "signaalwoorden-route", "regelroute", "grafiekenwandeling", "schaalwandeling", "foutenjacht"].includes(taskKey)
+  ) {
+    return ["START", "LEES", "VERWERK", "CHECK"];
+  }
+
+  if (["waar-hoort-het-woord", "tekstsoorten-hoeken", "hoeken-kiezen-bij-spelling", "vier-hoeken-categorie-of-regel", "hoeken-kiezen", "keuzehoeken-rekenen"].includes(taskKey)) {
+    return ["KIES", "GA STAAN", "LEG UIT", "CHECK"];
+  }
+
   if (visual === "dictation") {
     return ["HANG OP", "LOOP", "SCHRIJF", "WISSEL"];
   }
@@ -4108,8 +4843,9 @@ function getStarterCards(subjectId, groupId, visual, taskKey, title, printProfil
   const rawItems =
     readGroupValue(overrideItems, groupId) ??
     readGroupValue(families[family] ?? families[`${subjectId}_${visual}`] ?? families.rekenen_antwoorden, groupId);
+  const itemList = Array.isArray(rawItems) ? rawItems : rawItems ? [rawItems] : [];
 
-  const normalizedItems = rawItems.map((item, index) =>
+  const normalizedItems = itemList.map((item, index) =>
     normalizeCardItem(item, `${title} ${index + 1}`, buildCardHint(subjectId, groupId, family, taskKey, index))
   );
 
@@ -4268,38 +5004,33 @@ function getWorkSetCopyCount(visual, organization) {
 }
 
 function duplicateCardsForGroups(cards, copies, units = []) {
-  const duplicated = [];
-
-  for (let groupNumber = 1; groupNumber <= copies; groupNumber += 1) {
-    const unit = units[groupNumber - 1];
-    const unitLabel = unit?.label ?? `Set ${groupNumber}`;
-    cards.forEach((source) => {
-      duplicated.push({
-        ...source,
-        label: `${source.label} • ${unitLabel.toLowerCase()}`,
-        hint: `${source.hint} Werkset voor ${unitLabel.toLowerCase()}.`
-      });
-    });
-  }
-
-  return duplicated;
+  return cards.map((source) =>
+    decorateCardDistribution(
+      source,
+      units.map((unit) => unit.label),
+      copies
+    )
+  );
 }
 
 function fillCardsToTarget(cards, targetCount, units = []) {
-  const completed = cards.slice(0, targetCount);
+  const baseCards = cards.slice(0, targetCount);
 
-  if (completed.length === targetCount || cards.length === 0) {
-    return completed.map((item, index) => relabelCardForUnit(item, units[index]));
+  if (!baseCards.length) {
+    return [];
   }
 
-  let index = 0;
+  const assignments = Array.from({ length: baseCards.length }, () => []);
 
-  while (completed.length < targetCount) {
-    completed.push(cards[index % cards.length]);
-    index += 1;
+  if (units.length) {
+    units.forEach((unit, index) => {
+      assignments[index % baseCards.length].push(unit.label);
+    });
   }
 
-  return completed.map((item, cardIndex) => relabelCardForUnit(item, units[cardIndex]));
+  return baseCards.map((item, index) =>
+    decorateCardDistribution(item, assignments[index], Math.max(1, assignments[index].length || 1))
+  );
 }
 
 function relabelCardForUnit(cardItem, unit) {
@@ -4649,26 +5380,57 @@ function buildMethodWorkHint(subjectId, family, taskKey, index) {
 }
 
 function fillCardsToClassSize(cards) {
-  const completed = cards.slice(0, CLASS_SIZE);
+  const baseCards = cards.slice(0, CLASS_SIZE);
 
-  if (completed.length === CLASS_SIZE || cards.length === 0) {
-    return completed;
+  if (!baseCards.length) {
+    return [];
   }
 
-  let index = 0;
+  const copyCounts = Array.from({ length: baseCards.length }, () => 0);
 
-  while (completed.length < CLASS_SIZE) {
-    const source = cards[index % cards.length];
-    const round = Math.floor(index / cards.length) + 2;
-    completed.push({
-      label: `${source.label} set ${round}`,
-      text: source.text,
-      hint: `${source.hint} Extra kopie voor een volledige klas van ${CLASS_SIZE} leerlingen.`
-    });
-    index += 1;
+  for (let index = 0; index < CLASS_SIZE; index += 1) {
+    copyCounts[index % baseCards.length] += 1;
   }
 
-  return completed;
+  return baseCards.map((source, index) =>
+    decorateCardDistribution(source, [], copyCounts[index])
+  );
+}
+
+function decorateCardDistribution(cardItem, assignmentLabels = [], copiesNeeded = 1) {
+  const safeCopies = Math.max(1, copiesNeeded);
+  const distributionText = buildDistributionText(assignmentLabels, safeCopies);
+
+  return {
+    ...cardItem,
+    copiesNeeded: safeCopies,
+    assignmentLabels,
+    distributionText
+  };
+}
+
+function buildDistributionText(assignmentLabels, copiesNeeded) {
+  if (copiesNeeded <= 1 && !assignmentLabels.length) {
+    return "";
+  }
+
+  if (assignmentLabels.length && assignmentLabels.length <= 3) {
+    return `Print ${copiesNeeded} exemplaar${copiesNeeded === 1 ? "" : "en"} en gebruik bij ${assignmentLabels.join(", ").toLowerCase()}.`;
+  }
+
+  if (assignmentLabels.length) {
+    return `Print ${copiesNeeded} exemplaar${copiesNeeded === 1 ? "" : "en"} en verdeel over ${assignmentLabels.length} plekken of groepen.`;
+  }
+
+  return `Print ${copiesNeeded} exemplaar${copiesNeeded === 1 ? "" : "en"} van deze kaart.`;
+}
+
+function getTotalCopiesNeeded(cards) {
+  return cards.reduce((total, cardItem) => total + Math.max(1, cardItem.copiesNeeded || 1), 0);
+}
+
+function hasRepeatedPrintCards(cards) {
+  return cards.some((cardItem) => (cardItem.copiesNeeded || 1) > 1);
 }
 
 function getSupportCards(group, subject, moment, blueprint, title) {
@@ -5030,14 +5792,15 @@ function buildPrintChecklist(subject, overviewSheets, cards, supportCards, teach
   }
 
   if (cards.length) {
+    const totalCopies = getTotalCopiesNeeded(cards);
     checklist.push(
       printProfile.expandWorkCardsToClassSize
-        ? `${cards.length} leerlingkaartjes of matchkaarten voor een klas van ${CLASS_SIZE}`
+        ? `${cards.length} unieke leerlingkaartjes of matchkaarten, samen ${totalCopies} printkaarten voor een klas van ${CLASS_SIZE}`
         : organization.type === "pairs" || organization.type === "row-pairs"
-          ? `${cards.length} werkkaartjes voor ${PAIR_OR_TRIO_UNITS.length - 1} tweetallen en 1 drietal`
+          ? `${cards.length} unieke werkkaartjes voor ${PAIR_OR_TRIO_UNITS.length - 1} tweetallen en 1 drietal`
           : organization.type === "teams" || organization.type === "small-groups"
-            ? `${cards.length} werkkaarten of werksets voor ${CLASS_GROUP_COUNT} groepjes`
-            : `${cards.length} opdrachtkaarten of werkbladen voor deze werkvorm`
+            ? `${cards.length} unieke werkkaarten of werksets voor ${CLASS_GROUP_COUNT} groepjes`
+            : `${cards.length} unieke opdrachtkaarten of werkbladen voor deze werkvorm`
     );
   }
 
@@ -5052,9 +5815,9 @@ function buildPrintChecklist(subject, overviewSheets, cards, supportCards, teach
   checklist.push(methodLine);
 
   if (printProfile.expandWorkCardsToClassSize) {
-    checklist.push("Print de leerlingkaartjes enkelzijdig en geef ieder kind 1 kaart.");
+    checklist.push("Je ziet elke voorbeeldkaart 1 keer; gebruik de print-badge op de kaart om te zien welke kaarten je vaker uitprint.");
   } else {
-    checklist.push("Print de opdrachtkaarten groot genoeg voor gebruik in tweetallen, hoeken of stations.");
+    checklist.push("Je ziet elke voorbeeldkaart 1 keer; alleen kaarten met een print-badge hoef je meerdere keren uit te printen.");
   }
 
   return checklist;
@@ -5096,12 +5859,84 @@ function getTeacherOverviewLines(sheetUnits) {
   return sheetUnits.map((unit) => `${unit.label} klaar: ____________________`);
 }
 
+function getTeacherSheetPrefix(organization) {
+  if (organization.type === "pairs" || organization.type === "row-pairs") {
+    return "Duo-blad";
+  }
+
+  if (organization.type === "teams" || organization.type === "small-groups") {
+    return "Groepsblad";
+  }
+
+  if (organization.type === "individual") {
+    return "Leerlingblad";
+  }
+
+  return "Werkblad";
+}
+
+function getMethodFocusLine(taskKey, subjectId, groupId, visual) {
+  if (subjectId === "taal") {
+    if (taskKey.includes("loopdictee")) {
+      return groupId === GROUP_34
+        ? "Focus: woordenschat verkennen, woordbetekenis zeggen en het woord in een zin gebruiken."
+        : "Focus: kernzin, hoofdgedachte of tekstbegrip in volledige zinnen verwoorden.";
+    }
+
+    if (taskKey.includes("signaalwoorden")) {
+      return "Focus: signaalwoord koppelen aan het juiste tekstverband en dat verband benoemen.";
+    }
+
+    if (taskKey.includes("argument") || taskKey.includes("standpunt")) {
+      return "Focus: standpunt, argument en voorbeeld logisch opbouwen in de lijn van Staal 2 taal.";
+    }
+
+    return "Focus: spreken, luisteren of schrijven met kernwoorden, tekstdelen en volledige zinnen.";
+  }
+
+  if (subjectId === "spelling") {
+    if (taskKey.includes("werkwoord")) {
+      return "Focus: persoonsvorm, tijd, stam en controlezin gebruiken volgens het werkwoordschema van Staal 2.";
+    }
+
+    if (taskKey.includes("categorie") || taskKey.includes("hoeken") || taskKey.includes("regel")) {
+      return "Focus: eerst de spellingcategorie of regel uit Staal 2 noemen en daarna pas schrijven.";
+    }
+
+    return groupId === GROUP_34
+      ? "Focus: luisterwoord, hakken, plakken en het juiste woordbeeld opbouwen."
+      : "Focus: categorie, regel of woordbeeld benoemen en daarna correct noteren.";
+  }
+
+  if (subjectId === "rekenen") {
+    if (taskKey.includes("breuk") || taskKey.includes("procent") || taskKey.includes("komma")) {
+      return "Focus: notaties vergelijken en uitleggen met breuk, procent, decimaal of model.";
+    }
+
+    if (visual === "stations" || taskKey.includes("circuit")) {
+      return "Focus: per post een aanpak uit Getal & Ruimte Junior kiezen, uitvoeren en kort controleren.";
+    }
+
+    return groupId === GROUP_34
+      ? "Focus: getalbegrip, handige sprongen en eenvoudige sommen hardop verwoorden."
+      : groupId === GROUP_56
+        ? "Focus: tafels, delen, getallenlijn en strategieen uit Getal & Ruimte Junior inzetten."
+        : "Focus: verhouding, procent, breuk of schaal aanpakken met een passend model en controle.";
+  }
+
+  return "Focus: noteer kernantwoord, korte uitleg en controle.";
+}
+
 function getTeacherSheetPromptLines(taskKey, subjectId, visual) {
   if (taskKey.includes("loopdictee")) {
     return [
       "Kaart of strook: ____________________",
       subjectId === "rekenen" ? "Som of opgave: ____________________" : "Woord of zin: ____________________",
-      subjectId === "spelling" ? "Regel of categorie: ____________________" : "Uitleg of betekenis: ____________________",
+      subjectId === "spelling"
+        ? "Categorie of regel uit Staal 2: ____________________"
+        : subjectId === "taal"
+          ? "Betekenis, kernzin of uitleg: ____________________"
+          : "Uitleg of model: ____________________",
       subjectId === "rekenen" ? "Berekening en antwoord: ____________________" : "Controle: ____________________"
     ];
   }
@@ -5181,25 +6016,25 @@ function getTeacherSheetPromptLines(taskKey, subjectId, visual) {
   if (subjectId === "spelling") {
     return [
       "Woord of zin: ____________________",
-      "Categorie of regel: ____________________",
-      "Controle: klopt het woordbeeld? ____________________",
+      "Categorie of regel uit Staal 2: ____________________",
+      "Controlezin of woordbeeld: ____________________",
       "Opmerking: ____________________"
     ];
   }
 
   if (subjectId === "rekenen") {
     return [
-      "Som of opgave: ____________________",
-      "Model of strategie: ____________________",
+      "Som of contextsom: ____________________",
+      "Aanpak uit Getal & Ruimte: ____________________",
       "Antwoord: ____________________",
-      "Controle: ____________________"
+      "Controle of schatting: ____________________"
     ];
   }
 
   return [
-    "Antwoord: ____________________",
-    "Uitleg: ____________________",
-    "Controle: hardop teruglezen",
+    "Kernantwoord: ____________________",
+    "Uitleg in volledige zin: ____________________",
+    "Controle: hardop teruglezen of samenvatten",
     "Nog lastig?: ____________________"
   ];
 }
@@ -5208,14 +6043,16 @@ function getTeacherSheets(group, subject, moment, blueprint, title, organization
   const roundCount = Math.max(3, Math.min(6, blueprint.steps.length));
   const roundLines = Array.from({ length: roundCount }, (_, index) => `Ronde ${index + 1}: ____________________`).join("\n");
   const answerBlock = getTeacherSheetPromptLines(blueprint.key, subject.id, blueprint.visual).join("\n");
+  const focusLine = getMethodFocusLine(blueprint.key, subject.id, group.id, blueprint.visual);
 
   const sheetUnits = getTeacherSheetUnits(organization, blueprint.visual);
+  const sheetPrefix = getTeacherSheetPrefix(organization);
 
   const groupSheets = sheetUnits.map((unit) =>
     card(
-      `Werkblad ${unit.label}`,
-      `${title}\n${unit.label} (${formatLearnerCount(unit.size)})\n${roundLines}\n${answerBlock}`,
-      `Print 1 blad voor ${unit.label.toLowerCase()} van ${formatLearnerCount(unit.size)}.`
+      `${sheetPrefix} ${unit.label}`,
+      `${title}\n${unit.label} (${formatLearnerCount(unit.size)})\n${focusLine}\n${roundLines}\n${answerBlock}`,
+      `Print 1 ${sheetPrefix.toLowerCase()} voor ${unit.label.toLowerCase()} van ${formatLearnerCount(unit.size)}.`
     )
   );
 
@@ -5493,12 +6330,13 @@ function handleTaskDetailClick(event) {
   const tabButton = event.target.closest("[data-detail-view]");
 
   if (tabButton) {
+    document.body.dataset.printSection = "all";
     state.detailView = normalizeDetailView(tabButton.dataset.detailView);
     commitState("push");
     return;
   }
 
-  const printButton = event.target.closest("[data-action='print-direct'], [data-action='print-now']");
+  const printButton = event.target.closest("[data-action='print-direct'], [data-action='print-now'], [data-action='print-section']");
 
   if (printButton) {
     const selectedTask = getSelectedTask(getFilteredTasks());
@@ -5515,13 +6353,22 @@ function handleTaskDetailClick(event) {
     const historyMode = state.detailView === "print" ? "replace" : "push";
     state.detailView = "print";
     commitState(historyMode);
-
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-        window.print();
-      });
-    });
+    triggerPrint(printButton.dataset.printSection || "all");
   }
+}
+
+function triggerPrint(section = "all") {
+  document.body.dataset.printSection = section;
+
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      window.print();
+    });
+  });
+}
+
+function handleAfterPrint() {
+  document.body.dataset.printSection = "all";
 }
 
 function toggleFilter(level, id) {
@@ -5631,6 +6478,9 @@ function render() {
   renderHeader();
   renderStepSection();
   renderResultsSection();
+  if (state.detailView !== "print") {
+    document.body.dataset.printSection = "all";
+  }
   document.body.classList.toggle("app--print-view", state.detailView === "print" && Boolean(state.taskId));
 }
 
@@ -5662,7 +6512,7 @@ function renderFilters() {
     )
     .join("");
 
-  ui.subjectFilters.innerHTML = subjects
+  ui.subjectFilters.innerHTML = getSubjectOptionsForCurrentRoute()
     .map((subject) =>
       renderFilterButton({
         id: subject.id,
@@ -5675,18 +6525,20 @@ function renderFilters() {
     )
     .join("");
 
-  ui.momentFilters.innerHTML = moments
-    .map((moment) =>
-      renderFilterButton({
-        id: moment.id,
-        level: "moment",
-        title: moment.label,
-        description: moment.subtitle,
-        count: countForMoment(moment.id),
-        active: state.momentId === moment.id
-      })
-    )
-    .join("");
+  ui.momentFilters.innerHTML = isEnergizerGroup()
+    ? ""
+    : moments
+        .map((moment) =>
+          renderFilterButton({
+            id: moment.id,
+            level: "moment",
+            title: moment.label,
+            description: moment.subtitle,
+            count: countForMoment(moment.id),
+            active: state.momentId === moment.id
+          })
+        )
+        .join("");
 }
 
 function renderFilterButton({ id, level, title, description, count, active }) {
@@ -5723,9 +6575,17 @@ function renderHeader() {
     ui.contentDescription.textContent = `Gebruik de filters om de ${filteredTasks.length} zoekresultaten verder te verfijnen of klik direct een opdracht open.`;
   } else if (!selectedGroup) {
     ui.contentEyebrow.textContent = "Start";
-    ui.contentTitle.textContent = "Kies eerst een bouw";
+    ui.contentTitle.textContent = "Kies eerst een bouw of energizers";
     ui.contentDescription.textContent =
-      "Werk stap voor stap: kies eerst de bouw, daarna het vak, vervolgens het lesmoment en open dan een opdracht met een duidelijke uitleg en waar nodig passend printmateriaal.";
+      "Werk stap voor stap: kies eerst een bouw voor taal, spelling of rekenen, of open direct de aparte energizerbibliotheek voor lesovergangen.";
+  } else if (isEnergizerGroup(selectedGroup.id) && !selectedSubject) {
+    ui.contentEyebrow.textContent = selectedGroup.label;
+    ui.contentTitle.textContent = "Kies een type energizer";
+    ui.contentDescription.textContent = selectedGroup.focus;
+  } else if (isEnergizerGroup(selectedGroup.id)) {
+    ui.contentEyebrow.textContent = `${selectedGroup.label} • ${selectedSubject.label}`;
+    ui.contentTitle.textContent = energizerMoment.subtitle;
+    ui.contentDescription.textContent = selectedSubject.description;
   } else if (!selectedSubject) {
     ui.contentEyebrow.textContent = selectedGroup.label;
     ui.contentTitle.textContent = `Kies een vak voor ${selectedGroup.label}`;
@@ -5734,7 +6594,7 @@ function renderHeader() {
     ui.contentEyebrow.textContent = `${selectedGroup.label} • ${selectedSubject.label}`;
     ui.contentTitle.textContent = "Kies wanneer je de werkvorm wilt inzetten";
     ui.contentDescription.textContent =
-      "Zo vind je sneller of je een korte energizer zoekt, een actieve lesvorm midden in de les of juist een opdracht waarbij beweging het leren ondersteunt.";
+      "Zo vind je sneller of je een actieve werkvorm midden in de les zoekt, of juist een opdracht waarbij bewegen het leren zelf ondersteunt.";
   } else {
     ui.contentEyebrow.textContent = `${selectedGroup.label} • ${selectedSubject.label}`;
     ui.contentTitle.textContent = selectedMoment.subtitle;
@@ -5795,9 +6655,13 @@ function renderStepSection() {
     ui.stepSectionDescription.textContent =
       "Je kunt direct een opdracht openen, of eerst nog verder kiezen op bouw, vak of lesmoment.";
   } else if (nextStep?.level === "group") {
-    ui.stepSectionTitle.textContent = "Kies een bouw";
+    ui.stepSectionTitle.textContent = "Kies een bouw of energizers";
     ui.stepSectionDescription.textContent =
-      "De opdrachten zijn afgestemd op groep 3/4, 5/6 en 7/8. Start hier voor de snelste route.";
+      "De opdrachten zijn afgestemd op groep 3/4, 5/6 en 7/8. Daarnaast kun je direct naar een aparte bibliotheek met energizers voor lesovergangen.";
+  } else if (nextStep?.level === "subject" && isEnergizerGroup()) {
+    ui.stepSectionTitle.textContent = "Kies een type energizer";
+    ui.stepSectionDescription.textContent =
+      "Kies of je een activerende, focussende of kalmerend actieve energizer zoekt voor een lesovergang.";
   } else if (nextStep?.level === "subject") {
     ui.stepSectionTitle.textContent = "Kies een vak";
     ui.stepSectionDescription.textContent =
@@ -5805,7 +6669,7 @@ function renderStepSection() {
   } else if (nextStep?.level === "moment") {
     ui.stepSectionTitle.textContent = "Kies het lesmoment";
     ui.stepSectionDescription.textContent =
-      "Kies of je een energizer zoekt, een actieve lesvorm tijdens het leren, of een opdracht waarin beweging echt helpt om te leren.";
+      "Kies of je een actieve werkvorm tijdens het leren zoekt, of juist een opdracht waarin beweging echt helpt om te leren.";
   } else {
     ui.stepSectionTitle.textContent = "Filters";
     ui.stepSectionDescription.textContent = "Open direct een opdracht of ga een stap terug.";
@@ -5846,7 +6710,7 @@ function renderStepCards(nextStep) {
   }
 
   if (nextStep.level === "subject") {
-    return subjects
+    return getSubjectOptionsForCurrentRoute()
       .map((subject) => {
         const count = countForSubject(subject.id);
         const disabled = count === 0;
@@ -5898,17 +6762,25 @@ function renderStepCards(nextStep) {
 
 function renderResultsSection() {
   const filteredTasks = getFilteredTasks();
-  const canShowTasks = Boolean(state.groupId && state.subjectId && state.momentId);
+  const canShowTasks = Boolean(
+    state.groupId && state.subjectId && (isEnergizerGroup() || state.momentId)
+  );
 
   if (!canShowTasks) {
     ui.resultsTitle.textContent = "Nog geen opdrachten in beeld";
     ui.resultsMeta.textContent =
-      "Kies hierboven eerst een bouw, daarna een vak en vervolgens een lesmoment.";
+      isEnergizerGroup()
+        ? "Kies hierboven eerst een type energizer."
+        : "Kies hierboven eerst een bouw, daarna een vak en vervolgens een lesmoment.";
     ui.taskDetail.className = "task-detail";
     ui.taskDetail.innerHTML = "";
     ui.taskGrid.innerHTML = `
       <div class="empty-state">
-        Zodra je de drie grote keuzes hebt gemaakt, verschijnen hier direct de passende opdrachten.
+        ${
+          isEnergizerGroup()
+            ? "Zodra je een energizertype hebt gekozen, verschijnen hier direct de passende energizers."
+            : "Zodra je bouw, vak en lesmoment hebt gekozen, verschijnen hier direct de passende opdrachten."
+        }
       </div>
     `;
     return;
@@ -5928,8 +6800,10 @@ function renderResultsSection() {
     return;
   }
 
-  ui.resultsTitle.textContent = "Kies een opdracht";
-  ui.resultsMeta.textContent = `${filteredTasks.length} opdrachten in deze route. Open een opdracht voor de uitleg, klaarzetten in 1 minuut of direct printen.`;
+  ui.resultsTitle.textContent = isEnergizerGroup() ? "Kies een energizer" : "Kies een opdracht";
+  ui.resultsMeta.textContent = isEnergizerGroup()
+    ? `${filteredTasks.length} energizers in deze route. Open een energizer voor de uitleg, klaarzetten in 1 minuut of direct printen als dat nodig is.`
+    : `${filteredTasks.length} opdrachten in deze route. Open een opdracht voor de uitleg, klaarzetten in 1 minuut of direct printen.`;
 
   const selectedTask = getSelectedTask(filteredTasks);
   const hasPrintView =
@@ -6090,7 +6964,12 @@ function getPrintSummary(task, showCards) {
   }
 
   if (task.cardPack.cards.length) {
-    summary.push(`${task.cardPack.cards.length} werkkaartjes`);
+    const totalCopies = getTotalCopiesNeeded(task.cardPack.cards);
+    summary.push(
+      hasRepeatedPrintCards(task.cardPack.cards)
+        ? `${task.cardPack.cards.length} unieke werkkaartjes (${totalCopies} printkaarten)`
+        : `${task.cardPack.cards.length} werkkaartjes`
+    );
   }
 
   if (task.cardPack.supportCards.length) {
@@ -6380,20 +7259,26 @@ function renderTaskDetail(task) {
 }
 
 function renderCardLayer(task) {
+  const repeatedCards = hasRepeatedPrintCards(task.cardPack.cards);
+  const totalCardCopies = getTotalCopiesNeeded(task.cardPack.cards);
   const cardDescription = task.printProfile.expandWorkCardsToClassSize
-    ? `Deze set is uitgewerkt voor ${CLASS_SIZE} leerlingen. Geef ieder kind 1 kaart.`
+    ? `Deze set is uitgewerkt voor ${CLASS_SIZE} leerlingen. Je ziet elke voorbeeldkaart 1 keer; kaarten met een print-badge druk je vaker af zodat ieder kind 1 kaart krijgt.`
     : task.cardPack.organization.type === "pairs" || task.cardPack.organization.type === "row-pairs"
-      ? `Deze set is uitgewerkt voor ${PAIR_OR_TRIO_UNITS.length - 1} tweetallen en 1 drietal in een klas van ongeveer ${CLASS_SIZE} leerlingen.`
+      ? `Deze set is uitgewerkt voor ${PAIR_OR_TRIO_UNITS.length - 1} tweetallen en 1 drietal in een klas van ongeveer ${CLASS_SIZE} leerlingen. Je ziet hier steeds 1 voorbeeldkaart per inhoud, niet alle kopieën achter elkaar.`
       : task.cardPack.organization.type === "teams" || task.cardPack.organization.type === "small-groups"
-        ? `Deze set is uitgewerkt voor ${CLASS_GROUP_COUNT} groepjes van ${CLASS_GROUP_SIZE} leerlingen.`
+        ? `Deze set is uitgewerkt voor ${CLASS_GROUP_COUNT} groepjes van ${CLASS_GROUP_SIZE} leerlingen. Je ziet hier de unieke werkset; kaarten met een print-badge gebruik je voor meerdere groepjes.`
         : `Deze set hoort direct bij de opdracht en is logisch geordend voor een klas van ongeveer ${CLASS_SIZE} leerlingen.`;
 
   const printTip = task.printProfile.expandWorkCardsToClassSize
-    ? "Tip: print op A4, knip de leerlingkaartjes los en deel ze direct uit."
+    ? `Tip: print op A4, knip de leerlingkaartjes los en let op de badges zoals print x2 of print x3. Samen kom je uit op ${totalCardCopies} kaartjes.`
     : task.cardPack.organization.type === "pairs" || task.cardPack.organization.type === "row-pairs"
-      ? "Tip: print op A4 of A3, begin met de lesplaten en geef daarna per duo of trio 1 werkset of 1 duidelijk startblad."
+      ? repeatedCards
+        ? "Tip: begin met de lesplaten en print daarna alleen de kaarten met een badge meerdere keren voor de verschillende duo's of trio's."
+        : "Tip: print op A4 of A3, begin met de lesplaten en geef daarna per duo of trio 1 werkset of 1 duidelijk startblad."
       : task.cardPack.organization.type === "teams" || task.cardPack.organization.type === "small-groups"
-        ? `Tip: print op A4 of A3, begin met de lesplaten en gebruik daarna de overige printvellen per groepje van ${CLASS_GROUP_SIZE}.`
+        ? repeatedCards
+          ? `Tip: begin met de lesplaten en print daarna de unieke werkset. Kaarten met een badge druk je voor meerdere groepjes af.`
+          : `Tip: print op A4 of A3, begin met de lesplaten en gebruik daarna de overige printvellen per groepje van ${CLASS_GROUP_SIZE}.`
         : "Tip: print op A4 of A3, begin met de lesplaten en leg daarna de route-, post- of leerlingbladen in dezelfde volgorde klaar als in de opdracht.";
 
   const teacherDescription = task.cardPack.organization.type === "pairs" || task.cardPack.organization.type === "row-pairs"
@@ -6416,27 +7301,35 @@ function renderCardLayer(task) {
       </div>
 
       ${renderPrintSection(
+        "overview",
         `Lesplaten en overzicht (${task.cardPack.overviewSheets.length})`,
         `Print deze drie bladen eerst. Ze geven de opstelling, de klasindeling voor ${CLASS_SIZE} leerlingen en de stapvolgorde in een logische volgorde weer.`,
-        task.cardPack.overviewSheets
+        task.cardPack.overviewSheets,
+        "Print lesplaten"
       )}
 
       ${renderPrintSection(
+        "support",
         `Opstellings- en hulpmateriaal (${task.cardPack.supportCards.length})`,
         "Deze kaartjes hoef je als leerkracht niet meer zelf te maken; je kunt ze direct uitprinten en klaarleggen voor de klasorganisatie.",
-        task.cardPack.supportCards
+        task.cardPack.supportCards,
+        "Print hulpmateriaal"
       )}
 
       ${renderPrintSection(
-        `Werkkaartjes bij de opdracht (${task.cardPack.cards.length})`,
+        "cards",
+        `Werkkaartjes bij de opdracht (${task.cardPack.cards.length}${repeatedCards ? ` unieke / ${totalCardCopies} afdrukken` : ""})`,
         cardDescription,
-        task.cardPack.cards
+        task.cardPack.cards,
+        "Print werkkaartjes"
       )}
 
       ${renderPrintSection(
-        `Groepsbladen en controlebladen (${task.cardPack.teacherSheets.length})`,
+        "teacher",
+        `Groepsbladen, klasoverzicht en controle (${task.cardPack.teacherSheets.length})`,
         teacherDescription,
-        task.cardPack.teacherSheets
+        task.cardPack.teacherSheets,
+        "Print groepsbladen"
       )}
 
       <div class="card-layer__notes">
@@ -6448,16 +7341,23 @@ function renderCardLayer(task) {
   `;
 }
 
-function renderPrintSection(title, description, items) {
+function renderPrintSection(sectionId, title, description, items, buttonLabel) {
   if (!items.length) {
     return "";
   }
 
   return `
-    <section class="card-layer__section">
+    <section class="card-layer__section" data-print-section="${escapeHtml(sectionId)}">
       <div class="card-layer__section-head">
-        <h4>${escapeHtml(title)}</h4>
-        <p>${escapeHtml(description)}</p>
+        <div class="card-layer__section-copy">
+          <h4>${escapeHtml(title)}</h4>
+          <p>${escapeHtml(description)}</p>
+        </div>
+        <button type="button" class="button button--secondary card-layer__section-action" data-action="print-section" data-print-section="${escapeHtml(
+          sectionId
+        )}">
+          ${escapeHtml(buttonLabel)}
+        </button>
       </div>
       <div class="card-pack-grid">
         ${items.map((card) => renderPrintCard(card)).join("")}
@@ -6469,10 +7369,14 @@ function renderPrintSection(title, description, items) {
 function renderPrintCard(card) {
   return `
     <article class="card-pack-item ${card.art ? "card-pack-item--visual" : ""}">
-      <span class="card-pack-item__tag">${escapeHtml(card.label)}</span>
+      <div class="card-pack-item__topline">
+        <span class="card-pack-item__tag">${escapeHtml(card.label)}</span>
+        ${card.copiesNeeded > 1 ? `<span class="card-pack-item__copies">print x${card.copiesNeeded}</span>` : ""}
+      </div>
       ${card.title ? `<h5 class="card-pack-item__title">${escapeHtml(card.title)}</h5>` : ""}
       ${card.art ? `<div class="card-pack-item__art">${card.art}</div>` : ""}
       <div class="card-pack-item__body">${renderPrintableText(card.text)}</div>
+      ${card.distributionText ? `<div class="card-pack-item__distribution">${escapeHtml(card.distributionText)}</div>` : ""}
       <div class="card-pack-item__hint">${escapeHtml(card.hint)}</div>
     </article>
   `;
@@ -6700,7 +7604,114 @@ function renderIllustrationScene(task, subjectAccent, momentAccent, stroke) {
   `;
 }
 
-function renderClassLayoutArt(visual, organization, subjectAccent, momentAccent) {
+function renderClassLayoutArt(taskKey, visual, organization, subjectAccent, momentAccent) {
+  if (
+    [
+      "loopdictee-woordenschat",
+      "loopdictee-kernzinnen",
+      "loopdictee-luisterwoorden",
+      "loopdictee-categorie-van-de-week",
+      "loopdictee-werkwoordspelling",
+      "loopdictee-rekenen"
+    ].includes(taskKey)
+  ) {
+    const wallLabels = {
+      "loopdictee-woordenschat": "Woordkaarten",
+      "loopdictee-kernzinnen": "Kernzinnen",
+      "loopdictee-luisterwoorden": "Luisterwoorden",
+      "loopdictee-categorie-van-de-week": "Woorden + regels",
+      "loopdictee-werkwoordspelling": "Werkwoordzinnen",
+      "loopdictee-rekenen": "Somkaarten"
+    };
+
+    return renderPairDictationLayoutDetailed(
+      { wall: wallLabels[taskKey], roleA: "LOPER", roleB: "SCHRIJVER", note: "WISSEL" },
+      subjectAccent,
+      momentAccent
+    );
+  }
+
+  if (
+    [
+      "waar-hoort-het-woord",
+      "tekstsoorten-hoeken",
+      "hoeken-kiezen-bij-spelling",
+      "vier-hoeken-categorie-of-regel",
+      "hoeken-kiezen",
+      "keuzehoeken-rekenen"
+    ].includes(taskKey)
+  ) {
+    const cornerLabels = {
+      "waar-hoort-het-woord": ["CATEG. 1", "CATEG. 2", "CATEG. 3", "CATEG. 4"],
+      "tekstsoorten-hoeken": ["VERHAAL", "INSTRUCT.", "NIEUWS", "MENING"],
+      "hoeken-kiezen-bij-spelling": ["LUISTER", "LETTER", "REGEL", "WEET"],
+      "vier-hoeken-categorie-of-regel": ["WW", "WEET", "LEEST.", "LEEN"],
+      "hoeken-kiezen": ["A", "B", "C", "D"],
+      "keuzehoeken-rekenen": ["BREUK", "PROCENT", "GRAFIEK", "MODEL"]
+    };
+
+    return renderCornerLayoutDetailed(cornerLabels[taskKey], subjectAccent, momentAccent);
+  }
+
+  if (["zinnenstraat", "alinea-opstelling", "argumentenlijn", "werkwoordschema-op-de-vloer", "zin-in-delen"].includes(taskKey)) {
+    const floorLabels = {
+      zinnenstraat: ["WOORD 1", "WOORD 2", "WOORD 3", "WOORD 4"],
+      "alinea-opstelling": ["INL.", "KERN", "SLOT", "CHECK"],
+      argumentenlijn: ["STANDP.", "ARGUMENT", "VOORBLD", "CHECK"],
+      "werkwoordschema-op-de-vloer": ["OND.", "TIJD", "STAM", "UITG."],
+      "zin-in-delen": ["OND.", "PV", "AANV.", "CHECK"]
+    };
+
+    return renderFloorLayoutDetailed(floorLabels[taskKey], subjectAccent, momentAccent);
+  }
+
+  if (
+    [
+      "vraag-en-antwoordwandeling",
+      "wandel-en-vat-samen",
+      "presentatiepad",
+      "verhaalpad-drie-stappen",
+      "sommenwandeling",
+      "wandel-en-leg-uit",
+      "regelroute",
+      "signaalwoorden-route",
+      "weetwoordmuur",
+      "leestekenroute",
+      "grafiekenwandeling",
+      "schaalwandeling",
+      "foutenjacht"
+    ].includes(taskKey)
+  ) {
+    const routeLabels = {
+      "vraag-en-antwoordwandeling": ["VRAAG", "ANTWOORD", "WISSEL", "DEEL"],
+      "wandel-en-vat-samen": ["LEES", "SAMENVAT", "AANVUL", "CHECK"],
+      presentatiepad: ["OPENING", "KERN", "VOORBLD", "AFSLUIT"],
+      "verhaalpad-drie-stappen": ["BEGIN", "MIDDEN", "EINDE", "VERTEL"],
+      sommenwandeling: ["LEES", "ONTHOUD", "REKEN", "CHECK"],
+      "wandel-en-leg-uit": ["LOOP", "LEG UIT", "LUISTER", "WISSEL"],
+      regelroute: ["WOORD", "REGEL", "VOORBLD", "CHECK"],
+      "signaalwoorden-route": ["SIGNAAL", "VERBAND", "VOORBLD", "CHECK"],
+      weetwoordmuur: ["KIES", "LEES", "SCHRIJF", "CHECK"],
+      leestekenroute: ["LEES", "VOEG TOE", "BESPREEK", "CHECK"],
+      grafiekenwandeling: ["KIJK", "LEES", "VERGELIJK", "CHECK"],
+      schaalwandeling: ["MEET", "REKEN", "SCHAAL", "CHECK"],
+      foutenjacht: ["LEES", "ZOEK FOUT", "HERSTEL", "CHECK"]
+    };
+
+    return renderRouteLayoutDetailed(routeLabels[taskKey], subjectAccent, momentAccent);
+  }
+
+  if (
+    [
+      "zoek-je-spellingmaatje",
+      "zoek-de-juiste-spellingpartner",
+      "zoek-iemand-die",
+      "breuk-decimaal-procent-match"
+    ].includes(taskKey)
+  ) {
+    return renderMatchLayoutDetailed(subjectAccent, momentAccent);
+  }
+
   if (organization.type === "pairs" && visual === "dictation") {
     return `
       <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor loopdictee of kaartwandeling">
@@ -6998,6 +8009,96 @@ function renderClassLayoutArt(visual, organization, subjectAccent, momentAccent)
       ${renderMiniSign(102, 96, "KIES", subjectAccent)}
       ${renderMiniSign(166, 96, "DOE", momentAccent)}
       ${renderMiniSign(230, 96, "CHECK", subjectAccent)}
+    </svg>
+  `;
+}
+
+function renderPairDictationLayoutDetailed(config, subjectAccent, momentAccent) {
+  return `
+    <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor loopdictee in tweetallen">
+      <rect width="360" height="180" rx="22" fill="#f7fbff" />
+      ${renderCardRack(274, 30, config.wall, subjectAccent, "#19424a")}
+      ${renderZone(24, 24, 132, 36, "11 tweetallen", "#ffffff", "#19424a", 12)}
+      ${renderZone(188, 24, 116, 36, "1 drietal", "#ffffff", "#19424a", 12)}
+      ${renderZone(24, 86, 96, 30, "Tweetallen A-D", "#ffffff", "#19424a", 10)}
+      ${renderZone(132, 86, 96, 30, "Tweetallen E-H", "#ffffff", "#19424a", 10)}
+      ${renderZone(24, 132, 96, 30, "Tweetallen I-K", "#ffffff", "#19424a", 10)}
+      ${renderZone(132, 132, 96, 30, "Drietal L", "#ffffff", "#19424a", 10)}
+      ${renderMiniSign(28, 62, config.roleA, momentAccent)}
+      ${renderMiniSign(98, 62, config.roleB, subjectAccent)}
+      ${renderMiniSign(188, 62, config.note, momentAccent)}
+    </svg>
+  `;
+}
+
+function renderCornerLayoutDetailed(labels, subjectAccent, momentAccent) {
+  return `
+    <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor vier keuzehoeken">
+      <rect width="360" height="180" rx="22" fill="#f7fbff" />
+      ${renderZone(18, 22, 82, 34, labels[0], "#ffffff", "#19424a", 11)}
+      ${renderZone(260, 22, 82, 34, labels[1], "#ffffff", "#19424a", 11)}
+      ${renderZone(18, 124, 82, 34, labels[2], "#ffffff", "#19424a", 11)}
+      ${renderZone(260, 124, 82, 34, labels[3], "#ffffff", "#19424a", 11)}
+      ${renderZone(126, 70, 108, 42, "25 leerlingen", "#ffffff", "#19424a", 11)}
+      ${renderMiniSign(112, 122, "KIES", subjectAccent)}
+      ${renderMiniSign(190, 122, "LEG UIT", momentAccent)}
+    </svg>
+  `;
+}
+
+function renderFloorLayoutDetailed(labels, subjectAccent, momentAccent) {
+  const cards = labels
+    .map((label, index) => renderWordCard(22 + index * 80, 98, 70, 34, label, subjectAccent, "#19424a", 10.5))
+    .join("");
+
+  return `
+    <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor vloer- of lijnopdracht">
+      <rect width="360" height="180" rx="22" fill="#f7fbff" />
+      <path d="M26 88 H334" stroke="#19424a" stroke-width="4" stroke-linecap="round" stroke-dasharray="8 8" />
+      ${cards}
+      ${renderMiniSign(62, 146, "LEG", subjectAccent)}
+      ${renderMiniSign(142, 146, "ZET", momentAccent)}
+      ${renderMiniSign(222, 146, "CHECK", subjectAccent)}
+    </svg>
+  `;
+}
+
+function renderRouteLayoutDetailed(labels, subjectAccent, momentAccent) {
+  return `
+    <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor een vaste route">
+      <rect width="360" height="180" rx="22" fill="#f7fbff" />
+      ${renderMiniSign(24, 26, "START", subjectAccent)}
+      ${renderTrack(
+        [
+          [48, 34],
+          [84, 130],
+          [136, 112],
+          [188, 94],
+          [240, 76]
+        ],
+        momentAccent
+      )}
+      ${renderRouteStop(88, 138, labels[0], momentAccent, "#19424a")}
+      ${renderRouteStop(140, 120, labels[1], momentAccent, "#19424a")}
+      ${renderRouteStop(192, 102, labels[2], momentAccent, "#19424a")}
+      ${renderRouteStop(244, 84, labels[3], momentAccent, "#19424a")}
+      ${renderZone(212, 128, 118, 32, "start gespreid", "#ffffff", "#19424a", 10.5)}
+      ${renderZone(212, 92, 118, 28, "1 stop tegelijk", "#ffffff", "#19424a", 10.5)}
+    </svg>
+  `;
+}
+
+function renderMatchLayoutDetailed(subjectAccent, momentAccent) {
+  return `
+    <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Klasindeling voor een matchopdracht">
+      <rect width="360" height="180" rx="22" fill="#f7fbff" />
+      ${renderZone(28, 22, 128, 34, "25 leerlingen", "#ffffff", "#19424a", 12)}
+      ${renderZone(204, 22, 128, 34, "ieder 1 kaart", "#ffffff", "#19424a", 12)}
+      ${renderZone(116, 72, 128, 38, "ZOEK MATCH", "#ffffff", "#19424a", 12)}
+      ${renderWordCard(56, 128, 60, 28, "KAART", subjectAccent, "#19424a", 10)}
+      ${renderWordCard(150, 128, 60, 28, "MATCH", momentAccent, "#19424a", 10)}
+      ${renderWordCard(244, 128, 60, 28, "SET", subjectAccent, "#19424a", 10)}
+      ${renderMiniSign(120, 152, "LEG UIT", momentAccent)}
     </svg>
   `;
 }
@@ -7437,6 +8538,97 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
     return renderGeometrySceneDetailed({ tags: ["RECHT", "SCHERP", "STOMP"], note: "BEELD UIT" }, subjectAccent, momentAccent, stroke);
   }
 
+  if (
+    [
+      "sta-zit-sprong",
+      "tien-seconden-challenge",
+      "ja-nee-beweging"
+    ].includes(key)
+  ) {
+    const energizerJumpPresets = {
+      "sta-zit-sprong": { prompt: "REAGEER", actions: ["STA", "ZIT", "SPRING"] },
+      "tien-seconden-challenge": { prompt: "10 SEC.", actions: ["KNIE", "STAMP", "BOKS"] },
+      "ja-nee-beweging": { prompt: "STELLING?", actions: ["JA", "NEE", "LUISTER"] }
+    };
+
+    return renderChoiceJumpScene(energizerJumpPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (["beweegstop", "dansfreeze"].includes(key)) {
+    const freezePresets = {
+      beweegstop: { start: "BEWEEG", stop: "STOP", prompt: "FREEZE", check: "STIL" },
+      dansfreeze: { start: "DANS", stop: "FREEZE", prompt: "20 SEC.", check: "STIL" }
+    };
+
+    return renderMoveStopScene(freezePresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (["richtingenrace", "hoeken-zonder-lopen"].includes(key)) {
+    const directionPresets = {
+      richtingenrace: { center: "RICHTING", corners: ["VOOR", "ACHTER", "LINKS", "RECHTS"] },
+      "hoeken-zonder-lopen": { center: "NUMMER", corners: ["1", "2", "3", "4"] }
+    };
+
+    return renderCornerChoiceScene(directionPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (["spiegelspel-in-tweetallen"].includes(key)) {
+    return renderDuoSceneDetailed({ left: "LEIDT", right: "SPIEGELT", middle: "WISSEL" }, subjectAccent, momentAccent, stroke);
+  }
+
+  if (["springparcours-zonder-materiaal", "wiebelmix", "hoofd-schouders-knieen-tenen-plus"].includes(key)) {
+    const floorPresets = {
+      "springparcours-zonder-materiaal": { steps: ["KLEIN", "GROOT", "HURK", "DRAAI"], note: "VOLG REEKS" },
+      wiebelmix: { steps: ["STAP", "SPRING", "DRAAI", "STREK"], note: "15 SEC." },
+      "hoofd-schouders-knieen-tenen-plus": { steps: ["HOOFD", "SCHOUD.", "KNIEEN", "TENEN"], note: "LUISTER GOED" }
+    };
+
+    return renderFloorStepsSceneDetailed(floorPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (["tel-samen-naar-20-met-beweging"].includes(key)) {
+    return renderCountJumpScene({ prompt: "TEL MEE", numbers: ["5", "10", "20"], note: "RITME" }, subjectAccent, momentAccent, stroke);
+  }
+
+  if (["wekkerenergizer", "actie-op-signaal"].includes(key)) {
+    const signalPresets = {
+      wekkerenergizer: { title: "CIJFER", items: ["1", "2", "3", "4"], note: "SCHAKEL" },
+      "actie-op-signaal": { title: "SIGNAAL", items: ["1 KLAP", "2 KLAP", "3 KLAP", "STIL"] , note: "REAGEER" }
+    };
+
+    return renderSignalSceneDetailed(signalPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (["bewegingen-estafette-op-de-plek"].includes(key)) {
+    return renderRelaySceneDetailed(
+      { start: "RIJ 1", team: "DOE REEKS", rack: "BEURTEN", chip: "VOLGENDE" },
+      subjectAccent,
+      momentAccent,
+      stroke
+    );
+  }
+
+  if (["volg-de-leerkracht"].includes(key)) {
+    return renderLeaderSceneDetailed({ left: "DOE VOOR", right: "VOLG", note: "SAMEN" }, subjectAccent, momentAccent, stroke);
+  }
+
+  if (["klap-en-stap"].includes(key)) {
+    return renderRhythmSceneDetailed({ top: "KLAP", bottom: "STAP", note: "RITME" }, subjectAccent, momentAccent, stroke);
+  }
+
+  if (["dierenbewegingen"].includes(key)) {
+    return renderAnimalSceneDetailed(["KIKKER", "KRAB", "VOGEL"], subjectAccent, momentAccent, stroke);
+  }
+
+  if (["stoelyoga-in-beweging", "adem-en-beweeg"].includes(key)) {
+    const calmPresets = {
+      "stoelyoga-in-beweging": { cards: ["GROOT", "KLEIN", "REK"], note: "RUSTIG" },
+      "adem-en-beweeg": { cards: ["IN", "UIT", "ONTSPAN"], note: "ADEM" }
+    };
+
+    return renderStretchSceneDetailed(calmPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
   return "";
 }
 
@@ -7455,6 +8647,87 @@ function renderChoiceJumpScene(preset, subjectAccent, momentAccent, stroke) {
     ${renderChoicePad(296, 120, preset.actions[1], subjectAccent, stroke)}
     ${renderChoicePad(248, 86, preset.actions[2], subjectAccent, stroke)}
     ${renderMiniSign(170, 92, "REAGEER DIRECT", momentAccent)}
+  `;
+}
+
+function renderSignalSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderZone(124, 78, 112, 40, preset.title, "#ffffff", stroke, 12)}
+    ${renderWordCard(28, 58, 66, 30, preset.items[0], subjectAccent, stroke, 10)}
+    ${renderWordCard(266, 58, 66, 30, preset.items[1], subjectAccent, stroke, 10)}
+    ${renderWordCard(28, 132, 66, 30, preset.items[2], momentAccent, stroke, 10)}
+    ${renderWordCard(266, 132, 66, 30, preset.items[3], momentAccent, stroke, 10)}
+    ${renderMiniSign(142, 136, preset.note, momentAccent)}
+  `;
+}
+
+function renderLeaderSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderLearnerIcon(104, 138, subjectAccent, stroke, preset.left)}
+    ${renderLearnerIcon(260, 138, momentAccent, stroke, preset.right)}
+    ${renderTrack(
+      [
+        [128, 86],
+        [180, 74],
+        [232, 86]
+      ],
+      momentAccent
+    )}
+    ${renderMiniSign(144, 98, preset.note, subjectAccent)}
+  `;
+}
+
+function renderRhythmSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderZone(38, 84, 92, 40, preset.top, "#ffffff", stroke, 12)}
+    ${renderZone(38, 136, 92, 40, preset.bottom, "#ffffff", stroke, 12)}
+    ${renderTrack(
+      [
+        [146, 106],
+        [176, 92],
+        [206, 118],
+        [236, 92],
+        [268, 106]
+      ],
+      momentAccent
+    )}
+    ${renderMiniSign(212, 134, preset.note, subjectAccent)}
+  `;
+}
+
+function renderAnimalSceneDetailed(labels, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderWordCard(38, 70, 82, 32, labels[0], subjectAccent, stroke, 11)}
+    ${renderWordCard(138, 116, 82, 32, labels[1], subjectAccent, stroke, 11)}
+    ${renderWordCard(238, 70, 82, 32, labels[2], subjectAccent, stroke, 11)}
+    ${renderTrack(
+      [
+        [82, 108],
+        [138, 134],
+        [220, 134],
+        [276, 108]
+      ],
+      momentAccent
+    )}
+    ${renderMiniSign(132, 56, "DOE NA", momentAccent)}
+  `;
+}
+
+function renderStretchSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderWordCard(48, 126, 68, 30, preset.cards[0], subjectAccent, stroke, 10.5)}
+    ${renderWordCard(146, 88, 68, 30, preset.cards[1], subjectAccent, stroke, 10.5)}
+    ${renderWordCard(244, 126, 68, 30, preset.cards[2], subjectAccent, stroke, 10.5)}
+    ${renderTrack(
+      [
+        [84, 120],
+        [146, 84],
+        [214, 84],
+        [276, 120]
+      ],
+      momentAccent
+    )}
+    ${renderMiniSign(144, 154, preset.note, momentAccent)}
   `;
 }
 
@@ -7834,9 +9107,7 @@ function renderMiniSign(x, y, label, accent) {
 function renderRouteStop(x, y, label, accent, stroke) {
   return `
     <circle cx="${x}" cy="${y}" r="12" fill="#ffffff" stroke="${stroke}" stroke-width="4" />
-    <text x="${x}" y="${y + 4}" text-anchor="middle" fill="${accent}" font-size="8.5" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
-      label
-    )}</text>
+    ${renderSvgTextBlock(x - 12, y - 12, 24, 24, label, accent, 8.5, 2)}
   `;
 }
 
@@ -8038,7 +9309,7 @@ function sortTasks(left, right) {
     orderMaps.groups.get(left.groupId) - orderMaps.groups.get(right.groupId) ||
     orderMaps.subjects.get(left.subjectId) - orderMaps.subjects.get(right.subjectId) ||
     orderMaps.moments.get(left.momentId) - orderMaps.moments.get(right.momentId) ||
-    left.title.localeCompare(right.title, "nl")
+    String(left.title ?? "").localeCompare(String(right.title ?? ""), "nl")
   );
 }
 
@@ -8084,6 +9355,10 @@ function getNextStep() {
     return { level: "subject" };
   }
 
+  if (isEnergizerGroup()) {
+    return null;
+  }
+
   if (!state.momentId) {
     return { level: "moment" };
   }
@@ -8100,11 +9375,11 @@ function getGroup(groupId) {
 }
 
 function getSubject(subjectId) {
-  return subjects.find((subject) => subject.id === subjectId) ?? null;
+  return getAllSubjectOptions().find((subject) => subject.id === subjectId) ?? null;
 }
 
 function getMoment(momentId) {
-  return moments.find((moment) => moment.id === momentId) ?? null;
+  return getAllMomentOptions().find((moment) => moment.id === momentId) ?? null;
 }
 
 function hasSearch() {
