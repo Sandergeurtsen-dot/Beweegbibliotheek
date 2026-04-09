@@ -1355,6 +1355,116 @@ body::before {
   background: #fff6f4;
 }
 
+.local-publish-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.local-publish-panel__head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.local-publish-panel__head strong {
+  display: block;
+  color: var(--subject-accent);
+  font-size: 1.18rem;
+  font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
+}
+
+.local-publish-panel__head p {
+  margin: 10px 0 0;
+  color: var(--ink-soft);
+  line-height: 1.58;
+  max-width: 66ch;
+}
+
+.local-change-overview {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--subject-soft) 52%, white), #ffffff);
+  border: 1px solid var(--subject-line);
+}
+
+.local-change-overview__head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.local-change-overview__head strong {
+  display: block;
+  color: var(--subject-accent);
+  font-size: 1.06rem;
+  font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
+}
+
+.local-change-overview__head p {
+  margin: 8px 0 0;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.local-change-overview__counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.local-change-overview__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.local-change-overview__panel {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid var(--subject-line);
+}
+
+.local-change-overview__panel h4 {
+  margin: 0;
+  color: var(--subject-accent);
+  font-size: 1rem;
+}
+
+.local-change-overview__panel ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.local-change-overview__panel li {
+  display: grid;
+  gap: 3px;
+}
+
+.local-change-overview__panel li strong {
+  font-size: 0.96rem;
+  color: var(--ink);
+}
+
+.local-change-overview__panel li span {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.local-change-overview__empty {
+  color: var(--ink-soft);
+}
+
 .local-editor__feedback {
   padding: 12px 14px;
   border-radius: 16px;
@@ -1771,12 +1881,18 @@ body::before {
   .task-detail__grid,
   .teacher-brief__grid,
   .minute-view__grid,
-  .local-editor__grid {
+  .local-editor__grid,
+  .local-change-overview__grid {
     grid-template-columns: 1fr;
   }
 
   .content__controls {
     justify-items: start;
+  }
+
+  .local-publish-panel__head,
+  .local-change-overview__head {
+    display: grid;
   }
 
   .selection-chips {

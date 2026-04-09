@@ -2655,6 +2655,7 @@ let localDeletedCustomTaskChanges = loadLocalDeletedCustomTaskChanges();
 let localEditFeedback = null;
 let localCreateFeedback = null;
 let localCreateDraft = null;
+let localChangeFeedback = null;
 
 function getAllSubjectOptions() {
   return [...subjects, ...energizerSubjects];
@@ -2984,30 +2985,95 @@ function getAllLocalCustomTaskKeys() {
   return getAllLocalCustomTaskBlueprints().map((entry) => entry.blueprint.key);
 }
 
+function getLocalEditedTaskKeys() {
+  const customTaskKeys = new Set(getAllLocalCustomTaskKeys());
+  const keys = new Set([
+    ...Object.keys(localTaskTextOverrides),
+    ...Object.keys(localRenderedTaskOverrides)
+  ]);
+
+  return [...keys].filter((taskKey) => !customTaskKeys.has(taskKey));
+}
+
 function hasLocalCustomTasks() {
   return getAllLocalCustomTaskKeys().length > 0;
 }
 
 function hasPendingLocalCustomChanges() {
-  return hasLocalCustomTasks() || localDeletedCustomTaskChanges.length > 0;
+  return hasLocalCustomTasks() || getLocalEditedTaskKeys().length > 0 || localDeletedCustomTaskChanges.length > 0;
+}
+
+function findTaskByKey(taskKey) {
+  return allTasks.find((task) => task.key === taskKey) ?? null;
+}
+
+function buildRouteLabelForTask(task) {
+  return [task?.groupLabel, task?.subjectLabel, task?.momentLabel].filter(Boolean).join(" • ");
+}
+
+function buildChangeSummary() {
+  const newTasks = getAllLocalCustomTaskBlueprints().map(({ routeKey, blueprint }) => {
+    const [groupId, subjectId, momentId] = routeKey.split("__");
+
+    return {
+      key: blueprint.key,
+      title: blueprint.title,
+      routeLabel: [getGroup(groupId)?.label, getSubject(subjectId)?.label, getMoment(momentId)?.label].filter(Boolean).join(" • ")
+    };
+  });
+  const editedTasks = getLocalEditedTaskKeys()
+    .map((taskKey) => {
+      const task = findTaskByKey(taskKey);
+
+      return task
+        ? {
+            key: task.key,
+            title: task.title,
+            routeLabel: buildRouteLabelForTask(task)
+          }
+        : {
+            key: taskKey,
+            title: taskKey,
+            routeLabel: "Route niet gevonden"
+          };
+    })
+    .sort((left, right) => left.title.localeCompare(right.title, "nl"));
+  const deletedTasks = [...localDeletedCustomTaskChanges]
+    .map((entry) => ({
+      key: entry.key,
+      title: entry.title || entry.key,
+      routeLabel: [getGroup(entry.groupId)?.label, getSubject(entry.subjectId)?.label, getMoment(entry.momentId)?.label]
+        .filter(Boolean)
+        .join(" • ")
+    }))
+    .sort((left, right) => left.title.localeCompare(right.title, "nl"));
+
+  return {
+    newTasks,
+    editedTasks,
+    deletedTasks,
+    total: newTasks.length + editedTasks.length + deletedTasks.length
+  };
+}
+
+function renderLocalChangeFeedback() {
+  if (!localChangeFeedback) {
+    return "";
+  }
+
+  return `<div class="local-editor__feedback local-editor__feedback--${escapeHtml(localChangeFeedback.tone)}">${escapeHtml(
+    localChangeFeedback.text
+  )}</div>`;
 }
 
 function buildLocalCustomTaskExport() {
-  const customTaskKeys = new Set(getAllLocalCustomTaskKeys());
-  const textOverrides = Object.fromEntries(
-    Object.entries(localTaskTextOverrides).filter(([taskKey]) => customTaskKeys.has(taskKey))
-  );
-  const renderedOverrides = Object.fromEntries(
-    Object.entries(localRenderedTaskOverrides).filter(([taskKey]) => customTaskKeys.has(taskKey))
-  );
-
   return {
     version: 1,
     exportedAt: new Date().toISOString(),
     customTasks: JSON.parse(JSON.stringify(localCustomTaskBlueprints)),
     deletedTasks: JSON.parse(JSON.stringify(localDeletedCustomTaskChanges)),
-    textOverrides: JSON.parse(JSON.stringify(textOverrides)),
-    renderedOverrides: JSON.parse(JSON.stringify(renderedOverrides))
+    textOverrides: JSON.parse(JSON.stringify(localTaskTextOverrides)),
+    renderedOverrides: JSON.parse(JSON.stringify(localRenderedTaskOverrides))
   };
 }
 
@@ -3057,11 +3123,16 @@ async function saveLocalCustomTaskExportToAppFolder(exportData) {
 
 async function downloadLocalCustomTaskExport(task) {
   if (!hasPendingLocalCustomChanges()) {
+    const message = {
+      tone: "info",
+      text: "Er zijn nog geen lokale wijzigingen om te exporteren."
+    };
+    localChangeFeedback = message;
     localEditFeedback = task
       ? {
           taskKey: task.key,
-          tone: "info",
-          text: "Er zijn nog geen lokale wijzigingen om te exporteren."
+          tone: message.tone,
+          text: message.text
         }
       : null;
     return false;
@@ -3082,11 +3153,15 @@ async function downloadLocalCustomTaskExport(task) {
     });
 
     if (folderSave?.saved) {
+      localChangeFeedback = {
+        tone: "success",
+        text: `Live-bestand bijgewerkt in ${folderSave.relativePath}. Dit bestand kun je daarna naar GitHub pushen.`
+      };
       if (task) {
         localEditFeedback = {
           taskKey: task.key,
           tone: "success",
-          text: `Opgeslagen in ${folderSave.relativePath}. Kies bij het mapvenster de hoofdmap van de website/app.`
+          text: `Live-bestand bijgewerkt in ${folderSave.relativePath}. Kies bij het mapvenster de hoofdmap van de website/app.`
         };
       }
 
@@ -3094,11 +3169,15 @@ async function downloadLocalCustomTaskExport(task) {
     }
 
     if (folderSave?.cancelled) {
+      localChangeFeedback = {
+        tone: "info",
+        text: "Geen map gekozen. Er is nog niets opgeslagen."
+      };
       if (task) {
         localEditFeedback = {
           taskKey: task.key,
-          tone: "info",
-          text: "Geen map gekozen. Er is nog niets opgeslagen."
+          tone: localChangeFeedback.tone,
+          text: localChangeFeedback.text
         };
       }
 
@@ -3123,11 +3202,15 @@ async function downloadLocalCustomTaskExport(task) {
     link.remove();
     window.URL.revokeObjectURL(exportUrl);
 
+    localChangeFeedback = {
+      tone: "info",
+      text: "Deze browser slaat het live-bestand als gewone download op. Gebruik lokaal Chrome om direct naar de appmap te schrijven."
+    };
     if (task) {
       localEditFeedback = {
         taskKey: task.key,
-        tone: "info",
-        text: "Deze browser slaat het exportbestand als gewone download op. In Safari kun je niet rechtstreeks naar de appmap schrijven vanuit de site."
+        tone: localChangeFeedback.tone,
+        text: localChangeFeedback.text
       };
     }
 
@@ -3135,11 +3218,15 @@ async function downloadLocalCustomTaskExport(task) {
   } catch (error) {
     console.warn("Lokale opdrachten konden niet worden geëxporteerd.", error);
 
+    localChangeFeedback = {
+      tone: "error",
+      text: "Live-bestand wegschrijven lukte niet in deze browser."
+    };
     if (task) {
       localEditFeedback = {
         taskKey: task.key,
-        tone: "error",
-        text: "Exporteren lukte niet in deze browser."
+        tone: localChangeFeedback.tone,
+        text: localChangeFeedback.text
       };
     }
 
@@ -7293,6 +7380,7 @@ function selectPrintSection(section = "all") {
 function toggleFilter(level, id) {
   localCreateFeedback = null;
   localCreateDraft = null;
+  localChangeFeedback = null;
 
   if (level === "group") {
     if (state.groupId === id) {
@@ -7386,6 +7474,7 @@ function handleBack() {
 function resetState() {
   localCreateFeedback = null;
   localCreateDraft = null;
+  localChangeFeedback = null;
   applyNavigationState(initialState);
   commitState("push");
 }
@@ -7699,6 +7788,7 @@ function renderResultsSection() {
   const canCreateLocalTask = isLocalEditorAvailable() && canShowTasks;
   const createCardMarkup = canCreateLocalTask ? renderLocalCreateTaskCard() : "";
   const exportCardMarkup = isLocalEditorAvailable() && hasPendingLocalCustomChanges() ? renderLocalExportTaskCard() : "";
+  const showPublishPanel = !showCreateView && !state.taskId && isLocalEditorAvailable() && hasPendingLocalCustomChanges();
 
   if (!canShowTasks) {
     ui.resultsTitle.textContent = "Nog geen opdrachten in beeld";
@@ -7728,8 +7818,8 @@ function renderResultsSection() {
     if (!showCreateView && hasPendingLocalCustomChanges()) {
       ui.resultsMeta.textContent += " Er staan lokale wijzigingen klaar om te exporteren.";
     }
-    ui.taskDetail.className = showCreateView ? "task-detail task-detail--visible" : "task-detail";
-    ui.taskDetail.innerHTML = showCreateView ? renderLocalCreateView() : "";
+    ui.taskDetail.className = showCreateView || showPublishPanel ? "task-detail task-detail--visible" : "task-detail";
+    ui.taskDetail.innerHTML = showCreateView ? renderLocalCreateView() : showPublishPanel ? renderLocalPublishPanel() : "";
     ui.taskGrid.className = showCreateView ? "task-grid task-grid--hidden" : "task-grid";
     ui.taskGrid.innerHTML = showCreateView
       ? ""
@@ -7768,8 +7858,14 @@ function renderResultsSection() {
     state.detailView = "task";
   }
 
-  ui.taskDetail.className = selectedTask || showCreateView ? "task-detail task-detail--visible" : "task-detail";
-  ui.taskDetail.innerHTML = selectedTask ? renderTaskDetail(selectedTask) : showCreateView ? renderLocalCreateView() : "";
+  ui.taskDetail.className = selectedTask || showCreateView || showPublishPanel ? "task-detail task-detail--visible" : "task-detail";
+  ui.taskDetail.innerHTML = selectedTask
+    ? renderTaskDetail(selectedTask)
+    : showCreateView
+      ? renderLocalCreateView()
+      : showPublishPanel
+        ? renderLocalPublishPanel()
+        : "";
   ui.taskGrid.className = selectedTask || showCreateView ? "task-grid task-grid--hidden" : "task-grid";
   ui.taskGrid.innerHTML =
     selectedTask || showCreateView
@@ -7832,6 +7928,8 @@ function renderLocalCreateTaskCard() {
 }
 
 function renderLocalExportTaskCard() {
+  const summary = buildChangeSummary();
+
   return `
     <button
       type="button"
@@ -7841,16 +7939,91 @@ function renderLocalExportTaskCard() {
     >
       <div class="task-card__content task-card__content--add">
         <span class="task-card__plus" aria-hidden="true">⇪</span>
-        <h4 class="task-card__title">Exporteer lokale wijzigingen</h4>
+        <h4 class="task-card__title">Klaar voor live</h4>
         <p class="task-card__summary">
-          Download alle lokaal toegevoegde opdrachten, aanpassingen en verwijderingen als exportbestand voor de live site.
+          Zet alle lokale wijzigingen klaar voor de live site: nieuw, aangepast en verwijderd.
         </p>
         <div class="task-card__meta">
-          <span class="pill">export</span>
-          <span class="pill">lokaal</span>
+          <span class="pill">${summary.newTasks.length} nieuw</span>
+          <span class="pill">${summary.editedTasks.length} aangepast</span>
+          <span class="pill">${summary.deletedTasks.length} verwijderd</span>
         </div>
       </div>
     </button>
+  `;
+}
+
+function renderChangeListItems(items, emptyText) {
+  if (!items.length) {
+    return `<li class="local-change-overview__empty">${escapeHtml(emptyText)}</li>`;
+  }
+
+  return items
+    .slice(0, 6)
+    .map(
+      (item) => `
+        <li>
+          <strong>${escapeHtml(item.title)}</strong>
+          <span>${escapeHtml(item.routeLabel)}</span>
+        </li>
+      `
+    )
+    .join("");
+}
+
+function renderLocalChangeOverview() {
+  const summary = buildChangeSummary();
+
+  return `
+    <section class="local-change-overview" aria-label="Lokale wijzigingen">
+      <div class="local-change-overview__head">
+        <div>
+          <strong>Lokale wijzigingen</strong>
+          <p>Hier zie je wat er klaarstaat voor live. Deze lijst komt mee in <em>live-opdrachten.json</em>.</p>
+        </div>
+        <div class="local-change-overview__counts">
+          <span class="pill">${summary.newTasks.length} nieuw</span>
+          <span class="pill">${summary.editedTasks.length} aangepast</span>
+          <span class="pill">${summary.deletedTasks.length} verwijderd</span>
+        </div>
+      </div>
+      <div class="local-change-overview__grid">
+        <article class="local-change-overview__panel">
+          <h4>Nieuw</h4>
+          <ul>${renderChangeListItems(summary.newTasks, "Nog geen nieuwe opdrachten toegevoegd.")}</ul>
+        </article>
+        <article class="local-change-overview__panel">
+          <h4>Aangepast</h4>
+          <ul>${renderChangeListItems(summary.editedTasks, "Nog geen bestaande opdrachten aangepast.")}</ul>
+        </article>
+        <article class="local-change-overview__panel">
+          <h4>Verwijderd</h4>
+          <ul>${renderChangeListItems(summary.deletedTasks, "Nog geen opdrachten verwijderd.")}</ul>
+        </article>
+      </div>
+    </section>
+  `;
+}
+
+function renderLocalPublishPanel() {
+  return `
+    <div class="task-detail__sheet" style="${getSubjectThemeStyle(state.subjectId)}">
+      <div class="local-publish-panel">
+        <div class="local-publish-panel__head">
+          <div>
+            <strong>Klaar voor live</strong>
+            <p>Controleer hier wat lokaal anders is dan live en werk daarna in 1 stap het live-bestand bij.</p>
+          </div>
+          <div class="local-editor__actions">
+            <button type="button" class="button" data-action="export-local-custom-tasks">
+              Zet live klaar
+            </button>
+          </div>
+        </div>
+        ${renderLocalChangeFeedback()}
+        ${renderLocalChangeOverview()}
+      </div>
+    </div>
   `;
 }
 
@@ -8280,6 +8453,7 @@ function saveLocalCustomTask(form) {
 
   localCreateFeedback = null;
   localCreateDraft = null;
+  localChangeFeedback = null;
   localEditFeedback = {
     taskKey: blueprint.key,
     tone: "success",
@@ -8351,6 +8525,10 @@ function deleteLocalCustomTask(task) {
     tone: "info",
     text: "De lokale opdracht is verwijderd en staat nu klaar om mee te exporteren naar de live site."
   };
+  localChangeFeedback = {
+    tone: "info",
+    text: "De verwijdering staat klaar voor live. Klik op 'Zet live klaar' om het live-bestand bij te werken."
+  };
   refreshTaskData();
   state.taskId = null;
   state.detailView = "task";
@@ -8386,6 +8564,7 @@ function saveLocalTaskEdit(task, form) {
   }
 
   const persisted = persistLocalTaskTextOverrides() && persistLocalRenderedTaskOverrides();
+  localChangeFeedback = null;
 
   localEditFeedback = {
     taskKey: task.key,
@@ -8404,6 +8583,7 @@ function resetLocalTaskEdit(task) {
   delete localRenderedTaskOverrides[task.key];
 
   const persisted = persistLocalTaskTextOverrides() && persistLocalRenderedTaskOverrides();
+  localChangeFeedback = null;
 
   localEditFeedback = {
     taskKey: task.key,
@@ -9133,6 +9313,7 @@ function renderLocalCreateView() {
 function renderLocalEditor(task) {
   const feedback = getLocalEditFeedbackForTask(task.key);
   const activeSection = getCurrentLocalEditSection(task);
+  const showChangeOverview = hasPendingLocalCustomChanges();
   const coreSection = renderLocalEditorSection(
     "Kern van de opdracht",
     "Pas hier de gewone opdrachttekst aan die op de kaart en in de uitleg terugkomt.",
@@ -9189,7 +9370,7 @@ function renderLocalEditor(task) {
             hasPendingLocalCustomChanges()
               ? `
                 <button type="button" class="button button--secondary" data-action="export-local-custom-tasks">
-                  Exporteer lokale opdrachten
+                  Zet live klaar
                 </button>
               `
               : ""
@@ -9219,6 +9400,10 @@ function renderLocalEditor(task) {
             )}</div>`
           : ""
       }
+
+      ${renderLocalChangeFeedback()}
+
+      ${showChangeOverview ? renderLocalChangeOverview() : ""}
 
       ${renderLocalEditorTabs(task)}
       ${sectionContent}
