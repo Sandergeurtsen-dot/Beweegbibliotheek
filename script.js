@@ -7014,9 +7014,8 @@ function renderTaskCard(task, selectedTask) {
 
 function buildQuickOverview(task) {
   return [
-    `Vooraf: ${shortenPrintText(buildQuickStart(task), 96)}`,
-    `Kern: ${shortenPrintText(buildQuickPlay(task), 96)}`,
-    `Let op: ${shortenPrintText(buildQuickFinish(task), 96)}`
+    `Doel: ${shortenPrintText(task.goal, 96)}`,
+    `Leerlingen: ${shortenPrintText(buildQuickPlay(task), 96)}`
   ];
 }
 
@@ -7080,10 +7079,20 @@ function normalizeDetailView(detailView) {
 }
 
 function getMaterialsList(task) {
+  const seen = new Set();
   const cleaned = task.materials
     .map((item) => item.trim())
     .filter(Boolean)
-    .filter((item, index, collection) => collection.indexOf(item) === index);
+    .filter((item) => {
+      const fingerprint = normalize(item);
+
+      if (seen.has(fingerprint)) {
+        return false;
+      }
+
+      seen.add(fingerprint);
+      return true;
+    });
 
   return cleaned.length ? cleaned : ["Geen extra materialen nodig"];
 }
@@ -7163,30 +7172,31 @@ function buildReadyInOneMinute(task, showCards) {
     {
       label: "1",
       title: "Print of pak klaar",
-      lines: printSummary.slice(0, 4)
+      lines: printSummary.slice(0, 3)
     },
     {
       label: "2",
-      title: "Leg dit neer",
-      lines: [task.setup, `Benodigd: ${materials.slice(0, 4).join(", ")}`]
+      title: "Zet klaar",
+      lines: [shortenPrintText(task.setup, 120)]
     },
     {
       label: "3",
-      title: "Leg dit kort uit",
-      lines: [explanation[0], explanation[1]]
+      title: "Pak erbij",
+      lines: [shortenPrintText(materials.slice(0, 4).join(", "), 120)]
     },
     {
       label: "4",
-      title: "Let hier extra op",
-      lines: [explanation[2], `Beweegfocus: ${task.movementFocus}`]
+      title: "Leg dit kort uit",
+      lines: [explanation[0], explanation[1]]
     }
   ];
 }
 
 function buildTeacherBriefItems(task, showCards) {
   const materials = getMaterialsList(task);
-  const printSummary = getPrintSummary(task, showCards);
-  const startLine = task.steps[0] || task.setup || task.goal;
+  const readyLine = showCards
+    ? `${materials.slice(0, 3).join(", ")}${materials.length ? " + " : ""}${shortenPrintText(getPrintSummary(task, showCards).slice(0, 2).join(", "), 52)}`
+    : shortenPrintText(materials.slice(0, 4).join(", "), 92);
 
   return [
     {
@@ -7202,16 +7212,8 @@ function buildTeacherBriefItems(task, showCards) {
       value: getOrganizationSummary(task)
     },
     {
-      label: "Benodigd",
-      value: shortenPrintText(materials.slice(0, 4).join(", "), 92)
-    },
-    {
-      label: "Print",
-      value: shortenPrintText(printSummary.slice(0, 3).join(", "), 92)
-    },
-    {
-      label: "Kerninstructie",
-      value: shortenPrintText(startLine, 108)
+      label: "Klaarleggen",
+      value: shortenPrintText(readyLine, 108)
     }
   ];
 }
@@ -7255,7 +7257,6 @@ function renderTeacherBrief(task, showCards) {
     <section class="teacher-brief" aria-label="Korte leerkrachtkaart">
       <div class="teacher-brief__lead">
         <strong>Leerkrachtkaart</strong>
-        <p>Alles wat je direct nodig hebt om deze opdracht te starten, in één kort overzicht.</p>
       </div>
       <div class="teacher-brief__grid">
         ${items
@@ -7322,7 +7323,7 @@ function renderOneMinuteView(task, showCards) {
     <div class="minute-view">
       <div class="minute-view__lead">
         <strong>In 1 minuut klaar voor de les</strong>
-        <p>Gebruik deze snelle leerkrachtstand om direct te printen, klaar te leggen en de opdracht uit te leggen zonder lange tekst te hoeven lezen.</p>
+        <p>Alleen de kern om snel te printen, klaar te leggen en te starten.</p>
       </div>
       <div class="minute-view__grid">
         ${blocks
@@ -7365,6 +7366,10 @@ function renderTaskDetail(task) {
       (task.cardPack.cards.length || task.cardPack.supportCards.length || task.cardPack.teacherSheets.length)
   );
   const currentView = state.detailView === "print" && !showCards ? "task" : state.detailView;
+  const materials = getMaterialsList(task);
+  const readyPreview = showCards
+    ? `${materials.length} dingen + printset`
+    : `${materials.length} dingen klaarleggen`;
 
   return `
     <div class="task-detail__sheet" style="${getSubjectThemeStyle(task.subjectId)}">
@@ -7406,7 +7411,6 @@ function renderTaskDetail(task) {
                 ? renderOneMinuteView(task, showCards)
                 : `
                   ${renderTeacherBrief(task, showCards)}
-                  ${renderCompactHighlights(task, showCards)}
                   <div class="task-detail__grid">
                     ${renderDetailFold(
                       "Zo voer je de opdracht uit",
@@ -7429,8 +7433,8 @@ function renderTaskDetail(task) {
                     )}
 
                     ${renderDetailFold(
-                      "Zo leg je het uit aan de klas",
-                      "Korte instructiezinnen",
+                      "Zeg dit kort tegen de klas",
+                      "3 korte instructiezinnen",
                       `
                         <ul class="quick-overview">
                           ${buildClassExplanation(task)
@@ -7441,31 +7445,20 @@ function renderTaskDetail(task) {
                     )}
 
                     ${renderDetailFold(
-                      "Klaarzetten en organiseren",
-                      shortenPrintText(task.setup, 78),
-                      `
-                        <p>${escapeHtml(task.setup)}</p>
-                        ${
-                          showCards
-                            ? `
-                              <ul>
-                                ${task.cardPack.printChecklist
-                                  .slice(0, 4)
-                                  .map((item) => `<li>${escapeHtml(item)}</li>`)
-                                  .join("")}
-                              </ul>
-                            `
-                            : ""
-                        }
-                      `
-                    )}
-
-                    ${renderDetailFold(
-                      "Benodigdheden",
-                      `${getMaterialsList(task).length} dingen klaarleggen`,
+                      "Klaarzetten",
+                      readyPreview,
                       `
                         <ul>
-                          ${getMaterialsList(task).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+                          <li>${escapeHtml(task.setup)}</li>
+                          ${materials.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+                          ${
+                            showCards
+                              ? task.cardPack.printChecklist
+                                  .slice(0, 3)
+                                  .map((item) => `<li>${escapeHtml(item)}</li>`)
+                                  .join("")
+                              : ""
+                          }
                         </ul>
                       `
                     )}

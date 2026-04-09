@@ -629,7 +629,7 @@ body::before {
 
 .task-detail__sheet {
   display: grid;
-  gap: 22px;
+  gap: 18px;
   padding: 22px;
   border: 1px solid var(--subject-line);
   border-radius: 28px;
@@ -700,7 +700,7 @@ body::before {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .task-card__meta .pill,
@@ -724,7 +724,7 @@ body::before {
 }
 
 .detail-box--intro {
-  margin-top: 14px;
+  margin-top: 12px;
 }
 
 .detail-box--wide {
@@ -736,7 +736,7 @@ body::before {
 }
 
 .quick-overview {
-  margin: 10px 0 0;
+  margin: 8px 0 0;
   padding-left: 20px;
   color: var(--ink-soft);
   line-height: 1.5;
@@ -1112,7 +1112,7 @@ body::before {
 
 .teacher-brief {
   display: grid;
-  gap: 16px;
+  gap: 12px;
 }
 
 .teacher-brief__lead strong,
@@ -1134,16 +1134,16 @@ body::before {
 
 .teacher-brief__grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
 }
 
 .teacher-brief__item {
-  padding: 16px;
+  padding: 14px;
   border-radius: 18px;
   background: linear-gradient(180deg, #ffffff, var(--subject-soft));
   border: 1px solid var(--subject-line);
-  min-height: 112px;
+  min-height: 96px;
 }
 
 .teacher-brief__label,
@@ -1162,15 +1162,15 @@ body::before {
 }
 
 .teacher-brief__item p {
-  margin: 12px 0 0;
+  margin: 10px 0 0;
   color: var(--ink);
-  line-height: 1.55;
+  line-height: 1.45;
   font-weight: 700;
 }
 
 .minute-view {
   display: grid;
-  gap: 18px;
+  gap: 14px;
 }
 
 .minute-view__grid {
