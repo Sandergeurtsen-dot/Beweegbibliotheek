@@ -273,7 +273,9 @@ const LOCAL_CREATE_VISUAL_OPTIONS = [
   { value: "bingo", label: "Kaarten zoeken of bingo" }
 ];
 
+const LOCAL_EXPORT_FOLDER_NAME = "lokale-exporten";
 const LOCAL_RENDER_EDIT_STORAGE_KEY = "columbus-beweegbibliotheek-local-render-edits-v1";
+const LOCAL_CUSTOM_TASK_DELETIONS_STORAGE_KEY = "columbus-beweegbibliotheek-local-custom-deletions-v1";
 const fileTaskTextOverrides = flattenTaskTextOverrides(globalThis.taskTextOverrides || {});
 let taskTextOverrides = {};
 
@@ -2644,6 +2646,7 @@ const LOCAL_CUSTOM_TASKS_STORAGE_KEY = "columbus-beweegbibliotheek-local-custom-
 let localTaskTextOverrides = loadLocalTaskTextOverrides();
 let localRenderedTaskOverrides = loadLocalRenderedTaskOverrides();
 let localCustomTaskBlueprints = loadLocalCustomTaskBlueprints();
+let localDeletedCustomTaskChanges = loadLocalDeletedCustomTaskChanges();
 let localEditFeedback = null;
 let localCreateFeedback = null;
 let localCreateDraft = null;
@@ -2949,6 +2952,182 @@ function loadLocalCustomTaskBlueprints() {
 
 function persistLocalCustomTaskBlueprints() {
   return persistLocalJsonStorage(LOCAL_CUSTOM_TASKS_STORAGE_KEY, localCustomTaskBlueprints);
+}
+
+function loadLocalDeletedCustomTaskChanges() {
+  const parsed = loadLocalJsonStorage(LOCAL_CUSTOM_TASK_DELETIONS_STORAGE_KEY);
+  return Array.isArray(parsed.items) ? parsed.items : [];
+}
+
+function persistLocalDeletedCustomTaskChanges() {
+  return persistLocalJsonStorage(
+    LOCAL_CUSTOM_TASK_DELETIONS_STORAGE_KEY,
+    localDeletedCustomTaskChanges.length ? { items: localDeletedCustomTaskChanges } : {}
+  );
+}
+
+function getAllLocalCustomTaskBlueprints() {
+  return Object.entries(localCustomTaskBlueprints).flatMap(([routeKey, blueprints]) =>
+    (blueprints || []).map((blueprint) => ({ routeKey, blueprint }))
+  );
+}
+
+function getAllLocalCustomTaskKeys() {
+  return getAllLocalCustomTaskBlueprints().map((entry) => entry.blueprint.key);
+}
+
+function hasLocalCustomTasks() {
+  return getAllLocalCustomTaskKeys().length > 0;
+}
+
+function hasPendingLocalCustomChanges() {
+  return hasLocalCustomTasks() || localDeletedCustomTaskChanges.length > 0;
+}
+
+function buildLocalCustomTaskExport() {
+  const customTaskKeys = new Set(getAllLocalCustomTaskKeys());
+  const textOverrides = Object.fromEntries(
+    Object.entries(localTaskTextOverrides).filter(([taskKey]) => customTaskKeys.has(taskKey))
+  );
+  const renderedOverrides = Object.fromEntries(
+    Object.entries(localRenderedTaskOverrides).filter(([taskKey]) => customTaskKeys.has(taskKey))
+  );
+
+  return {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    customTasks: JSON.parse(JSON.stringify(localCustomTaskBlueprints)),
+    deletedTasks: JSON.parse(JSON.stringify(localDeletedCustomTaskChanges)),
+    textOverrides: JSON.parse(JSON.stringify(textOverrides)),
+    renderedOverrides: JSON.parse(JSON.stringify(renderedOverrides))
+  };
+}
+
+function getLocalCustomTaskExportFilename() {
+  const dateStamp = new Date().toISOString().slice(0, 10);
+  return `columbus-lokale-opdrachten-${dateStamp}.json`;
+}
+
+async function saveLocalCustomTaskExportToAppFolder(exportData) {
+  if (typeof window.showDirectoryPicker !== "function") {
+    return {
+      saved: false,
+      supported: false
+    };
+  }
+
+  const rootHandle = await window.showDirectoryPicker({
+    mode: "readwrite"
+  });
+  const exportDirHandle = await rootHandle.getDirectoryHandle(LOCAL_EXPORT_FOLDER_NAME, {
+    create: true
+  });
+  const filename = getLocalCustomTaskExportFilename();
+  const fileHandle = await exportDirHandle.getFileHandle(filename, {
+    create: true
+  });
+  const writable = await fileHandle.createWritable();
+  await writable.write(JSON.stringify(exportData, null, 2));
+  await writable.close();
+
+  return {
+    saved: true,
+    supported: true,
+    filename,
+    relativePath: `${LOCAL_EXPORT_FOLDER_NAME}/${filename}`
+  };
+}
+
+async function downloadLocalCustomTaskExport(task) {
+  if (!hasPendingLocalCustomChanges()) {
+    localEditFeedback = task
+      ? {
+          taskKey: task.key,
+          tone: "info",
+          text: "Er zijn nog geen lokale wijzigingen om te exporteren."
+        }
+      : null;
+    return false;
+  }
+
+  try {
+    const exportData = buildLocalCustomTaskExport();
+    const folderSave = await saveLocalCustomTaskExportToAppFolder(exportData).catch((error) => {
+      if (error?.name === "AbortError") {
+        return {
+          saved: false,
+          supported: true,
+          cancelled: true
+        };
+      }
+
+      throw error;
+    });
+
+    if (folderSave?.saved) {
+      if (task) {
+        localEditFeedback = {
+          taskKey: task.key,
+          tone: "success",
+          text: `Opgeslagen in ${folderSave.relativePath}. Kies bij het mapvenster de hoofdmap van de website/app.`
+        };
+      }
+
+      return true;
+    }
+
+    if (folderSave?.cancelled) {
+      if (task) {
+        localEditFeedback = {
+          taskKey: task.key,
+          tone: "info",
+          text: "Geen map gekozen. Er is nog niets opgeslagen."
+        };
+      }
+
+      return false;
+    }
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+      type: "application/json"
+    });
+    const exportUrl = window.URL?.createObjectURL?.(blob);
+
+    if (!exportUrl) {
+      throw new Error("Kon geen downloadlink maken.");
+    }
+
+    const link = document.createElement("a");
+    const dateStamp = new Date().toISOString().slice(0, 10);
+    link.href = exportUrl;
+    link.download = `columbus-lokale-opdrachten-${dateStamp}.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(exportUrl);
+
+    if (task) {
+      localEditFeedback = {
+        taskKey: task.key,
+        tone: "info",
+        text: "Deze browser slaat het exportbestand als gewone download op. In Safari kun je niet rechtstreeks naar de appmap schrijven vanuit de site."
+      };
+    }
+
+    return true;
+  } catch (error) {
+    console.warn("Lokale opdrachten konden niet worden geëxporteerd.", error);
+
+    if (task) {
+      localEditFeedback = {
+        taskKey: task.key,
+        tone: "error",
+        text: "Exporteren lukte niet in deze browser."
+      };
+    }
+
+    return false;
+  }
 }
 
 function buildMergedTaskTextOverrides() {
@@ -6796,7 +6975,14 @@ function handleStepCardClick(event) {
   toggleFilter(button.dataset.filterLevel, button.dataset.id);
 }
 
-function handleTaskGridClick(event) {
+async function handleTaskGridClick(event) {
+  const exportButton = event.target.closest("[data-action='export-local-custom-tasks']");
+
+  if (exportButton && isLocalEditorAvailable()) {
+    await downloadLocalCustomTaskExport(null);
+    return;
+  }
+
   const createButton = event.target.closest("[data-action='open-local-create']");
 
   if (createButton && isLocalEditorAvailable()) {
@@ -6829,8 +7015,16 @@ function handleTaskGridClick(event) {
   }
 }
 
-function handleTaskDetailClick(event) {
+async function handleTaskDetailClick(event) {
   const selectedTask = getSelectedTask(getFilteredTasks());
+  const exportButton = event.target.closest("[data-action='export-local-custom-tasks']");
+
+  if (exportButton && isLocalEditorAvailable()) {
+    await downloadLocalCustomTaskExport(selectedTask);
+    commitState("replace");
+    return;
+  }
+
   const createButton = event.target.closest("[data-action='save-local-create'], [data-action='cancel-local-create']");
 
   if (createButton && isLocalEditorAvailable()) {
@@ -7454,6 +7648,7 @@ function renderResultsSection() {
   const showCreateView = state.detailView === "create" && isLocalEditorAvailable() && canShowTasks;
   const canCreateLocalTask = isLocalEditorAvailable() && canShowTasks;
   const createCardMarkup = canCreateLocalTask ? renderLocalCreateTaskCard() : "";
+  const exportCardMarkup = isLocalEditorAvailable() && hasPendingLocalCustomChanges() ? renderLocalExportTaskCard() : "";
 
   if (!canShowTasks) {
     ui.resultsTitle.textContent = "Nog geen opdrachten in beeld";
@@ -7480,6 +7675,9 @@ function renderResultsSection() {
     ui.resultsMeta.textContent = showCreateView
       ? `Deze opdracht komt alleen lokaal in ${buildLocalCreateRouteLabel()}.`
       : "Kies een andere combinatie van bouw, vak of lesmoment.";
+    if (!showCreateView && hasPendingLocalCustomChanges()) {
+      ui.resultsMeta.textContent += " Er staan lokale wijzigingen klaar om te exporteren.";
+    }
     ui.taskDetail.className = showCreateView ? "task-detail task-detail--visible" : "task-detail";
     ui.taskDetail.innerHTML = showCreateView ? renderLocalCreateView() : "";
     ui.taskGrid.className = showCreateView ? "task-grid task-grid--hidden" : "task-grid";
@@ -7489,6 +7687,7 @@ function renderResultsSection() {
         <div class="empty-state">
           Er zijn geen opdrachten die passen bij deze combinatie. Kies bijvoorbeeld een ander vak of een ander lesmoment.
         </div>
+        ${exportCardMarkup}
         ${createCardMarkup}
       `;
     return;
@@ -7500,6 +7699,9 @@ function renderResultsSection() {
     : isEnergizerGroup()
       ? `${filteredTasks.length} energizers in deze route. Open een energizer voor de uitleg, klaarzetten in 1 minuut of direct printen als dat nodig is.`
       : `${filteredTasks.length} opdrachten in deze route. Open een opdracht voor de uitleg, klaarzetten in 1 minuut of direct printen.`;
+  if (!showCreateView && hasPendingLocalCustomChanges()) {
+    ui.resultsMeta.textContent += " Er staan lokale wijzigingen klaar om te exporteren.";
+  }
 
   const selectedTask = getSelectedTask(filteredTasks);
   const hasPrintView =
@@ -7522,7 +7724,7 @@ function renderResultsSection() {
   ui.taskGrid.innerHTML =
     selectedTask || showCreateView
       ? ""
-      : `${createCardMarkup}${filteredTasks.map((task) => renderTaskCard(task, selectedTask)).join("")}`;
+      : `${exportCardMarkup}${createCardMarkup}${filteredTasks.map((task) => renderTaskCard(task, selectedTask)).join("")}`;
 }
 
 function renderTaskCard(task, selectedTask) {
@@ -7573,6 +7775,29 @@ function renderLocalCreateTaskCard() {
         <div class="task-card__meta">
           <span class="pill">lokaal</span>
           <span class="pill">nieuwe opdracht</span>
+        </div>
+      </div>
+    </button>
+  `;
+}
+
+function renderLocalExportTaskCard() {
+  return `
+    <button
+      type="button"
+      class="task-card task-card--export"
+      data-action="export-local-custom-tasks"
+      style="${getSubjectThemeStyle(state.subjectId)}"
+    >
+      <div class="task-card__content task-card__content--add">
+        <span class="task-card__plus" aria-hidden="true">⇪</span>
+        <h4 class="task-card__title">Exporteer lokale wijzigingen</h4>
+        <p class="task-card__summary">
+          Download alle lokaal toegevoegde opdrachten, aanpassingen en verwijderingen als exportbestand voor de live site.
+        </p>
+        <div class="task-card__meta">
+          <span class="pill">export</span>
+          <span class="pill">lokaal</span>
         </div>
       </div>
     </button>
@@ -7982,12 +8207,15 @@ function saveLocalCustomTask(form) {
 
   const routeKey = buildRouteStorageKey(state.groupId, state.subjectId, getActiveRouteMomentId());
   const currentBlueprints = localCustomTaskBlueprints[routeKey] || [];
+  const currentDeletedChanges = [...localDeletedCustomTaskChanges];
   localCustomTaskBlueprints[routeKey] = [...currentBlueprints, blueprint];
+  localDeletedCustomTaskChanges = localDeletedCustomTaskChanges.filter((entry) => entry.key !== blueprint.key);
 
-  const persisted = persistLocalCustomTaskBlueprints();
+  const persisted = persistLocalCustomTaskBlueprints() && persistLocalDeletedCustomTaskChanges();
 
   if (!persisted) {
     localCustomTaskBlueprints[routeKey] = currentBlueprints;
+    localDeletedCustomTaskChanges = currentDeletedChanges;
     localCreateFeedback = {
       tone: "error",
       text: "Opslaan lukte niet. Controleer of deze browser lokale opslag toelaat."
@@ -8017,6 +8245,8 @@ function deleteLocalCustomTask(task) {
 
   const routeKey = buildRouteStorageKey(task.groupId, task.subjectId, task.momentId);
   const currentBlueprints = localCustomTaskBlueprints[routeKey] || [];
+  const hadRouteKey = Object.prototype.hasOwnProperty.call(localCustomTaskBlueprints, routeKey);
+  const currentDeletedChanges = [...localDeletedCustomTaskChanges];
   const nextBlueprints = currentBlueprints.filter((blueprint) => blueprint.key !== task.key);
 
   if (nextBlueprints.length) {
@@ -8027,13 +8257,32 @@ function deleteLocalCustomTask(task) {
 
   delete localTaskTextOverrides[task.key];
   delete localRenderedTaskOverrides[task.key];
+  localDeletedCustomTaskChanges = [
+    ...localDeletedCustomTaskChanges.filter((entry) => entry.key !== task.key),
+    {
+      key: task.key,
+      routeKey,
+      groupId: task.groupId,
+      subjectId: task.subjectId,
+      momentId: task.momentId,
+      title: task.title,
+      deletedAt: new Date().toISOString()
+    }
+  ];
 
   const persisted =
     persistLocalCustomTaskBlueprints() &&
+    persistLocalDeletedCustomTaskChanges() &&
     persistLocalTaskTextOverrides() &&
     persistLocalRenderedTaskOverrides();
 
   if (!persisted) {
+    if (hadRouteKey) {
+      localCustomTaskBlueprints[routeKey] = currentBlueprints;
+    } else {
+      delete localCustomTaskBlueprints[routeKey];
+    }
+    localDeletedCustomTaskChanges = currentDeletedChanges;
     localEditFeedback = {
       taskKey: task.key,
       tone: "error",
@@ -8045,7 +8294,7 @@ function deleteLocalCustomTask(task) {
   localEditFeedback = null;
   localCreateFeedback = {
     tone: "info",
-    text: "De lokale opdracht is verwijderd van deze Mac in deze browser."
+    text: "De lokale opdracht is verwijderd en staat nu klaar om mee te exporteren naar de live site."
   };
   refreshTaskData();
   state.taskId = null;
@@ -8881,6 +9130,15 @@ function renderLocalEditor(task) {
           <p>Deze wijzigingen worden alleen op dit apparaat en in deze browser bewaard. De gedeelde GitHub-site verandert hierdoor niet mee.</p>
         </div>
         <div class="local-editor__actions">
+          ${
+            hasPendingLocalCustomChanges()
+              ? `
+                <button type="button" class="button button--secondary" data-action="export-local-custom-tasks">
+                  Exporteer lokale opdrachten
+                </button>
+              `
+              : ""
+          }
           ${
             task.isLocalCustom
               ? `

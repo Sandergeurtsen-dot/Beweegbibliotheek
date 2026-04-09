@@ -571,6 +571,14 @@ body::before {
   box-shadow: none;
 }
 
+.task-card--export {
+  border-style: dashed;
+  border-width: 2px;
+  border-color: rgba(0, 171, 200, 0.28);
+  background: linear-gradient(180deg, #ffffff, #f1fbff);
+  box-shadow: none;
+}
+
 .task-card__content {
   min-width: 0;
   display: grid;
