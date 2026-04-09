@@ -1,39 +1,18 @@
 {
   "version": 1,
-  "exportedAt": "2026-04-09T16:56:16.091Z",
-  "customTasks": {
-    "groep-3-4__rekenen__tijdens": [
-      {
-        "key": "lokaal-groep-3-4-rekenen-tijdens-sneeuwbal-mnrpy3tu",
-        "groupScope": [
-          "groep-3-4"
-        ],
-        "title": "Sneeuwbal",
-        "summary": "Zoek de sneeuwballen en los de som op",
-        "duration": "10 min",
-        "goal": "Som onthouden en oplossen",
-        "setup": "Bladen met sommen en dan propjes maken als een sneeuwbal",
-        "movementFocus": "",
-        "materials": [
-          "Geen extra materialen"
-        ],
-        "steps": [
-          "Zoek een sneeuwbal, bekijk de som en onthoud, los deze op op je plek"
-        ],
-        "differentiation": "",
-        "teacherTip": "",
-        "visualHint": "",
-        "visual": "stations",
-        "keywords": [
-          "Groep 3/4",
-          "Rekenen",
-          "Tijdens het leren"
-        ],
-        "isLocalCustom": true
-      }
-    ]
-  },
-  "deletedTasks": [],
+  "exportedAt": "2026-04-09T17:06:58.506Z",
+  "customTasks": {},
+  "deletedTasks": [
+    {
+      "key": "lokaal-groep-3-4-rekenen-tijdens-sneeuwbal-mnrpy3tu",
+      "routeKey": "groep-3-4__rekenen__tijdens",
+      "groupId": "groep-3-4",
+      "subjectId": "rekenen",
+      "momentId": "tijdens",
+      "title": "Sneeuwbal",
+      "deletedAt": "2026-04-09T17:06:56.724Z"
+    }
+  ],
   "textOverrides": {},
   "renderedOverrides": {}
 }
