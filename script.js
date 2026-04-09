@@ -274,10 +274,15 @@ const LOCAL_CREATE_VISUAL_OPTIONS = [
 ];
 
 const LOCAL_EXPORT_FOLDER_NAME = "lokale-exporten";
+const LIVE_CUSTOM_TASK_EXPORT_PATH = "./lokale-exporten/live-opdrachten.json";
 const LOCAL_RENDER_EDIT_STORAGE_KEY = "columbus-beweegbibliotheek-local-render-edits-v1";
 const LOCAL_CUSTOM_TASK_DELETIONS_STORAGE_KEY = "columbus-beweegbibliotheek-local-custom-deletions-v1";
 const fileTaskTextOverrides = flattenTaskTextOverrides(globalThis.taskTextOverrides || {});
 let taskTextOverrides = {};
+let publishedTaskTextOverrides = {};
+let publishedRenderedTaskOverrides = {};
+let publishedCustomTaskBlueprints = {};
+let publishedDeletedCustomTaskKeys = new Set();
 
 const subjectThemes = {
   taal: {
@@ -2867,8 +2872,11 @@ function buildRouteStorageKey(groupId, subjectId, momentId) {
 
 function getBlueprintsForRoute(groupId, subjectId, momentId, baseBlueprints = []) {
   const routeKey = buildRouteStorageKey(groupId, subjectId, momentId);
+  const publishedBlueprints = publishedCustomTaskBlueprints[routeKey] || [];
   const localBlueprints = localCustomTaskBlueprints[routeKey] || [];
-  return [...baseBlueprints, ...localBlueprints];
+  return [...baseBlueprints, ...publishedBlueprints, ...localBlueprints].filter(
+    (blueprint) => !publishedDeletedCustomTaskKeys.has(blueprint.key)
+  );
 }
 
 function isLocalEditorAvailable() {
@@ -3008,6 +3016,10 @@ function getLocalCustomTaskExportFilename() {
   return `columbus-lokale-opdrachten-${dateStamp}.json`;
 }
 
+function getLiveCustomTaskExportFilename() {
+  return "live-opdrachten.json";
+}
+
 async function saveLocalCustomTaskExportToAppFolder(exportData) {
   if (typeof window.showDirectoryPicker !== "function") {
     return {
@@ -3023,18 +3035,23 @@ async function saveLocalCustomTaskExportToAppFolder(exportData) {
     create: true
   });
   const filename = getLocalCustomTaskExportFilename();
-  const fileHandle = await exportDirHandle.getFileHandle(filename, {
-    create: true
-  });
-  const writable = await fileHandle.createWritable();
-  await writable.write(JSON.stringify(exportData, null, 2));
-  await writable.close();
+  const archiveFileHandle = await exportDirHandle.getFileHandle(filename, { create: true });
+  const archiveWritable = await archiveFileHandle.createWritable();
+  const payload = JSON.stringify(exportData, null, 2);
+  await archiveWritable.write(payload);
+  await archiveWritable.close();
+
+  const liveFilename = getLiveCustomTaskExportFilename();
+  const liveFileHandle = await exportDirHandle.getFileHandle(liveFilename, { create: true });
+  const liveWritable = await liveFileHandle.createWritable();
+  await liveWritable.write(payload);
+  await liveWritable.close();
 
   return {
     saved: true,
     supported: true,
     filename,
-    relativePath: `${LOCAL_EXPORT_FOLDER_NAME}/${filename}`
+    relativePath: `${LOCAL_EXPORT_FOLDER_NAME}/${liveFilename}`
   };
 }
 
@@ -3131,7 +3148,7 @@ async function downloadLocalCustomTaskExport(task) {
 }
 
 function buildMergedTaskTextOverrides() {
-  return mergeTaskTextOverrideMaps(fileTaskTextOverrides, localTaskTextOverrides);
+  return mergeTaskTextOverrideMaps(fileTaskTextOverrides, publishedTaskTextOverrides, localTaskTextOverrides);
 }
 
 function mergeTaskTextOverrideMaps(...maps) {
@@ -3159,6 +3176,38 @@ function refreshTaskData() {
   allTasks = flattenTasks();
 }
 
+async function loadPublishedCustomTaskExport() {
+  if (window.location?.protocol === "file:" || typeof fetch !== "function") {
+    return false;
+  }
+
+  try {
+    const response = await fetch(`${LIVE_CUSTOM_TASK_EXPORT_PATH}?v=20260409-3`, {
+      cache: "no-store"
+    });
+
+    if (!response.ok) {
+      return false;
+    }
+
+    const exportData = await response.json();
+    publishedCustomTaskBlueprints = exportData?.customTasks && typeof exportData.customTasks === "object" ? exportData.customTasks : {};
+    publishedTaskTextOverrides = exportData?.textOverrides && typeof exportData.textOverrides === "object" ? exportData.textOverrides : {};
+    publishedRenderedTaskOverrides =
+      exportData?.renderedOverrides && typeof exportData.renderedOverrides === "object" ? exportData.renderedOverrides : {};
+    publishedDeletedCustomTaskKeys = new Set(
+      Array.isArray(exportData?.deletedTasks) ? exportData.deletedTasks.map((entry) => entry?.key).filter(Boolean) : []
+    );
+
+    refreshTaskData();
+    render();
+    return true;
+  } catch (error) {
+    console.warn("Live exportbestand kon niet worden geladen.", error);
+    return false;
+  }
+}
+
 let library = [];
 let allTasks = [];
 
@@ -3166,6 +3215,7 @@ refreshTaskData();
 
 initializeHistory();
 commitState("replace");
+loadPublishedCustomTaskExport();
 
 function materializeTask(group, subject, moment, blueprint) {
   if (Array.isArray(blueprint.groupScope) && !blueprint.groupScope.includes(group.id)) {
@@ -8156,13 +8206,18 @@ function mergeRenderedContent(baseValue, overrideValue) {
 }
 
 function applyLocalRenderedTaskOverrides(task) {
-  const override = localRenderedTaskOverrides[task.key];
+  const publishedOverride = publishedRenderedTaskOverrides[task.key];
+  const localOverride = localRenderedTaskOverrides[task.key];
+  const mergedOverride =
+    publishedOverride && localOverride
+      ? mergeRenderedContent(publishedOverride, localOverride)
+      : publishedOverride || localOverride;
 
-  if (!override) {
+  if (!mergedOverride) {
     return task;
   }
 
-  return mergeRenderedContent(task, override);
+  return mergeRenderedContent(task, mergedOverride);
 }
 
 function buildLocalRenderedTaskOverrideFromForm(form) {
