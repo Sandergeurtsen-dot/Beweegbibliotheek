@@ -3154,36 +3154,39 @@ function getPrintOrganizationLines(taskKey, visual, printProfile, organization) 
 
 function finalizeSupportCardsForClass(cards, visual, organization) {
   const merged = [...cards, ...getClassManagementSupportCards(visual, organization)];
-  const seen = new Set();
-
-  return merged.filter((cardItem) => {
-    const fingerprint = normalize(`${cardItem.label} ${cardItem.text}`);
-
-    if (seen.has(fingerprint)) {
-      return false;
-    }
-
-    seen.add(fingerprint);
-    return true;
-  });
+  return aggregatePrintableItems(merged);
 }
 
 function getClassManagementSupportCards(visual, organization) {
-  const groupCards = organization.units.map((unit) =>
-    card("Groepskaart", unit.label, `Gebruik deze kaart bij ${unit.label.toLowerCase()} (${formatLearnerCount(unit.size)}).`)
-  );
+  const unitCount = organization.units.length;
+  const groupCards =
+    unitCount > 0
+      ? [
+          makeRepeatedPrintCard(
+            card("Groepskaart", getOrganizationCardLabel(organization), getOrganizationCardHint(organization)),
+            unitCount,
+            `Print ${unitCount} exemplaren en geef iedere ${getOrganizationReceiverLabel(organization)} een eigen kaart.`
+          )
+        ]
+      : [];
 
   if (organization.type === "pairs" && visual === "dictation") {
     return [
       ...groupCards,
-      ...organization.units.map((unit) =>
-        card("Rolkaart", `Loper ${unit.label.replace("Tweetal ", "").replace("Drietal ", "")}`, `Gebruik deze rolkaart bij ${unit.label.toLowerCase()}.`)
+      makeRepeatedPrintCard(
+        card("Rolkaart", "Loper", "Gebruik deze rolkaart voor de leerling die de kaart ophaalt."),
+        unitCount,
+        `Print ${unitCount} exemplaren zodat ieder ${getOrganizationReceiverLabel(organization)} 1 loperkaart heeft.`
       ),
-      ...organization.units.map((unit) =>
-        card("Rolkaart", `Schrijver ${unit.label.replace("Tweetal ", "").replace("Drietal ", "")}`, `Gebruik deze rolkaart bij ${unit.label.toLowerCase()}.`)
+      makeRepeatedPrintCard(
+        card("Rolkaart", "Schrijver", "Gebruik deze rolkaart voor de leerling die noteert."),
+        unitCount,
+        `Print ${unitCount} exemplaren zodat ieder ${getOrganizationReceiverLabel(organization)} 1 schrijverkaart heeft.`
       ),
-      ...organization.units.map((unit) =>
-        card("Rolkaart", `Controleur ${unit.label.replace("Tweetal ", "").replace("Drietal ", "")}`, `Gebruik deze rolkaart bij ${unit.label.toLowerCase()}.`)
+      makeRepeatedPrintCard(
+        card("Rolkaart", "Controleur", "Gebruik deze rolkaart voor de leerling die terugleest en controleert."),
+        unitCount,
+        `Print ${unitCount} exemplaren zodat ieder ${getOrganizationReceiverLabel(organization)} 1 controleurkaart heeft.`
       )
     ];
   }
@@ -5397,6 +5400,55 @@ function fillCardsToClassSize(cards) {
   );
 }
 
+function makeRepeatedPrintCard(cardItem, copiesNeeded, distributionText = "") {
+  const safeCopies = Math.max(1, copiesNeeded);
+
+  return {
+    ...cardItem,
+    copiesNeeded: safeCopies,
+    assignmentLabels: [],
+    distributionText: distributionText || buildDistributionText([], safeCopies)
+  };
+}
+
+function aggregatePrintableItems(items) {
+  const grouped = new Map();
+
+  items.forEach((item) => {
+    const key = normalize(
+      [
+        item.label || "",
+        item.title || "",
+        item.text || "",
+        item.art || ""
+      ].join(" ")
+    );
+    const current = grouped.get(key);
+
+    if (!current) {
+      grouped.set(key, {
+        ...item,
+        copiesNeeded: Math.max(1, item.copiesNeeded || 1),
+        assignmentLabels: [...(item.assignmentLabels || [])]
+      });
+      return;
+    }
+
+    current.copiesNeeded += Math.max(1, item.copiesNeeded || 1);
+    current.assignmentLabels = [...new Set([...(current.assignmentLabels || []), ...(item.assignmentLabels || [])])];
+    current.distributionText =
+      current.distributionText ||
+      item.distributionText ||
+      buildDistributionText(current.assignmentLabels, current.copiesNeeded);
+  });
+
+  return Array.from(grouped.values()).map((item) => ({
+    ...item,
+    distributionText:
+      item.distributionText || buildDistributionText(item.assignmentLabels || [], Math.max(1, item.copiesNeeded || 1))
+  }));
+}
+
 function decorateCardDistribution(cardItem, assignmentLabels = [], copiesNeeded = 1) {
   const safeCopies = Math.max(1, copiesNeeded);
   const distributionText = buildDistributionText(assignmentLabels, safeCopies);
@@ -5455,8 +5507,6 @@ function getVisualSupportCards(visual, title) {
       card("Opstelling", "Klaar", "Gebruik als eindbordje.")
     ],
     dictation: [
-      card("Rolkaart", "Loper", "Print deze rolkaart voor de loper."),
-      card("Rolkaart", "Schrijver", "Print deze rolkaart voor de schrijver."),
       card("Opstelling", "Kijkkaart", "Hang hier de woorden of zinnen op."),
       card("Opstelling", "Schrijfplek", "Leg deze kaart op de werktafel."),
       card("Opstelling", "Controle", "Gebruik als controlevak."),
@@ -5875,6 +5925,110 @@ function getTeacherSheetPrefix(organization) {
   return "Werkblad";
 }
 
+function getOrganizationReceiverLabel(organization, visual = "") {
+  if (organization.type === "individual" || ["stations", "path", "measure"].includes(visual)) {
+    return "leerling";
+  }
+
+  if (organization.type === "pairs" || organization.type === "row-pairs") {
+    return "duo of trio";
+  }
+
+  if (organization.type === "teams") {
+    return "team";
+  }
+
+  if (organization.type === "small-groups") {
+    return "groepje";
+  }
+
+  return "werkplek";
+}
+
+function getOrganizationCardLabel(organization) {
+  if (organization.type === "individual") {
+    return "Leerling";
+  }
+
+  if (organization.type === "pairs" || organization.type === "row-pairs") {
+    return "Duo / trio";
+  }
+
+  if (organization.type === "teams") {
+    return "Team";
+  }
+
+  if (organization.type === "small-groups") {
+    return "Groepje";
+  }
+
+  return "Werkplek";
+}
+
+function getOrganizationCardHint(organization) {
+  return `Gebruik deze kaart als vaste herkenningskaart per ${getOrganizationReceiverLabel(organization)}.`;
+}
+
+function getOrganizationDistributionLine(organization, visual = "") {
+  if (organization.type === "individual" || ["stations", "path", "measure"].includes(visual)) {
+    return `${CLASS_SIZE} leerlingen`;
+  }
+
+  if (organization.type === "pairs" || organization.type === "row-pairs") {
+    return `${PAIR_OR_TRIO_UNITS.length - 1} tweetallen en 1 drietal`;
+  }
+
+  if (organization.type === "teams") {
+    return `${CLASS_GROUP_COUNT} teams van ${CLASS_GROUP_SIZE}`;
+  }
+
+  if (organization.type === "small-groups") {
+    return `${CLASS_GROUP_COUNT} groepjes van ${CLASS_GROUP_SIZE}`;
+  }
+
+  return "deze werkvorm";
+}
+
+function getTeacherSheetTitle(sheetPrefix, organization, visual) {
+  if (organization.type === "individual" || ["stations", "path", "measure"].includes(visual)) {
+    return `${sheetPrefix} leerling`;
+  }
+
+  if (organization.type === "pairs" || organization.type === "row-pairs") {
+    return `${sheetPrefix} duo / trio`;
+  }
+
+  if (organization.type === "teams") {
+    return `${sheetPrefix} team`;
+  }
+
+  if (organization.type === "small-groups") {
+    return `${sheetPrefix} groepje`;
+  }
+
+  return sheetPrefix;
+}
+
+function getTeacherSheetTargetLine(organization, visual) {
+  if (organization.type === "individual" || ["stations", "path", "measure"].includes(visual)) {
+    return "Voor leerling: ____________________";
+  }
+
+  if (organization.type === "pairs" || organization.type === "row-pairs") {
+    return "Voor duo of trio: ____________________";
+  }
+
+  if (organization.type === "teams") {
+    return "Voor team: ____________________";
+  }
+
+  if (organization.type === "small-groups") {
+    return "Voor groepje: ____________________";
+  }
+
+  return "Voor: ____________________";
+}
+
 function getMethodFocusLine(taskKey, subjectId, groupId, visual) {
   if (subjectId === "taal") {
     if (taskKey.includes("loopdictee")) {
@@ -6047,16 +6201,23 @@ function getTeacherSheets(group, subject, moment, blueprint, title, organization
 
   const sheetUnits = getTeacherSheetUnits(organization, blueprint.visual);
   const sheetPrefix = getTeacherSheetPrefix(organization);
+  const genericSheetTitle = getTeacherSheetTitle(sheetPrefix, organization, blueprint.visual);
+  const genericSheetTarget = getTeacherSheetTargetLine(organization, blueprint.visual);
+  const groupSheets = sheetUnits.length
+    ? [
+        makeRepeatedPrintCard(
+          card(
+            genericSheetTitle,
+            `${title}\nVoor: ____________________\n${genericSheetTarget}\n${focusLine}\n${roundLines}\n${answerBlock}`,
+            `Print ${sheetUnits.length} exemplaren voor ${getOrganizationDistributionLine(organization, blueprint.visual)}.`
+          ),
+          sheetUnits.length,
+          `Print ${sheetUnits.length} exemplaren en gebruik hetzelfde blad per ${getOrganizationReceiverLabel(organization, blueprint.visual)}.`
+        )
+      ]
+    : [];
 
-  const groupSheets = sheetUnits.map((unit) =>
-    card(
-      `${sheetPrefix} ${unit.label}`,
-      `${title}\n${unit.label} (${formatLearnerCount(unit.size)})\n${focusLine}\n${roundLines}\n${answerBlock}`,
-      `Print 1 ${sheetPrefix.toLowerCase()} voor ${unit.label.toLowerCase()} van ${formatLearnerCount(unit.size)}.`
-    )
-  );
-
-  return [
+  return aggregatePrintableItems([
     ...groupSheets,
     card(
       "Klasoverzicht",
@@ -6068,7 +6229,7 @@ function getTeacherSheets(group, subject, moment, blueprint, title, organization
       `Doel: ${readGroupValue(blueprint.goal, group.id)}\nCheck 1: kaartje goed gebruikt\nCheck 2: antwoord of woord klopt\nCheck 3: leerling kan uitleggen waarom\nCheck 4: materiaal weer compleet`,
       `Print 1 controleblad voor de leerkracht of een nakijkgroep tijdens ${moment.label.toLowerCase()}.`
     )
-  ];
+  ]);
 }
 
 function buildCardHint(subjectId, groupId, family, taskKey, index) {
@@ -6853,9 +7014,9 @@ function renderTaskCard(task, selectedTask) {
 
 function buildQuickOverview(task) {
   return [
-    `Vooraf: ${buildQuickStart(task)}`,
-    `Kern van de opdracht: ${buildQuickPlay(task)}`,
-    `Belangrijk om te bewaken: ${buildQuickFinish(task)}`
+    `Vooraf: ${shortenPrintText(buildQuickStart(task), 96)}`,
+    `Kern: ${shortenPrintText(buildQuickPlay(task), 96)}`,
+    `Let op: ${shortenPrintText(buildQuickFinish(task), 96)}`
   ];
 }
 
@@ -6889,10 +7050,20 @@ function buildClassExplanation(task) {
   const closingStep = task.steps[task.steps.length - 1] || task.goal;
 
   return [
-    `Leg de bedoeling uit: ${task.goal}`,
-    middleStep ? `Laat leerlingen dit doen: ${middleStep}` : `Laat leerlingen dit doen: ${task.steps[0] || task.setup}`,
-    `Benoem ook: ${closingStep}`
+    `Leg de bedoeling uit: ${shortenPrintText(task.goal, 130)}`,
+    middleStep
+      ? `Laat leerlingen dit doen: ${shortenPrintText(middleStep, 130)}`
+      : `Laat leerlingen dit doen: ${shortenPrintText(task.steps[0] || task.setup, 130)}`,
+    `Benoem ook: ${shortenPrintText(closingStep, 130)}`
   ];
+}
+
+function getCompactPreview(task) {
+  return {
+    start: shortenPrintText(task.setup, 88),
+    action: shortenPrintText(task.steps[1] || task.steps[0] || task.goal, 88),
+    print: shortenPrintText(getPrintSummary(task, Boolean(task.cardPack)).slice(0, 2).join(", "), 88)
+  };
 }
 
 function getSubjectTheme(subjectId) {
@@ -7102,6 +7273,48 @@ function renderTeacherBrief(task, showCards) {
   `;
 }
 
+function renderCompactHighlights(task, showCards) {
+  const preview = getCompactPreview(task);
+  const materials = shortenPrintText(getMaterialsList(task).slice(0, 3).join(", "), 84);
+
+  return `
+    <section class="compact-highlights" aria-label="Snel overzicht">
+      <article class="compact-highlights__item">
+        <span class="compact-highlights__label">Start</span>
+        <p>${escapeHtml(preview.start)}</p>
+      </article>
+      <article class="compact-highlights__item">
+        <span class="compact-highlights__label">Doen</span>
+        <p>${escapeHtml(preview.action)}</p>
+      </article>
+      <article class="compact-highlights__item">
+        <span class="compact-highlights__label">Benodigd</span>
+        <p>${escapeHtml(materials)}</p>
+      </article>
+      <article class="compact-highlights__item">
+        <span class="compact-highlights__label">Print</span>
+        <p>${escapeHtml(showCards ? preview.print : "Geen apart printmateriaal nodig")}</p>
+      </article>
+    </section>
+  `;
+}
+
+function renderDetailFold(title, preview, body, options = {}) {
+  return `
+    <details class="detail-fold ${options.wide ? "detail-fold--wide" : ""}" ${options.open ? "open" : ""}>
+      <summary>
+        <div class="detail-fold__heading">
+          <strong>${escapeHtml(title)}</strong>
+          ${preview ? `<span>${escapeHtml(preview)}</span>` : ""}
+        </div>
+      </summary>
+      <div class="detail-fold__body">
+        ${body}
+      </div>
+    </details>
+  `;
+}
+
 function renderOneMinuteView(task, showCards) {
   const blocks = buildReadyInOneMinute(task, showCards);
 
@@ -7166,7 +7379,6 @@ function renderTaskDetail(task) {
                 <div class="task-detail__art" aria-hidden="true">
                   ${renderIllustration(task, false)}
                 </div>
-                <p class="task-detail__caption">${escapeHtml(task.visualHint)}</p>
               </div>
 
               <div>
@@ -7178,7 +7390,7 @@ function renderTaskDetail(task) {
                 </div>
                 <h3 class="task-detail__title">${escapeHtml(task.title)}</h3>
                 <p class="task-detail__summary">${escapeHtml(task.summary)}</p>
-                <div class="detail-box detail-box--intro">
+                <div class="detail-box detail-box--intro detail-box--compact">
                   <h4>In 20 seconden uitgelegd</h4>
                   <ul class="quick-overview">
                     ${buildQuickOverview(task)
@@ -7194,61 +7406,78 @@ function renderTaskDetail(task) {
                 ? renderOneMinuteView(task, showCards)
                 : `
                   ${renderTeacherBrief(task, showCards)}
+                  ${renderCompactHighlights(task, showCards)}
                   <div class="task-detail__grid">
-                    <section class="detail-box detail-box--wide">
-                      <h4>Zo voer je de opdracht uit</h4>
-                      <ol>
-                        ${task.steps
-                          .map(
-                            (step, index) => `
-                              <li>
-                                <span class="step-label">${escapeHtml(getStepLabel(index, task.steps.length))}</span>
-                                ${escapeHtml(step)}
-                              </li>
+                    ${renderDetailFold(
+                      "Zo voer je de opdracht uit",
+                      `${task.steps.length} korte stappen`,
+                      `
+                        <ol>
+                          ${task.steps
+                            .map(
+                              (step, index) => `
+                                <li>
+                                  <span class="step-label">${escapeHtml(getStepLabel(index, task.steps.length))}</span>
+                                  ${escapeHtml(step)}
+                                </li>
+                              `
+                            )
+                            .join("")}
+                        </ol>
+                      `,
+                      { open: true, wide: true }
+                    )}
+
+                    ${renderDetailFold(
+                      "Zo leg je het uit aan de klas",
+                      "Korte instructiezinnen",
+                      `
+                        <ul class="quick-overview">
+                          ${buildClassExplanation(task)
+                            .map((line) => `<li>${escapeHtml(line)}</li>`)
+                            .join("")}
+                        </ul>
+                      `
+                    )}
+
+                    ${renderDetailFold(
+                      "Klaarzetten en organiseren",
+                      shortenPrintText(task.setup, 78),
+                      `
+                        <p>${escapeHtml(task.setup)}</p>
+                        ${
+                          showCards
+                            ? `
+                              <ul>
+                                ${task.cardPack.printChecklist
+                                  .slice(0, 4)
+                                  .map((item) => `<li>${escapeHtml(item)}</li>`)
+                                  .join("")}
+                              </ul>
                             `
-                          )
-                          .join("")}
-                      </ol>
-                    </section>
+                            : ""
+                        }
+                      `
+                    )}
 
-                    <section class="detail-box">
-                      <h4>Zo leg je het uit aan de klas</h4>
-                      <ul class="quick-overview">
-                        ${buildClassExplanation(task)
-                          .map((line) => `<li>${escapeHtml(line)}</li>`)
-                          .join("")}
-                      </ul>
-                    </section>
+                    ${renderDetailFold(
+                      "Benodigdheden",
+                      `${getMaterialsList(task).length} dingen klaarleggen`,
+                      `
+                        <ul>
+                          ${getMaterialsList(task).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+                        </ul>
+                      `
+                    )}
 
-                    <section class="detail-box">
-                      <h4>Klaarzetten en organiseren</h4>
-                      <p>${escapeHtml(task.setup)}</p>
-                      ${
-                        showCards
-                          ? `
-                            <ul>
-                              ${task.cardPack.printChecklist
-                                .slice(0, 4)
-                                .map((item) => `<li>${escapeHtml(item)}</li>`)
-                                .join("")}
-                            </ul>
-                          `
-                          : ""
-                      }
-                    </section>
-
-                    <section class="detail-box">
-                      <h4>Benodigdheden</h4>
-                      <ul>
-                        ${getMaterialsList(task).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
-                      </ul>
-                    </section>
-
-                    <section class="detail-box">
-                      <h4>Leerkrachttip en differentiatie</h4>
-                      <p>${escapeHtml(task.teacherTip)}</p>
-                      <p>${escapeHtml(task.differentiation)}</p>
-                    </section>
+                    ${renderDetailFold(
+                      "Leerkrachttip en differentiatie",
+                      "Extra houvast voor uitvoering",
+                      `
+                        <p>${escapeHtml(task.teacherTip)}</p>
+                        <p>${escapeHtml(task.differentiation)}</p>
+                      `
+                    )}
                   </div>
                 `
             }
@@ -7371,7 +7600,11 @@ function renderPrintCard(card) {
     <article class="card-pack-item ${card.art ? "card-pack-item--visual" : ""}">
       <div class="card-pack-item__topline">
         <span class="card-pack-item__tag">${escapeHtml(card.label)}</span>
-        ${card.copiesNeeded > 1 ? `<span class="card-pack-item__copies">print x${card.copiesNeeded}</span>` : ""}
+        ${
+          card.copiesNeeded > 1
+            ? `<span class="card-pack-item__copies" title="Print ${card.copiesNeeded} keer">x${card.copiesNeeded}</span>`
+            : ""
+        }
       </div>
       ${card.title ? `<h5 class="card-pack-item__title">${escapeHtml(card.title)}</h5>` : ""}
       ${card.art ? `<div class="card-pack-item__art">${card.art}</div>` : ""}
@@ -9187,10 +9420,10 @@ function renderTableText(x, y, text, fill) {
 }
 
 function renderSvgTextBlock(x, y, width, height, label, fill, preferredFontSize = 12, maxLines = 2) {
-  const fitted = fitSvgText(label, width, height, preferredFontSize, maxLines);
+  const fitted = fitSvgText(label, Math.max(12, width - 8), Math.max(12, height - 8), preferredFontSize, maxLines);
   const centerX = x + width / 2;
-  const lineHeight = fitted.fontSize * 1.06;
-  const startY = y + height / 2 - ((fitted.lines.length - 1) * lineHeight) / 2 + fitted.fontSize * 0.36;
+  const lineHeight = fitted.fontSize * 1.02;
+  const startY = y + height / 2 - ((fitted.lines.length - 1) * lineHeight) / 2 + fitted.fontSize * 0.34;
 
   return `
     <text text-anchor="middle" fill="${fill}" font-size="${fitted.fontSize}" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">
@@ -9205,23 +9438,28 @@ function renderSvgTextBlock(x, y, width, height, label, fill, preferredFontSize 
 }
 
 function fitSvgText(label, width, height, preferredFontSize, maxLines) {
-  for (let fontSize = preferredFontSize; fontSize >= 7.5; fontSize -= 0.5) {
-    const maxChars = Math.max(3, Math.floor(width / (fontSize * 0.6)));
-    const lines = wrapSvgText(label, maxChars, maxLines);
-    const lineHeight = fontSize * 1.06;
+  const safeLabel = String(label).trim();
+  const minFontSize = 6.5;
 
-    if (lines.length * lineHeight <= height - 6) {
+  for (let fontSize = preferredFontSize; fontSize >= minFontSize; fontSize -= 0.5) {
+    const maxChars = Math.max(3, Math.floor(width / (fontSize * 0.68)));
+    const lines = wrapSvgText(safeLabel, maxChars);
+    const lineHeight = fontSize * 1.02;
+
+    if (lines.length <= maxLines && lines.length * lineHeight <= height - 2) {
       return { lines, fontSize };
     }
   }
 
+  const fallbackChars = Math.max(3, Math.floor(width / (minFontSize * 0.72)));
+
   return {
-    lines: wrapSvgText(label, Math.max(3, Math.floor(width / 4.8)), maxLines),
-    fontSize: 7.5
+    lines: clampSvgLines(wrapSvgText(safeLabel, fallbackChars), fallbackChars, maxLines),
+    fontSize: minFontSize
   };
 }
 
-function wrapSvgText(label, maxChars, maxLines) {
+function wrapSvgText(label, maxChars) {
   const rawTokens = String(label)
     .replaceAll("/", " / ")
     .replaceAll("-", " - ")
@@ -9248,13 +9486,20 @@ function wrapSvgText(label, maxChars, maxLines) {
     lines.push(current);
   }
 
+  return lines;
+}
+
+function clampSvgLines(lines, maxChars, maxLines) {
   if (lines.length <= maxLines) {
     return lines;
   }
 
-  const visible = lines.slice(0, maxLines - 1);
-  const lastLine = lines.slice(maxLines - 1).join(" ");
-  visible.push(lastLine);
+  const visible = lines.slice(0, maxLines);
+  const lastLine = visible[maxLines - 1];
+  const clippedLength = Math.max(1, maxChars - 1);
+  const clippedLine = lastLine.length > clippedLength ? lastLine.slice(0, clippedLength).trimEnd() : lastLine.trimEnd();
+
+  visible[maxLines - 1] = clippedLine.endsWith("…") ? clippedLine : `${clippedLine}…`;
   return visible;
 }
 

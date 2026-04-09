@@ -422,6 +422,10 @@ body::before {
   margin: 0;
   color: var(--ink-soft);
   line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .step-card__meta {
@@ -577,10 +581,10 @@ body::before {
   line-height: 1.58;
   font-size: 0.98rem;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: calc(1.58em * 3);
+  min-height: calc(1.58em * 2.4);
 }
 
 .task-card__meta {
@@ -650,8 +654,9 @@ body::before {
 .task-detail__summary {
   margin: 12px 0 0;
   color: var(--ink-soft);
-  line-height: 1.7;
-  font-size: 1.04rem;
+  line-height: 1.58;
+  font-size: 1rem;
+  max-width: 64ch;
 }
 
 .teacher-toolbar {
@@ -715,22 +720,26 @@ body::before {
 .task-detail__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
+  gap: 16px;
 }
 
 .detail-box--intro {
-  margin-top: 16px;
+  margin-top: 14px;
 }
 
 .detail-box--wide {
   grid-column: 1 / -1;
 }
 
+.detail-box--compact {
+  padding: 16px 18px;
+}
+
 .quick-overview {
-  margin: 12px 0 0;
+  margin: 10px 0 0;
   padding-left: 20px;
   color: var(--ink-soft);
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .quick-overview li + li {
@@ -740,6 +749,103 @@ body::before {
 .card-layer {
   display: grid;
   gap: 20px;
+}
+
+.compact-highlights {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.compact-highlights__item {
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid var(--subject-line);
+  background: #ffffff;
+  box-shadow: 0 10px 22px rgba(20, 59, 134, 0.05);
+}
+
+.compact-highlights__label {
+  display: inline-flex;
+  margin-bottom: 8px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--subject-soft);
+  color: var(--subject-accent);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.compact-highlights__item p {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+.detail-fold {
+  border: 1px solid var(--subject-line);
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 10px 22px rgba(20, 59, 134, 0.05);
+  overflow: clip;
+}
+
+.detail-fold--wide {
+  grid-column: 1 / -1;
+}
+
+.detail-fold summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 16px 18px;
+}
+
+.detail-fold summary::-webkit-details-marker {
+  display: none;
+}
+
+.detail-fold__heading {
+  display: grid;
+  gap: 4px;
+}
+
+.detail-fold__heading strong {
+  color: var(--subject-accent);
+  font-size: 1.03rem;
+  font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
+}
+
+.detail-fold__heading span {
+  color: var(--ink-soft);
+  line-height: 1.45;
+  font-size: 0.94rem;
+}
+
+.detail-fold__body {
+  padding: 0 18px 18px;
+  color: var(--ink-soft);
+}
+
+.detail-fold__body p,
+.detail-fold__body ul,
+.detail-fold__body ol {
+  margin: 0;
+  line-height: 1.58;
+}
+
+.detail-fold__body ul,
+.detail-fold__body ol {
+  padding-left: 20px;
+}
+
+.detail-fold__body li + li,
+.detail-fold__body p + p,
+.detail-fold__body p + ul,
+.detail-fold__body ul + p {
+  margin-top: 8px;
 }
 
 .card-layer__intro {
@@ -824,13 +930,14 @@ body::before {
 
 .card-pack-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(188px, 1fr));
   gap: 12px;
 }
 
 .card-pack-item {
   position: relative;
   min-height: 176px;
+  min-width: 0;
   padding: 20px;
   border-radius: 20px;
   background:
@@ -841,6 +948,7 @@ body::before {
   display: grid;
   align-content: space-between;
   gap: 14px;
+  overflow: hidden;
 }
 
 .card-pack-item::before {
@@ -869,6 +977,8 @@ body::before {
 .card-pack-item__tag {
   display: inline-flex;
   width: fit-content;
+  max-width: 100%;
+  min-width: 0;
   padding: 6px 10px;
   border-radius: 999px;
   background: var(--subject-soft);
@@ -877,28 +987,36 @@ body::before {
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 .card-pack-item__topline {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
 }
 
 .card-pack-item__copies {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  justify-self: end;
+  max-width: 100%;
+  min-width: 0;
   padding: 6px 10px;
   border-radius: 999px;
   background: color-mix(in srgb, var(--subject-accent) 12%, white);
   color: var(--subject-accent);
   border: 1px solid color-mix(in srgb, var(--subject-accent) 24%, white);
-  font-size: 0.74rem;
+  font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.03em;
-  white-space: nowrap;
+  line-height: 1.15;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .card-pack-item__title {
@@ -907,6 +1025,8 @@ body::before {
   line-height: 1.12;
   color: var(--subject-accent);
   font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
 }
 
 .card-pack-item__art {
@@ -928,12 +1048,14 @@ body::before {
   line-height: 1.4;
   color: var(--ink);
   font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
+  overflow-wrap: anywhere;
 }
 
 .card-pack-item__hint {
   color: var(--ink-soft);
   font-size: 0.92rem;
   line-height: 1.55;
+  overflow-wrap: anywhere;
 }
 
 .card-pack-item__distribution {
@@ -941,6 +1063,11 @@ body::before {
   font-size: 0.86rem;
   line-height: 1.45;
   font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.card-pack-item > * {
+  min-width: 0;
 }
 
 .detail-box {
@@ -1311,6 +1438,7 @@ body::before {
 
   .task-detail__grid,
   .card-pack-grid,
+  .compact-highlights,
   .teacher-brief__grid,
   .minute-view__grid {
     grid-template-columns: 1fr;
@@ -1324,6 +1452,14 @@ body::before {
   .card-layer__section-action {
     width: 100%;
     justify-content: center;
+  }
+
+  .card-pack-item__topline {
+    grid-template-columns: 1fr;
+  }
+
+  .card-pack-item__copies {
+    justify-self: start;
   }
 }
 
