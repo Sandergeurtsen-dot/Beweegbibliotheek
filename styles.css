@@ -841,24 +841,9 @@ body::before {
 .detail-panel__head {
   padding: 16px 18px;
   display: grid;
-  gap: 10px;
+  gap: 8px;
   border-bottom: 1px solid color-mix(in srgb, var(--subject-line) 72%, white);
   background: linear-gradient(180deg, color-mix(in srgb, var(--subject-soft) 68%, white), #ffffff);
-}
-
-.detail-panel__chip {
-  display: inline-flex;
-  align-items: center;
-  width: fit-content;
-  padding: 7px 12px;
-  border-radius: 999px;
-  background: var(--subject-soft);
-  color: var(--subject-accent);
-  border: 1px solid var(--subject-line);
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
 }
 
 .detail-fold__heading {

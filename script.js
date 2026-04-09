@@ -7353,7 +7353,6 @@ function renderStaticDetailPanel(title, preview, body, options = {}) {
   return `
     <section class="detail-panel ${options.wide ? "detail-panel--wide" : ""}">
       <div class="detail-panel__head">
-        <span class="detail-panel__chip">Altijd zichtbaar</span>
         <div class="detail-fold__heading">
           <strong>${escapeHtml(title)}</strong>
           ${preview ? `<span>${escapeHtml(preview)}</span>` : ""}
