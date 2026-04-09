@@ -7349,6 +7349,22 @@ function renderDetailFold(title, preview, body, options = {}) {
   `;
 }
 
+function renderStaticDetailPanel(title, preview, body, options = {}) {
+  return `
+    <section class="detail-panel ${options.wide ? "detail-panel--wide" : ""}">
+      <div class="detail-panel__head">
+        <div class="detail-fold__heading">
+          <strong>${escapeHtml(title)}</strong>
+          ${preview ? `<span>${escapeHtml(preview)}</span>` : ""}
+        </div>
+      </div>
+      <div class="detail-fold__body">
+        ${body}
+      </div>
+    </section>
+  `;
+}
+
 function renderOneMinuteView(task, showCards) {
   const blocks = buildReadyInOneMinute(task, showCards);
 
@@ -7445,7 +7461,7 @@ function renderTaskDetail(task) {
                 : `
                   ${renderTeacherBrief(task, showCards)}
                   <div class="task-detail__grid">
-                    ${renderDetailFold(
+                    ${renderStaticDetailPanel(
                       "Zo voer je de opdracht uit",
                       `${task.steps.length} korte stappen`,
                       `
@@ -7462,7 +7478,7 @@ function renderTaskDetail(task) {
                             .join("")}
                         </ol>
                       `,
-                      { open: true, wide: true }
+                      { wide: true }
                     )}
 
                     ${renderDetailFold(
