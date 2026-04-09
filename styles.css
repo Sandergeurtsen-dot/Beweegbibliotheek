@@ -791,6 +791,7 @@ body::before {
   background: #ffffff;
   box-shadow: 0 10px 22px rgba(20, 59, 134, 0.05);
   overflow: clip;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 }
 
 .detail-fold--wide {
@@ -801,15 +802,39 @@ body::before {
   list-style: none;
   cursor: pointer;
   padding: 16px 18px;
+  user-select: none;
 }
 
 .detail-fold summary::-webkit-details-marker {
   display: none;
 }
 
+.detail-fold summary:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--subject-accent) 24%, white);
+  outline-offset: -3px;
+}
+
+.detail-fold:hover {
+  border-color: color-mix(in srgb, var(--subject-accent) 34%, white);
+  box-shadow: 0 14px 28px rgba(20, 59, 134, 0.08);
+}
+
+.detail-fold[open] {
+  border-color: color-mix(in srgb, var(--subject-accent) 38%, white);
+  box-shadow: 0 16px 30px rgba(20, 59, 134, 0.1);
+}
+
+.detail-fold__summary {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .detail-fold__heading {
   display: grid;
   gap: 4px;
+  min-width: 0;
 }
 
 .detail-fold__heading strong {
@@ -824,9 +849,45 @@ body::before {
   font-size: 0.94rem;
 }
 
+.detail-fold__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: var(--subject-soft);
+  color: var(--subject-accent);
+  border: 1px solid var(--subject-line);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.detail-fold__toggle-label::before {
+  content: "Uitklappen";
+}
+
+.detail-fold__toggle-icon::before {
+  content: "+";
+  display: inline-block;
+  min-width: 10px;
+  text-align: center;
+}
+
+.detail-fold[open] .detail-fold__toggle-label::before {
+  content: "Inklappen";
+}
+
+.detail-fold[open] .detail-fold__toggle-icon::before {
+  content: "−";
+}
+
 .detail-fold__body {
   padding: 0 18px 18px;
   color: var(--ink-soft);
+  border-top: 1px solid color-mix(in srgb, var(--subject-line) 72%, white);
 }
 
 .detail-fold__body p,
@@ -1460,6 +1521,14 @@ body::before {
 
   .card-pack-item__copies {
     justify-self: start;
+  }
+
+  .detail-fold__summary {
+    flex-direction: column;
+  }
+
+  .detail-fold__toggle {
+    align-self: start;
   }
 }
 

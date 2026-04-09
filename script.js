@@ -6515,7 +6515,34 @@ function handleTaskDetailClick(event) {
     state.detailView = "print";
     commitState(historyMode);
     triggerPrint(printButton.dataset.printSection || "all");
+    return;
   }
+
+  const detailSummary = event.target.closest(".detail-fold summary");
+
+  if (detailSummary) {
+    event.preventDefault();
+    toggleDetailFoldGroup(detailSummary.closest(".detail-fold"));
+  }
+}
+
+function toggleDetailFoldGroup(activeFold) {
+  if (!activeFold) {
+    return;
+  }
+
+  const detailGrid = activeFold.closest(".task-detail__grid");
+
+  if (!detailGrid) {
+    activeFold.open = !activeFold.open;
+    return;
+  }
+
+  const nextOpen = !activeFold.open;
+
+  detailGrid.querySelectorAll(".detail-fold").forEach((fold) => {
+    fold.open = nextOpen;
+  });
 }
 
 function triggerPrint(section = "all") {
@@ -7304,9 +7331,15 @@ function renderDetailFold(title, preview, body, options = {}) {
   return `
     <details class="detail-fold ${options.wide ? "detail-fold--wide" : ""}" ${options.open ? "open" : ""}>
       <summary>
-        <div class="detail-fold__heading">
-          <strong>${escapeHtml(title)}</strong>
-          ${preview ? `<span>${escapeHtml(preview)}</span>` : ""}
+        <div class="detail-fold__summary">
+          <div class="detail-fold__heading">
+            <strong>${escapeHtml(title)}</strong>
+            ${preview ? `<span>${escapeHtml(preview)}</span>` : ""}
+          </div>
+          <span class="detail-fold__toggle" aria-hidden="true">
+            <span class="detail-fold__toggle-label"></span>
+            <span class="detail-fold__toggle-icon"></span>
+          </span>
         </div>
       </summary>
       <div class="detail-fold__body">
