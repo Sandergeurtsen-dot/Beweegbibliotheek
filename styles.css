@@ -523,6 +523,10 @@ body::before {
   gap: 18px;
 }
 
+.task-grid--hidden {
+  display: none;
+}
+
 .task-card {
   width: 100%;
   display: grid;
@@ -559,12 +563,39 @@ body::before {
   box-shadow: 0 18px 34px var(--subject-glow);
 }
 
+.task-card--add {
+  border-style: dashed;
+  border-width: 2px;
+  border-color: rgba(20, 59, 134, 0.18);
+  background: linear-gradient(180deg, #ffffff, #f7fbff);
+  box-shadow: none;
+}
+
 .task-card__content {
   min-width: 0;
   display: grid;
   grid-template-rows: auto auto 1fr auto;
   align-content: start;
   gap: 12px;
+}
+
+.task-card__content--add {
+  justify-items: start;
+  align-content: center;
+}
+
+.task-card__plus {
+  display: inline-grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid rgba(20, 59, 134, 0.12);
+  color: var(--ink);
+  font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
+  font-size: 2rem;
+  line-height: 1;
 }
 
 .task-card__title {
@@ -970,6 +1001,13 @@ body::before {
   gap: 12px;
 }
 
+.card-layer__section--selected {
+  padding: 14px;
+  border-radius: 22px;
+  border: 2px solid color-mix(in srgb, var(--subject-accent) 32%, white);
+  background: color-mix(in srgb, var(--subject-soft) 42%, white);
+}
+
 .card-layer__section-head {
   display: flex;
   align-items: start;
@@ -1131,6 +1169,14 @@ body::before {
   height: auto;
 }
 
+.card-pack-item__art img,
+.card-pack-item__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
 .card-pack-item__body {
   font-size: 1.2rem;
   font-weight: 800;
@@ -1255,6 +1301,308 @@ body::before {
   color: var(--ink);
   line-height: 1.45;
   font-weight: 700;
+}
+
+.local-editor {
+  display: grid;
+  gap: 18px;
+  padding: 20px;
+  border-radius: 22px;
+  background: #ffffff;
+  border: 1px solid var(--subject-line);
+  box-shadow: 0 14px 28px rgba(20, 59, 134, 0.06);
+}
+
+.local-editor__intro {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.local-editor__intro strong {
+  display: block;
+  color: var(--subject-accent);
+  font-size: 1.18rem;
+  font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
+}
+
+.local-editor__intro p {
+  margin: 10px 0 0;
+  color: var(--ink-soft);
+  line-height: 1.58;
+  max-width: 66ch;
+}
+
+.local-editor__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  gap: 10px;
+}
+
+.local-editor__delete {
+  border-color: #e0b8b0;
+  color: #9a3d2a;
+  background: #fff6f4;
+}
+
+.local-editor__feedback {
+  padding: 12px 14px;
+  border-radius: 16px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.local-editor__feedback--success {
+  background: #ebf8f4;
+  border: 1px solid #b9e2d8;
+  color: #0c6f5b;
+}
+
+.local-editor__feedback--info {
+  background: #edf4ff;
+  border: 1px solid #c3d6f7;
+  color: #143b86;
+}
+
+.local-editor__feedback--error {
+  background: #fff2f0;
+  border: 1px solid #f0c4bd;
+  color: #9a3d2a;
+}
+
+.local-editor__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.local-editor__tab {
+  appearance: none;
+  border: 1px solid var(--subject-line);
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 800;
+  font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(20, 59, 134, 0.05);
+}
+
+.local-editor__tab--active {
+  background: var(--subject-soft);
+  border-color: var(--subject-accent);
+  color: var(--subject-accent);
+}
+
+.local-editor__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.local-editor__field {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #ffffff, var(--subject-soft));
+  border: 1px solid var(--subject-line);
+}
+
+.local-editor__field--list {
+  grid-column: span 2;
+}
+
+.local-editor__field--toggle {
+  align-content: start;
+}
+
+.local-editor__label {
+  color: var(--subject-accent);
+  font-weight: 800;
+  font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
+}
+
+.local-editor__field input,
+.local-editor__field select,
+.local-editor__field textarea {
+  width: 100%;
+  border: 1px solid color-mix(in srgb, var(--subject-line) 82%, white);
+  border-radius: 14px;
+  padding: 12px 14px;
+  color: var(--ink);
+  background: #ffffff;
+  font: inherit;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.local-editor__field input:focus-visible,
+.local-editor__field select:focus-visible,
+.local-editor__field textarea:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--subject-accent) 20%, white);
+  outline-offset: 1px;
+  border-color: var(--subject-accent);
+}
+
+.local-editor__check {
+  display: flex;
+  align-items: start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid color-mix(in srgb, var(--subject-line) 82%, white);
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.local-editor__check input {
+  margin-top: 3px;
+}
+
+.local-editor__help {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.local-editor__art-preview {
+  display: grid;
+  place-items: center;
+  min-height: 180px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid var(--subject-line);
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.local-editor__art-preview img,
+.local-editor__art-preview svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.local-editor__art-preview--empty {
+  color: var(--ink-soft);
+  font-weight: 700;
+  text-align: center;
+}
+
+.local-editor__art-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.local-editor__upload {
+  position: relative;
+  overflow: hidden;
+}
+
+.local-editor__upload input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.local-editor__art-value {
+  display: none;
+}
+
+.local-editor__section {
+  border: 1px solid var(--subject-line);
+  border-radius: 20px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--subject-soft) 44%, white), #ffffff);
+  overflow: clip;
+}
+
+.local-editor__section summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 16px 18px;
+}
+
+.local-editor__section summary::-webkit-details-marker {
+  display: none;
+}
+
+.local-editor__section-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.local-editor__section-head strong {
+  display: block;
+  color: var(--subject-accent);
+  font-size: 1.04rem;
+  font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
+}
+
+.local-editor__section-head p {
+  margin: 6px 0 0;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.local-editor__section-meta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid var(--subject-line);
+  color: var(--subject-accent);
+  font-size: 0.8rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.local-editor__section-body {
+  display: grid;
+  gap: 14px;
+  padding: 0 18px 18px;
+  border-top: 1px solid color-mix(in srgb, var(--subject-line) 72%, white);
+}
+
+.local-editor__list {
+  display: grid;
+  gap: 14px;
+}
+
+.local-editor__item {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid var(--subject-line);
+}
+
+.local-editor__item-head {
+  display: grid;
+  gap: 4px;
+}
+
+.local-editor__item-head strong {
+  color: var(--subject-accent);
+  font-size: 1rem;
+  font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
+}
+
+.local-editor__item-head span {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
 }
 
 .minute-view {
@@ -1414,7 +1762,8 @@ body::before {
   .task-detail__top,
   .task-detail__grid,
   .teacher-brief__grid,
-  .minute-view__grid {
+  .minute-view__grid,
+  .local-editor__grid {
     grid-template-columns: 1fr;
   }
 
@@ -1529,8 +1878,33 @@ body::before {
   .card-pack-grid,
   .compact-highlights,
   .teacher-brief__grid,
-  .minute-view__grid {
+  .minute-view__grid,
+  .local-editor__grid {
     grid-template-columns: 1fr;
+  }
+
+  .local-editor__intro {
+    display: grid;
+  }
+
+  .local-editor__section-head {
+    display: grid;
+  }
+
+  .local-editor__section-meta {
+    justify-self: start;
+  }
+
+  .local-editor__actions {
+    justify-content: stretch;
+  }
+
+  .local-editor__actions .button {
+    width: 100%;
+  }
+
+  .local-editor__field--list {
+    grid-column: auto;
   }
 
   .card-layer__section-head {

@@ -174,7 +174,108 @@ const EDITABLE_TASK_FIELDS = new Set([
   "keywords"
 ]);
 
-const taskTextOverrides = flattenTaskTextOverrides(globalThis.taskTextOverrides || {});
+const LOCAL_EDIT_FIELD_CONFIG = [
+  {
+    key: "title",
+    label: "Titel",
+    type: "text",
+    help: "Korte opdrachttitel."
+  },
+  {
+    key: "summary",
+    label: "Korte samenvatting",
+    type: "textarea",
+    rows: 3,
+    help: "Deze tekst zie je op de kaart en bovenaan de opdracht."
+  },
+  {
+    key: "duration",
+    label: "Tijd",
+    type: "text",
+    help: "Bijvoorbeeld 5 min of 10-15 min."
+  },
+  {
+    key: "goal",
+    label: "Doel",
+    type: "textarea",
+    rows: 3,
+    help: "Wat oefenen leerlingen inhoudelijk?"
+  },
+  {
+    key: "setup",
+    label: "Klaarzetten",
+    type: "textarea",
+    rows: 3,
+    help: "Wat zet je vooraf klaar in de ruimte?"
+  },
+  {
+    key: "movementFocus",
+    label: "Bewegingsfocus",
+    type: "textarea",
+    rows: 3,
+    help: "Welke beweging hoort bij deze opdracht?"
+  },
+  {
+    key: "materials",
+    label: "Benodigdheden",
+    type: "list",
+    rows: 5,
+    help: "Zet elk materiaal op een nieuwe regel."
+  },
+  {
+    key: "steps",
+    label: "Zo voer je de opdracht uit",
+    type: "list",
+    rows: 6,
+    help: "Zet elke stap op een nieuwe regel."
+  },
+  {
+    key: "differentiation",
+    label: "Differentiatie",
+    type: "textarea",
+    rows: 3,
+    help: "Eventuele vereenvoudiging of verdieping."
+  },
+  {
+    key: "teacherTip",
+    label: "Leerkrachttip",
+    type: "textarea",
+    rows: 3,
+    help: "Korte praktische tip voor uitvoering."
+  },
+  {
+    key: "visualHint",
+    label: "Uitleg voor illustratie",
+    type: "textarea",
+    rows: 3,
+    help: "Beschrijving die de ondersteunende illustratie richting geeft."
+  },
+  {
+    key: "keywords",
+    label: "Zoekwoorden",
+    type: "list",
+    rows: 5,
+    help: "Zet elk zoekwoord op een nieuwe regel."
+  }
+];
+
+const LOCAL_CREATE_VISUAL_OPTIONS = [
+  { value: "stations", label: "Posten of circuit" },
+  { value: "path", label: "Route of wandeling" },
+  { value: "dictation", label: "Loper en schrijver" },
+  { value: "corners", label: "Hoeken kiezen" },
+  { value: "line", label: "Lijn of volgorde" },
+  { value: "circle", label: "Kring of klassikaal" },
+  { value: "jump", label: "Korte beweegreactie" },
+  { value: "relay", label: "Estafette" },
+  { value: "measure", label: "Meten of vergelijken" },
+  { value: "mission", label: "Missie of opdrachtpad" },
+  { value: "bingo", label: "Kaarten zoeken of bingo" }
+];
+
+const LOCAL_RENDER_EDIT_STORAGE_KEY = "columbus-beweegbibliotheek-local-render-edits-v1";
+const fileTaskTextOverrides = flattenTaskTextOverrides(globalThis.taskTextOverrides || {});
+let taskTextOverrides = {};
 
 const subjectThemes = {
   taal: {
@@ -243,6 +344,7 @@ function onlyGroup(groupId, value) {
 function docTask(groupId, config) {
   return {
     key: config.key,
+    groupScope: [groupId],
     visual: config.visual,
     visualHint: config.visualHint,
     title: onlyGroup(groupId, config.title),
@@ -276,6 +378,7 @@ function taalDocTask(groupId, config) {
 function allGroupTask(config) {
   return {
     key: config.key,
+    groupScope: [GROUP_ENERGIZERS],
     visual: config.visual,
     visualHint: config.visualHint,
     title: same(config.title),
@@ -2527,6 +2630,7 @@ const initialState = {
   taskId: null,
   search: "",
   detailView: "task",
+  editSection: "task",
   mobileFiltersOpen: false
 };
 
@@ -2535,6 +2639,14 @@ const state = {
 };
 
 let historyIndex = 0;
+const LOCAL_EDIT_STORAGE_KEY = "columbus-beweegbibliotheek-local-edits-v1";
+const LOCAL_CUSTOM_TASKS_STORAGE_KEY = "columbus-beweegbibliotheek-local-custom-tasks-v1";
+let localTaskTextOverrides = loadLocalTaskTextOverrides();
+let localRenderedTaskOverrides = loadLocalRenderedTaskOverrides();
+let localCustomTaskBlueprints = loadLocalCustomTaskBlueprints();
+let localEditFeedback = null;
+let localCreateFeedback = null;
+let localCreateDraft = null;
 
 function getAllSubjectOptions() {
   return [...subjects, ...energizerSubjects];
@@ -2595,6 +2707,7 @@ bindIfPresent(ui.momentFilters, "click", handleFilterClick);
 bindIfPresent(ui.selectionChips, "click", handleChipClick);
 bindIfPresent(ui.stepCards, "click", handleStepCardClick);
 bindIfPresent(ui.taskDetail, "click", handleTaskDetailClick);
+bindIfPresent(ui.taskDetail, "change", handleTaskDetailChange);
 bindIfPresent(ui.taskGrid, "click", handleTaskGridClick);
 window.addEventListener("popstate", handlePopState);
 window.addEventListener("afterprint", handleAfterPrint);
@@ -2610,17 +2723,17 @@ function buildLibrary() {
   const regularGroups = groups
     .filter((group) => !isEnergizerGroup(group.id))
     .map((group) => ({
-      ...group,
-      subjects: subjects.map((subject) => ({
-        ...subject,
-        moments: moments.map((moment) => ({
-          ...moment,
-          tasks: taskBlueprints[subject.id][moment.id]
-            .map((blueprint) => materializeTask(group, subject, moment, blueprint))
-            .filter(Boolean)
+        ...group,
+        subjects: subjects.map((subject) => ({
+          ...subject,
+          moments: moments.map((moment) => ({
+            ...moment,
+            tasks: getBlueprintsForRoute(group.id, subject.id, moment.id, taskBlueprints[subject.id][moment.id])
+              .map((blueprint) => materializeTask(group, subject, moment, blueprint))
+              .filter(Boolean)
+          }))
         }))
-      }))
-    }));
+      }));
 
   const energizerGroup = groups.find((group) => isEnergizerGroup(group.id));
 
@@ -2637,7 +2750,7 @@ function buildLibrary() {
         moments: [
           {
             ...energizerMoment,
-            tasks: standaloneEnergizerBlueprints[subject.id]
+            tasks: getBlueprintsForRoute(energizerGroup.id, subject.id, energizerMoment.id, standaloneEnergizerBlueprints[subject.id])
               .map((blueprint) => materializeTask(energizerGroup, subject, energizerMoment, blueprint))
               .filter(Boolean)
           }
@@ -2741,13 +2854,145 @@ function getTaskPrintProfile(taskKey) {
   };
 }
 
-const library = buildLibrary();
-const allTasks = flattenTasks();
+function getActiveRouteMomentId(groupId = state.groupId, momentId = state.momentId) {
+  return groupId === GROUP_ENERGIZERS ? ENERGIZER_MOMENT_ID : momentId;
+}
+
+function buildRouteStorageKey(groupId, subjectId, momentId) {
+  return [groupId, subjectId, momentId].filter(Boolean).join("__");
+}
+
+function getBlueprintsForRoute(groupId, subjectId, momentId, baseBlueprints = []) {
+  const routeKey = buildRouteStorageKey(groupId, subjectId, momentId);
+  const localBlueprints = localCustomTaskBlueprints[routeKey] || [];
+  return [...baseBlueprints, ...localBlueprints];
+}
+
+function isLocalEditorAvailable() {
+  const protocol = window.location?.protocol;
+  const hostname = window.location?.hostname;
+
+  return protocol === "file:" || hostname === "localhost" || hostname === "127.0.0.1";
+}
+
+function loadLocalJsonStorage(storageKey) {
+  if (!isLocalEditorAvailable()) {
+    return {};
+  }
+
+  try {
+    const storage = window.localStorage;
+
+    if (!storage) {
+      return {};
+    }
+
+    const raw = storage.getItem(storageKey);
+
+    if (!raw) {
+      return {};
+    }
+
+    const parsed = JSON.parse(raw);
+
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch (error) {
+    console.warn("Lokale opslag kon niet worden gelezen.", error);
+    return {};
+  }
+}
+
+function persistLocalJsonStorage(storageKey, value) {
+  if (!isLocalEditorAvailable()) {
+    return false;
+  }
+
+  try {
+    const storage = window.localStorage;
+
+    if (!storage) {
+      return false;
+    }
+
+    if (value && Object.keys(value).length) {
+      storage.setItem(storageKey, JSON.stringify(value));
+    } else {
+      storage.removeItem(storageKey);
+    }
+
+    return true;
+  } catch (error) {
+    console.warn("Lokale opslag kon niet worden geschreven.", error);
+    return false;
+  }
+}
+
+function loadLocalTaskTextOverrides() {
+  return loadLocalJsonStorage(LOCAL_EDIT_STORAGE_KEY);
+}
+
+function persistLocalTaskTextOverrides() {
+  return persistLocalJsonStorage(LOCAL_EDIT_STORAGE_KEY, localTaskTextOverrides);
+}
+
+function loadLocalRenderedTaskOverrides() {
+  return loadLocalJsonStorage(LOCAL_RENDER_EDIT_STORAGE_KEY);
+}
+
+function persistLocalRenderedTaskOverrides() {
+  return persistLocalJsonStorage(LOCAL_RENDER_EDIT_STORAGE_KEY, localRenderedTaskOverrides);
+}
+
+function loadLocalCustomTaskBlueprints() {
+  return loadLocalJsonStorage(LOCAL_CUSTOM_TASKS_STORAGE_KEY);
+}
+
+function persistLocalCustomTaskBlueprints() {
+  return persistLocalJsonStorage(LOCAL_CUSTOM_TASKS_STORAGE_KEY, localCustomTaskBlueprints);
+}
+
+function buildMergedTaskTextOverrides() {
+  return mergeTaskTextOverrideMaps(fileTaskTextOverrides, localTaskTextOverrides);
+}
+
+function mergeTaskTextOverrideMaps(...maps) {
+  return maps.reduce((merged, map) => {
+    Object.entries(map || {}).forEach(([taskKey, override]) => {
+      const previous = merged[taskKey] || {};
+      const next = { ...previous };
+
+      Object.entries(override || {}).forEach(([field, value]) => {
+        next[field] = Object.prototype.hasOwnProperty.call(previous, field)
+          ? mergeEditableValue(previous[field], value)
+          : value;
+      });
+
+      merged[taskKey] = next;
+    });
+
+    return merged;
+  }, {});
+}
+
+function refreshTaskData() {
+  taskTextOverrides = buildMergedTaskTextOverrides();
+  library = buildLibrary();
+  allTasks = flattenTasks();
+}
+
+let library = [];
+let allTasks = [];
+
+refreshTaskData();
 
 initializeHistory();
 commitState("replace");
 
 function materializeTask(group, subject, moment, blueprint) {
+  if (Array.isArray(blueprint.groupScope) && !blueprint.groupScope.includes(group.id)) {
+    return null;
+  }
+
   const editableBlueprint = applyTaskTextOverrides(blueprint);
   const title = readGroupValue(editableBlueprint.title, group.id);
   const summary = readGroupValue(editableBlueprint.summary, group.id);
@@ -2757,11 +3002,11 @@ function materializeTask(group, subject, moment, blueprint) {
     return null;
   }
 
-  const printProfile = getTaskPrintProfile(editableBlueprint.key);
+  const printProfile = editableBlueprint.printProfile ?? getTaskPrintProfile(editableBlueprint.key);
   const usesCards = printProfile.enabled;
   const cardPack = usesCards ? buildCardPack(group, subject, moment, editableBlueprint, title, printProfile) : null;
 
-  return {
+  return applyLocalRenderedTaskOverrides({
     id: `${group.id}-${subject.id}-${moment.id}-${editableBlueprint.key}`,
     key: editableBlueprint.key,
     groupId: group.id,
@@ -2783,6 +3028,7 @@ function materializeTask(group, subject, moment, blueprint) {
     teacherTip: readGroupValue(editableBlueprint.teacherTip, group.id),
     visual: editableBlueprint.visual,
     visualHint: readGroupValue(editableBlueprint.visualHint, group.id),
+    isLocalCustom: Boolean(editableBlueprint.isLocalCustom),
     usesCards,
     cardPack,
     printProfile,
@@ -2802,7 +3048,7 @@ function materializeTask(group, subject, moment, blueprint) {
         readGroupValue(editableBlueprint.materials, group.id).join(" ")
       ].join(" ")
     )
-  };
+  });
 }
 
 function applyTaskTextOverrides(blueprint) {
@@ -3021,7 +3267,6 @@ function getTaskOrganization(taskKey, visual) {
 
 function buildCardPack(group, subject, moment, blueprint, title, printProfile) {
   const organization = getTaskOrganization(blueprint.key, blueprint.visual);
-  const overviewSheets = buildOverviewSheets(group, subject, moment, blueprint, title, printProfile, organization);
   const cards = getStarterCards(subject.id, group.id, blueprint.visual, blueprint.key, title, printProfile, organization);
   const supportCards = printProfile.includeSupportCards
     ? finalizeSupportCardsForClass(getSupportCards(group, subject, moment, blueprint, title), blueprint.visual, organization)
@@ -3033,11 +3278,11 @@ function buildCardPack(group, subject, moment, blueprint, title, printProfile) {
     intro: buildCardIntro(subject, moment, group, title, cards.length, printProfile, organization),
     note: buildCardNote(subject.id, group.id, blueprint.visual, blueprint.key),
     organization,
-    overviewSheets,
+    overviewSheets: [],
     cards,
     supportCards,
     teacherSheets,
-    printChecklist: buildPrintChecklist(subject, overviewSheets, cards, supportCards, teacherSheets, printProfile, organization)
+    printChecklist: buildPrintChecklist(subject, cards, supportCards, teacherSheets, printProfile, organization)
   };
 }
 
@@ -5910,7 +6155,7 @@ function getMethodSupportCards(subjectId, groupId, momentId, taskKey, visual, fa
   ];
 }
 
-function buildPrintChecklist(subject, overviewSheets, cards, supportCards, teacherSheets, printProfile, organization) {
+function buildPrintChecklist(subject, cards, supportCards, teacherSheets, printProfile, organization) {
   const methodLine =
     subject.id === "spelling"
       ? "Methodehulp uit Staal 2"
@@ -5919,10 +6164,6 @@ function buildPrintChecklist(subject, overviewSheets, cards, supportCards, teach
         : "Methodehulp uit Staal 2 taal";
 
   const checklist = [];
-
-  if (overviewSheets.length) {
-    checklist.push(`${overviewSheets.length} lesplaten met opstelling, klasindeling en stapvolgorde`);
-  }
 
   if (cards.length) {
     const totalCopies = getTotalCopiesNeeded(cards);
@@ -6393,7 +6634,8 @@ function snapshotNavigationState() {
     momentId: state.momentId,
     taskId: state.taskId,
     search: state.search,
-    detailView: state.detailView
+    detailView: state.detailView,
+    editSection: state.editSection
   };
 }
 
@@ -6404,6 +6646,7 @@ function applyNavigationState(nextState = initialState) {
   state.taskId = nextState.taskId ?? null;
   state.search = nextState.search ?? "";
   state.detailView = normalizeDetailView(nextState.detailView);
+  state.editSection = normalizeEditSection(nextState.editSection);
   state.mobileFiltersOpen = false;
 
   if (ui.searchInput) {
@@ -6422,7 +6665,8 @@ function isSameNavigationState(left, right) {
     left.momentId === right.momentId &&
     left.taskId === right.taskId &&
     left.search === right.search &&
-    left.detailView === right.detailView
+    left.detailView === right.detailView &&
+    left.editSection === right.editSection
   );
 }
 
@@ -6553,6 +6797,21 @@ function handleStepCardClick(event) {
 }
 
 function handleTaskGridClick(event) {
+  const createButton = event.target.closest("[data-action='open-local-create']");
+
+  if (createButton && isLocalEditorAvailable()) {
+    state.taskId = null;
+    state.detailView = "create";
+    localCreateFeedback = null;
+    localCreateDraft = buildLocalCreateDefaults();
+    commitState("push");
+
+    if (ui.taskDetail) {
+      ui.taskDetail.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    return;
+  }
+
   const button = event.target.closest("[data-task-id]");
 
   if (!button) {
@@ -6571,19 +6830,105 @@ function handleTaskGridClick(event) {
 }
 
 function handleTaskDetailClick(event) {
-  const tabButton = event.target.closest("[data-detail-view]");
+  const selectedTask = getSelectedTask(getFilteredTasks());
+  const createButton = event.target.closest("[data-action='save-local-create'], [data-action='cancel-local-create']");
 
-  if (tabButton) {
-    document.body.dataset.printSection = "all";
-    state.detailView = normalizeDetailView(tabButton.dataset.detailView);
+  if (createButton && isLocalEditorAvailable()) {
+    const createForm = createButton.closest("form[data-local-create-form]");
+
+    if (!createForm) {
+      return;
+    }
+
+    if (createButton.dataset.action === "save-local-create") {
+      saveLocalCustomTask(createForm);
+      commitState("replace");
+      return;
+    }
+
+    localCreateFeedback = null;
+    localCreateDraft = null;
+    state.detailView = "task";
     commitState("push");
     return;
   }
 
-  const printButton = event.target.closest("[data-action='print-direct'], [data-action='print-now'], [data-action='print-section']");
+  const localEditButton = event.target.closest(
+    "[data-action='save-local-edit'], [data-action='reset-local-edit'], [data-action='delete-local-task']"
+  );
+
+  if (localEditButton && selectedTask) {
+    const editorForm = localEditButton.closest("form[data-local-editor-form]");
+
+    if (!editorForm && localEditButton.dataset.action !== "delete-local-task") {
+      return;
+    }
+
+    if (localEditButton.dataset.action === "save-local-edit") {
+      saveLocalTaskEdit(selectedTask, editorForm);
+    } else if (localEditButton.dataset.action === "delete-local-task") {
+      deleteLocalCustomTask(selectedTask);
+    } else {
+      resetLocalTaskEdit(selectedTask);
+    }
+
+    commitState("replace");
+    return;
+  }
+
+  const editSectionButton = event.target.closest("[data-edit-section]");
+
+  if (editSectionButton) {
+    state.editSection = normalizeEditSection(editSectionButton.dataset.editSection);
+    commitState("replace");
+    return;
+  }
+
+  const clearArtButton = event.target.closest("[data-action='clear-art']");
+
+  if (clearArtButton) {
+    const targetPath = clearArtButton.dataset.artTargetPath;
+    const editorForm = clearArtButton.closest("form[data-local-editor-form]");
+
+    if (!targetPath || !editorForm) {
+      return;
+    }
+
+    const artField = findElementByDataPath(editorForm, "data-render-edit-path", targetPath);
+    const preview = findElementByDataPath(editorForm, "data-art-preview-path", targetPath);
+    const upload = findElementByDataPath(editorForm, "data-art-upload-path", targetPath);
+
+    if (artField) {
+      artField.value = "";
+    }
+
+    if (preview) {
+      preview.innerHTML = "Nog geen printafbeelding gekozen.";
+      preview.classList.add("local-editor__art-preview--empty");
+    }
+
+    if (upload) {
+      upload.value = "";
+    }
+
+    return;
+  }
+
+  const tabButton = event.target.closest("[data-detail-view]");
+
+  if (tabButton) {
+    selectPrintSection("all");
+    state.detailView = normalizeDetailView(tabButton.dataset.detailView);
+    if (state.detailView === "edit") {
+      state.editSection = "task";
+    }
+    commitState("push");
+    return;
+  }
+
+  const printButton = event.target.closest("[data-action='print-now'], [data-action='print-section']");
 
   if (printButton) {
-    const selectedTask = getSelectedTask(getFilteredTasks());
     const canPrint =
       selectedTask &&
       selectedTask.usesCards &&
@@ -6594,10 +6939,12 @@ function handleTaskDetailClick(event) {
       return;
     }
 
-    const historyMode = state.detailView === "print" ? "replace" : "push";
-    state.detailView = "print";
-    commitState(historyMode);
-    triggerPrint(printButton.dataset.printSection || "all");
+    if (printButton.dataset.action === "print-section") {
+      selectPrintSection(printButton.dataset.printSection || "all");
+      return;
+    }
+
+    triggerPrint(document.body.dataset.printSection || "all");
     return;
   }
 
@@ -6607,6 +6954,48 @@ function handleTaskDetailClick(event) {
     event.preventDefault();
     toggleDetailFoldGroup(detailSummary.closest(".detail-fold"));
   }
+}
+
+function handleTaskDetailChange(event) {
+  const upload = event.target.closest("[data-art-upload-path]");
+
+  if (!upload || !upload.files?.length) {
+    return;
+  }
+
+  const [file] = upload.files;
+  const targetPath = upload.dataset.artUploadPath;
+  const altText = upload.dataset.artAlt || "Printafbeelding";
+  const editorForm = upload.closest("form[data-local-editor-form]");
+
+  if (!file || !targetPath || !editorForm) {
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.addEventListener("load", () => {
+    const imageMarkup = buildLocalArtMarkup(String(reader.result || ""), altText);
+    const artField = findElementByDataPath(editorForm, "data-render-edit-path", targetPath);
+    const preview = findElementByDataPath(editorForm, "data-art-preview-path", targetPath);
+
+    if (artField) {
+      artField.value = imageMarkup;
+    }
+
+    if (preview) {
+      preview.innerHTML = imageMarkup;
+      preview.classList.remove("local-editor__art-preview--empty");
+    }
+  });
+
+  reader.readAsDataURL(file);
+}
+
+function findElementByDataPath(container, attributeName, expectedValue) {
+  return Array.from(container.querySelectorAll(`[${attributeName}]`)).find(
+    (element) => element.getAttribute(attributeName) === expectedValue
+  );
 }
 
 function toggleDetailFoldGroup(activeFold) {
@@ -6629,7 +7018,7 @@ function toggleDetailFoldGroup(activeFold) {
 }
 
 function triggerPrint(section = "all") {
-  document.body.dataset.printSection = section;
+  selectPrintSection(section);
 
   window.requestAnimationFrame(() => {
     window.requestAnimationFrame(() => {
@@ -6639,10 +7028,28 @@ function triggerPrint(section = "all") {
 }
 
 function handleAfterPrint() {
-  document.body.dataset.printSection = "all";
+  selectPrintSection("all");
+}
+
+function selectPrintSection(section = "all") {
+  document.body.dataset.printSection = section;
+
+  if (!ui.taskDetail) {
+    return;
+  }
+
+  ui.taskDetail.querySelectorAll(".card-layer__section").forEach((item) => {
+    item.classList.toggle(
+      "card-layer__section--selected",
+      section !== "all" && item.dataset.printSection === section
+    );
+  });
 }
 
 function toggleFilter(level, id) {
+  localCreateFeedback = null;
+  localCreateDraft = null;
+
   if (level === "group") {
     if (state.groupId === id) {
       state.groupId = null;
@@ -6698,6 +7105,12 @@ function handleBack() {
     return;
   }
 
+  if (state.detailView === "create") {
+    state.detailView = "task";
+    commitState("replace");
+    return;
+  }
+
   if (state.taskId) {
     state.taskId = null;
     state.detailView = "task";
@@ -6727,6 +7140,8 @@ function handleBack() {
 }
 
 function resetState() {
+  localCreateFeedback = null;
+  localCreateDraft = null;
   applyNavigationState(initialState);
   commitState("push");
 }
@@ -7036,6 +7451,9 @@ function renderResultsSection() {
   const canShowTasks = Boolean(
     state.groupId && state.subjectId && (isEnergizerGroup() || state.momentId)
   );
+  const showCreateView = state.detailView === "create" && isLocalEditorAvailable() && canShowTasks;
+  const canCreateLocalTask = isLocalEditorAvailable() && canShowTasks;
+  const createCardMarkup = canCreateLocalTask ? renderLocalCreateTaskCard() : "";
 
   if (!canShowTasks) {
     ui.resultsTitle.textContent = "Nog geen opdrachten in beeld";
@@ -7058,23 +7476,30 @@ function renderResultsSection() {
   }
 
   if (filteredTasks.length === 0) {
-    ui.resultsTitle.textContent = "Geen opdrachten gevonden";
-    ui.resultsMeta.textContent =
-      "Kies een andere combinatie van bouw, vak of lesmoment.";
-    ui.taskDetail.className = "task-detail";
-    ui.taskDetail.innerHTML = "";
-    ui.taskGrid.innerHTML = `
-      <div class="empty-state">
-        Er zijn geen opdrachten die passen bij deze combinatie. Kies bijvoorbeeld een ander vak of een ander lesmoment.
-      </div>
-    `;
+    ui.resultsTitle.textContent = showCreateView ? "Nieuwe lokale opdracht" : "Geen opdrachten gevonden";
+    ui.resultsMeta.textContent = showCreateView
+      ? `Deze opdracht komt alleen lokaal in ${buildLocalCreateRouteLabel()}.`
+      : "Kies een andere combinatie van bouw, vak of lesmoment.";
+    ui.taskDetail.className = showCreateView ? "task-detail task-detail--visible" : "task-detail";
+    ui.taskDetail.innerHTML = showCreateView ? renderLocalCreateView() : "";
+    ui.taskGrid.className = showCreateView ? "task-grid task-grid--hidden" : "task-grid";
+    ui.taskGrid.innerHTML = showCreateView
+      ? ""
+      : `
+        <div class="empty-state">
+          Er zijn geen opdrachten die passen bij deze combinatie. Kies bijvoorbeeld een ander vak of een ander lesmoment.
+        </div>
+        ${createCardMarkup}
+      `;
     return;
   }
 
-  ui.resultsTitle.textContent = isEnergizerGroup() ? "Kies een energizer" : "Kies een opdracht";
-  ui.resultsMeta.textContent = isEnergizerGroup()
-    ? `${filteredTasks.length} energizers in deze route. Open een energizer voor de uitleg, klaarzetten in 1 minuut of direct printen als dat nodig is.`
-    : `${filteredTasks.length} opdrachten in deze route. Open een opdracht voor de uitleg, klaarzetten in 1 minuut of direct printen.`;
+  ui.resultsTitle.textContent = showCreateView ? "Nieuwe lokale opdracht" : isEnergizerGroup() ? "Kies een energizer" : "Kies een opdracht";
+  ui.resultsMeta.textContent = showCreateView
+    ? `Deze opdracht komt alleen lokaal in ${buildLocalCreateRouteLabel()}.`
+    : isEnergizerGroup()
+      ? `${filteredTasks.length} energizers in deze route. Open een energizer voor de uitleg, klaarzetten in 1 minuut of direct printen als dat nodig is.`
+      : `${filteredTasks.length} opdrachten in deze route. Open een opdracht voor de uitleg, klaarzetten in 1 minuut of direct printen.`;
 
   const selectedTask = getSelectedTask(filteredTasks);
   const hasPrintView =
@@ -7087,10 +7512,17 @@ function renderResultsSection() {
     state.detailView = "task";
   }
 
-  ui.taskDetail.className = selectedTask ? "task-detail task-detail--visible" : "task-detail";
-  ui.taskDetail.innerHTML = selectedTask ? renderTaskDetail(selectedTask) : "";
+  if (state.detailView === "edit" && !isLocalEditorAvailable()) {
+    state.detailView = "task";
+  }
 
-  ui.taskGrid.innerHTML = filteredTasks.map((task) => renderTaskCard(task, selectedTask)).join("");
+  ui.taskDetail.className = selectedTask || showCreateView ? "task-detail task-detail--visible" : "task-detail";
+  ui.taskDetail.innerHTML = selectedTask ? renderTaskDetail(selectedTask) : showCreateView ? renderLocalCreateView() : "";
+  ui.taskGrid.className = selectedTask || showCreateView ? "task-grid task-grid--hidden" : "task-grid";
+  ui.taskGrid.innerHTML =
+    selectedTask || showCreateView
+      ? ""
+      : `${createCardMarkup}${filteredTasks.map((task) => renderTaskCard(task, selectedTask)).join("")}`;
 }
 
 function renderTaskCard(task, selectedTask) {
@@ -7116,6 +7548,31 @@ function renderTaskCard(task, selectedTask) {
           ${showRouteBadges ? `<span class="pill">${escapeHtml(task.momentLabel)}</span>` : ""}
           <span class="pill">${escapeHtml(task.duration)}</span>
           ${task.usesCards ? `<span class="pill">print klaar</span>` : `<span class="pill">zonder print</span>`}
+        </div>
+      </div>
+    </button>
+  `;
+}
+
+function renderLocalCreateTaskCard() {
+  const routeLabel = buildLocalCreateRouteLabel();
+
+  return `
+    <button
+      type="button"
+      class="task-card task-card--add"
+      data-action="open-local-create"
+      style="${getSubjectThemeStyle(state.subjectId)}"
+    >
+      <div class="task-card__content task-card__content--add">
+        <span class="task-card__plus" aria-hidden="true">+</span>
+        <h4 class="task-card__title">Nieuwe opdracht toevoegen</h4>
+        <p class="task-card__summary">
+          Maak hier lokaal een eigen opdracht voor ${escapeHtml(routeLabel)}. Alleen op deze Mac en in deze browser zichtbaar.
+        </p>
+        <div class="task-card__meta">
+          <span class="pill">lokaal</span>
+          <span class="pill">nieuwe opdracht</span>
         </div>
       </div>
     </button>
@@ -7178,7 +7635,482 @@ function getSubjectThemeStyle(subjectId) {
 }
 
 function normalizeDetailView(detailView) {
-  return ["task", "quick", "print"].includes(detailView) ? detailView : "task";
+  const allowedViews = ["task", "quick", "print"];
+
+  if (isLocalEditorAvailable()) {
+    allowedViews.push("edit", "create");
+  }
+
+  return allowedViews.includes(detailView) ? detailView : "task";
+}
+
+function normalizeEditSection(editSection) {
+  return ["task", "print", "support", "cards", "teacher"].includes(editSection) ? editSection : "task";
+}
+
+function buildLocalCreateDefaults() {
+  const selectedGroup = getGroup(state.groupId);
+  const selectedSubject = getSubject(state.subjectId);
+  const routeMomentId = getActiveRouteMomentId();
+  const selectedMoment = getMoment(routeMomentId);
+  const defaultVisual = getSuggestedCustomVisual(state.groupId, state.subjectId, routeMomentId);
+  const defaultKeywords = [selectedGroup?.label, selectedSubject?.label, selectedMoment?.label].filter(Boolean);
+
+  return {
+    title: "",
+    summary: "",
+    duration: isEnergizerGroup() ? "2-4 min" : "10 min",
+    goal: "",
+    setup: "",
+    movementFocus: "",
+    materials: "Geen extra materialen",
+    steps: "Leg kort uit wat de bedoeling is.\nLaat leerlingen uitvoeren.\nBespreek kort na of controleer samen.",
+    differentiation: "",
+    teacherTip: "",
+    visualHint: "",
+    keywords: defaultKeywords.join("\n"),
+    visual: defaultVisual,
+    hasPrint: false
+  };
+}
+
+function buildLocalCreateDraftFromForm(formData) {
+  return {
+    title: String(formData.get("title") || "").trim(),
+    summary: String(formData.get("summary") || "").trim(),
+    duration: String(formData.get("duration") || "").trim(),
+    goal: String(formData.get("goal") || "").trim(),
+    setup: String(formData.get("setup") || "").trim(),
+    movementFocus: String(formData.get("movementFocus") || "").trim(),
+    materials: String(formData.get("materials") || "").trim(),
+    steps: String(formData.get("steps") || "").trim(),
+    differentiation: String(formData.get("differentiation") || "").trim(),
+    teacherTip: String(formData.get("teacherTip") || "").trim(),
+    visualHint: String(formData.get("visualHint") || "").trim(),
+    keywords: String(formData.get("keywords") || "").trim(),
+    visual: String(formData.get("visual") || "").trim(),
+    hasPrint: formData.get("hasPrint") === "on"
+  };
+}
+
+function getSuggestedCustomVisual(groupId, subjectId, momentId) {
+  if (groupId === GROUP_ENERGIZERS) {
+    if (subjectId === ENERGIZER_ACTIVE) {
+      return "jump";
+    }
+
+    if (subjectId === ENERGIZER_FOCUS) {
+      return "circle";
+    }
+
+    return "path";
+  }
+
+  if (momentId === "bewegend") {
+    return subjectId === "rekenen" ? "line" : "path";
+  }
+
+  if (subjectId === "spelling") {
+    return "dictation";
+  }
+
+  if (subjectId === "taal") {
+    return "stations";
+  }
+
+  return "stations";
+}
+
+function buildLocalCreateRouteLabel() {
+  const group = getGroup(state.groupId);
+  const subject = getSubject(state.subjectId);
+  const moment = getMoment(getActiveRouteMomentId());
+
+  return [group?.label, subject?.label, moment?.label].filter(Boolean).join(" • ");
+}
+
+function slugifyTaskKeyPart(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 48) || "nieuwe-opdracht";
+}
+
+function buildLocalCustomTaskKey(title) {
+  const routeKey = buildRouteStorageKey(state.groupId, state.subjectId, getActiveRouteMomentId()).replaceAll("__", "-");
+  return `lokaal-${routeKey}-${slugifyTaskKeyPart(title)}-${Date.now().toString(36)}`;
+}
+
+function buildLocalCustomTaskBlueprintFromForm(formData) {
+  const groupId = state.groupId;
+  const subjectId = state.subjectId;
+  const momentId = getActiveRouteMomentId();
+  const group = getGroup(groupId);
+  const subject = getSubject(subjectId);
+  const moment = getMoment(momentId);
+  const rawTitle = String(formData.get("title") || "").trim();
+  const rawVisual = String(formData.get("visual") || "").trim();
+  const materials = String(formData.get("materials") || "")
+    .split("\n")
+    .map((item) => item.trim())
+    .filter(Boolean);
+  const steps = String(formData.get("steps") || "")
+    .split("\n")
+    .map((item) => item.trim())
+    .filter(Boolean);
+  const keywords = String(formData.get("keywords") || "")
+    .split("\n")
+    .map((item) => item.trim())
+    .filter(Boolean);
+  const hasPrint = formData.get("hasPrint") === "on";
+  const keywordEntries = [...keywords, group?.label, subject?.label, moment?.label]
+    .map((item) => String(item || "").trim())
+    .filter(Boolean);
+  const uniqueKeywords = keywordEntries.filter(
+    (item, index, entries) => entries.findIndex((entry) => normalize(entry) === normalize(item)) === index
+  );
+
+  return {
+    key: buildLocalCustomTaskKey(rawTitle),
+    groupScope: [groupId],
+    title: rawTitle,
+    summary: String(formData.get("summary") || "").trim(),
+    duration: String(formData.get("duration") || "").trim(),
+    goal: String(formData.get("goal") || "").trim(),
+    setup: String(formData.get("setup") || "").trim(),
+    movementFocus: String(formData.get("movementFocus") || "").trim(),
+    materials: materials.length ? materials : ["Geen extra materialen"],
+    steps,
+    differentiation: String(formData.get("differentiation") || "").trim(),
+    teacherTip: String(formData.get("teacherTip") || "").trim(),
+    visualHint: String(formData.get("visualHint") || "").trim(),
+    visual: LOCAL_CREATE_VISUAL_OPTIONS.some((option) => option.value === rawVisual)
+      ? rawVisual
+      : getSuggestedCustomVisual(groupId, subjectId, momentId),
+    keywords: uniqueKeywords,
+    isLocalCustom: true,
+    printProfile: hasPrint
+      ? {
+          enabled: true,
+          expandWorkCardsToClassSize: false,
+          includeSupportCards: true,
+          includeTeacherSheets: true
+        }
+      : undefined
+  };
+}
+
+function validateLocalCustomTaskBlueprint(blueprint) {
+  if (!state.groupId || !state.subjectId || !getActiveRouteMomentId()) {
+    return "Kies eerst een complete route voordat je een lokale opdracht toevoegt.";
+  }
+
+  if (!blueprint.title) {
+    return "Geef de nieuwe opdracht een titel.";
+  }
+
+  if (!blueprint.summary) {
+    return "Vul een korte samenvatting in.";
+  }
+
+  if (!blueprint.goal) {
+    return "Vul in wat leerlingen met deze opdracht oefenen.";
+  }
+
+  if (!blueprint.steps.length) {
+    return "Zet minimaal 1 duidelijke stap in de uitvoering.";
+  }
+
+  return "";
+}
+
+function getLocalCreateFeedback() {
+  return localCreateFeedback;
+}
+
+function getLocalEditorFieldValue(task, fieldKey) {
+  const value = task[fieldKey];
+
+  if (Array.isArray(value)) {
+    return value.join("\n");
+  }
+
+  return value ?? "";
+}
+
+function buildLocalTaskOverrideFromForm(formData) {
+  return LOCAL_EDIT_FIELD_CONFIG.reduce((override, field) => {
+    const rawValue = String(formData.get(field.key) || "");
+
+    if (field.type === "list") {
+      override[field.key] = rawValue
+        .split("\n")
+        .map((item) => item.trim())
+        .filter(Boolean);
+
+      return override;
+    }
+
+    override[field.key] = rawValue.trim();
+
+    return override;
+  }, {});
+}
+
+function getLocalEditFeedbackForTask(taskKey) {
+  return localEditFeedback?.taskKey === taskKey ? localEditFeedback : null;
+}
+
+function validateLocalTaskOverride(override) {
+  if (!override.title) {
+    return "Laat bij deze opdracht de titel ingevuld staan.";
+  }
+
+  if (!override.summary) {
+    return "Laat bij deze opdracht een korte samenvatting ingevuld staan.";
+  }
+
+  if (!override.goal) {
+    return "Laat bij deze opdracht het doel ingevuld staan.";
+  }
+
+  return "";
+}
+
+function isNumericPathSegment(segment) {
+  return /^\d+$/.test(segment);
+}
+
+function setNestedOverrideValue(target, path, value) {
+  const segments = path.split(".");
+  let pointer = target;
+
+  segments.forEach((segment, index) => {
+    const isLast = index === segments.length - 1;
+    const nextSegment = segments[index + 1];
+
+    if (isLast) {
+      pointer[segment] = value;
+      return;
+    }
+
+    if (!Object.prototype.hasOwnProperty.call(pointer, segment)) {
+      pointer[segment] = isNumericPathSegment(nextSegment) ? [] : {};
+    }
+
+    pointer = pointer[segment];
+  });
+}
+
+function mergeRenderedContent(baseValue, overrideValue) {
+  if (Array.isArray(overrideValue)) {
+    if (!overrideValue.length || overrideValue.every((item) => typeof item !== "object" || item === null)) {
+      return overrideValue;
+    }
+
+    const baseArray = Array.isArray(baseValue) ? baseValue : [];
+
+    return overrideValue.map((item, index) => mergeRenderedContent(baseArray[index], item));
+  }
+
+  if (overrideValue && typeof overrideValue === "object") {
+    const baseObject = baseValue && typeof baseValue === "object" ? baseValue : {};
+    const result = Array.isArray(baseObject) ? [...baseObject] : { ...baseObject };
+
+    Object.entries(overrideValue).forEach(([key, value]) => {
+      result[key] = mergeRenderedContent(baseObject[key], value);
+    });
+
+    return result;
+  }
+
+  return overrideValue;
+}
+
+function applyLocalRenderedTaskOverrides(task) {
+  const override = localRenderedTaskOverrides[task.key];
+
+  if (!override) {
+    return task;
+  }
+
+  return mergeRenderedContent(task, override);
+}
+
+function buildLocalRenderedTaskOverrideFromForm(form) {
+  const override = {};
+
+  form.querySelectorAll("[data-render-edit-path]").forEach((field) => {
+    const path = field.getAttribute("data-render-edit-path");
+    const fieldType = field.getAttribute("data-editor-type");
+
+    if (!path) {
+      return;
+    }
+
+    const rawValue = String(field.value || "");
+    const value =
+      fieldType === "list"
+        ? rawValue
+            .split("\n")
+            .map((item) => item.trim())
+            .filter(Boolean)
+        : rawValue.trim();
+
+    setNestedOverrideValue(override, path, value);
+  });
+
+  return override;
+}
+
+function saveLocalCustomTask(form) {
+  const formData = new FormData(form);
+  localCreateDraft = buildLocalCreateDraftFromForm(formData);
+  const blueprint = buildLocalCustomTaskBlueprintFromForm(formData);
+  const validationMessage = validateLocalCustomTaskBlueprint(blueprint);
+
+  if (validationMessage) {
+    localCreateFeedback = {
+      tone: "error",
+      text: validationMessage
+    };
+    return false;
+  }
+
+  const routeKey = buildRouteStorageKey(state.groupId, state.subjectId, getActiveRouteMomentId());
+  const currentBlueprints = localCustomTaskBlueprints[routeKey] || [];
+  localCustomTaskBlueprints[routeKey] = [...currentBlueprints, blueprint];
+
+  const persisted = persistLocalCustomTaskBlueprints();
+
+  if (!persisted) {
+    localCustomTaskBlueprints[routeKey] = currentBlueprints;
+    localCreateFeedback = {
+      tone: "error",
+      text: "Opslaan lukte niet. Controleer of deze browser lokale opslag toelaat."
+    };
+    return false;
+  }
+
+  localCreateFeedback = null;
+  localCreateDraft = null;
+  localEditFeedback = {
+    taskKey: blueprint.key,
+    tone: "success",
+    text: "Nieuwe lokale opdracht toegevoegd op deze Mac in deze browser."
+  };
+
+  refreshTaskData();
+  state.taskId = `${state.groupId}-${state.subjectId}-${getActiveRouteMomentId()}-${blueprint.key}`;
+  state.detailView = "edit";
+  state.editSection = "task";
+  return true;
+}
+
+function deleteLocalCustomTask(task) {
+  if (!task?.isLocalCustom) {
+    return false;
+  }
+
+  const routeKey = buildRouteStorageKey(task.groupId, task.subjectId, task.momentId);
+  const currentBlueprints = localCustomTaskBlueprints[routeKey] || [];
+  const nextBlueprints = currentBlueprints.filter((blueprint) => blueprint.key !== task.key);
+
+  if (nextBlueprints.length) {
+    localCustomTaskBlueprints[routeKey] = nextBlueprints;
+  } else {
+    delete localCustomTaskBlueprints[routeKey];
+  }
+
+  delete localTaskTextOverrides[task.key];
+  delete localRenderedTaskOverrides[task.key];
+
+  const persisted =
+    persistLocalCustomTaskBlueprints() &&
+    persistLocalTaskTextOverrides() &&
+    persistLocalRenderedTaskOverrides();
+
+  if (!persisted) {
+    localEditFeedback = {
+      taskKey: task.key,
+      tone: "error",
+      text: "Verwijderen lukte niet. Controleer of deze browser lokale opslag toelaat."
+    };
+    return false;
+  }
+
+  localEditFeedback = null;
+  localCreateFeedback = {
+    tone: "info",
+    text: "De lokale opdracht is verwijderd van deze Mac in deze browser."
+  };
+  refreshTaskData();
+  state.taskId = null;
+  state.detailView = "task";
+  state.editSection = "task";
+  return true;
+}
+
+function saveLocalTaskEdit(task, form) {
+  const formData = new FormData(form);
+  const nextOverride = buildLocalTaskOverrideFromForm(formData);
+  const nextRenderedOverride = buildLocalRenderedTaskOverrideFromForm(form);
+  const validationMessage = validateLocalTaskOverride(nextOverride);
+
+  if (validationMessage) {
+    localEditFeedback = {
+      taskKey: task.key,
+      tone: "error",
+      text: validationMessage
+    };
+    return false;
+  }
+
+  if (Object.keys(nextOverride).length) {
+    localTaskTextOverrides[task.key] = nextOverride;
+  } else {
+    delete localTaskTextOverrides[task.key];
+  }
+
+  if (Object.keys(nextRenderedOverride).length) {
+    localRenderedTaskOverrides[task.key] = nextRenderedOverride;
+  } else {
+    delete localRenderedTaskOverrides[task.key];
+  }
+
+  const persisted = persistLocalTaskTextOverrides() && persistLocalRenderedTaskOverrides();
+
+  localEditFeedback = {
+    taskKey: task.key,
+    tone: persisted ? "success" : "error",
+    text: persisted
+      ? "Lokaal opgeslagen op deze Mac in deze browser."
+      : "Opslaan lukte niet. Controleer of deze browser lokale opslag toelaat."
+  };
+
+  refreshTaskData();
+  return persisted;
+}
+
+function resetLocalTaskEdit(task) {
+  delete localTaskTextOverrides[task.key];
+  delete localRenderedTaskOverrides[task.key];
+
+  const persisted = persistLocalTaskTextOverrides() && persistLocalRenderedTaskOverrides();
+
+  localEditFeedback = {
+    taskKey: task.key,
+    tone: persisted ? "info" : "error",
+    text: persisted
+      ? "Lokale wijzigingen voor deze opdracht zijn verwijderd."
+      : "Resetten lukte niet. Controleer of deze browser lokale opslag toelaat."
+  };
+
+  refreshTaskData();
+  return persisted;
 }
 
 function getMaterialsList(task) {
@@ -7241,10 +8173,6 @@ function getPrintSummary(task, showCards) {
   }
 
   const summary = [];
-
-  if (task.cardPack.overviewSheets.length) {
-    summary.push(`${task.cardPack.overviewSheets.length} lesplaten`);
-  }
 
   if (task.cardPack.cards.length) {
     const totalCopies = getTotalCopiesNeeded(task.cardPack.cards);
@@ -7340,14 +8268,28 @@ function renderTeacherToolbar(showCards) {
       >
         Klaarzetten in 1 minuut
       </button>
+      ${
+        isLocalEditorAvailable()
+          ? `
+            <button
+              type="button"
+              class="teacher-toolbar__button ${state.detailView === "edit" ? "teacher-toolbar__button--active" : ""}"
+              data-detail-view="edit"
+              aria-pressed="${state.detailView === "edit" ? "true" : "false"}"
+            >
+              Bewerk lokaal
+            </button>
+          `
+          : ""
+      }
       <button
         type="button"
         class="teacher-toolbar__button ${state.detailView === "print" ? "teacher-toolbar__button--active" : ""}"
-        data-action="print-direct"
+        data-detail-view="print"
         ${showCards ? "" : "disabled"}
         aria-pressed="${state.detailView === "print" ? "true" : "false"}"
       >
-        Direct printen
+        Printweergave
       </button>
     </div>
   `;
@@ -7474,7 +8416,7 @@ function renderPrintView(task) {
     <div class="task-print-preview">
       <div class="task-print-preview__lead">
         <strong>Printweergave</strong>
-        <p>Je ziet hier alleen de lesplaten, kaartjes en bladen voor ${escapeHtml(task.title)}. Gebruik deze weergave voor snel printen zonder extra schermruis.</p>
+        <p>Je ziet hier alleen de kaartjes en bladen voor ${escapeHtml(task.title)}. Kies eerst welk onderdeel je wilt printen en klik daarna op <strong>Print nu</strong>.</p>
         <button type="button" class="button button--secondary button--small" data-action="print-now">
           Print nu
         </button>
@@ -7484,13 +8426,505 @@ function renderPrintView(task) {
   `;
 }
 
+function renderLocalEditorField(task, field) {
+  const value = getLocalEditorFieldValue(task, field.key);
+  const escapedValue = escapeHtml(value);
+
+  if (field.type === "text") {
+    return `
+      <label class="local-editor__field">
+        <span class="local-editor__label">${escapeHtml(field.label)}</span>
+        <input type="text" name="${escapeHtml(field.key)}" value="${escapedValue}" />
+        <span class="local-editor__help">${escapeHtml(field.help)}</span>
+      </label>
+    `;
+  }
+
+  return `
+    <label class="local-editor__field ${field.type === "list" ? "local-editor__field--list" : ""}">
+      <span class="local-editor__label">${escapeHtml(field.label)}</span>
+      <textarea name="${escapeHtml(field.key)}" rows="${field.rows || 4}">${escapedValue}</textarea>
+      <span class="local-editor__help">${escapeHtml(field.help)}</span>
+    </label>
+  `;
+}
+
+function renderRenderedEditorField({ label, path, value, type = "textarea", rows = 3, help = "" }) {
+  const normalizedValue = Array.isArray(value) ? value.join("\n") : value ?? "";
+  const escapedValue = escapeHtml(String(normalizedValue));
+
+  if (type === "text") {
+    return `
+      <label class="local-editor__field">
+        <span class="local-editor__label">${escapeHtml(label)}</span>
+        <input
+          type="text"
+          value="${escapedValue}"
+          data-render-edit-path="${escapeHtml(path)}"
+          data-editor-type="${escapeHtml(type)}"
+        />
+        ${help ? `<span class="local-editor__help">${escapeHtml(help)}</span>` : ""}
+      </label>
+    `;
+  }
+
+  return `
+    <label class="local-editor__field ${type === "list" ? "local-editor__field--list" : ""}">
+      <span class="local-editor__label">${escapeHtml(label)}</span>
+      <textarea
+        rows="${rows}"
+        data-render-edit-path="${escapeHtml(path)}"
+        data-editor-type="${escapeHtml(type)}"
+      >${escapedValue}</textarea>
+      ${help ? `<span class="local-editor__help">${escapeHtml(help)}</span>` : ""}
+    </label>
+  `;
+}
+
+function renderLocalCreateField(field, values) {
+  const value = values[field.key] ?? "";
+  const escapedValue = escapeHtml(String(value));
+
+  if (field.type === "text") {
+    return `
+      <label class="local-editor__field">
+        <span class="local-editor__label">${escapeHtml(field.label)}</span>
+        <input type="text" name="${escapeHtml(field.key)}" value="${escapedValue}" />
+        <span class="local-editor__help">${escapeHtml(field.help)}</span>
+      </label>
+    `;
+  }
+
+  return `
+    <label class="local-editor__field ${field.type === "list" ? "local-editor__field--list" : ""}">
+      <span class="local-editor__label">${escapeHtml(field.label)}</span>
+      <textarea name="${escapeHtml(field.key)}" rows="${field.rows || 4}">${escapedValue}</textarea>
+      <span class="local-editor__help">${escapeHtml(field.help)}</span>
+    </label>
+  `;
+}
+
+function buildLocalArtMarkup(dataUrl, altText = "Printafbeelding") {
+  return `<img class="card-pack-item__photo" src="${escapeAttribute(dataUrl)}" alt="${escapeAttribute(altText)}" />`;
+}
+
+function renderLocalEditorSection(title, description, content, options = {}) {
+  if (!content) {
+    return "";
+  }
+
+  const summaryMeta = options.meta ? `<span class="local-editor__section-meta">${escapeHtml(options.meta)}</span>` : "";
+
+  return `
+    <details class="local-editor__section" ${options.open ? "open" : ""}>
+      <summary>
+        <div class="local-editor__section-head">
+          <div>
+            <strong>${escapeHtml(title)}</strong>
+            ${description ? `<p>${escapeHtml(description)}</p>` : ""}
+          </div>
+          ${summaryMeta}
+        </div>
+      </summary>
+      <div class="local-editor__section-body">
+        ${content}
+      </div>
+    </details>
+  `;
+}
+
+function renderArtEditor(item, pathPrefix, index) {
+  const artPath = `${pathPrefix}.${index}.art`;
+  const currentArt = item.art || "";
+  const preview = currentArt
+    ? `<div class="local-editor__art-preview">${currentArt}</div>`
+    : `<div class="local-editor__art-preview local-editor__art-preview--empty">Nog geen printafbeelding gekozen.</div>`;
+
+  return `
+    <div class="local-editor__field local-editor__field--list">
+      <span class="local-editor__label">Printafbeelding (optioneel)</span>
+      ${preview}
+      <div class="local-editor__art-actions">
+        <label class="button button--secondary local-editor__upload">
+          Kies afbeelding
+          <input
+            type="file"
+            accept="image/*"
+            data-art-upload-path="${escapeHtml(artPath)}"
+            data-art-alt="${escapeHtml(item.title || item.label || `printafbeelding ${index + 1}`)}"
+          />
+        </label>
+        <button type="button" class="button button--secondary" data-action="clear-art" data-art-target-path="${escapeHtml(artPath)}">
+          Verwijder afbeelding
+        </button>
+      </div>
+      <textarea class="local-editor__art-value" rows="2" data-render-edit-path="${escapeHtml(artPath)}" data-editor-type="textarea">${escapeHtml(
+        currentArt
+      )}</textarea>
+      <span class="local-editor__help">Kies lokaal een eigen afbeelding voor dit printblad of kaartje. Die vervangt de huidige illustratie alleen op deze Mac.</span>
+    </div>
+  `;
+}
+
+function renderPrintPackMetaEditor(task) {
+  if (!task.cardPack) {
+    return "";
+  }
+
+  return `
+    <div class="local-editor__grid">
+      ${renderRenderedEditorField({
+        label: "Titel van de printset",
+        path: "cardPack.title",
+        value: task.cardPack.title,
+        type: "text",
+        help: "Titel boven de printset."
+      })}
+      ${renderRenderedEditorField({
+        label: "Intro printset",
+        path: "cardPack.intro",
+        value: task.cardPack.intro,
+        rows: 4,
+        help: "Korte uitleg boven de printbladen."
+      })}
+      ${renderRenderedEditorField({
+        label: "Notities bij de printset",
+        path: "cardPack.note",
+        value: task.cardPack.note,
+        type: "list",
+        rows: Math.max(4, task.cardPack.note.length + 1),
+        help: "Zet elke notitie op een nieuwe regel."
+      })}
+      ${renderRenderedEditorField({
+        label: "Printchecklist",
+        path: "cardPack.printChecklist",
+        value: task.cardPack.printChecklist,
+        type: "list",
+        rows: Math.max(4, task.cardPack.printChecklist.length + 1),
+        help: "Zet elk checklistpunt op een nieuwe regel."
+      })}
+    </div>
+  `;
+}
+
+function renderPrintItemEditor(item, pathPrefix, index) {
+  const heading = item.title || item.label || `Item ${index + 1}`;
+  const fields = [
+    renderRenderedEditorField({
+      label: "Label",
+      path: `${pathPrefix}.${index}.label`,
+      value: item.label || "",
+      type: "text",
+      help: "Korte naam boven het kaartje."
+    })
+  ];
+
+  if (Object.prototype.hasOwnProperty.call(item, "title")) {
+    fields.push(
+      renderRenderedEditorField({
+        label: "Titel",
+        path: `${pathPrefix}.${index}.title`,
+        value: item.title || "",
+        type: "text",
+        help: "Extra titel op de kaart of lesplaat."
+      })
+    );
+  }
+
+  if (Object.prototype.hasOwnProperty.call(item, "text")) {
+    fields.push(
+      renderRenderedEditorField({
+        label: "Hoofdtekst",
+        path: `${pathPrefix}.${index}.text`,
+        value: item.text || "",
+        rows: Math.max(3, String(item.text || "").split("\n").length + 1),
+        help: "De belangrijkste tekst op dit blad of kaartje."
+      })
+    );
+  }
+
+  if (Object.prototype.hasOwnProperty.call(item, "hint")) {
+    fields.push(
+      renderRenderedEditorField({
+        label: "Hint of gebruiksregel",
+        path: `${pathPrefix}.${index}.hint`,
+        value: item.hint || "",
+        rows: 3,
+        help: "Korte toelichting onderaan het kaartje."
+      })
+    );
+  }
+
+  if (Object.prototype.hasOwnProperty.call(item, "distributionText")) {
+    fields.push(
+      renderRenderedEditorField({
+        label: "Verdeling of printuitleg",
+        path: `${pathPrefix}.${index}.distributionText`,
+        value: item.distributionText || "",
+        rows: 2,
+        help: "Tekst over aantallen of verdeling."
+      })
+    );
+  }
+
+  return `
+    <article class="local-editor__item">
+      <div class="local-editor__item-head">
+        <strong>${escapeHtml(heading)}</strong>
+        <span>${escapeHtml(item.label || `Item ${index + 1}`)}</span>
+      </div>
+      <div class="local-editor__grid">
+        ${fields.join("")}
+        ${renderArtEditor(item, pathPrefix, index)}
+      </div>
+    </article>
+  `;
+}
+
+function renderPrintItemSection(title, description, items, pathPrefix, open = false) {
+  if (!items?.length) {
+    return "";
+  }
+
+  return renderLocalEditorSection(
+    title,
+    description,
+    `<div class="local-editor__list">${items
+      .map((item, index) => renderPrintItemEditor(item, pathPrefix, index))
+      .join("")}</div>`,
+    {
+      open,
+      meta: `${items.length} ${items.length === 1 ? "item" : "items"}`
+    }
+  );
+}
+
+function getAvailableLocalEditSections(task) {
+  return [
+    {
+      id: "task",
+      label: "Opdracht",
+      available: true
+    },
+    {
+      id: "print",
+      label: "Printset",
+      available: Boolean(task.cardPack)
+    },
+    {
+      id: "cards",
+      label: "Werkkaartjes",
+      available: Boolean(task.cardPack?.cards?.length)
+    },
+    {
+      id: "support",
+      label: "Hulpmateriaal",
+      available: Boolean(task.cardPack?.supportCards?.length)
+    },
+    {
+      id: "teacher",
+      label: "Groepsbladen",
+      available: Boolean(task.cardPack?.teacherSheets?.length)
+    }
+  ].filter((section) => section.available);
+}
+
+function getCurrentLocalEditSection(task) {
+  const availableSections = getAvailableLocalEditSections(task).map((section) => section.id);
+  return availableSections.includes(state.editSection) ? state.editSection : "task";
+}
+
+function renderLocalEditorTabs(task) {
+  const sections = getAvailableLocalEditSections(task);
+  const activeSection = getCurrentLocalEditSection(task);
+
+  return `
+    <div class="local-editor__tabs" role="tablist" aria-label="Kies wat je wilt bewerken">
+      ${sections
+        .map(
+          (section) => `
+            <button
+              type="button"
+              class="local-editor__tab ${section.id === activeSection ? "local-editor__tab--active" : ""}"
+              data-edit-section="${escapeHtml(section.id)}"
+              aria-pressed="${section.id === activeSection ? "true" : "false"}"
+            >
+              ${escapeHtml(section.label)}
+            </button>
+          `
+        )
+        .join("")}
+    </div>
+  `;
+}
+
+function renderLocalCreateView() {
+  const defaults = localCreateDraft || buildLocalCreateDefaults();
+  const feedback = getLocalCreateFeedback();
+  const routeLabel = buildLocalCreateRouteLabel();
+  const themeStyle = getSubjectThemeStyle(state.subjectId);
+
+  return `
+    <div class="task-detail__sheet" style="${themeStyle}">
+      <form class="local-editor" data-local-create-form>
+        <div class="local-editor__intro">
+          <div>
+            <strong>Nieuwe opdracht lokaal toevoegen</strong>
+            <p>Deze opdracht wordt alleen op deze Mac en in deze browser opgeslagen, onder <strong>${escapeHtml(routeLabel)}</strong>.</p>
+          </div>
+          <div class="local-editor__actions">
+            <button type="button" class="button button--secondary" data-action="cancel-local-create">
+              Annuleer
+            </button>
+            <button type="button" class="button" data-action="save-local-create">
+              Voeg opdracht toe
+            </button>
+          </div>
+        </div>
+
+        ${
+          feedback
+            ? `<div class="local-editor__feedback local-editor__feedback--${escapeHtml(feedback.tone)}">${escapeHtml(
+                feedback.text
+              )}</div>`
+            : ""
+        }
+
+        ${renderLocalEditorSection(
+          "Nieuwe opdracht",
+          "Vul hier de basis in. Daarna kun je de nieuwe opdracht verder aanpassen via Bewerk lokaal.",
+          `
+            <div class="local-editor__grid">
+              ${LOCAL_EDIT_FIELD_CONFIG.map((field) => renderLocalCreateField(field, defaults)).join("")}
+              <label class="local-editor__field">
+                <span class="local-editor__label">Type illustratie</span>
+                <select name="visual">
+                  ${LOCAL_CREATE_VISUAL_OPTIONS.map(
+                    (option) => `
+                      <option value="${escapeHtml(option.value)}" ${option.value === defaults.visual ? "selected" : ""}>
+                        ${escapeHtml(option.label)}
+                      </option>
+                    `
+                  ).join("")}
+                </select>
+                <span class="local-editor__help">Kies de opstelling die het beste past bij de nieuwe opdracht.</span>
+              </label>
+              <label class="local-editor__field local-editor__field--toggle">
+                <span class="local-editor__label">Basis-printset</span>
+                <span class="local-editor__check">
+                  <input type="checkbox" name="hasPrint" ${defaults.hasPrint ? "checked" : ""} />
+                  <span>Maak meteen een basis-printset met werkkaartjes, hulpmateriaal en groepsbladen.</span>
+                </span>
+                <span class="local-editor__help">Handig als je later ook de printkaartjes of printbladen van deze opdracht wilt aanpassen.</span>
+              </label>
+            </div>
+          `,
+          { open: true, meta: routeLabel }
+        )}
+      </form>
+    </div>
+  `;
+}
+
+function renderLocalEditor(task) {
+  const feedback = getLocalEditFeedbackForTask(task.key);
+  const activeSection = getCurrentLocalEditSection(task);
+  const coreSection = renderLocalEditorSection(
+    "Kern van de opdracht",
+    "Pas hier de gewone opdrachttekst aan die op de kaart en in de uitleg terugkomt.",
+    `<div class="local-editor__grid">${LOCAL_EDIT_FIELD_CONFIG.map((field) => renderLocalEditorField(task, field)).join("")}</div>`,
+    { open: true, meta: "Opdracht" }
+  );
+  const printMetaSection = task.cardPack
+    ? renderLocalEditorSection(
+        "Printset en checklist",
+        "Pas hier de tekst boven de printbladen aan.",
+        renderPrintPackMetaEditor(task),
+        { open: true, meta: "Printintro" }
+      )
+    : "";
+  const cardsSection = renderPrintItemSection(
+    "Werkkaartjes en printafbeeldingen",
+    "Dit zijn de kaartjes of bladen die leerlingen gebruiken tijdens de opdracht. Hier kun je ook de printafbeelding vervangen.",
+    task.cardPack?.cards,
+    "cardPack.cards",
+    true
+  );
+  const supportSection = renderPrintItemSection(
+    "Hulpmateriaal",
+    "Deze kaartjes zijn voor opstelling, hulpteksten en organisatie in de klas.",
+    task.cardPack?.supportCards,
+    "cardPack.supportCards",
+    true
+  );
+  const teacherSection = renderPrintItemSection(
+    "Groepsbladen en controle",
+    "Deze bladen horen bij registratie, antwoorden of controle.",
+    task.cardPack?.teacherSheets,
+    "cardPack.teacherSheets",
+    true
+  );
+  const sectionContent =
+    {
+      task: coreSection,
+      print: printMetaSection,
+      cards: cardsSection,
+      support: supportSection,
+      teacher: teacherSection
+    }[activeSection] || coreSection;
+
+  return `
+    <form class="local-editor" data-local-editor-form>
+      <div class="local-editor__intro">
+        <div>
+          <strong>Bewerk opdracht lokaal</strong>
+          <p>Deze wijzigingen worden alleen op dit apparaat en in deze browser bewaard. De gedeelde GitHub-site verandert hierdoor niet mee.</p>
+        </div>
+        <div class="local-editor__actions">
+          ${
+            task.isLocalCustom
+              ? `
+                <button type="button" class="button button--secondary local-editor__delete" data-action="delete-local-task">
+                  Verwijder lokale opdracht
+                </button>
+              `
+              : ""
+          }
+          <button type="button" class="button button--secondary" data-action="reset-local-edit">
+            Reset deze opdracht
+          </button>
+          <button type="button" class="button" data-action="save-local-edit">
+            Sla lokaal op
+          </button>
+        </div>
+      </div>
+
+      ${
+        feedback
+          ? `<div class="local-editor__feedback local-editor__feedback--${escapeHtml(feedback.tone)}">${escapeHtml(
+              feedback.text
+            )}</div>`
+          : ""
+      }
+
+      ${renderLocalEditorTabs(task)}
+      ${sectionContent}
+    </form>
+  `;
+}
+
 function renderTaskDetail(task) {
   const showCards = Boolean(
     task.usesCards &&
       task.cardPack &&
       (task.cardPack.cards.length || task.cardPack.supportCards.length || task.cardPack.teacherSheets.length)
   );
-  const currentView = state.detailView === "print" && !showCards ? "task" : state.detailView;
+  const currentView =
+    state.detailView === "print" && !showCards
+      ? "task"
+      : state.detailView === "edit" && !isLocalEditorAvailable()
+        ? "task"
+        : state.detailView;
   const materials = getMaterialsList(task);
   const readyPreview = showCards
     ? `${materials.length} dingen + printset`
@@ -7526,6 +8960,8 @@ function renderTaskDetail(task) {
             ${
               currentView === "quick"
                 ? renderOneMinuteView(task, showCards)
+                : currentView === "edit"
+                  ? renderLocalEditor(task)
                 : `
                   ${renderTeacherBrief(task, showCards)}
                   <div class="task-detail__grid">
@@ -7640,19 +9076,11 @@ function renderCardLayer(task) {
       </div>
 
       ${renderPrintSection(
-        "overview",
-        `Lesplaten en overzicht (${task.cardPack.overviewSheets.length})`,
-        `Print deze drie bladen eerst. Ze geven de opstelling, de klasindeling voor ${CLASS_SIZE} leerlingen en de stapvolgorde in een logische volgorde weer.`,
-        task.cardPack.overviewSheets,
-        "Print lesplaten"
-      )}
-
-      ${renderPrintSection(
         "support",
         `Opstellings- en hulpmateriaal (${task.cardPack.supportCards.length})`,
         "Deze kaartjes hoef je als leerkracht niet meer zelf te maken; je kunt ze direct uitprinten en klaarleggen voor de klasorganisatie.",
         task.cardPack.supportCards,
-        "Print hulpmateriaal"
+        "Kies hulpmateriaal"
       )}
 
       ${renderPrintSection(
@@ -7660,7 +9088,7 @@ function renderCardLayer(task) {
         `Werkkaartjes bij de opdracht (${task.cardPack.cards.length}${repeatedCards ? ` unieke / ${totalCardCopies} afdrukken` : ""})`,
         cardDescription,
         task.cardPack.cards,
-        "Print werkkaartjes"
+        "Kies werkkaartjes"
       )}
 
       ${renderPrintSection(
@@ -7668,7 +9096,7 @@ function renderCardLayer(task) {
         `Groepsbladen, klasoverzicht en controle (${task.cardPack.teacherSheets.length})`,
         teacherDescription,
         task.cardPack.teacherSheets,
-        "Print groepsbladen"
+        "Kies groepsbladen"
       )}
 
       <div class="card-layer__notes">
@@ -9761,4 +11189,8 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
+}
+
+function escapeAttribute(value) {
+  return escapeHtml(value);
 }
