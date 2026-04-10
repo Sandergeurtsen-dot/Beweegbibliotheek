@@ -277,12 +277,14 @@ const LOCAL_EXPORT_FOLDER_NAME = "lokale-exporten";
 const LIVE_CUSTOM_TASK_EXPORT_PATH = "./lokale-exporten/live-opdrachten.json";
 const LOCAL_RENDER_EDIT_STORAGE_KEY = "columbus-beweegbibliotheek-local-render-edits-v1";
 const LOCAL_CUSTOM_TASK_DELETIONS_STORAGE_KEY = "columbus-beweegbibliotheek-local-custom-deletions-v1";
+const LOCAL_LIVE_IMPORT_STORAGE_KEY = "columbus-beweegbibliotheek-live-import-v1";
 const fileTaskTextOverrides = flattenTaskTextOverrides(globalThis.taskTextOverrides || {});
 let taskTextOverrides = {};
 let publishedTaskTextOverrides = {};
 let publishedRenderedTaskOverrides = {};
 let publishedCustomTaskBlueprints = {};
 let publishedDeletedCustomTaskKeys = new Set();
+let localImportedLiveExport = loadLocalLiveImportExport();
 
 const subjectThemes = {
   taal: {
@@ -2638,6 +2640,11 @@ const initialState = {
   search: "",
   detailView: "task",
   editSection: "task",
+  manageSearch: "",
+  manageStatus: "all",
+  manageGroupId: "",
+  manageSubjectId: "",
+  manageMomentId: "",
   mobileFiltersOpen: false
 };
 
@@ -2691,6 +2698,7 @@ const ui = {
   contentEyebrow: document.querySelector("#contentEyebrow"),
   contentTitle: document.querySelector("#contentTitle"),
   contentDescription: document.querySelector("#contentDescription"),
+  localAdminControls: document.querySelector("#localAdminControls"),
   selectionChips: document.querySelector("#selectionChips"),
   backButton: document.querySelector("#backButton"),
   resetButton: document.querySelector("#resetButton"),
@@ -2714,9 +2722,11 @@ bindIfPresent(ui.groupFilters, "click", handleFilterClick);
 bindIfPresent(ui.subjectFilters, "click", handleFilterClick);
 bindIfPresent(ui.momentFilters, "click", handleFilterClick);
 bindIfPresent(ui.selectionChips, "click", handleChipClick);
+bindIfPresent(ui.localAdminControls, "click", handleLocalAdminClick);
 bindIfPresent(ui.stepCards, "click", handleStepCardClick);
 bindIfPresent(ui.taskDetail, "click", handleTaskDetailClick);
 bindIfPresent(ui.taskDetail, "change", handleTaskDetailChange);
+bindIfPresent(ui.taskDetail, "input", handleTaskDetailInput);
 bindIfPresent(ui.taskGrid, "click", handleTaskGridClick);
 window.addEventListener("popstate", handlePopState);
 window.addEventListener("afterprint", handleAfterPrint);
@@ -2875,8 +2885,9 @@ function getBlueprintsForRoute(groupId, subjectId, momentId, baseBlueprints = []
   const routeKey = buildRouteStorageKey(groupId, subjectId, momentId);
   const publishedBlueprints = publishedCustomTaskBlueprints[routeKey] || [];
   const localBlueprints = localCustomTaskBlueprints[routeKey] || [];
+  const localDeletedKeys = getLocalDeletedTaskKeySet();
   return [...baseBlueprints, ...publishedBlueprints, ...localBlueprints].filter(
-    (blueprint) => !publishedDeletedCustomTaskKeys.has(blueprint.key)
+    (blueprint) => !publishedDeletedCustomTaskKeys.has(blueprint.key) && !localDeletedKeys.has(blueprint.key)
   );
 }
 
@@ -2975,6 +2986,20 @@ function persistLocalDeletedCustomTaskChanges() {
   );
 }
 
+function loadLocalLiveImportExport() {
+  return loadLocalJsonStorage(LOCAL_LIVE_IMPORT_STORAGE_KEY);
+}
+
+function persistLocalLiveImportExport(exportData) {
+  localImportedLiveExport = exportData && typeof exportData === "object" ? exportData : {};
+  return persistLocalJsonStorage(LOCAL_LIVE_IMPORT_STORAGE_KEY, localImportedLiveExport);
+}
+
+function clearLocalLiveImportExport() {
+  localImportedLiveExport = {};
+  return persistLocalJsonStorage(LOCAL_LIVE_IMPORT_STORAGE_KEY, {});
+}
+
 function getAllLocalCustomTaskBlueprints() {
   return Object.entries(localCustomTaskBlueprints).flatMap(([routeKey, blueprints]) =>
     (blueprints || []).map((blueprint) => ({ routeKey, blueprint }))
@@ -2983,6 +3008,10 @@ function getAllLocalCustomTaskBlueprints() {
 
 function getAllLocalCustomTaskKeys() {
   return getAllLocalCustomTaskBlueprints().map((entry) => entry.blueprint.key);
+}
+
+function getLocalDeletedTaskKeySet() {
+  return new Set(localDeletedCustomTaskChanges.map((entry) => entry.key).filter(Boolean));
 }
 
 function getLocalEditedTaskKeys() {
@@ -3064,6 +3093,18 @@ function renderLocalChangeFeedback() {
   return `<div class="local-editor__feedback local-editor__feedback--${escapeHtml(localChangeFeedback.tone)}">${escapeHtml(
     localChangeFeedback.text
   )}</div>`;
+}
+
+function applyPublishedExportData(exportData) {
+  publishedCustomTaskBlueprints =
+    exportData?.customTasks && typeof exportData.customTasks === "object" ? exportData.customTasks : {};
+  publishedTaskTextOverrides =
+    exportData?.textOverrides && typeof exportData.textOverrides === "object" ? exportData.textOverrides : {};
+  publishedRenderedTaskOverrides =
+    exportData?.renderedOverrides && typeof exportData.renderedOverrides === "object" ? exportData.renderedOverrides : {};
+  publishedDeletedCustomTaskKeys = new Set(
+    Array.isArray(exportData?.deletedTasks) ? exportData.deletedTasks.map((entry) => entry?.key).filter(Boolean) : []
+  );
 }
 
 function buildLocalCustomTaskExport() {
@@ -3234,6 +3275,33 @@ async function downloadLocalCustomTaskExport(task) {
   }
 }
 
+async function importLiveTaskExport(file) {
+  if (!file) {
+    return false;
+  }
+
+  try {
+    const raw = await file.text();
+    const exportData = JSON.parse(raw);
+    applyPublishedExportData(exportData);
+    persistLocalLiveImportExport(exportData);
+    refreshTaskData();
+    localChangeFeedback = {
+      tone: "success",
+      text: "Live-bestand lokaal ingelezen. Je beheer werkt nu op basis van deze live versie plus jouw lokale wijzigingen."
+    };
+    state.detailView = "manage";
+    return true;
+  } catch (error) {
+    console.warn("Live exportbestand kon niet worden ingelezen.", error);
+    localChangeFeedback = {
+      tone: "error",
+      text: "Het gekozen JSON-bestand kon niet worden ingelezen als live-bestand."
+    };
+    return false;
+  }
+}
+
 function buildMergedTaskTextOverrides() {
   return mergeTaskTextOverrideMaps(fileTaskTextOverrides, publishedTaskTextOverrides, localTaskTextOverrides);
 }
@@ -3269,7 +3337,7 @@ async function loadPublishedCustomTaskExport() {
   }
 
   try {
-    const response = await fetch(`${LIVE_CUSTOM_TASK_EXPORT_PATH}?v=20260409-3`, {
+    const response = await fetch(`${LIVE_CUSTOM_TASK_EXPORT_PATH}?v=20260410-1`, {
       cache: "no-store"
     });
 
@@ -3278,14 +3346,7 @@ async function loadPublishedCustomTaskExport() {
     }
 
     const exportData = await response.json();
-    publishedCustomTaskBlueprints = exportData?.customTasks && typeof exportData.customTasks === "object" ? exportData.customTasks : {};
-    publishedTaskTextOverrides = exportData?.textOverrides && typeof exportData.textOverrides === "object" ? exportData.textOverrides : {};
-    publishedRenderedTaskOverrides =
-      exportData?.renderedOverrides && typeof exportData.renderedOverrides === "object" ? exportData.renderedOverrides : {};
-    publishedDeletedCustomTaskKeys = new Set(
-      Array.isArray(exportData?.deletedTasks) ? exportData.deletedTasks.map((entry) => entry?.key).filter(Boolean) : []
-    );
-
+    applyPublishedExportData(exportData);
     refreshTaskData();
     render();
     return true;
@@ -3298,6 +3359,7 @@ async function loadPublishedCustomTaskExport() {
 let library = [];
 let allTasks = [];
 
+applyPublishedExportData(localImportedLiveExport);
 refreshTaskData();
 
 initializeHistory();
@@ -6951,7 +7013,12 @@ function snapshotNavigationState() {
     taskId: state.taskId,
     search: state.search,
     detailView: state.detailView,
-    editSection: state.editSection
+    editSection: state.editSection,
+    manageSearch: state.manageSearch,
+    manageStatus: state.manageStatus,
+    manageGroupId: state.manageGroupId,
+    manageSubjectId: state.manageSubjectId,
+    manageMomentId: state.manageMomentId
   };
 }
 
@@ -6963,6 +7030,11 @@ function applyNavigationState(nextState = initialState) {
   state.search = nextState.search ?? "";
   state.detailView = normalizeDetailView(nextState.detailView);
   state.editSection = normalizeEditSection(nextState.editSection);
+  state.manageSearch = nextState.manageSearch ?? "";
+  state.manageStatus = normalizeManageStatus(nextState.manageStatus);
+  state.manageGroupId = nextState.manageGroupId ?? "";
+  state.manageSubjectId = nextState.manageSubjectId ?? "";
+  state.manageMomentId = nextState.manageMomentId ?? "";
   state.mobileFiltersOpen = false;
 
   if (ui.searchInput) {
@@ -6982,7 +7054,12 @@ function isSameNavigationState(left, right) {
     left.taskId === right.taskId &&
     left.search === right.search &&
     left.detailView === right.detailView &&
-    left.editSection === right.editSection
+    left.editSection === right.editSection &&
+    left.manageSearch === right.manageSearch &&
+    left.manageStatus === right.manageStatus &&
+    left.manageGroupId === right.manageGroupId &&
+    left.manageSubjectId === right.manageSubjectId &&
+    left.manageMomentId === right.manageMomentId
   );
 }
 
@@ -7112,6 +7189,18 @@ function handleStepCardClick(event) {
   toggleFilter(button.dataset.filterLevel, button.dataset.id);
 }
 
+function handleLocalAdminClick(event) {
+  const button = event.target.closest("[data-action='open-local-manage']");
+
+  if (!button || !isLocalEditorAvailable()) {
+    return;
+  }
+
+  state.taskId = null;
+  state.detailView = state.detailView === "manage" ? "task" : "manage";
+  commitState("push");
+}
+
 async function handleTaskGridClick(event) {
   const exportButton = event.target.closest("[data-action='export-local-custom-tasks']");
 
@@ -7160,6 +7249,46 @@ async function handleTaskDetailClick(event) {
     await downloadLocalCustomTaskExport(selectedTask);
     commitState("replace");
     return;
+  }
+
+  const manageResetButton = event.target.closest("[data-action='reset-manage-filters']");
+
+  if (manageResetButton) {
+    resetManageFilters();
+    commitState("replace");
+    return;
+  }
+
+  const manageTaskButton = event.target.closest("[data-manage-task-action]");
+
+  if (manageTaskButton && isLocalEditorAvailable()) {
+    const action = manageTaskButton.dataset.manageTaskAction;
+    const taskKey = manageTaskButton.dataset.taskKey;
+    const task = taskKey ? findTaskByKey(taskKey) : null;
+
+    if (action === "edit" && task) {
+      openTaskInLocalEditor(task);
+      commitState("push");
+      return;
+    }
+
+    if (action === "duplicate" && task) {
+      duplicateTaskLocally(task);
+      commitState("push");
+      return;
+    }
+
+    if (action === "delete" && task) {
+      deleteTaskLocally(task);
+      commitState("replace");
+      return;
+    }
+
+    if (action === "restore" && taskKey) {
+      restoreDeletedTask(taskKey);
+      commitState("replace");
+      return;
+    }
   }
 
   const createButton = event.target.closest("[data-action='save-local-create'], [data-action='cancel-local-create']");
@@ -7287,7 +7416,36 @@ async function handleTaskDetailClick(event) {
   }
 }
 
-function handleTaskDetailChange(event) {
+async function handleTaskDetailChange(event) {
+  const manageFilter = event.target.closest("[data-manage-filter]");
+
+  if (manageFilter) {
+    const filterType = manageFilter.dataset.manageFilter;
+    const nextValue = String(manageFilter.value || "");
+
+    if (filterType === "status") {
+      state.manageStatus = normalizeManageStatus(nextValue);
+    } else if (filterType === "group") {
+      state.manageGroupId = nextValue;
+    } else if (filterType === "subject") {
+      state.manageSubjectId = nextValue;
+    } else if (filterType === "moment") {
+      state.manageMomentId = nextValue;
+    }
+
+    commitState("replace");
+    return;
+  }
+
+  const importInput = event.target.closest("[data-live-import-input]");
+
+  if (importInput?.files?.length) {
+    await importLiveTaskExport(importInput.files[0]);
+    importInput.value = "";
+    commitState("replace");
+    return;
+  }
+
   const upload = event.target.closest("[data-art-upload-path]");
 
   if (!upload || !upload.files?.length) {
@@ -7321,6 +7479,17 @@ function handleTaskDetailChange(event) {
   });
 
   reader.readAsDataURL(file);
+}
+
+function handleTaskDetailInput(event) {
+  const manageSearch = event.target.closest("[data-manage-search]");
+
+  if (!manageSearch) {
+    return;
+  }
+
+  state.manageSearch = String(manageSearch.value || "");
+  commitState("replace");
 }
 
 function findElementByDataPath(container, attributeName, expectedValue) {
@@ -7443,6 +7612,12 @@ function handleBack() {
     return;
   }
 
+  if (state.detailView === "manage") {
+    state.detailView = "task";
+    commitState("replace");
+    return;
+  }
+
   if (state.taskId) {
     state.taskId = null;
     state.detailView = "task";
@@ -7490,10 +7665,11 @@ function syncSelectedTask() {
 function render() {
   syncSelectedTask();
   ui.totalTaskCount.textContent = String(allTasks.length);
-  ui.backButton.disabled = !state.groupId && !state.subjectId && !state.momentId && !state.taskId;
+  ui.backButton.disabled = !state.groupId && !state.subjectId && !state.momentId && !state.taskId && state.detailView !== "manage";
 
   renderMobileFinder();
   renderFilters();
+  renderLocalAdminControls();
   renderHeader();
   renderStepSection();
   renderResultsSection();
@@ -7501,6 +7677,31 @@ function render() {
     document.body.dataset.printSection = "all";
   }
   document.body.classList.toggle("app--print-view", state.detailView === "print" && Boolean(state.taskId));
+}
+
+function renderLocalAdminControls() {
+  if (!ui.localAdminControls) {
+    return;
+  }
+
+  if (!isLocalEditorAvailable()) {
+    ui.localAdminControls.innerHTML = "";
+    ui.localAdminControls.style.display = "none";
+    return;
+  }
+
+  ui.localAdminControls.style.display = "grid";
+  ui.localAdminControls.innerHTML = `
+    <button
+      type="button"
+      class="button button--secondary ${state.detailView === "manage" ? "button--active-soft" : ""}"
+      style="${getSubjectThemeStyle(state.subjectId || "rekenen")}"
+      data-action="open-local-manage"
+      aria-pressed="${state.detailView === "manage" ? "true" : "false"}"
+    >
+      ${state.detailView === "manage" ? "Sluit beheer" : "Beheer lokaal"}
+    </button>
+  `;
 }
 
 function renderMobileFinder() {
@@ -7588,7 +7789,12 @@ function renderHeader() {
   const selectedMoment = getMoment(state.momentId);
   const filteredTasks = getFilteredTasks();
 
-  if (searchActive) {
+  if (state.detailView === "manage" && isLocalEditorAvailable()) {
+    ui.contentEyebrow.textContent = "Lokaal beheer";
+    ui.contentTitle.textContent = "Beheer opdrachten";
+    ui.contentDescription.textContent =
+      "Zoek hier door alle opdrachten, open direct de editor, maak een kopie of zet wijzigingen klaar voor live.";
+  } else if (searchActive) {
     ui.contentEyebrow.textContent = "Zoeken";
     ui.contentTitle.textContent = "Zoekresultaten";
     ui.contentDescription.textContent = `Gebruik de filters om de ${filteredTasks.length} zoekresultaten verder te verfijnen of klik direct een opdracht open.`;
@@ -7658,6 +7864,12 @@ function renderSelectionChips() {
 }
 
 function renderStepSection() {
+  if (state.detailView === "manage" && isLocalEditorAvailable()) {
+    ui.stepSection.style.display = "none";
+    ui.stepCards.innerHTML = "";
+    return;
+  }
+
   const searchActive = hasSearch();
   const nextStep = getNextStep();
 
@@ -7780,6 +7992,17 @@ function renderStepCards(nextStep) {
 }
 
 function renderResultsSection() {
+  if (state.detailView === "manage" && isLocalEditorAvailable()) {
+    ui.resultsTitle.textContent = "Beheer opdrachten";
+    ui.resultsMeta.textContent =
+      "Zoek, filter en beheer hier alle opdrachten. Vanuit deze pagina kun je direct bewerken, dupliceren, verbergen en live klaarzetten.";
+    ui.taskDetail.className = "task-detail task-detail--visible";
+    ui.taskDetail.innerHTML = renderLocalManageView();
+    ui.taskGrid.className = "task-grid task-grid--hidden";
+    ui.taskGrid.innerHTML = "";
+    return;
+  }
+
   const filteredTasks = getFilteredTasks();
   const canShowTasks = Boolean(
     state.groupId && state.subjectId && (isEnergizerGroup() || state.momentId)
@@ -8027,6 +8250,288 @@ function renderLocalPublishPanel() {
   `;
 }
 
+function hasTaskLocalEdits(taskKey) {
+  return Boolean(localTaskTextOverrides[taskKey] || localRenderedTaskOverrides[taskKey]);
+}
+
+function getManageStatusLabel(status) {
+  return (
+    {
+      live: "Live",
+      new: "Nieuw",
+      changed: "Aangepast",
+      deleted: "Verwijderd"
+    }[status] || "Live"
+  );
+}
+
+function getManageTaskStatus(task) {
+  if (task.isLocalCustom) {
+    return "new";
+  }
+
+  if (hasTaskLocalEdits(task.key)) {
+    return "changed";
+  }
+
+  return "live";
+}
+
+function buildManageSearchText(item) {
+  return normalize(
+    [
+      item.title,
+      item.summary,
+      item.routeLabel,
+      item.groupLabel,
+      item.subjectLabel,
+      item.momentLabel
+    ]
+      .filter(Boolean)
+      .join(" ")
+  );
+}
+
+function matchesManageFilters(item, status) {
+  const searchTerm = normalize(state.manageSearch || "");
+
+  if (state.manageStatus !== "all" && state.manageStatus !== status) {
+    return false;
+  }
+
+  if (state.manageGroupId && item.groupId !== state.manageGroupId) {
+    return false;
+  }
+
+  if (state.manageSubjectId && item.subjectId !== state.manageSubjectId) {
+    return false;
+  }
+
+  if (state.manageMomentId && item.momentId !== state.manageMomentId) {
+    return false;
+  }
+
+  if (searchTerm && !buildManageSearchText(item).includes(searchTerm)) {
+    return false;
+  }
+
+  return true;
+}
+
+function buildManageActiveTasks() {
+  return allTasks
+    .map((task) => ({
+      ...task,
+      manageStatus: getManageTaskStatus(task),
+      routeLabel: buildRouteLabelForTask(task)
+    }))
+    .filter((task) => matchesManageFilters(task, task.manageStatus))
+    .sort(sortTasks);
+}
+
+function buildManageDeletedTasks() {
+  return [...localDeletedCustomTaskChanges]
+    .map((entry) => ({
+      ...entry,
+      groupLabel: getGroup(entry.groupId)?.label || "",
+      subjectLabel: getSubject(entry.subjectId)?.label || "",
+      momentLabel: getMoment(entry.momentId)?.label || "",
+      routeLabel: [getGroup(entry.groupId)?.label, getSubject(entry.subjectId)?.label, getMoment(entry.momentId)?.label]
+        .filter(Boolean)
+        .join(" • ")
+    }))
+    .filter((entry) => matchesManageFilters(entry, "deleted"))
+    .sort((left, right) => {
+      return (
+        orderMaps.groups.get(left.groupId) - orderMaps.groups.get(right.groupId) ||
+        orderMaps.subjects.get(left.subjectId) - orderMaps.subjects.get(right.subjectId) ||
+        orderMaps.moments.get(left.momentId) - orderMaps.moments.get(right.momentId) ||
+        String(left.title ?? "").localeCompare(String(right.title ?? ""), "nl")
+      );
+    });
+}
+
+function renderManageFilterOptions(options, currentValue, allLabel) {
+  return [
+    `<option value="">${escapeHtml(allLabel)}</option>`,
+    ...options.map(
+      (option) =>
+        `<option value="${escapeHtml(option.id)}" ${option.id === currentValue ? "selected" : ""}>${escapeHtml(option.label)}</option>`
+    )
+  ].join("");
+}
+
+function renderManageTaskCard(task) {
+  const manageStatus = task.manageStatus;
+  const deleteLabel = task.isLocalCustom ? "Verwijder lokaal" : "Verberg lokaal";
+
+  return `
+    <article class="manage-card">
+      <div class="manage-card__copy">
+        <div class="manage-card__head">
+          <strong>${escapeHtml(task.title)}</strong>
+          <div class="manage-card__pills">
+            <span class="pill">${escapeHtml(task.groupLabel)}</span>
+            <span class="pill">${escapeHtml(task.subjectLabel)}</span>
+            <span class="pill">${escapeHtml(task.momentLabel)}</span>
+            <span class="pill">${escapeHtml(getManageStatusLabel(manageStatus))}</span>
+            <span class="pill">${task.usesCards ? "print" : "zonder print"}</span>
+          </div>
+        </div>
+        <p>${escapeHtml(shortenPrintText(task.summary, 150))}</p>
+        <span class="manage-card__route">${escapeHtml(task.routeLabel)}</span>
+      </div>
+      <div class="manage-card__actions">
+        <button type="button" class="button button--secondary" data-manage-task-action="edit" data-task-key="${escapeHtml(task.key)}">
+          Bewerk
+        </button>
+        <button type="button" class="button button--secondary" data-manage-task-action="duplicate" data-task-key="${escapeHtml(task.key)}">
+          Dupliceer
+        </button>
+        <button type="button" class="button button--secondary" data-manage-task-action="delete" data-task-key="${escapeHtml(task.key)}">
+          ${escapeHtml(deleteLabel)}
+        </button>
+      </div>
+    </article>
+  `;
+}
+
+function renderManageDeletedCard(entry) {
+  return `
+    <article class="manage-card manage-card--deleted">
+      <div class="manage-card__copy">
+        <div class="manage-card__head">
+          <strong>${escapeHtml(entry.title || entry.key)}</strong>
+          <div class="manage-card__pills">
+            <span class="pill">${escapeHtml(entry.groupLabel)}</span>
+            <span class="pill">${escapeHtml(entry.subjectLabel)}</span>
+            <span class="pill">${escapeHtml(entry.momentLabel)}</span>
+            <span class="pill">Verwijderd</span>
+          </div>
+        </div>
+        <p>Deze opdracht staat lokaal op verwijderd en wordt pas weer zichtbaar als je hem terugzet.</p>
+        <span class="manage-card__route">${escapeHtml(entry.routeLabel)}</span>
+      </div>
+      <div class="manage-card__actions">
+        <button type="button" class="button button--secondary" data-manage-task-action="restore" data-task-key="${escapeHtml(entry.key)}">
+          Zet terug
+        </button>
+      </div>
+    </article>
+  `;
+}
+
+function renderLocalManageView() {
+  const activeTasks = buildManageActiveTasks();
+  const deletedTasks = buildManageDeletedTasks();
+
+  return `
+    <div class="task-detail__sheet" style="${getSubjectThemeStyle(state.subjectId || "rekenen")}">
+      <div class="local-manage">
+        <div class="local-manage__head">
+          <div>
+            <strong>Beheer opdrachten</strong>
+            <p>Werk hier lokaal door alle opdrachten heen. Je kunt zoeken, dupliceren, lokaal verbergen, terugzetten en wijzigingen klaarzetten voor live.</p>
+          </div>
+          <div class="local-editor__actions">
+            <label class="button button--secondary local-manage__upload">
+              Importeer live-bestand
+              <input type="file" accept="application/json,.json" data-live-import-input />
+            </label>
+            <button type="button" class="button button--secondary" data-action="reset-manage-filters">
+              Wis beheerfilters
+            </button>
+            <button type="button" class="button" data-action="export-local-custom-tasks">
+              Zet live klaar
+            </button>
+          </div>
+        </div>
+
+        ${renderLocalChangeFeedback()}
+        ${renderLocalChangeOverview()}
+
+        <section class="local-manage__filters" aria-label="Beheerfilters">
+          <label class="local-editor__field">
+            <span class="local-editor__label">Zoek in beheer</span>
+            <input type="text" value="${escapeHtml(state.manageSearch)}" placeholder="Zoek op titel, route of vak" data-manage-search />
+          </label>
+          <label class="local-editor__field">
+            <span class="local-editor__label">Status</span>
+            <select data-manage-filter="status">
+              <option value="all" ${state.manageStatus === "all" ? "selected" : ""}>Alles</option>
+              <option value="changed" ${state.manageStatus === "changed" ? "selected" : ""}>Aangepast</option>
+              <option value="new" ${state.manageStatus === "new" ? "selected" : ""}>Nieuw</option>
+              <option value="deleted" ${state.manageStatus === "deleted" ? "selected" : ""}>Verwijderd</option>
+            </select>
+          </label>
+          <label class="local-editor__field">
+            <span class="local-editor__label">Bouw</span>
+            <select data-manage-filter="group">
+              ${renderManageFilterOptions(groups, state.manageGroupId, "Alle bouwen")}
+            </select>
+          </label>
+          <label class="local-editor__field">
+            <span class="local-editor__label">Vak</span>
+            <select data-manage-filter="subject">
+              ${renderManageFilterOptions(getAllSubjectOptions(), state.manageSubjectId, "Alle vakken")}
+            </select>
+          </label>
+          <label class="local-editor__field">
+            <span class="local-editor__label">Lesmoment</span>
+            <select data-manage-filter="moment">
+              ${renderManageFilterOptions(getAllMomentOptions(), state.manageMomentId, "Alle lesmomenten")}
+            </select>
+          </label>
+        </section>
+
+        ${
+          state.manageStatus !== "deleted"
+            ? `
+              <section class="local-manage__section">
+                <div class="local-manage__section-head">
+                  <div>
+                    <strong>Actieve opdrachten</strong>
+                    <p>${activeTasks.length} zichtbaar in deze beheerfilter.</p>
+                  </div>
+                </div>
+                <div class="local-manage__list">
+                  ${
+                    activeTasks.length
+                      ? activeTasks.map((task) => renderManageTaskCard(task)).join("")
+                      : `<div class="empty-state">Geen actieve opdrachten binnen deze beheerfilters.</div>`
+                  }
+                </div>
+              </section>
+            `
+            : ""
+        }
+
+        ${
+          state.manageStatus === "all" || state.manageStatus === "deleted"
+            ? `
+              <section class="local-manage__section">
+                <div class="local-manage__section-head">
+                  <div>
+                    <strong>Verwijderd</strong>
+                    <p>${deletedTasks.length} opdrachten staan lokaal op verwijderd.</p>
+                  </div>
+                </div>
+                <div class="local-manage__list">
+                  ${
+                    deletedTasks.length
+                      ? deletedTasks.map((entry) => renderManageDeletedCard(entry)).join("")
+                      : `<div class="empty-state">Er staan nog geen verwijderde opdrachten klaar.</div>`
+                  }
+                </div>
+              </section>
+            `
+            : ""
+        }
+      </div>
+    </div>
+  `;
+}
+
 function buildQuickStart(task) {
   return task.setup;
 }
@@ -8086,7 +8591,7 @@ function normalizeDetailView(detailView) {
   const allowedViews = ["task", "quick", "print"];
 
   if (isLocalEditorAvailable()) {
-    allowedViews.push("edit", "create");
+    allowedViews.push("edit", "create", "manage");
   }
 
   return allowedViews.includes(detailView) ? detailView : "task";
@@ -8094,6 +8599,10 @@ function normalizeDetailView(detailView) {
 
 function normalizeEditSection(editSection) {
   return ["task", "print", "support", "cards", "teacher"].includes(editSection) ? editSection : "task";
+}
+
+function normalizeManageStatus(status) {
+  return ["all", "changed", "new", "deleted"].includes(status) ? status : "all";
 }
 
 function buildLocalCreateDefaults() {
@@ -8187,9 +8696,13 @@ function slugifyTaskKeyPart(value) {
     .slice(0, 48) || "nieuwe-opdracht";
 }
 
-function buildLocalCustomTaskKey(title) {
-  const routeKey = buildRouteStorageKey(state.groupId, state.subjectId, getActiveRouteMomentId()).replaceAll("__", "-");
+function buildLocalCustomTaskKeyForRoute(groupId, subjectId, momentId, title) {
+  const routeKey = buildRouteStorageKey(groupId, subjectId, momentId).replaceAll("__", "-");
   return `lokaal-${routeKey}-${slugifyTaskKeyPart(title)}-${Date.now().toString(36)}`;
+}
+
+function buildLocalCustomTaskKey(title) {
+  return buildLocalCustomTaskKeyForRoute(state.groupId, state.subjectId, getActiveRouteMomentId(), title);
 }
 
 function buildLocalCustomTaskBlueprintFromForm(formData) {
@@ -8249,6 +8762,42 @@ function buildLocalCustomTaskBlueprintFromForm(formData) {
         }
       : undefined
   };
+}
+
+function cloneForStorage(value) {
+  return value ? JSON.parse(JSON.stringify(value)) : value;
+}
+
+function buildLocalCustomTaskBlueprintFromTask(task, titleSuffix = "kopie") {
+  const duplicateTitle = `${task.title} ${titleSuffix}`.trim();
+
+  return {
+    key: buildLocalCustomTaskKeyForRoute(task.groupId, task.subjectId, task.momentId, duplicateTitle),
+    groupScope: [task.groupId],
+    title: duplicateTitle,
+    summary: task.summary,
+    duration: task.duration,
+    goal: task.goal,
+    setup: task.setup,
+    movementFocus: task.movementFocus,
+    materials: [...task.materials],
+    steps: [...task.steps],
+    differentiation: task.differentiation,
+    teacherTip: task.teacherTip,
+    visualHint: task.visualHint,
+    visual: task.visual,
+    keywords: [...(task.keywords || [])],
+    isLocalCustom: true,
+    printProfile: task.printProfile?.enabled ? cloneForStorage(task.printProfile) : undefined
+  };
+}
+
+function resetManageFilters() {
+  state.manageSearch = "";
+  state.manageStatus = "all";
+  state.manageGroupId = "";
+  state.manageSubjectId = "";
+  state.manageMomentId = "";
 }
 
 function validateLocalCustomTaskBlueprint(blueprint) {
@@ -8467,8 +9016,72 @@ function saveLocalCustomTask(form) {
   return true;
 }
 
-function deleteLocalCustomTask(task) {
-  if (!task?.isLocalCustom) {
+function openTaskInLocalEditor(task) {
+  if (!task) {
+    return false;
+  }
+
+  state.groupId = task.groupId;
+  state.subjectId = task.subjectId;
+  state.momentId = isEnergizerGroup(task.groupId) ? null : task.momentId;
+  state.taskId = task.id;
+  state.detailView = "edit";
+  state.editSection = "task";
+  return true;
+}
+
+function duplicateTaskLocally(task) {
+  if (!task) {
+    return false;
+  }
+
+  const routeKey = buildRouteStorageKey(task.groupId, task.subjectId, task.momentId);
+  const currentBlueprints = localCustomTaskBlueprints[routeKey] || [];
+  const blueprint = buildLocalCustomTaskBlueprintFromTask(task);
+  const previousRenderedOverride = localRenderedTaskOverrides[blueprint.key];
+  localCustomTaskBlueprints[routeKey] = [...currentBlueprints, blueprint];
+
+  if (task.cardPack) {
+    localRenderedTaskOverrides[blueprint.key] = {
+      cardPack: cloneForStorage(task.cardPack)
+    };
+  }
+
+  const persisted = persistLocalCustomTaskBlueprints() && persistLocalRenderedTaskOverrides();
+
+  if (!persisted) {
+    localCustomTaskBlueprints[routeKey] = currentBlueprints;
+
+    if (previousRenderedOverride) {
+      localRenderedTaskOverrides[blueprint.key] = previousRenderedOverride;
+    } else {
+      delete localRenderedTaskOverrides[blueprint.key];
+    }
+
+    localChangeFeedback = {
+      tone: "error",
+      text: "Dupliceren lukte niet. Controleer of deze browser lokale opslag toelaat."
+    };
+    return false;
+  }
+
+  refreshTaskData();
+  const duplicatedTask = findTaskByKey(blueprint.key);
+  localChangeFeedback = {
+    tone: "success",
+    text: "Kopie gemaakt. Je kunt deze nu lokaal verder aanpassen."
+  };
+  localEditFeedback = null;
+
+  if (duplicatedTask) {
+    openTaskInLocalEditor(duplicatedTask);
+  }
+
+  return true;
+}
+
+function deleteTaskLocally(task) {
+  if (!task) {
     return false;
   }
 
@@ -8476,12 +9089,17 @@ function deleteLocalCustomTask(task) {
   const currentBlueprints = localCustomTaskBlueprints[routeKey] || [];
   const hadRouteKey = Object.prototype.hasOwnProperty.call(localCustomTaskBlueprints, routeKey);
   const currentDeletedChanges = [...localDeletedCustomTaskChanges];
-  const nextBlueprints = currentBlueprints.filter((blueprint) => blueprint.key !== task.key);
+  const previousTextOverride = localTaskTextOverrides[task.key];
+  const previousRenderedOverride = localRenderedTaskOverrides[task.key];
 
-  if (nextBlueprints.length) {
-    localCustomTaskBlueprints[routeKey] = nextBlueprints;
-  } else {
-    delete localCustomTaskBlueprints[routeKey];
+  if (task.isLocalCustom) {
+    const nextBlueprints = currentBlueprints.filter((blueprint) => blueprint.key !== task.key);
+
+    if (nextBlueprints.length) {
+      localCustomTaskBlueprints[routeKey] = nextBlueprints;
+    } else {
+      delete localCustomTaskBlueprints[routeKey];
+    }
   }
 
   delete localTaskTextOverrides[task.key];
@@ -8495,7 +9113,13 @@ function deleteLocalCustomTask(task) {
       subjectId: task.subjectId,
       momentId: task.momentId,
       title: task.title,
-      deletedAt: new Date().toISOString()
+      deletedAt: new Date().toISOString(),
+      isLocalCustom: Boolean(task.isLocalCustom),
+      blueprint: task.isLocalCustom
+        ? cloneForStorage(currentBlueprints.find((blueprint) => blueprint.key === task.key) || null)
+        : null,
+      textOverride: cloneForStorage(previousTextOverride || null),
+      renderedOverride: cloneForStorage(previousRenderedOverride || null)
     }
   ];
 
@@ -8506,11 +9130,20 @@ function deleteLocalCustomTask(task) {
     persistLocalRenderedTaskOverrides();
 
   if (!persisted) {
-    if (hadRouteKey) {
+    if (task.isLocalCustom && hadRouteKey) {
       localCustomTaskBlueprints[routeKey] = currentBlueprints;
-    } else {
+    } else if (task.isLocalCustom) {
       delete localCustomTaskBlueprints[routeKey];
     }
+
+    if (previousTextOverride) {
+      localTaskTextOverrides[task.key] = previousTextOverride;
+    }
+
+    if (previousRenderedOverride) {
+      localRenderedTaskOverrides[task.key] = previousRenderedOverride;
+    }
+
     localDeletedCustomTaskChanges = currentDeletedChanges;
     localEditFeedback = {
       taskKey: task.key,
@@ -8523,7 +9156,9 @@ function deleteLocalCustomTask(task) {
   localEditFeedback = null;
   localCreateFeedback = {
     tone: "info",
-    text: "De lokale opdracht is verwijderd en staat nu klaar om mee te exporteren naar de live site."
+    text: task.isLocalCustom
+      ? "De lokale opdracht is verwijderd en staat nu klaar om mee te exporteren naar de live site."
+      : "De opdracht is lokaal verborgen en staat nu klaar om mee te exporteren naar de live site."
   };
   localChangeFeedback = {
     tone: "info",
@@ -8531,8 +9166,80 @@ function deleteLocalCustomTask(task) {
   };
   refreshTaskData();
   state.taskId = null;
-  state.detailView = "task";
+  state.detailView = "manage";
   state.editSection = "task";
+  return true;
+}
+
+function deleteLocalCustomTask(task) {
+  return deleteTaskLocally(task);
+}
+
+function restoreDeletedTask(taskKey) {
+  const deletionEntry = localDeletedCustomTaskChanges.find((entry) => entry.key === taskKey);
+
+  if (!deletionEntry) {
+    return false;
+  }
+
+  const routeKey =
+    deletionEntry.routeKey || buildRouteStorageKey(deletionEntry.groupId, deletionEntry.subjectId, deletionEntry.momentId);
+  const previousBlueprints = localCustomTaskBlueprints[routeKey] || [];
+  const previousTextOverride = localTaskTextOverrides[taskKey];
+  const previousRenderedOverride = localRenderedTaskOverrides[taskKey];
+  const previousDeletedChanges = [...localDeletedCustomTaskChanges];
+
+  if (deletionEntry.isLocalCustom && deletionEntry.blueprint) {
+    localCustomTaskBlueprints[routeKey] = [...previousBlueprints, cloneForStorage(deletionEntry.blueprint)];
+  }
+
+  if (deletionEntry.textOverride) {
+    localTaskTextOverrides[taskKey] = cloneForStorage(deletionEntry.textOverride);
+  }
+
+  if (deletionEntry.renderedOverride) {
+    localRenderedTaskOverrides[taskKey] = cloneForStorage(deletionEntry.renderedOverride);
+  }
+
+  localDeletedCustomTaskChanges = localDeletedCustomTaskChanges.filter((entry) => entry.key !== taskKey);
+
+  const persisted =
+    persistLocalCustomTaskBlueprints() &&
+    persistLocalDeletedCustomTaskChanges() &&
+    persistLocalTaskTextOverrides() &&
+    persistLocalRenderedTaskOverrides();
+
+  if (!persisted) {
+    if (deletionEntry.isLocalCustom) {
+      localCustomTaskBlueprints[routeKey] = previousBlueprints;
+    }
+
+    if (previousTextOverride) {
+      localTaskTextOverrides[taskKey] = previousTextOverride;
+    } else {
+      delete localTaskTextOverrides[taskKey];
+    }
+
+    if (previousRenderedOverride) {
+      localRenderedTaskOverrides[taskKey] = previousRenderedOverride;
+    } else {
+      delete localRenderedTaskOverrides[taskKey];
+    }
+
+    localDeletedCustomTaskChanges = previousDeletedChanges;
+    localChangeFeedback = {
+      tone: "error",
+      text: "Terugzetten lukte niet. Controleer of deze browser lokale opslag toelaat."
+    };
+    return false;
+  }
+
+  refreshTaskData();
+  localChangeFeedback = {
+    tone: "success",
+    text: "De opdracht staat weer terug in je lokale bibliotheek."
+  };
+  state.detailView = "manage";
   return true;
 }
 

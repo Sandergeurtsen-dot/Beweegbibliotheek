@@ -327,6 +327,12 @@ body::before {
   justify-items: end;
 }
 
+.local-admin-controls {
+  display: grid;
+  width: 100%;
+  justify-items: end;
+}
+
 .selection-chips {
   display: flex;
   flex-wrap: wrap;
@@ -1355,6 +1361,138 @@ body::before {
   background: #fff6f4;
 }
 
+.local-manage {
+  display: grid;
+  gap: 18px;
+}
+
+.local-manage__head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.local-manage__head strong {
+  display: block;
+  color: var(--subject-accent);
+  font-size: 1.18rem;
+  font-family: "Fredoka", "Avenir Next", "Trebuchet MS", sans-serif;
+}
+
+.local-manage__head p {
+  margin: 10px 0 0;
+  color: var(--ink-soft);
+  line-height: 1.58;
+  max-width: 68ch;
+}
+
+.local-manage__filters {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  padding: 18px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--subject-soft) 52%, white), #ffffff);
+  border: 1px solid var(--subject-line);
+}
+
+.local-manage__section {
+  display: grid;
+  gap: 12px;
+}
+
+.local-manage__section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.local-manage__section-head strong {
+  color: var(--subject-accent);
+  font-size: 1.04rem;
+}
+
+.local-manage__section-head p {
+  margin: 6px 0 0;
+  color: var(--ink-soft);
+}
+
+.local-manage__list {
+  display: grid;
+  gap: 12px;
+}
+
+.local-manage__upload {
+  position: relative;
+  overflow: hidden;
+}
+
+.local-manage__upload input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.manage-card {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: #ffffff;
+  border: 1px solid var(--subject-line);
+  box-shadow: 0 12px 24px rgba(20, 59, 134, 0.05);
+}
+
+.manage-card--deleted {
+  background: #fffaf9;
+}
+
+.manage-card__copy {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.manage-card__head {
+  display: grid;
+  gap: 8px;
+}
+
+.manage-card__head strong {
+  font-size: 1.04rem;
+  color: var(--ink);
+}
+
+.manage-card__copy p {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.manage-card__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.manage-card__route {
+  color: var(--subject-accent);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.manage-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  gap: 10px;
+}
+
 .local-publish-panel {
   display: grid;
   gap: 16px;
@@ -1488,6 +1626,11 @@ body::before {
   background: #fff2f0;
   border: 1px solid #f0c4bd;
   color: #9a3d2a;
+}
+
+.button--active-soft {
+  box-shadow: inset 0 0 0 2px var(--subject-accent);
+  background: color-mix(in srgb, var(--subject-soft) 72%, white);
 }
 
 .local-editor__tabs {
@@ -1882,7 +2025,8 @@ body::before {
   .teacher-brief__grid,
   .minute-view__grid,
   .local-editor__grid,
-  .local-change-overview__grid {
+  .local-change-overview__grid,
+  .local-manage__filters {
     grid-template-columns: 1fr;
   }
 
@@ -1891,7 +2035,9 @@ body::before {
   }
 
   .local-publish-panel__head,
-  .local-change-overview__head {
+  .local-change-overview__head,
+  .local-manage__head,
+  .local-manage__section-head {
     display: grid;
   }
 
@@ -1994,8 +2140,14 @@ body::before {
     width: 100%;
   }
 
+  .local-admin-controls,
   .content__controls .button {
     width: 100%;
+  }
+
+  .manage-card,
+  .manage-card__actions {
+    display: grid;
   }
 
   .task-detail__grid,
