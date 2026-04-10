@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-04-09T17:15:16.756Z",
+  "exportedAt": "2026-04-10T11:31:23.737Z",
   "customTasks": {},
   "deletedTasks": [
     {
@@ -14,5 +14,8 @@
     }
   ],
   "textOverrides": {},
+  "siteTextOverrides": {
+    "heroDescription": "Vind snel een taal-, reken- of spellingwerkvorm voor bewegend leren. Kies een bouw, vak en lesmoment, of open direct de aparte energizerbibliotheek voor lesovergangen uit de lijn van Getal & Ruimte Junior en Staal 2."
+  },
   "renderedOverrides": {}
 }
