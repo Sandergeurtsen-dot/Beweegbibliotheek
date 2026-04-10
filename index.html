@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Columbus Beweegbibliotheek</title>
+    <title id="documentTitle">Columbus Beweegbibliotheek</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=20260410-1" />
+    <link rel="stylesheet" href="./styles.css?v=20260410-2" />
   </head>
   <body>
     <div class="page-shell">
@@ -22,9 +22,9 @@
             alt="Logo van Columbus school"
           />
           <div class="hero__copy">
-            <p class="eyebrow">Voor docenten, desktop en digibord</p>
-            <h1>Columbus Beweegbibliotheek</h1>
-            <p class="hero__description">
+            <p id="heroEyebrow" class="eyebrow">Voor docenten, desktop en digibord</p>
+            <h1 id="heroTitle">Columbus Beweegbibliotheek</h1>
+            <p id="heroDescription" class="hero__description">
               Vind snel een taal-, reken- of spellingwerkvorm voor bewegend
               leren. Kies een bouw, vak en lesmoment, of open direct de aparte
               energizerbibliotheek voor lesovergangen uit de lijn van de
@@ -37,29 +37,29 @@
           <div class="hero__stats">
             <div class="hero-stat">
               <strong id="totalTaskCount">0</strong>
-              <span>opdrachten</span>
+              <span id="heroStatTasksLabel">opdrachten</span>
             </div>
             <div class="hero-stat">
               <strong>4</strong>
-              <span>startpunten</span>
+              <span id="heroStatStartpointsLabel">startpunten</span>
             </div>
             <div class="hero-stat">
               <strong>3</strong>
-              <span>vakken</span>
+              <span id="heroStatSubjectsLabel">vakken</span>
             </div>
             <div class="hero-stat">
               <strong>2</strong>
-              <span>lesmomenten</span>
+              <span id="heroStatMomentsLabel">lesmomenten</span>
             </div>
             <div class="hero-stat">
               <strong>3</strong>
-              <span>energizertypes</span>
+              <span id="heroStatEnergizersLabel">energizertypes</span>
             </div>
           </div>
 
           <div class="hero__goal">
-            <p class="eyebrow eyebrow--light">Doel van de app</p>
-            <p>
+            <p id="heroGoalEyebrow" class="eyebrow eyebrow--light">Doel van de app</p>
+            <p id="heroGoalText">
               Docenten moeten makkelijk bewegend leren oefeningen kunnen vinden
               en direct kunnen toepassen in de les.
             </p>
@@ -117,7 +117,7 @@
       </div>
     </noscript>
 
-    <script src="./opdrachten-teksten.js?v=20260410-1" defer></script>
-    <script src="./script.js?v=20260410-1" defer></script>
+    <script src="./opdrachten-teksten.js?v=20260410-2" defer></script>
+    <script src="./script.js?v=20260410-2" defer></script>
   </body>
 </html>

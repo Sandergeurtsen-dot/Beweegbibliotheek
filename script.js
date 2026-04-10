@@ -278,13 +278,250 @@ const LIVE_CUSTOM_TASK_EXPORT_PATH = "./lokale-exporten/live-opdrachten.json";
 const LOCAL_RENDER_EDIT_STORAGE_KEY = "columbus-beweegbibliotheek-local-render-edits-v1";
 const LOCAL_CUSTOM_TASK_DELETIONS_STORAGE_KEY = "columbus-beweegbibliotheek-local-custom-deletions-v1";
 const LOCAL_LIVE_IMPORT_STORAGE_KEY = "columbus-beweegbibliotheek-live-import-v1";
+const LOCAL_SITE_TEXT_STORAGE_KEY = "columbus-beweegbibliotheek-site-teksten-v1";
 const fileTaskTextOverrides = flattenTaskTextOverrides(globalThis.taskTextOverrides || {});
 let taskTextOverrides = {};
 let publishedTaskTextOverrides = {};
 let publishedRenderedTaskOverrides = {};
 let publishedCustomTaskBlueprints = {};
 let publishedDeletedCustomTaskKeys = new Set();
+let localSiteTextOverrides = loadLocalSiteTextOverrides();
+let publishedSiteTextOverrides = {};
 let localImportedLiveExport = loadLocalLiveImportExport();
+
+const SITE_TEXT_DEFAULTS = {
+  documentTitle: "Columbus Beweegbibliotheek",
+  heroEyebrow: "Voor docenten, desktop en digibord",
+  heroTitle: "Columbus Beweegbibliotheek",
+  heroDescription:
+    "Vind snel een taal-, reken- of spellingwerkvorm voor bewegend leren. Kies een bouw, vak en lesmoment, of open direct de aparte energizerbibliotheek voor lesovergangen uit de lijn van de Dynamische Schooldag, Getal & Ruimte Junior en Staal 2.",
+  heroStatTasksLabel: "opdrachten",
+  heroStatStartpointsLabel: "startpunten",
+  heroStatSubjectsLabel: "vakken",
+  heroStatMomentsLabel: "lesmomenten",
+  heroStatEnergizersLabel: "energizertypes",
+  heroGoalEyebrow: "Doel van de app",
+  heroGoalText: "Docenten moeten makkelijk bewegend leren oefeningen kunnen vinden en direct kunnen toepassen in de les.",
+  resetButtonLabel: "Wis alle keuzes",
+  backButtonLabel: "1 stap terug",
+  adminOpenLabel: "Beheer lokaal",
+  adminCloseLabel: "Sluit beheer",
+  headerEyebrowSearch: "Zoeken",
+  headerTitleSearch: "Zoekresultaten",
+  headerDescriptionSearch: "Gebruik de filters om de {count} zoekresultaten verder te verfijnen of klik direct een opdracht open.",
+  headerEyebrowStart: "Start",
+  headerTitleStart: "Kies eerst een bouw of energizers",
+  headerDescriptionStart:
+    "Werk stap voor stap: kies eerst een bouw voor taal, spelling of rekenen, of open direct de aparte energizerbibliotheek voor lesovergangen.",
+  headerTitleEnergizerType: "Kies een type energizer",
+  headerTitleChooseSubject: "Kies een vak voor {groep}",
+  headerTitleChooseMoment: "Kies wanneer je de werkvorm wilt inzetten",
+  headerDescriptionChooseMoment:
+    "Zo vind je sneller of je een actieve werkvorm midden in de les zoekt, of juist een opdracht waarbij bewegen het leren zelf ondersteunt.",
+  resultsTitleManage: "Beheer opdrachten",
+  resultsMetaManage:
+    "Zoek, filter en beheer hier alle opdrachten. Vanuit deze pagina kun je direct bewerken, dupliceren, verbergen en live klaarzetten.",
+  resultsTitleEmpty: "Nog geen opdrachten in beeld",
+  resultsMetaNeedEnergizerType: "Kies hierboven eerst een type energizer.",
+  resultsMetaNeedRoute: "Kies hierboven eerst een bouw, daarna een vak en vervolgens een lesmoment.",
+  resultsEmptyEnergizerText: "Zodra je een energizertype hebt gekozen, verschijnen hier direct de passende energizers.",
+  resultsEmptyRouteText: "Zodra je bouw, vak en lesmoment hebt gekozen, verschijnen hier direct de passende opdrachten.",
+  resultsTitleCreate: "Nieuwe lokale opdracht",
+  resultsTitleNoResults: "Geen opdrachten gevonden",
+  resultsMetaCreateRoute: "Deze opdracht komt alleen lokaal in {route}.",
+  resultsMetaNoResults: "Kies een andere combinatie van bouw, vak of lesmoment.",
+  resultsMetaPendingChanges: "Er staan lokale wijzigingen klaar om te exporteren.",
+  resultsEmptyNoResults: "Er zijn geen opdrachten die passen bij deze combinatie. Kies bijvoorbeeld een ander vak of een ander lesmoment.",
+  resultsTitleChooseEnergizer: "Kies een energizer",
+  resultsTitleChooseTask: "Kies een opdracht",
+  resultsMetaEnergizers:
+    "{count} energizers in deze route. Open een energizer voor de uitleg, klaarzetten in 1 minuut of direct printen als dat nodig is.",
+  resultsMetaTasks:
+    "{count} opdrachten in deze route. Open een opdracht voor de uitleg, klaarzetten in 1 minuut of direct printen.",
+  createCardTitle: "Nieuwe opdracht toevoegen",
+  createCardSummary:
+    "Maak hier lokaal een eigen opdracht voor {route}. Alleen op deze Mac en in deze browser zichtbaar.",
+  exportCardTitle: "Klaar voor live",
+  exportCardSummary: "Zet alle lokale wijzigingen klaar voor de live site: nieuw, aangepast en verwijderd.",
+  changeOverviewTitle: "Lokale wijzigingen",
+  changeOverviewDescription: "Hier zie je wat er klaarstaat voor live. Deze lijst komt mee in live-opdrachten.json.",
+  changeOverviewNewTitle: "Nieuw",
+  changeOverviewChangedTitle: "Aangepast",
+  changeOverviewDeletedTitle: "Verwijderd",
+  changeOverviewEmptyNew: "Nog geen nieuwe opdrachten toegevoegd.",
+  changeOverviewEmptyChanged: "Nog geen bestaande opdrachten aangepast.",
+  changeOverviewEmptyDeleted: "Nog geen opdrachten verwijderd.",
+  publishPanelTitle: "Klaar voor live",
+  publishPanelDescription: "Controleer hier wat lokaal anders is dan live en werk daarna in 1 stap het live-bestand bij.",
+  publishButtonLabel: "Zet live klaar",
+  manageTitle: "Beheer opdrachten",
+  manageDescription:
+    "Werk hier lokaal door alle opdrachten heen. Je kunt zoeken, dupliceren, lokaal verbergen, terugzetten en wijzigingen klaarzetten voor live.",
+  manageImportLabel: "Importeer live-bestand",
+  manageResetFiltersLabel: "Wis beheerfilters",
+  manageSearchLabel: "Zoek in beheer",
+  manageSearchPlaceholder: "Zoek op titel, route of vak",
+  manageStatusLabel: "Status",
+  manageStatusAll: "Alles",
+  manageStatusChanged: "Aangepast",
+  manageStatusNew: "Nieuw",
+  manageStatusDeleted: "Verwijderd",
+  manageGroupLabel: "Bouw",
+  manageGroupAll: "Alle bouwen",
+  manageSubjectLabel: "Vak",
+  manageSubjectAll: "Alle vakken",
+  manageMomentLabel: "Lesmoment",
+  manageMomentAll: "Alle lesmomenten",
+  manageActiveTitle: "Actieve opdrachten",
+  manageActiveDescription: "{count} zichtbaar in deze beheerfilter.",
+  manageActiveEmpty: "Geen actieve opdrachten binnen deze beheerfilters.",
+  manageDeletedTitle: "Verwijderd",
+  manageDeletedDescription: "{count} opdrachten staan lokaal op verwijderd.",
+  manageDeletedEmpty: "Er staan nog geen verwijderde opdrachten klaar.",
+  manageStatusLiveLabel: "Live",
+  manageStatusNewLabel: "Nieuw",
+  manageStatusChangedLabel: "Aangepast",
+  manageStatusDeletedLabel: "Verwijderd",
+  managePrintLabel: "print",
+  manageNoPrintLabel: "zonder print",
+  manageActionEdit: "Bewerk",
+  manageActionDuplicate: "Dupliceer",
+  manageActionDeleteLocal: "Verwijder lokaal",
+  manageActionHideLocal: "Verberg lokaal",
+  manageActionRestore: "Zet terug",
+  manageDeletedCardText: "Deze opdracht staat lokaal op verwijderd en wordt pas weer zichtbaar als je hem terugzet.",
+  siteEditorTitle: "Vaste teksten van de app",
+  siteEditorDescription: "Pas hier de koppen, knoppen en vaste uitlegteksten van de site aan. Dit is los van de opdrachten zelf.",
+  siteEditorSaveLabel: "Sla site-teksten lokaal op",
+  siteEditorResetLabel: "Reset site-teksten",
+  siteEditorSectionHero: "Start en hero",
+  siteEditorSectionHeroDescription: "Teksten bovenaan de site.",
+  siteEditorSectionButtons: "Knoppen en hoofdlabels",
+  siteEditorSectionButtonsDescription: "Vaste labels voor knoppen en interface.",
+  siteEditorSectionRoute: "Route en resultaten",
+  siteEditorSectionRouteDescription: "Teksten voor kiezen, zoeken en resultaten.",
+  siteEditorSectionManage: "Beheer en live zetten",
+  siteEditorSectionManageDescription: "Teksten in het lokale beheer."
+};
+
+const SITE_TEXT_EDITOR_GROUPS = [
+  {
+    id: "hero",
+    titleKey: "siteEditorSectionHero",
+    descriptionKey: "siteEditorSectionHeroDescription",
+    fields: [
+      "documentTitle",
+      "heroEyebrow",
+      "heroTitle",
+      "heroDescription",
+      "heroGoalEyebrow",
+      "heroGoalText",
+      "heroStatTasksLabel",
+      "heroStatStartpointsLabel",
+      "heroStatSubjectsLabel",
+      "heroStatMomentsLabel",
+      "heroStatEnergizersLabel"
+    ]
+  },
+  {
+    id: "buttons",
+    titleKey: "siteEditorSectionButtons",
+    descriptionKey: "siteEditorSectionButtonsDescription",
+    fields: ["resetButtonLabel", "backButtonLabel", "adminOpenLabel", "adminCloseLabel"]
+  },
+  {
+    id: "route",
+    titleKey: "siteEditorSectionRoute",
+    descriptionKey: "siteEditorSectionRouteDescription",
+    fields: [
+      "headerEyebrowSearch",
+      "headerTitleSearch",
+      "headerDescriptionSearch",
+      "headerEyebrowStart",
+      "headerTitleStart",
+      "headerDescriptionStart",
+      "headerTitleEnergizerType",
+      "headerTitleChooseSubject",
+      "headerTitleChooseMoment",
+      "headerDescriptionChooseMoment",
+      "resultsTitleEmpty",
+      "resultsMetaNeedEnergizerType",
+      "resultsMetaNeedRoute",
+      "resultsEmptyEnergizerText",
+      "resultsEmptyRouteText",
+      "resultsTitleNoResults",
+      "resultsMetaNoResults",
+      "resultsEmptyNoResults",
+      "resultsTitleChooseEnergizer",
+      "resultsTitleChooseTask",
+      "resultsMetaEnergizers",
+      "resultsMetaTasks",
+      "createCardTitle",
+      "createCardSummary",
+      "exportCardTitle",
+      "exportCardSummary"
+    ]
+  },
+  {
+    id: "manage",
+    titleKey: "siteEditorSectionManage",
+    descriptionKey: "siteEditorSectionManageDescription",
+    fields: [
+      "resultsTitleManage",
+      "resultsMetaManage",
+      "changeOverviewTitle",
+      "changeOverviewDescription",
+      "changeOverviewNewTitle",
+      "changeOverviewChangedTitle",
+      "changeOverviewDeletedTitle",
+      "changeOverviewEmptyNew",
+      "changeOverviewEmptyChanged",
+      "changeOverviewEmptyDeleted",
+      "publishPanelTitle",
+      "publishPanelDescription",
+      "publishButtonLabel",
+      "manageTitle",
+      "manageDescription",
+      "manageImportLabel",
+      "manageResetFiltersLabel",
+      "manageSearchLabel",
+      "manageSearchPlaceholder",
+      "manageStatusLabel",
+      "manageStatusAll",
+      "manageStatusChanged",
+      "manageStatusNew",
+      "manageStatusDeleted",
+      "manageGroupLabel",
+      "manageGroupAll",
+      "manageSubjectLabel",
+      "manageSubjectAll",
+      "manageMomentLabel",
+      "manageMomentAll",
+      "manageActiveTitle",
+      "manageActiveDescription",
+      "manageActiveEmpty",
+      "manageDeletedTitle",
+      "manageDeletedDescription",
+      "manageDeletedEmpty",
+      "manageStatusLiveLabel",
+      "manageStatusNewLabel",
+      "manageStatusChangedLabel",
+      "manageStatusDeletedLabel",
+      "managePrintLabel",
+      "manageNoPrintLabel",
+      "manageActionEdit",
+      "manageActionDuplicate",
+      "manageActionDeleteLocal",
+      "manageActionHideLocal",
+      "manageActionRestore",
+      "manageDeletedCardText",
+      "siteEditorTitle",
+      "siteEditorDescription",
+      "siteEditorSaveLabel",
+      "siteEditorResetLabel"
+    ]
+  }
+];
 
 const subjectThemes = {
   taal: {
@@ -2688,6 +2925,16 @@ const orderMaps = {
 
 const ui = {
   totalTaskCount: document.querySelector("#totalTaskCount"),
+  heroEyebrow: document.querySelector("#heroEyebrow"),
+  heroTitle: document.querySelector("#heroTitle"),
+  heroDescription: document.querySelector("#heroDescription"),
+  heroStatTasksLabel: document.querySelector("#heroStatTasksLabel"),
+  heroStatStartpointsLabel: document.querySelector("#heroStatStartpointsLabel"),
+  heroStatSubjectsLabel: document.querySelector("#heroStatSubjectsLabel"),
+  heroStatMomentsLabel: document.querySelector("#heroStatMomentsLabel"),
+  heroStatEnergizersLabel: document.querySelector("#heroStatEnergizersLabel"),
+  heroGoalEyebrow: document.querySelector("#heroGoalEyebrow"),
+  heroGoalText: document.querySelector("#heroGoalText"),
   finderPanel: document.querySelector("#finderPanel"),
   mobileFilterToggle: document.querySelector("#mobileFilterToggle"),
   searchInput: document.querySelector("#searchInput"),
@@ -2958,6 +3205,14 @@ function persistLocalTaskTextOverrides() {
   return persistLocalJsonStorage(LOCAL_EDIT_STORAGE_KEY, localTaskTextOverrides);
 }
 
+function loadLocalSiteTextOverrides() {
+  return loadLocalJsonStorage(LOCAL_SITE_TEXT_STORAGE_KEY);
+}
+
+function persistLocalSiteTextOverrides() {
+  return persistLocalJsonStorage(LOCAL_SITE_TEXT_STORAGE_KEY, localSiteTextOverrides);
+}
+
 function loadLocalRenderedTaskOverrides() {
   return loadLocalJsonStorage(LOCAL_RENDER_EDIT_STORAGE_KEY);
 }
@@ -3000,6 +3255,20 @@ function clearLocalLiveImportExport() {
   return persistLocalJsonStorage(LOCAL_LIVE_IMPORT_STORAGE_KEY, {});
 }
 
+function getSiteText(key, replacements = {}) {
+  const template =
+    localSiteTextOverrides[key] ??
+    publishedSiteTextOverrides[key] ??
+    SITE_TEXT_DEFAULTS[key] ??
+    "";
+
+  return Object.entries(replacements).reduce(
+    (text, [replacementKey, replacementValue]) =>
+      text.replaceAll(`{${replacementKey}}`, String(replacementValue ?? "")),
+    String(template)
+  );
+}
+
 function getAllLocalCustomTaskBlueprints() {
   return Object.entries(localCustomTaskBlueprints).flatMap(([routeKey, blueprints]) =>
     (blueprints || []).map((blueprint) => ({ routeKey, blueprint }))
@@ -3028,8 +3297,12 @@ function hasLocalCustomTasks() {
   return getAllLocalCustomTaskKeys().length > 0;
 }
 
+function hasLocalSiteTextChanges() {
+  return Object.keys(localSiteTextOverrides).length > 0;
+}
+
 function hasPendingLocalCustomChanges() {
-  return hasLocalCustomTasks() || getLocalEditedTaskKeys().length > 0 || localDeletedCustomTaskChanges.length > 0;
+  return hasLocalCustomTasks() || getLocalEditedTaskKeys().length > 0 || localDeletedCustomTaskChanges.length > 0 || hasLocalSiteTextChanges();
 }
 
 function findTaskByKey(taskKey) {
@@ -3067,6 +3340,13 @@ function buildChangeSummary() {
           };
     })
     .sort((left, right) => left.title.localeCompare(right.title, "nl"));
+  if (hasLocalSiteTextChanges()) {
+    editedTasks.unshift({
+      key: "site-texts",
+      title: getSiteText("siteEditorTitle"),
+      routeLabel: "Vaste teksten van de app"
+    });
+  }
   const deletedTasks = [...localDeletedCustomTaskChanges]
     .map((entry) => ({
       key: entry.key,
@@ -3100,6 +3380,8 @@ function applyPublishedExportData(exportData) {
     exportData?.customTasks && typeof exportData.customTasks === "object" ? exportData.customTasks : {};
   publishedTaskTextOverrides =
     exportData?.textOverrides && typeof exportData.textOverrides === "object" ? exportData.textOverrides : {};
+  publishedSiteTextOverrides =
+    exportData?.siteTextOverrides && typeof exportData.siteTextOverrides === "object" ? exportData.siteTextOverrides : {};
   publishedRenderedTaskOverrides =
     exportData?.renderedOverrides && typeof exportData.renderedOverrides === "object" ? exportData.renderedOverrides : {};
   publishedDeletedCustomTaskKeys = new Set(
@@ -3114,6 +3396,7 @@ function buildLocalCustomTaskExport() {
     customTasks: JSON.parse(JSON.stringify(localCustomTaskBlueprints)),
     deletedTasks: JSON.parse(JSON.stringify(localDeletedCustomTaskChanges)),
     textOverrides: JSON.parse(JSON.stringify(localTaskTextOverrides)),
+    siteTextOverrides: JSON.parse(JSON.stringify(localSiteTextOverrides)),
     renderedOverrides: JSON.parse(JSON.stringify(localRenderedTaskOverrides))
   };
 }
@@ -3337,7 +3620,7 @@ async function loadPublishedCustomTaskExport() {
   }
 
   try {
-    const response = await fetch(`${LIVE_CUSTOM_TASK_EXPORT_PATH}?v=20260410-1`, {
+    const response = await fetch(`${LIVE_CUSTOM_TASK_EXPORT_PATH}?v=20260410-2`, {
       cache: "no-store"
     });
 
@@ -7251,6 +7534,25 @@ async function handleTaskDetailClick(event) {
     return;
   }
 
+  const siteTextButton = event.target.closest("[data-action='save-site-texts'], [data-action='reset-site-texts']");
+
+  if (siteTextButton && isLocalEditorAvailable()) {
+    const siteTextForm = siteTextButton.closest("form[data-site-text-form]");
+
+    if (!siteTextForm) {
+      return;
+    }
+
+    if (siteTextButton.dataset.action === "save-site-texts") {
+      saveSiteTextEdits(siteTextForm);
+    } else {
+      resetSiteTextEdits();
+    }
+
+    commitState("replace");
+    return;
+  }
+
   const manageResetButton = event.target.closest("[data-action='reset-manage-filters']");
 
   if (manageResetButton) {
@@ -7664,6 +7966,7 @@ function syncSelectedTask() {
 
 function render() {
   syncSelectedTask();
+  renderStaticSiteTexts();
   ui.totalTaskCount.textContent = String(allTasks.length);
   ui.backButton.disabled = !state.groupId && !state.subjectId && !state.momentId && !state.taskId && state.detailView !== "manage";
 
@@ -7677,6 +7980,47 @@ function render() {
     document.body.dataset.printSection = "all";
   }
   document.body.classList.toggle("app--print-view", state.detailView === "print" && Boolean(state.taskId));
+}
+
+function renderStaticSiteTexts() {
+  document.title = getSiteText("documentTitle");
+
+  if (ui.heroEyebrow) {
+    ui.heroEyebrow.textContent = getSiteText("heroEyebrow");
+  }
+  if (ui.heroTitle) {
+    ui.heroTitle.textContent = getSiteText("heroTitle");
+  }
+  if (ui.heroDescription) {
+    ui.heroDescription.textContent = getSiteText("heroDescription");
+  }
+  if (ui.heroStatTasksLabel) {
+    ui.heroStatTasksLabel.textContent = getSiteText("heroStatTasksLabel");
+  }
+  if (ui.heroStatStartpointsLabel) {
+    ui.heroStatStartpointsLabel.textContent = getSiteText("heroStatStartpointsLabel");
+  }
+  if (ui.heroStatSubjectsLabel) {
+    ui.heroStatSubjectsLabel.textContent = getSiteText("heroStatSubjectsLabel");
+  }
+  if (ui.heroStatMomentsLabel) {
+    ui.heroStatMomentsLabel.textContent = getSiteText("heroStatMomentsLabel");
+  }
+  if (ui.heroStatEnergizersLabel) {
+    ui.heroStatEnergizersLabel.textContent = getSiteText("heroStatEnergizersLabel");
+  }
+  if (ui.heroGoalEyebrow) {
+    ui.heroGoalEyebrow.textContent = getSiteText("heroGoalEyebrow");
+  }
+  if (ui.heroGoalText) {
+    ui.heroGoalText.textContent = getSiteText("heroGoalText");
+  }
+  if (ui.resetButton) {
+    ui.resetButton.textContent = getSiteText("resetButtonLabel");
+  }
+  if (ui.backButton) {
+    ui.backButton.textContent = getSiteText("backButtonLabel");
+  }
 }
 
 function renderLocalAdminControls() {
@@ -7699,7 +8043,7 @@ function renderLocalAdminControls() {
       data-action="open-local-manage"
       aria-pressed="${state.detailView === "manage" ? "true" : "false"}"
     >
-      ${state.detailView === "manage" ? "Sluit beheer" : "Beheer lokaal"}
+      ${state.detailView === "manage" ? getSiteText("adminCloseLabel") : getSiteText("adminOpenLabel")}
     </button>
   `;
 }
@@ -7791,21 +8135,19 @@ function renderHeader() {
 
   if (state.detailView === "manage" && isLocalEditorAvailable()) {
     ui.contentEyebrow.textContent = "Lokaal beheer";
-    ui.contentTitle.textContent = "Beheer opdrachten";
-    ui.contentDescription.textContent =
-      "Zoek hier door alle opdrachten, open direct de editor, maak een kopie of zet wijzigingen klaar voor live.";
+    ui.contentTitle.textContent = getSiteText("resultsTitleManage");
+    ui.contentDescription.textContent = getSiteText("resultsMetaManage");
   } else if (searchActive) {
-    ui.contentEyebrow.textContent = "Zoeken";
-    ui.contentTitle.textContent = "Zoekresultaten";
-    ui.contentDescription.textContent = `Gebruik de filters om de ${filteredTasks.length} zoekresultaten verder te verfijnen of klik direct een opdracht open.`;
+    ui.contentEyebrow.textContent = getSiteText("headerEyebrowSearch");
+    ui.contentTitle.textContent = getSiteText("headerTitleSearch");
+    ui.contentDescription.textContent = getSiteText("headerDescriptionSearch", { count: filteredTasks.length });
   } else if (!selectedGroup) {
-    ui.contentEyebrow.textContent = "Start";
-    ui.contentTitle.textContent = "Kies eerst een bouw of energizers";
-    ui.contentDescription.textContent =
-      "Werk stap voor stap: kies eerst een bouw voor taal, spelling of rekenen, of open direct de aparte energizerbibliotheek voor lesovergangen.";
+    ui.contentEyebrow.textContent = getSiteText("headerEyebrowStart");
+    ui.contentTitle.textContent = getSiteText("headerTitleStart");
+    ui.contentDescription.textContent = getSiteText("headerDescriptionStart");
   } else if (isEnergizerGroup(selectedGroup.id) && !selectedSubject) {
     ui.contentEyebrow.textContent = selectedGroup.label;
-    ui.contentTitle.textContent = "Kies een type energizer";
+    ui.contentTitle.textContent = getSiteText("headerTitleEnergizerType");
     ui.contentDescription.textContent = selectedGroup.focus;
   } else if (isEnergizerGroup(selectedGroup.id)) {
     ui.contentEyebrow.textContent = `${selectedGroup.label} • ${selectedSubject.label}`;
@@ -7813,13 +8155,12 @@ function renderHeader() {
     ui.contentDescription.textContent = selectedSubject.description;
   } else if (!selectedSubject) {
     ui.contentEyebrow.textContent = selectedGroup.label;
-    ui.contentTitle.textContent = `Kies een vak voor ${selectedGroup.label}`;
+    ui.contentTitle.textContent = getSiteText("headerTitleChooseSubject", { groep: selectedGroup.label });
     ui.contentDescription.textContent = selectedGroup.focus;
   } else if (!selectedMoment) {
     ui.contentEyebrow.textContent = `${selectedGroup.label} • ${selectedSubject.label}`;
-    ui.contentTitle.textContent = "Kies wanneer je de werkvorm wilt inzetten";
-    ui.contentDescription.textContent =
-      "Zo vind je sneller of je een actieve werkvorm midden in de les zoekt, of juist een opdracht waarbij bewegen het leren zelf ondersteunt.";
+    ui.contentTitle.textContent = getSiteText("headerTitleChooseMoment");
+    ui.contentDescription.textContent = getSiteText("headerDescriptionChooseMoment");
   } else {
     ui.contentEyebrow.textContent = `${selectedGroup.label} • ${selectedSubject.label}`;
     ui.contentTitle.textContent = selectedMoment.subtitle;
@@ -7993,9 +8334,8 @@ function renderStepCards(nextStep) {
 
 function renderResultsSection() {
   if (state.detailView === "manage" && isLocalEditorAvailable()) {
-    ui.resultsTitle.textContent = "Beheer opdrachten";
-    ui.resultsMeta.textContent =
-      "Zoek, filter en beheer hier alle opdrachten. Vanuit deze pagina kun je direct bewerken, dupliceren, verbergen en live klaarzetten.";
+    ui.resultsTitle.textContent = getSiteText("resultsTitleManage");
+    ui.resultsMeta.textContent = getSiteText("resultsMetaManage");
     ui.taskDetail.className = "task-detail task-detail--visible";
     ui.taskDetail.innerHTML = renderLocalManageView();
     ui.taskGrid.className = "task-grid task-grid--hidden";
@@ -8014,19 +8354,19 @@ function renderResultsSection() {
   const showPublishPanel = !showCreateView && !state.taskId && isLocalEditorAvailable() && hasPendingLocalCustomChanges();
 
   if (!canShowTasks) {
-    ui.resultsTitle.textContent = "Nog geen opdrachten in beeld";
+    ui.resultsTitle.textContent = getSiteText("resultsTitleEmpty");
     ui.resultsMeta.textContent =
       isEnergizerGroup()
-        ? "Kies hierboven eerst een type energizer."
-        : "Kies hierboven eerst een bouw, daarna een vak en vervolgens een lesmoment.";
+        ? getSiteText("resultsMetaNeedEnergizerType")
+        : getSiteText("resultsMetaNeedRoute");
     ui.taskDetail.className = "task-detail";
     ui.taskDetail.innerHTML = "";
     ui.taskGrid.innerHTML = `
       <div class="empty-state">
         ${
           isEnergizerGroup()
-            ? "Zodra je een energizertype hebt gekozen, verschijnen hier direct de passende energizers."
-            : "Zodra je bouw, vak en lesmoment hebt gekozen, verschijnen hier direct de passende opdrachten."
+            ? getSiteText("resultsEmptyEnergizerText")
+            : getSiteText("resultsEmptyRouteText")
         }
       </div>
     `;
@@ -8034,12 +8374,12 @@ function renderResultsSection() {
   }
 
   if (filteredTasks.length === 0) {
-    ui.resultsTitle.textContent = showCreateView ? "Nieuwe lokale opdracht" : "Geen opdrachten gevonden";
+    ui.resultsTitle.textContent = showCreateView ? getSiteText("resultsTitleCreate") : getSiteText("resultsTitleNoResults");
     ui.resultsMeta.textContent = showCreateView
-      ? `Deze opdracht komt alleen lokaal in ${buildLocalCreateRouteLabel()}.`
-      : "Kies een andere combinatie van bouw, vak of lesmoment.";
+      ? getSiteText("resultsMetaCreateRoute", { route: buildLocalCreateRouteLabel() })
+      : getSiteText("resultsMetaNoResults");
     if (!showCreateView && hasPendingLocalCustomChanges()) {
-      ui.resultsMeta.textContent += " Er staan lokale wijzigingen klaar om te exporteren.";
+      ui.resultsMeta.textContent += ` ${getSiteText("resultsMetaPendingChanges")}`;
     }
     ui.taskDetail.className = showCreateView || showPublishPanel ? "task-detail task-detail--visible" : "task-detail";
     ui.taskDetail.innerHTML = showCreateView ? renderLocalCreateView() : showPublishPanel ? renderLocalPublishPanel() : "";
@@ -8048,7 +8388,7 @@ function renderResultsSection() {
       ? ""
       : `
         <div class="empty-state">
-          Er zijn geen opdrachten die passen bij deze combinatie. Kies bijvoorbeeld een ander vak of een ander lesmoment.
+          ${getSiteText("resultsEmptyNoResults")}
         </div>
         ${exportCardMarkup}
         ${createCardMarkup}
@@ -8056,14 +8396,18 @@ function renderResultsSection() {
     return;
   }
 
-  ui.resultsTitle.textContent = showCreateView ? "Nieuwe lokale opdracht" : isEnergizerGroup() ? "Kies een energizer" : "Kies een opdracht";
-  ui.resultsMeta.textContent = showCreateView
-    ? `Deze opdracht komt alleen lokaal in ${buildLocalCreateRouteLabel()}.`
+  ui.resultsTitle.textContent = showCreateView
+    ? getSiteText("resultsTitleCreate")
     : isEnergizerGroup()
-      ? `${filteredTasks.length} energizers in deze route. Open een energizer voor de uitleg, klaarzetten in 1 minuut of direct printen als dat nodig is.`
-      : `${filteredTasks.length} opdrachten in deze route. Open een opdracht voor de uitleg, klaarzetten in 1 minuut of direct printen.`;
+      ? getSiteText("resultsTitleChooseEnergizer")
+      : getSiteText("resultsTitleChooseTask");
+  ui.resultsMeta.textContent = showCreateView
+    ? getSiteText("resultsMetaCreateRoute", { route: buildLocalCreateRouteLabel() })
+    : isEnergizerGroup()
+      ? getSiteText("resultsMetaEnergizers", { count: filteredTasks.length })
+      : getSiteText("resultsMetaTasks", { count: filteredTasks.length });
   if (!showCreateView && hasPendingLocalCustomChanges()) {
-    ui.resultsMeta.textContent += " Er staan lokale wijzigingen klaar om te exporteren.";
+    ui.resultsMeta.textContent += ` ${getSiteText("resultsMetaPendingChanges")}`;
   }
 
   const selectedTask = getSelectedTask(filteredTasks);
@@ -8137,9 +8481,9 @@ function renderLocalCreateTaskCard() {
     >
       <div class="task-card__content task-card__content--add">
         <span class="task-card__plus" aria-hidden="true">+</span>
-        <h4 class="task-card__title">Nieuwe opdracht toevoegen</h4>
+        <h4 class="task-card__title">${escapeHtml(getSiteText("createCardTitle"))}</h4>
         <p class="task-card__summary">
-          Maak hier lokaal een eigen opdracht voor ${escapeHtml(routeLabel)}. Alleen op deze Mac en in deze browser zichtbaar.
+          ${escapeHtml(getSiteText("createCardSummary", { route: routeLabel }))}
         </p>
         <div class="task-card__meta">
           <span class="pill">lokaal</span>
@@ -8162,9 +8506,9 @@ function renderLocalExportTaskCard() {
     >
       <div class="task-card__content task-card__content--add">
         <span class="task-card__plus" aria-hidden="true">⇪</span>
-        <h4 class="task-card__title">Klaar voor live</h4>
+        <h4 class="task-card__title">${escapeHtml(getSiteText("exportCardTitle"))}</h4>
         <p class="task-card__summary">
-          Zet alle lokale wijzigingen klaar voor de live site: nieuw, aangepast en verwijderd.
+          ${escapeHtml(getSiteText("exportCardSummary"))}
         </p>
         <div class="task-card__meta">
           <span class="pill">${summary.newTasks.length} nieuw</span>
@@ -8201,8 +8545,8 @@ function renderLocalChangeOverview() {
     <section class="local-change-overview" aria-label="Lokale wijzigingen">
       <div class="local-change-overview__head">
         <div>
-          <strong>Lokale wijzigingen</strong>
-          <p>Hier zie je wat er klaarstaat voor live. Deze lijst komt mee in <em>live-opdrachten.json</em>.</p>
+          <strong>${escapeHtml(getSiteText("changeOverviewTitle"))}</strong>
+          <p>${escapeHtml(getSiteText("changeOverviewDescription"))}</p>
         </div>
         <div class="local-change-overview__counts">
           <span class="pill">${summary.newTasks.length} nieuw</span>
@@ -8212,16 +8556,16 @@ function renderLocalChangeOverview() {
       </div>
       <div class="local-change-overview__grid">
         <article class="local-change-overview__panel">
-          <h4>Nieuw</h4>
-          <ul>${renderChangeListItems(summary.newTasks, "Nog geen nieuwe opdrachten toegevoegd.")}</ul>
+          <h4>${escapeHtml(getSiteText("changeOverviewNewTitle"))}</h4>
+          <ul>${renderChangeListItems(summary.newTasks, getSiteText("changeOverviewEmptyNew"))}</ul>
         </article>
         <article class="local-change-overview__panel">
-          <h4>Aangepast</h4>
-          <ul>${renderChangeListItems(summary.editedTasks, "Nog geen bestaande opdrachten aangepast.")}</ul>
+          <h4>${escapeHtml(getSiteText("changeOverviewChangedTitle"))}</h4>
+          <ul>${renderChangeListItems(summary.editedTasks, getSiteText("changeOverviewEmptyChanged"))}</ul>
         </article>
         <article class="local-change-overview__panel">
-          <h4>Verwijderd</h4>
-          <ul>${renderChangeListItems(summary.deletedTasks, "Nog geen opdrachten verwijderd.")}</ul>
+          <h4>${escapeHtml(getSiteText("changeOverviewDeletedTitle"))}</h4>
+          <ul>${renderChangeListItems(summary.deletedTasks, getSiteText("changeOverviewEmptyDeleted"))}</ul>
         </article>
       </div>
     </section>
@@ -8234,12 +8578,12 @@ function renderLocalPublishPanel() {
       <div class="local-publish-panel">
         <div class="local-publish-panel__head">
           <div>
-            <strong>Klaar voor live</strong>
-            <p>Controleer hier wat lokaal anders is dan live en werk daarna in 1 stap het live-bestand bij.</p>
+            <strong>${escapeHtml(getSiteText("publishPanelTitle"))}</strong>
+            <p>${escapeHtml(getSiteText("publishPanelDescription"))}</p>
           </div>
           <div class="local-editor__actions">
             <button type="button" class="button" data-action="export-local-custom-tasks">
-              Zet live klaar
+              ${escapeHtml(getSiteText("publishButtonLabel"))}
             </button>
           </div>
         </div>
@@ -8257,11 +8601,11 @@ function hasTaskLocalEdits(taskKey) {
 function getManageStatusLabel(status) {
   return (
     {
-      live: "Live",
-      new: "Nieuw",
-      changed: "Aangepast",
-      deleted: "Verwijderd"
-    }[status] || "Live"
+      live: getSiteText("manageStatusLiveLabel"),
+      new: getSiteText("manageStatusNewLabel"),
+      changed: getSiteText("manageStatusChangedLabel"),
+      deleted: getSiteText("manageStatusDeletedLabel")
+    }[status] || getSiteText("manageStatusLiveLabel")
   );
 }
 
@@ -8363,7 +8707,7 @@ function renderManageFilterOptions(options, currentValue, allLabel) {
 
 function renderManageTaskCard(task) {
   const manageStatus = task.manageStatus;
-  const deleteLabel = task.isLocalCustom ? "Verwijder lokaal" : "Verberg lokaal";
+  const deleteLabel = task.isLocalCustom ? getSiteText("manageActionDeleteLocal") : getSiteText("manageActionHideLocal");
 
   return `
     <article class="manage-card">
@@ -8375,7 +8719,7 @@ function renderManageTaskCard(task) {
             <span class="pill">${escapeHtml(task.subjectLabel)}</span>
             <span class="pill">${escapeHtml(task.momentLabel)}</span>
             <span class="pill">${escapeHtml(getManageStatusLabel(manageStatus))}</span>
-            <span class="pill">${task.usesCards ? "print" : "zonder print"}</span>
+            <span class="pill">${task.usesCards ? escapeHtml(getSiteText("managePrintLabel")) : escapeHtml(getSiteText("manageNoPrintLabel"))}</span>
           </div>
         </div>
         <p>${escapeHtml(shortenPrintText(task.summary, 150))}</p>
@@ -8383,10 +8727,10 @@ function renderManageTaskCard(task) {
       </div>
       <div class="manage-card__actions">
         <button type="button" class="button button--secondary" data-manage-task-action="edit" data-task-key="${escapeHtml(task.key)}">
-          Bewerk
+          ${escapeHtml(getSiteText("manageActionEdit"))}
         </button>
         <button type="button" class="button button--secondary" data-manage-task-action="duplicate" data-task-key="${escapeHtml(task.key)}">
-          Dupliceer
+          ${escapeHtml(getSiteText("manageActionDuplicate"))}
         </button>
         <button type="button" class="button button--secondary" data-manage-task-action="delete" data-task-key="${escapeHtml(task.key)}">
           ${escapeHtml(deleteLabel)}
@@ -8406,18 +8750,73 @@ function renderManageDeletedCard(entry) {
             <span class="pill">${escapeHtml(entry.groupLabel)}</span>
             <span class="pill">${escapeHtml(entry.subjectLabel)}</span>
             <span class="pill">${escapeHtml(entry.momentLabel)}</span>
-            <span class="pill">Verwijderd</span>
+            <span class="pill">${escapeHtml(getSiteText("manageStatusDeletedLabel"))}</span>
           </div>
         </div>
-        <p>Deze opdracht staat lokaal op verwijderd en wordt pas weer zichtbaar als je hem terugzet.</p>
+        <p>${escapeHtml(getSiteText("manageDeletedCardText"))}</p>
         <span class="manage-card__route">${escapeHtml(entry.routeLabel)}</span>
       </div>
       <div class="manage-card__actions">
         <button type="button" class="button button--secondary" data-manage-task-action="restore" data-task-key="${escapeHtml(entry.key)}">
-          Zet terug
+          ${escapeHtml(getSiteText("manageActionRestore"))}
         </button>
       </div>
     </article>
+  `;
+}
+
+function formatSiteTextFieldLabel(key) {
+  return key
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2")
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function renderSiteTextEditorField(key) {
+  const value = localSiteTextOverrides[key] ?? publishedSiteTextOverrides[key] ?? SITE_TEXT_DEFAULTS[key] ?? "";
+  const rows = Math.min(8, Math.max(2, String(value).split("\n").length + 1));
+  const hasTemplate = /\{.+?\}/.test(String(value));
+
+  return `
+    <label class="local-editor__field">
+      <span class="local-editor__label">${escapeHtml(formatSiteTextFieldLabel(key))}</span>
+      <textarea name="${escapeHtml(key)}" rows="${rows}">${escapeHtml(String(value))}</textarea>
+      ${
+        hasTemplate
+          ? `<span class="local-editor__help">Gebruik placeholders zoals ${escapeHtml(String(value).match(/\{.+?\}/g)?.join(", ") || "")} precies zoals ze hier staan.</span>`
+          : ""
+      }
+    </label>
+  `;
+}
+
+function renderSiteTextEditor() {
+  return `
+    <form class="local-editor" data-site-text-form>
+      <div class="local-editor__intro">
+        <div>
+          <strong>${escapeHtml(getSiteText("siteEditorTitle"))}</strong>
+          <p>${escapeHtml(getSiteText("siteEditorDescription"))}</p>
+        </div>
+        <div class="local-editor__actions">
+          <button type="button" class="button button--secondary" data-action="reset-site-texts">
+            ${escapeHtml(getSiteText("siteEditorResetLabel"))}
+          </button>
+          <button type="button" class="button" data-action="save-site-texts">
+            ${escapeHtml(getSiteText("siteEditorSaveLabel"))}
+          </button>
+        </div>
+      </div>
+
+      ${SITE_TEXT_EDITOR_GROUPS.map((group, index) =>
+        renderLocalEditorSection(
+          getSiteText(group.titleKey),
+          getSiteText(group.descriptionKey),
+          `<div class="local-editor__grid">${group.fields.map((fieldKey) => renderSiteTextEditorField(fieldKey)).join("")}</div>`,
+          { open: index === 0, meta: `${group.fields.length} velden` }
+        )
+      ).join("")}
+    </form>
   `;
 }
 
@@ -8430,56 +8829,57 @@ function renderLocalManageView() {
       <div class="local-manage">
         <div class="local-manage__head">
           <div>
-            <strong>Beheer opdrachten</strong>
-            <p>Werk hier lokaal door alle opdrachten heen. Je kunt zoeken, dupliceren, lokaal verbergen, terugzetten en wijzigingen klaarzetten voor live.</p>
+            <strong>${escapeHtml(getSiteText("manageTitle"))}</strong>
+            <p>${escapeHtml(getSiteText("manageDescription"))}</p>
           </div>
           <div class="local-editor__actions">
             <label class="button button--secondary local-manage__upload">
-              Importeer live-bestand
+              ${escapeHtml(getSiteText("manageImportLabel"))}
               <input type="file" accept="application/json,.json" data-live-import-input />
             </label>
             <button type="button" class="button button--secondary" data-action="reset-manage-filters">
-              Wis beheerfilters
+              ${escapeHtml(getSiteText("manageResetFiltersLabel"))}
             </button>
             <button type="button" class="button" data-action="export-local-custom-tasks">
-              Zet live klaar
+              ${escapeHtml(getSiteText("publishButtonLabel"))}
             </button>
           </div>
         </div>
 
         ${renderLocalChangeFeedback()}
         ${renderLocalChangeOverview()}
+        ${renderSiteTextEditor()}
 
         <section class="local-manage__filters" aria-label="Beheerfilters">
           <label class="local-editor__field">
-            <span class="local-editor__label">Zoek in beheer</span>
-            <input type="text" value="${escapeHtml(state.manageSearch)}" placeholder="Zoek op titel, route of vak" data-manage-search />
+            <span class="local-editor__label">${escapeHtml(getSiteText("manageSearchLabel"))}</span>
+            <input type="text" value="${escapeHtml(state.manageSearch)}" placeholder="${escapeHtml(getSiteText("manageSearchPlaceholder"))}" data-manage-search />
           </label>
           <label class="local-editor__field">
-            <span class="local-editor__label">Status</span>
+            <span class="local-editor__label">${escapeHtml(getSiteText("manageStatusLabel"))}</span>
             <select data-manage-filter="status">
-              <option value="all" ${state.manageStatus === "all" ? "selected" : ""}>Alles</option>
-              <option value="changed" ${state.manageStatus === "changed" ? "selected" : ""}>Aangepast</option>
-              <option value="new" ${state.manageStatus === "new" ? "selected" : ""}>Nieuw</option>
-              <option value="deleted" ${state.manageStatus === "deleted" ? "selected" : ""}>Verwijderd</option>
+              <option value="all" ${state.manageStatus === "all" ? "selected" : ""}>${escapeHtml(getSiteText("manageStatusAll"))}</option>
+              <option value="changed" ${state.manageStatus === "changed" ? "selected" : ""}>${escapeHtml(getSiteText("manageStatusChanged"))}</option>
+              <option value="new" ${state.manageStatus === "new" ? "selected" : ""}>${escapeHtml(getSiteText("manageStatusNew"))}</option>
+              <option value="deleted" ${state.manageStatus === "deleted" ? "selected" : ""}>${escapeHtml(getSiteText("manageStatusDeleted"))}</option>
             </select>
           </label>
           <label class="local-editor__field">
-            <span class="local-editor__label">Bouw</span>
+            <span class="local-editor__label">${escapeHtml(getSiteText("manageGroupLabel"))}</span>
             <select data-manage-filter="group">
-              ${renderManageFilterOptions(groups, state.manageGroupId, "Alle bouwen")}
+              ${renderManageFilterOptions(groups, state.manageGroupId, getSiteText("manageGroupAll"))}
             </select>
           </label>
           <label class="local-editor__field">
-            <span class="local-editor__label">Vak</span>
+            <span class="local-editor__label">${escapeHtml(getSiteText("manageSubjectLabel"))}</span>
             <select data-manage-filter="subject">
-              ${renderManageFilterOptions(getAllSubjectOptions(), state.manageSubjectId, "Alle vakken")}
+              ${renderManageFilterOptions(getAllSubjectOptions(), state.manageSubjectId, getSiteText("manageSubjectAll"))}
             </select>
           </label>
           <label class="local-editor__field">
-            <span class="local-editor__label">Lesmoment</span>
+            <span class="local-editor__label">${escapeHtml(getSiteText("manageMomentLabel"))}</span>
             <select data-manage-filter="moment">
-              ${renderManageFilterOptions(getAllMomentOptions(), state.manageMomentId, "Alle lesmomenten")}
+              ${renderManageFilterOptions(getAllMomentOptions(), state.manageMomentId, getSiteText("manageMomentAll"))}
             </select>
           </label>
         </section>
@@ -8490,15 +8890,15 @@ function renderLocalManageView() {
               <section class="local-manage__section">
                 <div class="local-manage__section-head">
                   <div>
-                    <strong>Actieve opdrachten</strong>
-                    <p>${activeTasks.length} zichtbaar in deze beheerfilter.</p>
+                    <strong>${escapeHtml(getSiteText("manageActiveTitle"))}</strong>
+                    <p>${escapeHtml(getSiteText("manageActiveDescription", { count: activeTasks.length }))}</p>
                   </div>
                 </div>
                 <div class="local-manage__list">
                   ${
                     activeTasks.length
                       ? activeTasks.map((task) => renderManageTaskCard(task)).join("")
-                      : `<div class="empty-state">Geen actieve opdrachten binnen deze beheerfilters.</div>`
+                      : `<div class="empty-state">${escapeHtml(getSiteText("manageActiveEmpty"))}</div>`
                   }
                 </div>
               </section>
@@ -8512,15 +8912,15 @@ function renderLocalManageView() {
               <section class="local-manage__section">
                 <div class="local-manage__section-head">
                   <div>
-                    <strong>Verwijderd</strong>
-                    <p>${deletedTasks.length} opdrachten staan lokaal op verwijderd.</p>
+                    <strong>${escapeHtml(getSiteText("manageDeletedTitle"))}</strong>
+                    <p>${escapeHtml(getSiteText("manageDeletedDescription", { count: deletedTasks.length }))}</p>
                   </div>
                 </div>
                 <div class="local-manage__list">
                   ${
                     deletedTasks.length
                       ? deletedTasks.map((entry) => renderManageDeletedCard(entry)).join("")
-                      : `<div class="empty-state">Er staan nog geen verwijderde opdrachten klaar.</div>`
+                      : `<div class="empty-state">${escapeHtml(getSiteText("manageDeletedEmpty"))}</div>`
                   }
                 </div>
               </section>
@@ -9241,6 +9641,60 @@ function restoreDeletedTask(taskKey) {
   };
   state.detailView = "manage";
   return true;
+}
+
+function buildSiteTextOverridesFromForm(form) {
+  const nextOverrides = {};
+
+  SITE_TEXT_EDITOR_GROUPS.forEach((group) => {
+    group.fields.forEach((fieldKey) => {
+      const field = form.elements.namedItem(fieldKey);
+
+      if (!field) {
+        return;
+      }
+
+      const value = String(field.value || "").trim();
+      const defaultValue = SITE_TEXT_DEFAULTS[fieldKey] ?? "";
+      const publishedValue = publishedSiteTextOverrides[fieldKey];
+
+      if (value && value !== defaultValue) {
+        nextOverrides[fieldKey] = value;
+      } else if (publishedValue && value !== publishedValue) {
+        nextOverrides[fieldKey] = value;
+      }
+    });
+  });
+
+  return nextOverrides;
+}
+
+function saveSiteTextEdits(form) {
+  localSiteTextOverrides = buildSiteTextOverridesFromForm(form);
+  const persisted = persistLocalSiteTextOverrides();
+
+  localChangeFeedback = {
+    tone: persisted ? "success" : "error",
+    text: persisted
+      ? "De vaste site-teksten zijn lokaal opgeslagen."
+      : "Opslaan van de vaste site-teksten lukte niet."
+  };
+
+  return persisted;
+}
+
+function resetSiteTextEdits() {
+  localSiteTextOverrides = {};
+  const persisted = persistLocalSiteTextOverrides();
+
+  localChangeFeedback = {
+    tone: persisted ? "info" : "error",
+    text: persisted
+      ? "De lokale aanpassingen aan de vaste site-teksten zijn verwijderd."
+      : "Resetten van de vaste site-teksten lukte niet."
+  };
+
+  return persisted;
 }
 
 function saveLocalTaskEdit(task, form) {
