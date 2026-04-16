@@ -3689,6 +3689,7 @@ function materializeTask(group, subject, moment, blueprint) {
     teacherTip: readGroupValue(editableBlueprint.teacherTip, group.id),
     visual: editableBlueprint.visual,
     visualHint: readGroupValue(editableBlueprint.visualHint, group.id),
+    activityArt: editableBlueprint.activityArt || "",
     isLocalCustom: Boolean(editableBlueprint.isLocalCustom),
     usesCards,
     cardPack,
@@ -3954,6 +3955,7 @@ function buildOverviewSheets(group, subject, moment, blueprint, title, printProf
     subjectId: subject.id,
     momentId: moment.id,
     visual: blueprint.visual,
+    activityArt: blueprint.activityArt || "",
     usesCards: printProfile.enabled
   };
 
@@ -7650,13 +7652,13 @@ async function handleTaskDetailClick(event) {
 
   if (clearArtButton) {
     const targetPath = clearArtButton.dataset.artTargetPath;
-    const editorForm = clearArtButton.closest("form[data-local-editor-form]");
+    const editorForm = clearArtButton.closest("form[data-local-editor-form], form[data-local-create-form]");
 
     if (!targetPath || !editorForm) {
       return;
     }
 
-    const artField = findElementByDataPath(editorForm, "data-render-edit-path", targetPath);
+    const artField = findArtValueField(editorForm, targetPath);
     const preview = findElementByDataPath(editorForm, "data-art-preview-path", targetPath);
     const upload = findElementByDataPath(editorForm, "data-art-upload-path", targetPath);
 
@@ -7757,7 +7759,7 @@ async function handleTaskDetailChange(event) {
   const [file] = upload.files;
   const targetPath = upload.dataset.artUploadPath;
   const altText = upload.dataset.artAlt || "Printafbeelding";
-  const editorForm = upload.closest("form[data-local-editor-form]");
+  const editorForm = upload.closest("form[data-local-editor-form], form[data-local-create-form]");
 
   if (!file || !targetPath || !editorForm) {
     return;
@@ -7766,8 +7768,9 @@ async function handleTaskDetailChange(event) {
   const reader = new FileReader();
 
   reader.addEventListener("load", () => {
-    const imageMarkup = buildLocalArtMarkup(String(reader.result || ""), altText);
-    const artField = findElementByDataPath(editorForm, "data-render-edit-path", targetPath);
+    const buildArtMarkup = targetPath === "activityArt" ? buildLocalActivityArtMarkup : buildLocalArtMarkup;
+    const imageMarkup = buildArtMarkup(String(reader.result || ""), altText);
+    const artField = findArtValueField(editorForm, targetPath);
     const preview = findElementByDataPath(editorForm, "data-art-preview-path", targetPath);
 
     if (artField) {
@@ -7797,6 +7800,13 @@ function handleTaskDetailInput(event) {
 function findElementByDataPath(container, attributeName, expectedValue) {
   return Array.from(container.querySelectorAll(`[${attributeName}]`)).find(
     (element) => element.getAttribute(attributeName) === expectedValue
+  );
+}
+
+function findArtValueField(container, targetPath) {
+  return (
+    findElementByDataPath(container, "data-render-edit-path", targetPath) ||
+    Array.from(container.querySelectorAll("[name]")).find((element) => element.getAttribute("name") === targetPath)
   );
 }
 
@@ -9025,6 +9035,7 @@ function buildLocalCreateDefaults() {
     differentiation: "",
     teacherTip: "",
     visualHint: "",
+    activityArt: "",
     keywords: defaultKeywords.join("\n"),
     visual: defaultVisual,
     hasPrint: false
@@ -9044,6 +9055,7 @@ function buildLocalCreateDraftFromForm(formData) {
     differentiation: String(formData.get("differentiation") || "").trim(),
     teacherTip: String(formData.get("teacherTip") || "").trim(),
     visualHint: String(formData.get("visualHint") || "").trim(),
+    activityArt: String(formData.get("activityArt") || "").trim(),
     keywords: String(formData.get("keywords") || "").trim(),
     visual: String(formData.get("visual") || "").trim(),
     hasPrint: formData.get("hasPrint") === "on"
@@ -9148,6 +9160,7 @@ function buildLocalCustomTaskBlueprintFromForm(formData) {
     differentiation: String(formData.get("differentiation") || "").trim(),
     teacherTip: String(formData.get("teacherTip") || "").trim(),
     visualHint: String(formData.get("visualHint") || "").trim(),
+    activityArt: String(formData.get("activityArt") || "").trim(),
     visual: LOCAL_CREATE_VISUAL_OPTIONS.some((option) => option.value === rawVisual)
       ? rawVisual
       : getSuggestedCustomVisual(groupId, subjectId, momentId),
@@ -9186,6 +9199,7 @@ function buildLocalCustomTaskBlueprintFromTask(task, titleSuffix = "kopie") {
     teacherTip: task.teacherTip,
     visualHint: task.visualHint,
     visual: task.visual,
+    activityArt: task.activityArt || "",
     keywords: [...(task.keywords || [])],
     isLocalCustom: true,
     printProfile: task.printProfile?.enabled ? cloneForStorage(task.printProfile) : undefined
@@ -10153,6 +10167,10 @@ function buildLocalArtMarkup(dataUrl, altText = "Printafbeelding") {
   return `<img class="card-pack-item__photo" src="${escapeAttribute(dataUrl)}" alt="${escapeAttribute(altText)}" />`;
 }
 
+function buildLocalActivityArtMarkup(dataUrl, altText = "Afbeelding bij de activiteit") {
+  return `<img class="activity-photo" src="${escapeAttribute(dataUrl)}" alt="${escapeAttribute(altText)}" />`;
+}
+
 function renderLocalEditorSection(title, description, content, options = {}) {
   if (!content) {
     return "";
@@ -10182,8 +10200,10 @@ function renderArtEditor(item, pathPrefix, index) {
   const artPath = `${pathPrefix}.${index}.art`;
   const currentArt = item.art || "";
   const preview = currentArt
-    ? `<div class="local-editor__art-preview">${currentArt}</div>`
-    : `<div class="local-editor__art-preview local-editor__art-preview--empty">Nog geen printafbeelding gekozen.</div>`;
+    ? `<div class="local-editor__art-preview" data-art-preview-path="${escapeHtml(artPath)}">${currentArt}</div>`
+    : `<div class="local-editor__art-preview local-editor__art-preview--empty" data-art-preview-path="${escapeHtml(
+        artPath
+      )}">Nog geen printafbeelding gekozen.</div>`;
 
   return `
     <div class="local-editor__field local-editor__field--list">
@@ -10207,6 +10227,50 @@ function renderArtEditor(item, pathPrefix, index) {
         currentArt
       )}</textarea>
       <span class="local-editor__help">Kies lokaal een eigen afbeelding voor dit printblad of kaartje. Die vervangt de huidige illustratie alleen op deze Mac.</span>
+    </div>
+  `;
+}
+
+function renderActivityArtEditor(currentArt, options = {}) {
+  const artPath = options.path || "activityArt";
+  const fieldName = options.fieldName || "activityArt";
+  const inputAlt = options.alt || "Afbeelding bij de activiteit";
+  const inputLabel = options.label || "Afbeelding bij de activiteit";
+  const helpText =
+    options.help ||
+    "Upload hier een eigen afbeelding voor deze activiteit. Die vervangt de standaardillustratie op deze Mac.";
+  const emptyText = options.emptyText || "Nog geen activiteitafbeelding gekozen.";
+  const preview = currentArt
+    ? `<div class="local-editor__art-preview" data-art-preview-path="${escapeHtml(artPath)}">${currentArt}</div>`
+    : `<div class="local-editor__art-preview local-editor__art-preview--empty" data-art-preview-path="${escapeHtml(artPath)}">${escapeHtml(
+        emptyText
+      )}</div>`;
+  const fieldAttributes = options.renderPath
+    ? `data-render-edit-path="${escapeHtml(options.renderPath)}" data-editor-type="textarea"`
+    : `name="${escapeHtml(fieldName)}"`;
+
+  return `
+    <div class="local-editor__field local-editor__field--list">
+      <span class="local-editor__label">${escapeHtml(inputLabel)}</span>
+      ${preview}
+      <div class="local-editor__art-actions">
+        <label class="button button--secondary local-editor__upload">
+          Kies afbeelding
+          <input
+            type="file"
+            accept="image/*"
+            data-art-upload-path="${escapeHtml(artPath)}"
+            data-art-alt="${escapeHtml(inputAlt)}"
+          />
+        </label>
+        <button type="button" class="button button--secondary" data-action="clear-art" data-art-target-path="${escapeHtml(artPath)}">
+          Verwijder afbeelding
+        </button>
+      </div>
+      <textarea class="local-editor__art-value local-editor__art-value--hidden" rows="2" ${fieldAttributes}>${escapeHtml(
+        currentArt || ""
+      )}</textarea>
+      <span class="local-editor__help">${escapeHtml(helpText)}</span>
     </div>
   `;
 }
@@ -10463,6 +10527,12 @@ function renderLocalCreateView() {
                 <span class="local-editor__help">Handig als je later ook de printkaartjes of printbladen van deze opdracht wilt aanpassen.</span>
               </label>
             </div>
+            ${renderActivityArtEditor(defaults.activityArt, {
+              fieldName: "activityArt",
+              path: "activityArt",
+              alt: defaults.title || "Afbeelding bij nieuwe activiteit",
+              help: "Upload meteen een eigen afbeelding voor deze nieuwe activiteit. Die komt op de opdrachtkaart en detailpagina."
+            })}
           `,
           { open: true, meta: routeLabel }
         )}
@@ -10478,7 +10548,15 @@ function renderLocalEditor(task) {
   const coreSection = renderLocalEditorSection(
     "Kern van de opdracht",
     "Pas hier de gewone opdrachttekst aan die op de kaart en in de uitleg terugkomt.",
-    `<div class="local-editor__grid">${LOCAL_EDIT_FIELD_CONFIG.map((field) => renderLocalEditorField(task, field)).join("")}</div>`,
+    `
+      <div class="local-editor__grid">${LOCAL_EDIT_FIELD_CONFIG.map((field) => renderLocalEditorField(task, field)).join("")}</div>
+      ${renderActivityArtEditor(task.activityArt, {
+        renderPath: "activityArt",
+        path: "activityArt",
+        alt: task.title || "Afbeelding bij activiteit",
+        help: "Upload hier een eigen afbeelding voor deze activiteit. Die vervangt de standaardillustratie op deze Mac."
+      })}
+    `,
     { open: true, meta: "Opdracht" }
   );
   const printMetaSection = task.cardPack
@@ -10817,6 +10895,10 @@ function renderPrintableText(text) {
 }
 
 function renderIllustration(task, compact) {
+  if (task.activityArt) {
+    return task.activityArt;
+  }
+
   const subject = getSubject(task.subjectId);
   const moment = getMoment(task.momentId);
   const sky = compact ? "#f4f8ff" : "#f7fbff";
