@@ -3,6 +3,7 @@ const GROUP_56 = "groep-5-6";
 const GROUP_78 = "groep-7-8";
 const GROUP_GOLDEN = "gouden-weken";
 const GROUP_ENERGIZERS = "energizers";
+const GOLDEN_SUBJECT_12 = "gouden-groep-1-2";
 const GOLDEN_SUBJECT_34 = "gouden-groep-3-4";
 const GOLDEN_SUBJECT_56 = "gouden-groep-5-6";
 const GOLDEN_SUBJECT_78 = "gouden-groep-7-8";
@@ -147,6 +148,14 @@ const energizerSubjects = [
 ];
 
 const goldenWeekSubjects = [
+  {
+    id: GOLDEN_SUBJECT_12,
+    label: "Groep 1/2",
+    marker: "1/2",
+    accent: "#55c0e8",
+    description:
+      "Kleuteractiviteiten met veel voordoen, korte rondes, eenvoudige taal en veel samen bewegen."
+  },
   {
     id: GOLDEN_SUBJECT_34,
     label: "Groep 3/4",
@@ -648,6 +657,13 @@ const subjectThemes = {
     line: "#b9e2d8",
     glow: "rgba(17, 139, 116, 0.12)",
     print: "#f4fcf9"
+  },
+  [GOLDEN_SUBJECT_12]: {
+    accent: "#55c0e8",
+    soft: "#eefbff",
+    line: "#bbe9f6",
+    glow: "rgba(85, 192, 232, 0.12)",
+    print: "#f6fcff"
   },
   [GOLDEN_SUBJECT_34]: {
     accent: "#118b74",
@@ -2980,6 +2996,73 @@ function buildSupplementalTaskBlueprints() {
 
 function buildSupplementalEnergizerBlueprints() {
   return {
+    [ENERGIZER_ACTIVE]: [
+      allGroupTask({
+        key: "dansen-in-een-hoepel-kort",
+        visual: "circle",
+        visualHint: "Leerlingen bewegen kort op muziek en zoeken daarna snel samen een hoepel op.",
+        title: "Dansen in een hoepel kort",
+        summary: "Een korte samenwerkenergizer waarbij leerlingen dansen en na het stopteken samen in een hoepel stappen.",
+        duration: "2-3 min",
+        setup: "Leg een paar hoepels of fietsbanden klaar met iets minder hoepels dan groepjes. Gebruik eventueel een kort muzieksignaal.",
+        goal: "De groep snel activeren en tegelijk direct laten samenwerken in een speelse overgang.",
+        movementFocus: "Vrij bewegen, snel reageren op stop en samen ruimte maken in een hoepel.",
+        materials: ["Hoepels of fietsbanden", "Eventueel muziek"],
+        steps: [
+          "Laat leerlingen vrij door de ruimte bewegen terwijl de muziek speelt of jij het startsein geeft.",
+          "Stop de muziek of geef het stopteken.",
+          "Iedereen zoekt snel een hoepel op en maakt ruimte voor elkaar.",
+          "Haal daarna een hoepel weg en speel nog een of twee korte rondes."
+        ],
+        differentiation: "Werk met grotere groepjes in een ruime zaal of laat de klas in tweetallen starten als dit de eerste keer is.",
+        teacherTip: "Houd de rondes kort; zo blijft dit echt een energizer en geen lang spelmoment.",
+        keywords: ["energizer", "lesovergang", "activerend", "hoepel", "samenwerken", "gouden weken bundel"]
+      })
+    ],
+    [ENERGIZER_FOCUS]: [
+      allGroupTask({
+        key: "gooi-de-bal-naar-kort",
+        visual: "circle",
+        visualHint: "De klas staat in een kring en gooit een zachte bal alleen naar iemand die echt klaarstaat en oogcontact maakt.",
+        title: "Gooi de bal naar kort",
+        summary: "Een focussende energizer waarbij leerlingen oogcontact maken en een zachte bal bewust naar elkaar gooien.",
+        duration: "2-3 min",
+        setup: "Laat leerlingen in een kring staan en gebruik een zachte bal.",
+        goal: "De aandacht bundelen en contact maken via kijken, klaarstaan en bewust gooien.",
+        movementFocus: "Oogcontact maken, gericht gooien en meteen opnieuw aansluiten in de kring.",
+        materials: ["Zachte bal"],
+        steps: [
+          "Laat de klas in een kring staan.",
+          "De leerling met de bal maakt eerst oogcontact met iemand anders in de kring.",
+          "Pas als die ander klaarstaat, wordt de bal gegooid.",
+          "Speel eerst met één bal en voeg eventueel een tweede bal toe als het rustig loopt."
+        ],
+        differentiation: "Houd het bij één bal voor jongere of onrustige groepen en voeg pas later extra tempo toe.",
+        teacherTip: "Benadruk dat veilig en bewust gooien belangrijker is dan snelheid; dan blijft de focus echt op afstemmen liggen.",
+        keywords: ["energizer", "lesovergang", "focussend", "bal", "oogcontact", "gouden weken bundel"]
+      }),
+      allGroupTask({
+        key: "spiegelen-kort",
+        visual: "circle",
+        visualHint: "In tweetallen maakt één leerling rustige bewegingen en de ander spiegelt die zo precies mogelijk.",
+        title: "Spiegelen kort",
+        summary: "Tweetallen stemmen zich kort op elkaar af door bewegingen precies te spiegelen.",
+        duration: "1-2 min",
+        setup: "Laat leerlingen snel een maatje zoeken en tegenover elkaar gaan staan.",
+        goal: "De aandacht richten op een ander en de klas in een korte overgang rustig gelijk maken.",
+        movementFocus: "Kijken, volgen en kleine bewegingen gecontroleerd nadoen.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Laat tweetallen tegenover elkaar staan.",
+          "Leerling A beweegt langzaam met armen, schouders of bovenlichaam.",
+          "Leerling B spiegelt zo precies mogelijk.",
+          "Wissel na ongeveer 20 seconden en sluit af met een gezamenlijke freeze."
+        ],
+        differentiation: "Gebruik eerst alleen armbewegingen en voeg later grotere bewegingen toe als de groep dit aankan.",
+        teacherTip: "Rustige bewegingen werken hier beter dan snelle; dan moeten leerlingen echt kijken en afstemmen.",
+        keywords: ["energizer", "lesovergang", "focussend", "spiegelen", "tweetallen", "gouden weken bundel"]
+      })
+    ],
     [ENERGIZER_CALM]: [
       allGroupTask({
         key: "steen-papier-schaar-stretch",
@@ -3050,6 +3133,90 @@ function buildSupplementalEnergizerBlueprints() {
 
 function buildSupplementalGoldenWeekBlueprints() {
   return {
+    [GOLDEN_SUBJECT_12]: {
+      [GOLDEN_MOMENT_KENNIS]: [
+        goldenWeekTask({
+          key: "gooi-de-bal-naar-kleuters",
+          visual: "circle",
+          visualHint: "Kleuters staan in een kring en gooien een zachte bal pas als de ander kijkt en klaar is om te vangen.",
+          title: "Gooi de bal naar",
+          summary: "Kleuters oefenen namen, oogcontact en rustig samenspelen met een zachte bal in de kring.",
+          duration: "8-10 min",
+          setup: "Laat de kinderen in een kring staan of zitten en gebruik een zachte bal.",
+          goal: "Contact maken, naar elkaar kijken en veilig om de beurt iets naar een ander sturen.",
+          movementFocus: "Kijken, mikken, gooien en vangen in een rustig kringritme.",
+          materials: ["Zachte bal"],
+          steps: [
+            "Ga met de groep in een kring staan.",
+            "De leerling met de bal kijkt eerst naar een kind dat klaarstaat.",
+            "Noem eventueel eerst de naam van dat kind en gooi daarna de bal rustig toe.",
+            "Speel een paar rondes en bespreek kort wat helpt om goed klaar te staan."
+          ],
+          questions: [
+            "Naar wie wil jij gooien?",
+            "Wie keek goed naar jou?",
+            "Wat helpt om de bal fijn te vangen?"
+          ],
+          differentiation: "Laat jongere kleuters eerst rollen in plaats van gooien als vangen nog spannend is.",
+          teacherTip: "Gebruik eerst vaste namenrondes voordat je het tempo iets opvoert; dat geeft veel rust en veiligheid.",
+          keywords: ["groep 1/2", "kleuters", "bal", "oogcontact", "kennismaken", "gouden weken bundel"]
+        })
+      ],
+      [GOLDEN_MOMENT_GROUP]: [
+        goldenWeekTask({
+          key: "spiegelen-kleuters",
+          visual: "circle",
+          visualHint: "Kleuters staan in tweetallen tegenover elkaar en doen rustige bewegingen van hun maatje na.",
+          title: "Spiegelen",
+          summary: "Kleuters leren kijken naar een ander en samen bewegen door korte spiegelbewegingen in tweetallen.",
+          duration: "8-10 min",
+          setup: "Maak tweetallen en zorg dat kinderen genoeg ruimte hebben om elkaar goed te zien.",
+          goal: "Afstemmen, kijken en rustig contact maken met een maatje.",
+          movementFocus: "Langzame bewegingen volgen en nadoen zonder de ander kwijt te raken.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat de kinderen in tweetallen tegenover elkaar staan.",
+            "Kind A maakt een rustige beweging met armen, handen of schouders.",
+            "Kind B speelt de spiegel en doet die beweging precies na.",
+            "Wissel daarna van rol en herhaal met een paar nieuwe bewegingen."
+          ],
+          questions: [
+            "Wie begon net?",
+            "Welke beweging kon jij goed nadoen?",
+            "Wat helpt om goed te spiegelen?"
+          ],
+          differentiation: "Laat kleuters eerst alleen bovenlichaambewegingen maken en pas later ook een stapje opzij of omhoog.",
+          teacherTip: "Doe zelf eerst één voorbeeldtweetal voor; kleuters stappen dan veel sneller in.",
+          keywords: ["groep 1/2", "kleuters", "spiegelen", "samenwerken", "gouden weken bundel"]
+        }),
+        goldenWeekTask({
+          key: "dansen-in-een-hoepel-kleuters",
+          visual: "circle",
+          visualHint: "Kleuters dansen vrij door de ruimte en zoeken daarna samen een hoepel op wanneer de muziek stopt.",
+          title: "Dansen in een hoepel",
+          summary: "Kleuters oefenen samen ruimte maken en niemand buitensluiten wanneer er minder hoepels overblijven.",
+          duration: "8-10 min",
+          setup: "Leg hoepels of fietsbanden klaar en gebruik eventueel muziek.",
+          goal: "Samenspelen, samenwerken en merken dat iedereen mee moet kunnen blijven doen.",
+          movementFocus: "Vrij bewegen, snel stoppen en samen in een kleine ruimte passen.",
+          materials: ["Hoepels of fietsbanden", "Eventueel muziek"],
+          steps: [
+            "Laat de kinderen vrij bewegen als de muziek speelt.",
+            "Stop de muziek en laat iedereen een hoepel zoeken.",
+            "Kinderen maken samen ruimte zodat iedereen in een hoepel past.",
+            "Haal daarna een hoepel weg en speel opnieuw."
+          ],
+          questions: [
+            "Wie helpt ruimte maken?",
+            "Hoe zorg je dat iedereen erbij past?",
+            "Wat deed jullie groepje goed?"
+          ],
+          differentiation: "Begin met veel hoepels en haal pas later één hoepel per ronde weg.",
+          teacherTip: "Benadruk steeds dat niemand af is; zo blijft de focus op samen oplossen in plaats van winnen.",
+          keywords: ["groep 1/2", "kleuters", "hoepel", "samenspelen", "gouden weken bundel"]
+        })
+      ]
+    },
     [GOLDEN_SUBJECT_34]: {
       [GOLDEN_MOMENT_KENNIS]: [
         goldenWeekTask({
@@ -3114,6 +3281,58 @@ function buildSupplementalGoldenWeekBlueprints() {
           differentiation: "Werk eerst met heel duidelijke keuzes en voeg later een open vraag toe.",
           teacherTip: "Gebruik herkenbare keuzes uit de schooldag of vrije tijd; dan komt het praten sneller op gang.",
           keywords: ["groep 3/4", "hoeken", "hobby", "kleur", "kennismaken", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "krantentikkertje-bundel",
+          visual: "circle",
+          visualHint: "In een kring noemen leerlingen elkaars naam terwijl de tikker met een opgerolde krant probeert op tijd te tikken.",
+          title: "Krantentikkertje",
+          summary: "Een naamspel waarmee leerlingen in beweging elkaars namen snel leren herkennen en noemen.",
+          duration: "10 min",
+          setup: "Zet stoelen in een kring en gebruik een opgerolde krant of zachte tikrol.",
+          goal: "Elkaars namen leren kennen en snel op elkaar leren reageren.",
+          movementFocus: "Luisteren naar namen, reageren in de kring en wisselen van rol in het midden.",
+          materials: ["Opgerolde krant of zachte tikrol", "Stoelen in een kring"],
+          steps: [
+            "Laat de groep in een kring zitten en wijs één leerling aan voor het midden.",
+            "Een leerling uit de kring noemt de naam van een klasgenoot.",
+            "De leerling in het midden probeert die klasgenoot te tikken voordat er een nieuwe naam wordt genoemd.",
+            "Wordt iemand getikt, dan wisselt die leerling met de tikker in het midden."
+          ],
+          questions: [
+            "Van wie weet jij de naam al goed?",
+            "Welke namen zijn nog lastig?",
+            "Wat helpt om een naam snel te onthouden?"
+          ],
+          differentiation: "Speel later ook met hobby's of huisdieren als de namen al beter bekend zijn.",
+          teacherTip: "Gebruik een zachte, lichte tikrol en spreek af dat tikken altijd rustig en veilig gebeurt.",
+          keywords: ["groep 3/4", "naam", "kring", "kennismaken", "gouden weken bundel"]
+        }),
+        goldenWeekTask({
+          key: "wat-mij-bijzonder-maakt-bundel",
+          visual: "circle",
+          visualHint: "Leerlingen delen om de beurt iets over zichzelf, waarna iedereen die dit herkent van plek wisselt.",
+          title: "Wat mij bijzonder maakt",
+          summary: "Leerlingen leren elkaar beter kennen door korte uitspraken over zichzelf en herkenning in de groep.",
+          duration: "10 min",
+          setup: "Zet stoelen in een kring met één stoel te weinig.",
+          goal: "Meer over klasgenoten ontdekken en merken welke dingen leerlingen met elkaar delen.",
+          movementFocus: "Luisteren, herkennen en van plek wisselen als een uitspraak ook bij jou past.",
+          materials: ["Stoelen in een kring"],
+          steps: [
+            "Laat leerlingen in een kring zitten met één leerling in het midden.",
+            "De leerling in het midden zegt iets over zichzelf, zoals: ik hou van voetballen of ik heb een broertje.",
+            "Iedereen voor wie dat ook klopt, wisselt van plek.",
+            "De leerling zonder stoel gaat daarna in het midden staan en zegt de volgende zin."
+          ],
+          questions: [
+            "Wat heb jij gehoord dat je nog niet wist?",
+            "Welke uitspraak paste bij veel kinderen?",
+            "Wat hebben jullie samen ontdekt?"
+          ],
+          differentiation: "Gebruik eerst heel concrete onderwerpen zoals hobby's, huisdieren of lievelingseten.",
+          teacherTip: "Laat leerlingen eerst een paar voorbeeldzinnen horen; dan komen zij sneller zelf op ideeën.",
+          keywords: ["groep 3/4", "overeenkomsten", "kring", "kennismaken", "gouden weken bundel"]
         })
       ],
       [GOLDEN_MOMENT_GROUP]: [
@@ -3179,6 +3398,32 @@ function buildSupplementalGoldenWeekBlueprints() {
           differentiation: "Begin met twee of drie heel duidelijke overeenkomsten en maak ze later subtieler.",
           teacherTip: "Vraag groepjes om hardop in wij-vorm te spreken; dat versterkt het groepsgevoel.",
           keywords: ["groep 3/4", "overeenkomsten", "groepje", "groepsvorming", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "lijmfiguren-bundel",
+          visual: "mission",
+          visualHint: "Tweetallen haken in en proberen samen rustig te gaan zitten en weer op te staan zonder los te laten.",
+          title: "Lijmfiguren",
+          summary: "Tweetallen oefenen samenwerken, tempo voelen en elkaar helpen bij een gezamenlijke beweegopdracht.",
+          duration: "8-10 min",
+          setup: "Maak tweetallen en zorg voor voldoende vrije ruimte.",
+          goal: "Samenwerken, afstemmen en ervaren dat je een opdracht alleen samen goed kunt oplossen.",
+          movementFocus: "Met elkaar verbonden blijven en samen gecontroleerd zitten en staan.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Maak tweetallen en laat die met de rug tegen elkaar aan staan.",
+            "Laat leerlingen de armen in elkaar haken.",
+            "De tweetallen proberen nu samen rustig te gaan zitten.",
+            "Lukt dat, dan proberen ze samen weer op te staan zonder los te laten."
+          ],
+          questions: [
+            "Wat hielp om samen te blijven?",
+            "Wanneer werkte het goed?",
+            "Hoe hielp jij jouw maatje?"
+          ],
+          differentiation: "Laat sterke tweetallen later proberen om dit ook in drietallen uit te voeren.",
+          teacherTip: "Benadruk rustig bewegen; snelheid maakt deze opdracht meestal juist moeilijker.",
+          keywords: ["groep 3/4", "tweetallen", "samenwerken", "groepsvorming", "gouden weken bundel"]
         })
       ]
     },
@@ -3246,6 +3491,33 @@ function buildSupplementalGoldenWeekBlueprints() {
           differentiation: "Speel eerst met makkelijke uitspraken en voeg later school- of samenwerkvragen toe.",
           teacherTip: "Laat leerlingen niet alleen bewegen, maar ook even rondkijken; dan zien ze de herkenning in de groep.",
           keywords: ["groep 5/6", "move if", "overeenkomsten", "kennismaken", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "zoek-iemand-die-bundel",
+          visual: "mission",
+          visualHint: "Leerlingen lopen rond met een zoekblad en vullen vakjes door klasgenoten te vinden bij herkenbare zomervakantie-, hobby- of schoolvragen.",
+          title: "Zoek iemand die",
+          summary: "Leerlingen spreken veel klasgenoten aan en ontdekken via een zoekblad snel overeenkomsten en verschillen in de groep.",
+          duration: "12-15 min",
+          setup: "Maak of print een eenvoudig zoekblad met herkenbare vragen en geef ieder kind een pen of potlood.",
+          goal: "Kennismaken, veel korte contactmomenten oefenen en meteen aandacht geven aan afspraken tijdens een spelvorm.",
+          movementFocus: "Rondlopen, iemand aanspreken, kort doorvragen en daarna weer door naar een nieuw vakje.",
+          materials: ["Zoekblad", "Pen of potlood"],
+          steps: [
+            "Geef ieder kind een zoekblad met verschillende vakjes.",
+            "Leerlingen lopen rond en zoeken een klasgenoot bij wie een vakje past.",
+            "Als een vakje past, mag die klasgenoot daar de naam invullen of laten noteren.",
+            "Na een paar minuten bespreek je welke vakjes makkelijk of lastig te vullen waren."
+          ],
+          questions: [
+            "Wie is naar de film geweest?",
+            "Wie heeft een huisdier?",
+            "Wie houdt van dezelfde hobby als jij?",
+            "Wie ontdekte iets nieuws over een klasgenoot?"
+          ],
+          differentiation: "Werk met minder vakjes voor een snellere ronde of voeg voor sterke groepen een doorvraag per vakje toe.",
+          teacherTip: "Bespreek vooraf ook gedragsregels, zoals rustig aanspreken en niet steeds dezelfde klasgenoot kiezen.",
+          keywords: ["groep 5/6", "zoek iemand die", "kennismaken", "zoekblad", "gouden weken bundel"]
         })
       ],
       [GOLDEN_MOMENT_GROUP]: [
@@ -3311,6 +3583,58 @@ function buildSupplementalGoldenWeekBlueprints() {
           differentiation: "Laat sommige groepjes zonder praten werken voor extra uitdaging.",
           teacherTip: "Kies vormen die niet te moeilijk zijn; de kracht zit in het samenwerken, niet in een perfecte uitkomst.",
           keywords: ["groep 5/6", "samenwerken", "vorm", "groepjes", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "levende-getallenlijn-bundel",
+          visual: "line",
+          visualHint: "Leerlingen vormen samen een lijn op basis van een afspraak, zoals lengte, leeftijd of afstand, en moeten daarbij goed overleggen.",
+          title: "Levende getallenlijn",
+          summary: "Leerlingen maken zonder veel materiaal een levende volgordelijn en oefenen zo afstemmen en overleggen.",
+          duration: "10 min",
+          setup: "Maak een lange lijn of vrije ruimte in het lokaal, de gang of op het plein.",
+          goal: "Samenwerken, ordenen en elkaars informatie gebruiken om tot een goede volgorde te komen.",
+          movementFocus: "Een plek in een lijn zoeken, vergelijken en daarna eventueel bijstellen.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Geef de groep een criterium, zoals lengte, leeftijd of afstand van huis tot school.",
+            "Laat leerlingen zonder veel hulp van jou een lijn vormen in de juiste volgorde.",
+            "Controleer daarna samen of de volgorde klopt.",
+            "Speel nog een ronde met een nieuw criterium."
+          ],
+          questions: [
+            "Waar denk jij te moeten staan?",
+            "Met wie moet jij even vergelijken?",
+            "Hoe wisten jullie dat de lijn klopte?"
+          ],
+          differentiation: "Laat leerlingen later een criterium kiezen waarbij overleg echt nodig is, zoals afstand of maand van geboorte.",
+          teacherTip: "Laat de groep eerst zelf puzzelen; de leerwinst zit juist in het overleggen en corrigeren.",
+          keywords: ["groep 5/6", "lijn", "overleggen", "samenwerken", "gouden weken bundel"]
+        }),
+        goldenWeekTask({
+          key: "cijfers-leggen-bundel",
+          visual: "mission",
+          visualHint: "Groepjes gebruiken hun lichaam om samen een letter, cijfer of uitkomst neer te leggen.",
+          title: "Cijfers leggen",
+          summary: "Leerlingen ervaren in kleine groepen hoe plannen, rollen verdelen en samen iets vormen werkt.",
+          duration: "10 min",
+          setup: "Maak twee of meer groepjes en kies een paar cijfers, letters of eenvoudige uitkomsten.",
+          goal: "Samenwerken en zichtbaar maken welke rollen en aanpakken in een groep ontstaan.",
+          movementFocus: "Samen positie kiezen en met het lichaam een vorm of cijfer neerleggen.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Verdeel de klas in kleine groepen.",
+            "Geef iedere groep een opdracht, zoals maak de letter A, het cijfer 8 of het antwoord op 25 gedeeld door 5.",
+            "Laat de groepjes overleggen en daarna de vorm neerleggen.",
+            "Bespreek kort welke groep snel samenwerkte en wat daarbij hielp."
+          ],
+          questions: [
+            "Wie pakt welke plek in de vorm?",
+            "Wat hielp om snel klaar te zijn?",
+            "Welke afspraak werkte goed in jullie groep?"
+          ],
+          differentiation: "Begin met eenvoudige letters en cijfers en voeg later somuitkomsten of woorden toe.",
+          teacherTip: "Laat soms één groep kijken naar de andere; dat maakt rollen en samenwerking extra zichtbaar.",
+          keywords: ["groep 5/6", "cijfers leggen", "vormen", "samenwerken", "gouden weken bundel"]
         })
       ]
     },
@@ -3443,6 +3767,58 @@ function buildSupplementalGoldenWeekBlueprints() {
           differentiation: "Gebruik eerst luchtige samenwerkvragen en voeg later vragen toe over rollen, feedback of vertrouwen.",
           teacherTip: "Houd de speelmomenten heel kort; het gesprek erna maakt deze opdracht waardevol voor groepsvorming.",
           keywords: ["groep 7/8", "roshambo", "samenwerken", "groepsvorming", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "chinees-boksen-bundel",
+          visual: "circle",
+          visualHint: "Tweetallen staan tegenover elkaar en proberen met gecontroleerde duw- en trekbewegingen de ander uit balans te brengen.",
+          title: "Chinees boksen",
+          summary: "Leerlingen oefenen contact, balans en rekening houden met elkaar in een duidelijke partneropdracht.",
+          duration: "10 min",
+          setup: "Maak tweetallen en zorg voor voldoende ruimte tussen de koppels.",
+          goal: "Aandacht voor de ander, zelfcontrole en samenwerken binnen een speelse uitdaging versterken.",
+          movementFocus: "Stevig staan, reageren op de ander en gecontroleerd duwen of loslaten zonder wild te bewegen.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat tweetallen tegenover elkaar staan met beide handen tegen elkaar.",
+            "Leerlingen proberen de ander uit evenwicht te brengen door op het juiste moment licht te duwen of de handen weg te trekken.",
+            "Wissel na korte rondes van maatje of laat leerlingen nog een tweede ronde spelen.",
+            "Bespreek daarna wat hielp om stevig en eerlijk te blijven spelen."
+          ],
+          questions: [
+            "Wat hielp om in balans te blijven?",
+            "Hoe merkte je dat iemand rekening met je hield?",
+            "Wat maakte dit spel veilig?"
+          ],
+          differentiation: "Werk eerst heel rustig en voeg pas later meer tempo toe als de groep dit veilig aankan.",
+          teacherTip: "Zet veiligheid voorop: open handen, rustige kracht en meteen stoppen als een tweetal te wild wordt.",
+          keywords: ["groep 7/8", "chinees boksen", "balans", "samenwerken", "gouden weken bundel"]
+        }),
+        goldenWeekTask({
+          key: "bonus-keuzespel-bundel",
+          visual: "mission",
+          visualHint: "Leerlingen dagen elkaar uit met korte spelletjes bij verschillende materialen en wisselen steeds weer van maatje.",
+          title: "Bonus: keuzespel",
+          summary: "Een vrije maar gestructureerde groepsvorm waarin leerlingen korte challenges kiezen, uitvoeren en sportief afsluiten.",
+          duration: "15-20 min",
+          setup: "Leg verschillende kleine materialen klaar, zoals kaarten, dobbelstenen, bekers, touwtjes, lego of zachte ballen.",
+          goal: "Contact maken, sportief spelen en leerlingen zelfstandig korte spelafspraken laten maken.",
+          movementFocus: "Steeds een nieuw maatje zoeken, een korte challenge doen en daarna weer doorschakelen.",
+          materials: ["Kleine spelmaterialen zoals kaarten, dobbelstenen, bekers, touwtjes of zachte ballen"],
+          steps: [
+            "Leg verschillende kleine materialen klaar door het lokaal of speellokaal.",
+            "Leerlingen dagen een klasgenoot uit voor een korte challenge bij één materiaal.",
+            "De uitgedaagde kiest het spel en na afloop bedanken beide leerlingen elkaar voor het spelen.",
+            "Daarna zoeken zij allebei een nieuw maatje en een nieuwe korte challenge."
+          ],
+          questions: [
+            "Welke challenge werkte goed?",
+            "Hoe hielden jullie het spel eerlijk en kort?",
+            "Met wie speelde jij nog niet?"
+          ],
+          differentiation: "Werk met een vaste tijdslimiet per challenge of benoem vooraf 3 veilige voorbeeldspellen per materiaal.",
+          teacherTip: "Maak vooraf heel duidelijk dat veiligheid en sportiviteit belangrijker zijn dan winnen; dat bepaalt het succes van deze werkvorm.",
+          keywords: ["groep 7/8", "challenge", "keuzespel", "groepsvorming", "gouden weken bundel"]
         })
       ]
     }
@@ -3928,6 +4304,220 @@ function buildStandaloneEnergizerBlueprints() {
 
 function buildStandaloneGoldenWeekBlueprints() {
   return {
+    [GOLDEN_SUBJECT_12]: {
+      [GOLDEN_MOMENT_KENNIS]: [
+        goldenWeekTask({
+          key: "hallo-en-zwaai-kring",
+          visual: "circle",
+          visualHint: "Kleuters staan in een kring, zeggen hun naam en kiezen daar een eenvoudige zwaai of groetbeweging bij.",
+          title: "Hallo en zwaai kring",
+          summary: "Kleuters oefenen namen en durven meteen iets van zichzelf te laten zien met een korte groet.",
+          duration: "8-10 min",
+          setup: "Maak een ruime kring waarin iedereen elkaar goed kan zien.",
+          goal: "Namen leren, de groep veilig starten en kinderen op een rustige manier aan het meedoen krijgen.",
+          movementFocus: "Naam zeggen, zwaaien of een groet voordoen en samen herhalen.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Ga met de klas in een kring staan.",
+            "Eén kind zegt de eigen naam en maakt een eenvoudige zwaai of groet.",
+            "De groep zegt de naam na en doet dezelfde groet mee.",
+            "Ga zo de kring rond en herhaal aan het eind nog een paar namen samen."
+          ],
+          questions: [
+            "Hoe heet jij?",
+            "Welke zwaai kies jij?",
+            "Wie deed net deze groet voor?"
+          ],
+          differentiation: "Laat kinderen die praten nog spannend vinden eerst alleen zwaaien en zeg hun naam samen met hen.",
+          teacherTip: "Doe zelf twee of drie voorbeelden voor; kleuters stappen sneller in als ze precies weten wat de bedoeling is.",
+          keywords: ["groep 1/2", "kleuters", "naam", "kennismaken", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "dieren-groet-kring",
+          visual: "circle",
+          visualHint: "In de kring kiest elk kind een dier, zegt de naam en laat met een klein gebaar of geluid zien welk dier past.",
+          title: "Dieren groet kring",
+          summary: "Kleuters maken kennis door hun naam te koppelen aan een dier dat de groep daarna nadoet.",
+          duration: "8-10 min",
+          setup: "Maak een kring en spreek af dat iedereen alleen kleine, veilige bewegingen gebruikt.",
+          goal: "Namen oefenen, plezier maken en drempels verlagen voor kleuters die nog moeten wennen.",
+          movementFocus: "Een dier kiezen, kort uitbeelden en samen herhalen.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Ga in een kring staan.",
+            "Een kind zegt: ik ben ... en ik kies een dier, bijvoorbeeld een konijn of olifant.",
+            "Het kind laat met een klein gebaar of geluid het dier zien.",
+            "De groep zegt de naam na en doet het dier kort mee."
+          ],
+          questions: [
+            "Welk dier kies jij?",
+            "Hoe beweegt dat dier?",
+            "Wie weet nog welk dier bij dit kind hoorde?"
+          ],
+          differentiation: "Gebruik dierenplaatjes als steun voor kinderen die moeilijk zelf een dier kiezen.",
+          teacherTip: "Houd de bewegingen klein en duidelijk; dan blijft het overzichtelijk en veilig in de kring.",
+          keywords: ["groep 1/2", "kleuters", "dieren", "kennismaken", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "zoek-je-speelmaatje-kleuters",
+          visual: "mission",
+          visualHint: "Kleuters lopen rustig rond en zoeken een maatje dat van dezelfde speelplek, kleur of activiteit houdt.",
+          title: "Zoek je speelmaatje",
+          summary: "Kleuters ontdekken al bewegend wie dezelfde lievelingskleur, speelplek of activiteit heeft.",
+          duration: "8-10 min",
+          setup: "Bedenk 4 tot 6 eenvoudige zoekvragen die passen bij kleuters.",
+          goal: "Kleuters laten merken dat ze al snel iets met een ander gemeen hebben.",
+          movementFocus: "Rondlopen, een maatje zoeken, kort uitwisselen en weer verder bewegen.",
+          materials: ["Eventueel plaatjes van speelplekken of kleuren"],
+          steps: [
+            "Laat de kinderen rustig door het lokaal lopen.",
+            "Noem een eenvoudige zoekvraag, zoals: zoek iemand die ook graag in de bouwhoek speelt.",
+            "Als kinderen een passend maatje vinden, blijven ze even samen staan en noemen ze hun antwoord.",
+            "Geef daarna een nieuwe vraag en laat iedereen weer verder lopen."
+          ],
+          questions: [
+            "Wie speelt ook graag in de bouwhoek?",
+            "Wie kiest ook graag rood of blauw?",
+            "Wie houdt ook van tekenen of buiten spelen?"
+          ],
+          differentiation: "Laat kinderen ook wijzen naar een plaatje als antwoorden in woorden nog lastig is.",
+          teacherTip: "Kies vragen die dicht bij de schooldag van kleuters liggen; dan lukt het contact maken veel sneller.",
+          keywords: ["groep 1/2", "kleuters", "maatje", "zoeken", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "kleur-hoeken-kleuters",
+          visual: "corners",
+          visualHint: "Vier eenvoudige hoeken met kleuren of speelkeuzes helpen kleuters snel kiezen en kort iets van zichzelf laten zien.",
+          title: "Kleurhoeken voor kleuters",
+          summary: "Kleuters lopen naar een hoek die past bij hun kleur, spel of favoriete plek in de klas.",
+          duration: "8-10 min",
+          setup: "Geef vier hoeken een duidelijk kleur- of speellabel met kaartjes of voorwerpen.",
+          goal: "Kiezen, kijken naar elkaar en laagdrempelig iets over jezelf delen.",
+          movementFocus: "Naar een hoek lopen, daar even blijven en samen kijken wie dezelfde keuze heeft.",
+          materials: ["Hoeklabels of kleurkaarten"],
+          steps: [
+            "Leg uit welke kleur of speelkeuze bij elke hoek hoort.",
+            "Noem een ronde, bijvoorbeeld: kies jouw lievelingskleur of kies waar jij graag speelt.",
+            "Laat de kinderen naar een hoek lopen die bij hen past.",
+            "Laat per hoek één of twee kinderen kort iets aanwijzen of zeggen over hun keuze."
+          ],
+          questions: [
+            "Welke kleur kies jij?",
+            "Waar speel jij graag?",
+            "Wie staat er bij jou in de hoek?"
+          ],
+          differentiation: "Gebruik eerst alleen kleuren en voeg later pas speelkeuzes of favoriete activiteiten toe.",
+          teacherTip: "Werk met grote, zichtbare kaarten; kleuters kiezen dan sneller en raken minder afgeleid.",
+          keywords: ["groep 1/2", "kleuters", "hoeken", "kleur", "gouden weken"]
+        })
+      ],
+      [GOLDEN_MOMENT_GROUP]: [
+        goldenWeekTask({
+          key: "maatjes-trein-kleuters",
+          visual: "path",
+          visualHint: "Kleuters lopen in een rustige trein door het lokaal en maken bij een stopteken steeds een nieuw maatje.",
+          title: "Maatjes trein",
+          summary: "Kleuters wisselen op een speelse manier van maatje en oefenen meteen korte samenopdrachten.",
+          duration: "8-10 min",
+          setup: "Maak loopruimte vrij en spreek af hoe de trein rustig door het lokaal beweegt.",
+          goal: "Veilig wisselen van maatje en kleuters laten ervaren dat ze met iedereen kort kunnen samenwerken.",
+          movementFocus: "Samen lopen, stoppen en een nieuw maatje zoeken.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat de kinderen achter elkaar of in tweetallen rustig door het lokaal lopen als een trein.",
+            "Geef een stopteken.",
+            "Bij het stopteken zoeken kinderen snel een maatje dat dichtbij staat.",
+            "Laat maatjes iets kleins samen doen, zoals een high five, hand in hand tellen tot drie of samen zwaaien."
+          ],
+          questions: [
+            "Met wie sta jij nu samen?",
+            "Kunnen jullie samen een high five geven?",
+            "Wie heeft nu een nieuw maatje?"
+          ],
+          differentiation: "Laat jongere kleuters steeds dezelfde korte samenactie doen en wissel pas later af.",
+          teacherTip: "Houd de wissels heel voorspelbaar; voor kleuters werkt een vaste stop-en-maatje-structuur het best.",
+          keywords: ["groep 1/2", "kleuters", "maatjes", "trein", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "groepjes-maken-op-signaal",
+          visual: "mission",
+          visualHint: "Op een duidelijk signaal vormen kleuters snel groepjes van twee, drie of vier en kijken ze wie nog hulp nodig heeft.",
+          title: "Groepjes maken op signaal",
+          summary: "Kleuters oefenen samenwerken door op tijd kleine groepjes te maken en elkaar erbij te halen.",
+          duration: "8-10 min",
+          setup: "Spreek af hoe een groepje van twee, drie of vier eruitziet en oefen dat eerst een keer voor.",
+          goal: "Kijken naar elkaar, snel samenwerken en merken dat niemand alleen hoeft te blijven staan.",
+          movementFocus: "Rondlopen, stoppen en meteen samen een groepje vormen.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat de kinderen rustig door het lokaal lopen.",
+            "Noem een getal, bijvoorbeeld twee of drie.",
+            "De kinderen maken zo snel mogelijk een groepje met dat aantal kinderen.",
+            "Kijk samen of iedereen erbij hoort en help groepjes die nog niet kloppen."
+          ],
+          questions: [
+            "Met hoeveel kinderen moet jouw groepje zijn?",
+            "Wie mist er nog in jullie groepje?",
+            "Kunnen jullie nog iemand erbij halen?"
+          ],
+          differentiation: "Start alleen met tweetallen en voeg pas later groepjes van drie of vier toe.",
+          teacherTip: "Benadruk steeds dat kinderen om zich heen kijken wie nog alleen staat; dat maakt deze opdracht sterk voor groepsvorming.",
+          keywords: ["groep 1/2", "kleuters", "groepjes", "samenwerken", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "samen-een-vorm-kleuters",
+          visual: "mission",
+          visualHint: "Kleine groepjes maken samen een eenvoudige vorm zoals een slang, cirkel of huis en oefenen zo afstemmen zonder ingewikkelde taal.",
+          title: "Samen een vorm maken",
+          summary: "Kleuters maken met hun groepje een eenvoudige vorm en leren kijken, wachten en meedoen.",
+          duration: "8-10 min",
+          setup: "Maak ruimte voor kleine groepjes en kies 3 of 4 simpele vormen die kleuters herkennen.",
+          goal: "Samenwerken, afstemmen en ervaren dat een groep iets samen kan maken.",
+          movementFocus: "Met je lichaam een plek kiezen en samen één vorm neerzetten.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Verdeel de kinderen in kleine groepjes.",
+            "Noem een eenvoudige vorm, zoals een kring, een slang of een huis.",
+            "Laat elk groepje samen de vorm maken.",
+            "Kijk kort samen naar de groepjes en benoem wat al goed samen lukte."
+          ],
+          questions: [
+            "Welke vorm maken jullie?",
+            "Waar kun jij het best staan?",
+            "Hoe helpen jullie elkaar?"
+          ],
+          differentiation: "Geef een voorbeeldvorm voor of gebruik een plaatje als steun.",
+          teacherTip: "Kies echt simpele vormen; het doel is samenwerken, niet een perfecte vorm maken.",
+          keywords: ["groep 1/2", "kleuters", "vorm", "samenwerken", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "stap-erbij-kleuters",
+          visual: "line",
+          visualHint: "Kleuters stappen naar voren of in de kring wanneer een herkenbare uitspraak bij hen past en zien zo wie hetzelfde kiest.",
+          title: "Stap erbij als het past",
+          summary: "Kleuters zien op een eenvoudige manier welke kinderen dezelfde dingen leuk vinden of herkennen.",
+          duration: "8-10 min",
+          setup: "Laat de kinderen in een kring of achter een lijn starten en kies herkenbare uitspraken.",
+          goal: "Herkenning in de groep opbouwen en kleuters laten ervaren dat ze dingen met elkaar delen.",
+          movementFocus: "Een stap naar voren zetten als iets bij je past en daarna weer teruggaan.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat alle kinderen op een beginplek staan.",
+            "Noem een korte uitspraak, zoals: stap erbij als jij graag buiten speelt of graag tekent.",
+            "Kinderen voor wie dat klopt, zetten een stap naar voren of in de kring.",
+            "Laat iedereen weer teruggaan en start daarna de volgende ronde."
+          ],
+          questions: [
+            "Wie vindt dit ook leuk?",
+            "Wie stapte er net ook naar voren?",
+            "Wat hebben jullie samen?"
+          ],
+          differentiation: "Werk eerst met heel zichtbare thema's zoals kleur, fruit of spelen en voeg later pas schoolse keuzes toe.",
+          teacherTip: "Houd het tempo rustig; kleuters hebben even nodig om te luisteren, kiezen en bewegen.",
+          keywords: ["groep 1/2", "kleuters", "overeenkomsten", "lijn", "gouden weken"]
+        })
+      ]
+    },
     [GOLDEN_SUBJECT_34]: {
       [GOLDEN_MOMENT_KENNIS]: [
         goldenWeekTask({
@@ -13264,8 +13854,94 @@ function renderSequenceArt(labels, subjectAccent, momentAccent) {
 function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, stroke) {
   const key = task.key;
 
-  if (["naam-en-beweging-kring", "ik-hou-van-mijn-buur-junior", "iedereen-hoort-erbij-kring", "ritme-doorgeven"].includes(key)) {
+  if (["gooi-de-bal-naar-kleuters", "gooi-de-bal-naar-kort"].includes(key)) {
+    const ballPresets = {
+      "gooi-de-bal-naar-kleuters": { top: "BAL", left: "KIJK", right: "VANG", ball: "GOOI", note: "NOEM NAAM" },
+      "gooi-de-bal-naar-kort": { top: "BAL", left: "KIJK", right: "VANG", ball: "GOOI", note: "OOGCONTACT" }
+    };
+
+    return renderBallPassSceneDetailed(ballPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (["krantentikkertje-bundel", "wat-mij-bijzonder-maakt-bundel"].includes(key)) {
+    const seatPresets = {
+      "krantentikkertje-bundel": { top: "NOEM NAAM", middle: "KRANT", note: "WISSEL STOEL" },
+      "wat-mij-bijzonder-maakt-bundel": { top: "VERTEL IETS", middle: "IK OOK", note: "WISSEL PLEK" }
+    };
+
+    return renderSeatSwitchSceneDetailed(seatPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (["dansen-in-een-hoepel-kleuters", "dansen-in-een-hoepel-kort"].includes(key)) {
+    const hoopPresets = {
+      "dansen-in-een-hoepel-kleuters": { top: "DANS", center: "STOP", note: "SAMEN IN 1" },
+      "dansen-in-een-hoepel-kort": { top: "MUZIEK", center: "STOP", note: "ZOEK HOEPEL" }
+    };
+
+    return renderHoopDanceSceneDetailed(hoopPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (["spiegelen-kleuters", "spiegelen-kort"].includes(key)) {
+    const mirrorPresets = {
+      "spiegelen-kleuters": { top: "SPIEGEL", left: "DOE VOOR", right: "DOE NA", note: "WISSEL" },
+      "spiegelen-kort": { top: "SPIEGEL", left: "DOE VOOR", right: "DOE NA", note: "KIJK GOED" }
+    };
+
+    return renderMirrorSceneDetailed(mirrorPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (key === "zoek-iemand-die-bundel") {
+    return renderSearchSheetSceneDetailed(
+      { top: "ZOEKBLAD", labels: ["VRAAG", "NAAM"], note: "ZOEK + VUL IN" },
+      subjectAccent,
+      momentAccent,
+      stroke
+    );
+  }
+
+  if (key === "bonus-keuzespel-bundel") {
+    return renderChoiceChallengeSceneDetailed(
+      { top: "KIES SPEL", cards: ["BAL", "KAART", "LEGO", "TOUW"], note: "KORT + FAIR" },
+      subjectAccent,
+      momentAccent,
+      stroke
+    );
+  }
+
+  if (key === "levende-getallenlijn-bundel") {
+    return renderLiveOrderSceneDetailed(
+      { top: "OP VOLGORDE", left: "BEGIN", right: "EIND", note: "OVERLEG" },
+      subjectAccent,
+      momentAccent,
+      stroke
+    );
+  }
+
+  if (key === "cijfers-leggen-bundel") {
+    return renderBodyBuildSceneDetailed({ cards: ["A", "8", "5"], note: "MET JE LIJF" }, subjectAccent, momentAccent, stroke);
+  }
+
+  if (key === "chinees-boksen-bundel") {
+    return renderPushBalanceSceneDetailed({ left: "DUW", right: "TREK", note: "BLIJF STEVIG" }, subjectAccent, momentAccent, stroke);
+  }
+
+  if (key === "lijmfiguren-bundel") {
+    return renderLinkedSitStandSceneDetailed({ left: "HAAK IN", right: "SAMEN", note: "ZIT / STA" }, subjectAccent, momentAccent, stroke);
+  }
+
+  if (
+    [
+      "hallo-en-zwaai-kring",
+      "dieren-groet-kring",
+      "naam-en-beweging-kring",
+      "ik-hou-van-mijn-buur-junior",
+      "iedereen-hoort-erbij-kring",
+      "ritme-doorgeven"
+    ].includes(key)
+  ) {
     const circlePresets = {
+      "hallo-en-zwaai-kring": { top: "HALLO", left: "NAAM", right: "ZWAAI", center: "DOE MEE", note: "HERHAAL" },
+      "dieren-groet-kring": { top: "NAAM", left: "DIER", right: "DOE NA", center: "GROET", note: "SAMEN" },
       "naam-en-beweging-kring": { top: "NAAM", left: "ZEG", right: "DOE MEE", center: "BEWEGING", note: "HERHAAL" },
       "ik-hou-van-mijn-buur-junior": { top: "ZEG", left: "PAST BIJ MIJ", right: "WISSEL", center: "NIEUWE PLEK", note: "KIJK ROND" },
       "iedereen-hoort-erbij-kring": { top: "SITUATIE", left: "NODIG UIT", right: "DOE MEE", center: "ERBIJ", note: "SAMEN" },
@@ -13284,6 +13960,7 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       "complimentenoversteek",
       "move-if-bovenbouw",
       "op-een-lijn-junior",
+      "stap-erbij-kleuters",
       "wat-is-waar-groep",
       "over-de-lijn-bovenbouw",
       "teamkeuze-continuum"
@@ -13297,6 +13974,7 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       complimentenoversteek: { left: "START", right: "OVERSTEEK", middle: "ZEG IETS", note: "NIEUW MAATJE" },
       "move-if-bovenbouw": { left: "BLIJF", right: "WISSEL", middle: "MOVE IF", note: "HERKEN" },
       "op-een-lijn-junior": { left: "NEE", right: "JA", middle: "OP DE LIJN", note: "KIJK" },
+      "stap-erbij-kleuters": { left: "BLIJF", right: "STAP IN", middle: "PAST BIJ JOU", note: "KIJK ROND" },
       "wat-is-waar-groep": { left: "BLIJF", right: "STAP IN", middle: "WAT IS WAAR?", note: "HERKEN" },
       "over-de-lijn-bovenbouw": { left: "START", right: "OVER DE LIJN", middle: "STELLING", note: "PRAAT KORT" },
       "teamkeuze-continuum": { left: "ONEENS", right: "EENS", middle: "TWIJFEL", note: "LEG UIT" }
@@ -13305,10 +13983,17 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
     return renderContinuumSceneDetailed(continuumPresets[key], subjectAccent, momentAccent, stroke);
   }
 
-  if (["samen-standbeeld", "samen-vorm-maken"].includes(key)) {
+  if (
+    [
+      "samen-standbeeld",
+      "samen-vorm-maken",
+      "samen-een-vorm-kleuters"
+    ].includes(key)
+  ) {
     const groupPresets = {
       "samen-standbeeld": { left: "OVERLEG", center: "BEELD", right: "FREEZE", note: "KIJK SAMEN" },
-      "samen-vorm-maken": { left: "OVERLEG", center: "VORM", right: "SAMEN", note: "LEG NEER" }
+      "samen-vorm-maken": { left: "OVERLEG", center: "VORM", right: "SAMEN", note: "LEG NEER" },
+      "samen-een-vorm-kleuters": { left: "SAMEN", center: "VORM", right: "KIJK", note: "DOE MEE" }
     };
 
     return renderGroupPoseSceneDetailed(groupPresets[key], subjectAccent, momentAccent, stroke);
@@ -13384,6 +14069,7 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       "vier-hoeken-categorie-of-regel",
       "hoeken-kiezen",
       "keuzehoeken-rekenen",
+      "kleur-hoeken-kleuters",
       "kleur-en-hobby-hoeken",
       "klassenzicht-in-hoeken"
     ].includes(key)
@@ -13418,6 +14104,7 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
         center: "KIES HOEK",
         corners: ["BREUK", "PROCENT", "GRAFIEK", "MODEL"]
       },
+      "kleur-hoeken-kleuters": { center: "KIES HOEK", corners: ["ROOD", "BLAUW", "GEEL", "GROEN"] },
       "kleur-en-hobby-hoeken": { center: "KIES HOEK", corners: ["KLEUR", "SPEL", "HOBBY", "SPORT"] },
       "klassenzicht-in-hoeken": { center: "KIES HOEK", corners: ["THUIS", "LEREN", "MAATJES", "TWIJFEL"] }
     };
@@ -13555,6 +14242,8 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       "zoek-de-juiste-spellingpartner",
       "zoek-iemand-die",
       "breuk-decimaal-procent-match",
+      "zoek-je-speelmaatje-kleuters",
+      "groepjes-maken-op-signaal",
       "zoek-iemand-die-junior",
       "zoek-iemand-die-middenbouw",
       "wij-horen-bij-elkaar",
@@ -13581,6 +14270,14 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       "breuk-decimaal-procent-match": {
         center: "NOTATIES",
         cards: ["1/2", "0,5", "50%", "3/4", "75%"]
+      },
+      "zoek-je-speelmaatje-kleuters": {
+        center: "MAATJE",
+        cards: ["BOUW", "TEKEN", "BUITEN", "POP", "LEES"]
+      },
+      "groepjes-maken-op-signaal": {
+        center: "GROEPJE",
+        cards: ["2", "3", "4", "SAMEN", "HELP"]
       },
       "zoek-iemand-die-junior": {
         center: "ZOEK",
@@ -13662,6 +14359,7 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       "bron-en-bewijswandeling",
       "vertel-en-wisselpad",
       "net-als-woordpad",
+      "maatjes-trein-kleuters",
       "maatjesbrug",
       "roshambo-samenwerkingsmix",
       "redigeerroute-kort"
@@ -13744,6 +14442,7 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       "bron-en-bewijswandeling": { start: "BRON", stops: ["LEES", "KIES", "BEWIJS", "LEG UIT"], side: "TWEETAL", end: "WISSEL" },
       "vertel-en-wisselpad": { start: "KIJK", stops: ["NOEM", "VERTEL", "VOEG TOE", "WISSEL"], side: "PRAATPLAAT", end: "DOOR" },
       "net-als-woordpad": { start: "BASIS", stops: ["KIJK", "ZOEK", "ZEG", "MATCH"], side: "PATROON", end: "CHECK" },
+      "maatjes-trein-kleuters": { start: "LOOP", stops: ["TREIN", "STOP", "MAATJE", "HIGH 5"], side: "SAMEN", end: "DOOR" },
       maatjesbrug: { start: "LOOP", stops: ["STOP", "VRAAG", "HIGH 5", "WISSEL"], side: "MAATJE", end: "DOOR" },
       "roshambo-samenwerkingsmix": { start: "LOOP", stops: ["RPS", "VRAAG", "DEEL", "WISSEL"], side: "MAATJE", end: "DOOR" }
     };
@@ -13966,6 +14665,165 @@ function renderGroupPoseSceneDetailed(preset, subjectAccent, momentAccent, strok
     ${renderLearnerIcon(180, 98, momentAccent, stroke, preset.center)}
     ${renderLearnerIcon(268, 144, subjectAccent, stroke, preset.right)}
     ${renderMiniSign(144, 176, preset.note, momentAccent)}
+  `;
+}
+
+function renderBallPassSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderMiniSign(144, 26, preset.top, subjectAccent)}
+    ${renderTrack(
+      [
+        [104, 110],
+        [180, 84],
+        [256, 110]
+      ],
+      momentAccent
+    )}
+    ${renderLearnerIcon(86, 116, subjectAccent, stroke, preset.left)}
+    ${renderLearnerIcon(274, 116, subjectAccent, stroke, preset.right)}
+    <circle cx="180" cy="88" r="18" fill="#ffffff" stroke="${stroke}" stroke-width="4" />
+    ${renderSvgTextBlock(160, 72, 40, 32, preset.ball, momentAccent, 10, 2)}
+    ${renderMiniSign(144, 140, preset.note, momentAccent)}
+  `;
+}
+
+function renderSeatSwitchSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderMiniSign(144, 24, preset.top, subjectAccent)}
+    ${renderSeatShape(88, 112, stroke, subjectAccent)}
+    ${renderSeatShape(272, 112, stroke, subjectAccent)}
+    ${renderTrack(
+      [
+        [106, 108],
+        [148, 88],
+        [212, 88],
+        [254, 108]
+      ],
+      momentAccent
+    )}
+    ${renderWordCard(132, 86, 96, 38, preset.middle, momentAccent, stroke, 11)}
+    ${renderMiniSign(144, 138, preset.note, momentAccent)}
+  `;
+}
+
+function renderHoopDanceSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderMiniSign(144, 24, preset.top, subjectAccent)}
+    ${renderHoopShape(106, 108, momentAccent, stroke)}
+    ${renderHoopShape(254, 108, momentAccent, stroke)}
+    ${renderTrack(
+      [
+        [136, 108],
+        [180, 88],
+        [224, 108]
+      ],
+      momentAccent
+    )}
+    ${renderZone(142, 84, 76, 34, preset.center, "#ffffff", stroke, 11)}
+    ${renderMiniSign(144, 140, preset.note, momentAccent)}
+  `;
+}
+
+function renderMirrorSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderWordCard(126, 24, 108, 30, preset.top, momentAccent, stroke, 11)}
+    ${renderLearnerIcon(92, 116, subjectAccent, stroke, preset.left)}
+    ${renderLearnerIcon(268, 116, subjectAccent, stroke, preset.right)}
+    <rect x="164" y="62" width="32" height="76" rx="14" fill="${momentAccent}" opacity="0.12" stroke="${stroke}" stroke-width="3" />
+    <path d="M180 68 V132" stroke="${momentAccent}" stroke-width="4" stroke-dasharray="6 8" stroke-linecap="round" />
+    ${renderMiniSign(144, 140, preset.note, momentAccent)}
+  `;
+}
+
+function renderSearchSheetSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderMiniSign(144, 24, preset.top, subjectAccent)}
+    ${renderBingoBoard(32, 58, stroke, subjectAccent)}
+    ${renderWordCard(188, 64, 74, 30, preset.labels[0], subjectAccent, stroke, 10.5)}
+    ${renderWordCard(188, 102, 74, 30, preset.labels[1], momentAccent, stroke, 10.5)}
+    ${renderTrack(
+      [
+        [150, 100],
+        [182, 100],
+        [212, 118],
+        [252, 118]
+      ],
+      momentAccent
+    )}
+    ${renderLearnerIcon(284, 110, subjectAccent, stroke, "LOOP")}
+    ${renderMiniSign(144, 140, preset.note, momentAccent)}
+  `;
+}
+
+function renderChoiceChallengeSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderMiniSign(144, 24, preset.top, subjectAccent)}
+    ${renderWordCard(28, 62, 82, 30, preset.cards[0], subjectAccent, stroke, 10)}
+    ${renderWordCard(250, 62, 82, 30, preset.cards[1], subjectAccent, stroke, 10)}
+    ${renderWordCard(28, 118, 82, 30, preset.cards[2], subjectAccent, stroke, 10)}
+    ${renderWordCard(250, 118, 82, 30, preset.cards[3], subjectAccent, stroke, 10)}
+    ${renderZone(128, 82, 104, 46, "KIES 1", "#ffffff", stroke, 12)}
+    ${renderMiniSign(144, 142, preset.note, momentAccent)}
+  `;
+}
+
+function renderLiveOrderSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderMiniSign(144, 24, preset.top, subjectAccent)}
+    ${renderWordCard(24, 64, 80, 30, preset.left, subjectAccent, stroke, 10.5)}
+    ${renderWordCard(256, 64, 80, 30, preset.right, subjectAccent, stroke, 10.5)}
+    <path d="M54 118 H306" stroke="${stroke}" stroke-width="6" stroke-linecap="round" />
+    ${renderTick(116)}
+    ${renderTick(180)}
+    ${renderTick(244)}
+    ${renderCirclePoint(116, 100, "1", momentAccent, stroke)}
+    ${renderCirclePoint(180, 100, "2", momentAccent, stroke)}
+    ${renderCirclePoint(244, 100, "3", momentAccent, stroke)}
+    ${renderMiniSign(144, 138, preset.note, momentAccent)}
+  `;
+}
+
+function renderBodyBuildSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderWordCard(126, 22, 108, 30, "MAAK VORM", momentAccent, stroke, 11)}
+    ${renderWordCard(26, 60, 84, 40, preset.cards[0], subjectAccent, stroke, 18)}
+    ${renderWordCard(138, 60, 84, 40, preset.cards[1], subjectAccent, stroke, 18)}
+    ${renderWordCard(250, 60, 84, 40, preset.cards[2], subjectAccent, stroke, 18)}
+    ${renderSimpleFigure(68, 118, subjectAccent, stroke)}
+    ${renderSimpleFigure(180, 118, subjectAccent, stroke)}
+    ${renderSimpleFigure(292, 118, subjectAccent, stroke)}
+    ${renderMiniSign(144, 140, preset.note, momentAccent)}
+  `;
+}
+
+function renderPushBalanceSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderWordCard(128, 24, 104, 30, "BALANS", momentAccent, stroke, 11)}
+    ${renderSimpleFigure(94, 84, subjectAccent, stroke)}
+    ${renderSimpleFigure(266, 84, subjectAccent, stroke)}
+    ${renderWordCard(36, 116, 76, 30, preset.left, subjectAccent, stroke, 10.5)}
+    ${renderWordCard(248, 116, 76, 30, preset.right, subjectAccent, stroke, 10.5)}
+    <path d="M116 94 H154" stroke="${momentAccent}" stroke-width="4" stroke-linecap="round" />
+    <path d="M154 94 L144 88 M154 94 L144 100" stroke="${momentAccent}" stroke-width="4" stroke-linecap="round" />
+    <path d="M244 94 H206" stroke="${momentAccent}" stroke-width="4" stroke-linecap="round" />
+    <path d="M206 94 L216 88 M206 94 L216 100" stroke="${momentAccent}" stroke-width="4" stroke-linecap="round" />
+    ${renderMiniSign(144, 140, preset.note, momentAccent)}
+  `;
+}
+
+function renderLinkedSitStandSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderMiniSign(144, 24, preset.note, momentAccent)}
+    ${renderSimpleFigure(150, 78, subjectAccent, stroke)}
+    ${renderSimpleFigure(210, 78, subjectAccent, stroke)}
+    <path d="M162 92 Q180 80 198 92" fill="none" stroke="${momentAccent}" stroke-width="5" stroke-linecap="round" />
+    <path d="M146 118 C146 136 136 142 136 154" fill="none" stroke="${momentAccent}" stroke-width="4" stroke-linecap="round" />
+    <path d="M136 154 L130 146 M136 154 L142 146" stroke="${momentAccent}" stroke-width="4" stroke-linecap="round" />
+    <path d="M224 154 C224 138 236 132 236 118" fill="none" stroke="${momentAccent}" stroke-width="4" stroke-linecap="round" />
+    <path d="M236 118 L230 126 M236 118 L242 126" stroke="${momentAccent}" stroke-width="4" stroke-linecap="round" />
+    ${renderWordCard(34, 138, 84, 30, preset.left, subjectAccent, stroke, 10.5)}
+    ${renderWordCard(242, 138, 84, 30, preset.right, subjectAccent, stroke, 10.5)}
+    ${renderZone(138, 90, 84, 34, "SAMEN", "#ffffff", stroke, 11)}
   `;
 }
 
@@ -14538,6 +15396,28 @@ function renderSvgTextBlock(x, y, width, height, label, fill, preferredFontSize 
         )
         .join("")}
     </text>
+  `;
+}
+
+function renderSimpleFigure(x, y, accent, stroke) {
+  return `
+    <circle cx="${x}" cy="${y}" r="8" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
+    <path d="M${x} ${y + 8} V${y + 26} M${x - 12} ${y + 16} H${x + 12} M${x} ${y + 26} L${x - 10} ${y + 40} M${x} ${y + 26} L${x + 10} ${y + 40}" stroke="${accent}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+  `;
+}
+
+function renderSeatShape(x, y, stroke, accent) {
+  return `
+    <rect x="${x - 16}" y="${y - 6}" width="32" height="10" rx="4" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
+    <rect x="${x - 12}" y="${y - 28}" width="24" height="16" rx="6" fill="${accent}" opacity="0.18" stroke="${stroke}" stroke-width="3" />
+    <path d="M${x - 12} ${y + 4} V${y + 22} M${x + 12} ${y + 4} V${y + 22} M${x - 10} ${y - 12} V${y + 4} M${x + 10} ${y - 12} V${y + 4}" stroke="${stroke}" stroke-width="3" stroke-linecap="round" />
+  `;
+}
+
+function renderHoopShape(x, y, accent, stroke) {
+  return `
+    <circle cx="${x}" cy="${y}" r="28" fill="none" stroke="${accent}" stroke-width="6" opacity="0.85" />
+    <circle cx="${x}" cy="${y}" r="18" fill="#f7fbff" stroke="${stroke}" stroke-width="2.5" opacity="0.18" />
   `;
 }
 
