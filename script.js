@@ -1,7 +1,13 @@
 const GROUP_34 = "groep-3-4";
 const GROUP_56 = "groep-5-6";
 const GROUP_78 = "groep-7-8";
+const GROUP_GOLDEN = "gouden-weken";
 const GROUP_ENERGIZERS = "energizers";
+const GOLDEN_SUBJECT_34 = "gouden-groep-3-4";
+const GOLDEN_SUBJECT_56 = "gouden-groep-5-6";
+const GOLDEN_SUBJECT_78 = "gouden-groep-7-8";
+const GOLDEN_MOMENT_KENNIS = "gouden-kennismaken";
+const GOLDEN_MOMENT_GROUP = "gouden-groepsvorming";
 const ENERGIZER_ACTIVE = "energizer-activerend";
 const ENERGIZER_FOCUS = "energizer-focussend";
 const ENERGIZER_CALM = "energizer-kalmerend";
@@ -65,6 +71,15 @@ const groups = [
       "Werkvormen met meer zelfstandigheid, verdieping, reflectie en inhoudelijke keuzes.",
     focus:
       "Focus op uitleggen, redeneren, complexere opdrachten en transfer naar andere vakken."
+  },
+  {
+    id: GROUP_GOLDEN,
+    label: "Gouden Weken",
+    shortLabel: "GW",
+    description:
+      "Kennismakingsspellen en groepsvormende activiteiten voor een veilige, sterke start van het schooljaar.",
+    focus:
+      "Focus op elkaar leren kennen, samenwerken, erbij horen en groepsgevoel opbouwen in de eerste schoolweken."
   },
   {
     id: GROUP_ENERGIZERS,
@@ -131,6 +146,33 @@ const energizerSubjects = [
   }
 ];
 
+const goldenWeekSubjects = [
+  {
+    id: GOLDEN_SUBJECT_34,
+    label: "Groep 3/4",
+    marker: "3/4",
+    accent: "#118b74",
+    description:
+      "Eenvoudige, veilige kennismakings- en groepsvormingsspellen met veel voordoen, samen doen en korte rondes."
+  },
+  {
+    id: GOLDEN_SUBJECT_56,
+    label: "Groep 5/6",
+    marker: "5/6",
+    accent: "#00abc8",
+    description:
+      "Actieve werkvormen waarin leerlingen meer kunnen delen, samenwerken en overeenkomsten ontdekken."
+  },
+  {
+    id: GOLDEN_SUBJECT_78,
+    label: "Groep 7/8",
+    marker: "7/8",
+    accent: "#143b86",
+    description:
+      "Werkvormen met meer reflectie, keuzevrijheid en gesprek over de groep, rollen en samenwerking."
+  }
+];
+
 const moments = [
   {
     id: "tijdens",
@@ -158,6 +200,25 @@ const energizerMoment = {
   description:
     "Korte beweegpauzes voor tussen lessen in, zonder vakinhoud en direct inzetbaar op de eigen plek."
 };
+
+const goldenWeekMoments = [
+  {
+    id: GOLDEN_MOMENT_KENNIS,
+    label: "Kennismaken",
+    subtitle: "Kennismakingsspellen in de Gouden Weken",
+    accent: "#00abc8",
+    description:
+      "Werkvormen om namen te leren, contact te maken en leerlingen snel op een veilige manier aan het praten en bewegen te krijgen."
+  },
+  {
+    id: GOLDEN_MOMENT_GROUP,
+    label: "Groepsvorming",
+    subtitle: "Groepsvorming en verbinding",
+    accent: "#143b86",
+    description:
+      "Werkvormen om verbondenheid, samenwerken, erbij horen en positieve groepsnormen op te bouwen."
+  }
+];
 
 const EDITABLE_TASK_FIELDS = new Set([
   "title",
@@ -294,7 +355,7 @@ const SITE_TEXT_DEFAULTS = {
   heroEyebrow: "Voor docenten, desktop en digibord",
   heroTitle: "Columbus Beweegbibliotheek",
   heroDescription:
-    "Vind snel een taal-, reken- of spellingwerkvorm voor bewegend leren. Kies een bouw, vak en lesmoment, of open direct de aparte energizerbibliotheek voor lesovergangen uit de lijn van de Dynamische Schooldag, Getal & Ruimte Junior en Staal 2.",
+    "Vind snel een taal-, reken- of spellingwerkvorm voor bewegend leren. Kies een bouw, vak en lesmoment, of open direct de aparte bibliotheken voor Energizers en Gouden Weken.",
   heroStatTasksLabel: "opdrachten",
   heroStatStartpointsLabel: "startpunten",
   heroStatSubjectsLabel: "vakken",
@@ -310,10 +371,16 @@ const SITE_TEXT_DEFAULTS = {
   headerTitleSearch: "Zoekresultaten",
   headerDescriptionSearch: "Gebruik de filters om de {count} zoekresultaten verder te verfijnen of klik direct een opdracht open.",
   headerEyebrowStart: "Start",
-  headerTitleStart: "Kies eerst een bouw of energizers",
+  headerTitleStart: "Kies eerst een bouw, Gouden Weken of energizers",
   headerDescriptionStart:
-    "Werk stap voor stap: kies eerst een bouw voor taal, spelling of rekenen, of open direct de aparte energizerbibliotheek voor lesovergangen.",
+    "Werk stap voor stap: kies eerst een bouw voor taal, spelling of rekenen, of open direct de aparte bibliotheken voor Gouden Weken en lesovergangen.",
   headerTitleEnergizerType: "Kies een type energizer",
+  headerTitleGoldenWeekBuild: "Kies een bouw voor Gouden Weken",
+  headerDescriptionGoldenWeekBuild:
+    "Zo kies je meteen activiteiten die passen bij de leeftijd, taalvaardigheid en zelfstandigheid van de groep.",
+  headerTitleGoldenWeekType: "Kies het doel van de activiteit",
+  headerDescriptionGoldenWeekType:
+    "Kies of je vooral een kennismakingsspel zoekt, of juist een activiteit voor groepsvorming en verbinding.",
   headerTitleChooseSubject: "Kies een vak voor {groep}",
   headerTitleChooseMoment: "Kies wanneer je de werkvorm wilt inzetten",
   headerDescriptionChooseMoment:
@@ -323,8 +390,10 @@ const SITE_TEXT_DEFAULTS = {
     "Zoek, filter en beheer hier alle opdrachten. Vanuit deze pagina kun je direct bewerken, dupliceren, verbergen en live klaarzetten.",
   resultsTitleEmpty: "Nog geen opdrachten in beeld",
   resultsMetaNeedEnergizerType: "Kies hierboven eerst een type energizer.",
+  resultsMetaNeedGoldenRoute: "Kies hierboven eerst een bouw binnen Gouden Weken en daarna kennismaken of groepsvorming.",
   resultsMetaNeedRoute: "Kies hierboven eerst een bouw, daarna een vak en vervolgens een lesmoment.",
   resultsEmptyEnergizerText: "Zodra je een energizertype hebt gekozen, verschijnen hier direct de passende energizers.",
+  resultsEmptyGoldenText: "Zodra je binnen Gouden Weken een bouw en activiteitstype kiest, verschijnen hier direct passende opdrachten.",
   resultsEmptyRouteText: "Zodra je bouw, vak en lesmoment hebt gekozen, verschijnen hier direct de passende opdrachten.",
   resultsTitleCreate: "Nieuwe lokale opdracht",
   resultsTitleNoResults: "Geen opdrachten gevonden",
@@ -441,13 +510,19 @@ const SITE_TEXT_EDITOR_GROUPS = [
       "headerTitleStart",
       "headerDescriptionStart",
       "headerTitleEnergizerType",
+      "headerTitleGoldenWeekBuild",
+      "headerDescriptionGoldenWeekBuild",
+      "headerTitleGoldenWeekType",
+      "headerDescriptionGoldenWeekType",
       "headerTitleChooseSubject",
       "headerTitleChooseMoment",
       "headerDescriptionChooseMoment",
       "resultsTitleEmpty",
       "resultsMetaNeedEnergizerType",
+      "resultsMetaNeedGoldenRoute",
       "resultsMetaNeedRoute",
       "resultsEmptyEnergizerText",
+      "resultsEmptyGoldenText",
       "resultsEmptyRouteText",
       "resultsTitleNoResults",
       "resultsMetaNoResults",
@@ -565,11 +640,33 @@ const subjectThemes = {
     line: "#b9e2d8",
     glow: "rgba(17, 139, 116, 0.12)",
     print: "#f4fcf9"
+  },
+  [GOLDEN_SUBJECT_34]: {
+    accent: "#118b74",
+    soft: "#ebf8f4",
+    line: "#b9e2d8",
+    glow: "rgba(17, 139, 116, 0.12)",
+    print: "#f4fcf9"
+  },
+  [GOLDEN_SUBJECT_56]: {
+    accent: "#00abc8",
+    soft: "#ebfaff",
+    line: "#b9e8f2",
+    glow: "rgba(0, 171, 200, 0.12)",
+    print: "#f4fcff"
+  },
+  [GOLDEN_SUBJECT_78]: {
+    accent: "#143b86",
+    soft: "#edf4ff",
+    line: "#c3d6f7",
+    glow: "rgba(20, 59, 134, 0.12)",
+    print: "#f5f9ff"
   }
 };
 
 const taskBlueprints = redistributeRegularTaskBlueprints(buildTaskBlueprintsFromDoc());
 const standaloneEnergizerBlueprints = buildStandaloneEnergizerBlueprints();
+const standaloneGoldenWeekBlueprints = buildStandaloneGoldenWeekBlueprints();
 
 function emptyTaskMoments() {
   return {
@@ -638,6 +735,26 @@ function allGroupTask(config) {
     differentiation: same(config.differentiation),
     teacherTip: same(config.teacherTip),
     keywords: [...config.keywords, ...(config.methodKeywords ?? ["energizer", "lesovergang", "dynamische schooldag"])]
+  };
+}
+
+function goldenWeekTask(config) {
+  return {
+    key: config.key,
+    groupScope: [GROUP_GOLDEN],
+    visual: config.visual,
+    visualHint: config.visualHint,
+    title: config.title,
+    summary: config.summary,
+    duration: config.duration,
+    setup: config.setup,
+    goal: config.goal,
+    movementFocus: config.movementFocus,
+    materials: config.materials,
+    steps: config.steps,
+    differentiation: config.differentiation,
+    teacherTip: config.teacherTip,
+    keywords: [...config.keywords, "gouden weken", "groepsvorming", "nieuw schooljaar"]
   };
 }
 
@@ -2869,6 +2986,281 @@ function buildStandaloneEnergizerBlueprints() {
   };
 }
 
+function buildStandaloneGoldenWeekBlueprints() {
+  return {
+    [GOLDEN_SUBJECT_34]: {
+      [GOLDEN_MOMENT_KENNIS]: [
+        goldenWeekTask({
+          key: "kennismaken-in-tweetallen-junior",
+          visual: "circle",
+          visualHint: "In korte tweetalrondes oefenen jonge leerlingen hun naam, hobby en een eerste praatje met steeds een nieuw maatje.",
+          title: "Kennismaken in tweetallen",
+          summary: "In korte rondes vertellen leerlingen hun naam, iets wat ze leuk vinden en iets waar ze goed in zijn.",
+          duration: "10 min",
+          setup: "Laat leerlingen verspreid staan en koppel snel tweetallen. Geef per ronde één korte vraag.",
+          goal: "Een veilige start maken, namen oefenen en de drempel verlagen om met klasgenoten te praten.",
+          movementFocus: "Na elke korte uitwisseling wisselen leerlingen van maatje door een paar stappen door het lokaal.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Koppel leerlingen in tweetallen.",
+            "Geef een korte vraag, zoals: hoe heet je, wat speel je graag of wat vind je leuk op school?",
+            "Laat beide leerlingen om de beurt antwoorden.",
+            "Geef daarna het signaal om een nieuw maatje te zoeken en herhaal dit met een nieuwe vraag."
+          ],
+          differentiation: "Werk met pictogrammen of laat leerlingen ook iets aanwijzen of voordoen als praten nog spannend is.",
+          teacherTip: "Doe de eerste ronde zelf even voor met één leerling; dat maakt de opdracht in groep 3/4 direct veiliger.",
+          keywords: ["groep 3/4", "kennismaken", "tweetallen", "gouden weken", "groepsvorming"]
+        }),
+        goldenWeekTask({
+          key: "zoek-iemand-die-junior",
+          visual: "mission",
+          visualHint: "Leerlingen lopen rond en zoeken klasgenoten die passen bij eenvoudige kenmerken zoals lievelingskleur, huisdier of favoriete activiteit.",
+          title: "Zoek iemand die... junior",
+          summary: "Leerlingen bewegen door het lokaal en zoeken klasgenoten bij eenvoudige herkenningsvragen.",
+          duration: "10-12 min",
+          setup: "Noem 4 tot 6 eenvoudige zoekvragen hardop of zet ze zichtbaar op het bord.",
+          goal: "Leerlingen laten ontdekken wat ze met elkaar delen en veilig contact laten maken met meerdere klasgenoten.",
+          movementFocus: "Steeds een nieuw kind opzoeken, luisteren, antwoord geven en daarna weer verder bewegen.",
+          materials: ["Eventueel zoekvragen op het bord"],
+          steps: [
+            "Noem een zoekvraag, zoals: zoek iemand met dezelfde lievelingskleur of zoek iemand die ook van bouwen houdt.",
+            "Laat leerlingen rustig door het lokaal lopen.",
+            "Wanneer leerlingen iemand vinden die past, wisselen ze kort hun antwoord uit.",
+            "Geef daarna een nieuwe vraag zodat iedereen weer verder zoekt."
+          ],
+          differentiation: "Gebruik alleen ja/nee-vragen voor een jongere groep of voeg één open vraag toe als de klas al wat losser is.",
+          teacherTip: "Kies eerst heel toegankelijke vragen, zodat iedereen snel succeservaringen opdoet.",
+          keywords: ["groep 3/4", "zoek iemand die", "kennismaken", "bewegen", "gouden weken"]
+        })
+      ],
+      [GOLDEN_MOMENT_GROUP]: [
+        goldenWeekTask({
+          key: "iedereen-hoort-erbij-kring",
+          visual: "circle",
+          visualHint: "In een kringactiviteit praten leerlingen over erbij horen en laten ze met kleine stappen of gebaren zien hoe je iemand mee kunt laten doen.",
+          title: "Iedereen hoort erbij",
+          summary: "Met korte vragen en beweging ervaren leerlingen dat iedereen een plek heeft in de groep.",
+          duration: "10-15 min",
+          setup: "Maak ruimte voor een kring of halve kring waarin iedereen elkaar kan zien.",
+          goal: "Bewust werken aan erbij horen, samen spelen en elkaar meenemen in de groep.",
+          movementFocus: "Leerlingen stappen, wijzen of draaien naar elkaar toe wanneer zij een manier noemen om iemand mee te laten doen.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Ga met de klas in een kring staan of zitten.",
+            "Bespreek korte situaties, zoals: iemand staat alleen op het plein of iemand durft nog niet mee te doen.",
+            "Laat leerlingen met een stap of gebaar laten zien wat zij zouden doen.",
+            "Kies na elke situatie één of twee reacties om samen hardop te oefenen."
+          ],
+          differentiation: "Werk met uitgebeelde situaties als verwoorden nog lastig is.",
+          teacherTip: "Houd de voorbeelden heel concreet en dicht bij de schooldag van jonge kinderen.",
+          keywords: ["groep 3/4", "erbij horen", "groepsvorming", "veiligheid", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "op-een-lijn-junior",
+          visual: "line",
+          visualHint: "Leerlingen kiezen met een stap op een lijn wat bij hen past, bijvoorbeeld spelen binnen of buiten of rustig of druk werken.",
+          title: "Op één lijn junior",
+          summary: "Leerlingen zetten een stap op of naast een lijn wanneer een stelling bij hen past.",
+          duration: "10 min",
+          setup: "Maak een denkbeeldige lijn of leg een lijn op de vloer met tape.",
+          goal: "Laat leerlingen veilige overeenkomsten en verschillen ontdekken zonder lange gesprekken.",
+          movementFocus: "Door fysiek positie te kiezen wordt zichtbaar wat leerlingen delen of juist verschillend vinden.",
+          materials: ["Eventueel tape voor een lijn op de vloer"],
+          steps: [
+            "Maak een lijn op de vloer of spreek een denkbeeldige lijn af.",
+            "Noem een stelling, zoals: ik speel liever buiten dan binnen of ik werk graag samen.",
+            "Laat leerlingen op de lijn stappen als het bij hen past en op hun plek blijven als dat niet zo is.",
+            "Vraag kort wat leerlingen opvalt aan de groep."
+          ],
+          differentiation: "Werk met twee duidelijke kanten, bijvoorbeeld ja en nee, als een open lijn nog te moeilijk is.",
+          teacherTip: "Kies luchtige stellingen; in groep 3/4 is het doel vooral veilige herkenning en niet diep debat.",
+          keywords: ["groep 3/4", "op een lijn", "groepsvorming", "stellingen", "gouden weken"]
+        })
+      ]
+    },
+    [GOLDEN_SUBJECT_56]: {
+      [GOLDEN_MOMENT_KENNIS]: [
+        goldenWeekTask({
+          key: "vakantievragen-in-beweging",
+          visual: "mission",
+          visualHint: "Leerlingen lopen in tweetallen of wisselende maatjes door het lokaal en beantwoorden om de beurt korte vakantie- en hobbyvragen.",
+          title: "Vakantievragen in beweging",
+          summary: "Leerlingen beantwoorden al bewegend korte vragen over vakantie, hobby's en verwachtingen van het jaar.",
+          duration: "10-12 min",
+          setup: "Zet 4 tot 6 korte vragen klaar die je mondeling kunt geven of op het bord kunt zetten.",
+          goal: "Contact maken met meerdere klasgenoten en op een luchtige manier informatie delen.",
+          movementFocus: "Steeds in beweging blijven, een maatje opzoeken, uitwisselen en weer doorschuiven.",
+          materials: ["Eventueel vragen op het bord"],
+          steps: [
+            "Laat leerlingen door het lokaal bewegen.",
+            "Geef een vraag, zoals: wat vond je het leukste van de vakantie of waar kijk je naar uit dit jaar?",
+            "Bij het stopteken zoekt iedereen een maatje en wisselt om de beurt een antwoord uit.",
+            "Laat leerlingen daarna weer verder lopen tot de volgende vraag."
+          ],
+          differentiation: "Gebruik een tijdslimiet per antwoord of laat leerlingen één antwoord van hun maatje onthouden voor de nabespreking.",
+          teacherTip: "Wissel luchtige vragen af met één iets inhoudelijkere vraag; zo blijft het speels en krijg je toch betekenisvolle input.",
+          keywords: ["groep 5/6", "vakantievragen", "kennismaken", "tweetallen", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "zoek-iemand-die-middenbouw",
+          visual: "mission",
+          visualHint: "In een vlotte zoekopdracht vinden leerlingen klasgenoten met dezelfde hobby, talenten of favoriete vakken.",
+          title: "Zoek iemand die... middenbouw",
+          summary: "Leerlingen zoeken klasgenoten die passen bij hobby-, talent- of schoolvragen en noteren of onthouden de antwoorden.",
+          duration: "12-15 min",
+          setup: "Noem of toon 6 tot 8 zoekopdrachten, zoals zoek iemand die van lezen houdt of iemand die goed is in tekenen.",
+          goal: "Kennismaken op meerdere thema's tegelijk en leerlingen laten ervaren dat er veel overlap in de groep is.",
+          movementFocus: "Zoeken, aanspreken, luisteren en doorschuiven in een hoog maar overzichtelijk tempo.",
+          materials: ["Eventueel wisbordje of kladblaadje"],
+          steps: [
+            "Geef leerlingen de eerste zoekopdracht.",
+            "Laat hen iemand zoeken die bij de opdracht past en kort doorvragen.",
+            "Geef na een halve minuut een nieuwe opdracht.",
+            "Bespreek aan het eind welke verrassende overeenkomsten leerlingen ontdekten."
+          ],
+          differentiation: "Laat leerlingen antwoorden opschrijven of juist alleen onthouden en later samenvatten.",
+          teacherTip: "Voorkom dat leerlingen steeds bij hetzelfde vriendje blijven door expliciet te laten wisselen na elke opdracht.",
+          keywords: ["groep 5/6", "zoek iemand die", "kennismaken", "middenbouw", "gouden weken"]
+        })
+      ],
+      [GOLDEN_MOMENT_GROUP]: [
+        goldenWeekTask({
+          key: "tweekening-samen",
+          visual: "dictation",
+          visualHint: "Tweetallen proberen via goede afstemming dezelfde tekening te maken zonder steeds op elkaars blad te kijken.",
+          title: "Tweekening samen",
+          summary: "Tweetallen maken via overleg dezelfde tekening en merken hoe belangrijk luisteren en afstemmen is.",
+          duration: "12-15 min",
+          setup: "Geef ieder tweetal twee vellen papier en twee potloden.",
+          goal: "Samenwerken, precies luisteren en afspraken maken binnen een tweetal.",
+          movementFocus: "Korte wisselmomenten tussen kijken, overleggen, tekenen en vergelijken houden de opdracht actief.",
+          materials: ["Papier", "Potloden of stiften"],
+          steps: [
+            "Maak tweetallen en geef ieder kind een eigen vel.",
+            "Geef een eenvoudige tekenopdracht of laat één leerling een tekening beschrijven die de ander moet namaken.",
+            "Laat tweetallen na een eerste ronde vergelijken wat al hetzelfde is en wat nog niet.",
+            "Wissel daarna van rol of geef een tweede tekening."
+          ],
+          differentiation: "Maak de tekening simpeler voor een onrustige groep of voeg extra details toe voor meer uitdaging.",
+          teacherTip: "De nabespreking is hier belangrijk: laat tweetallen benoemen wat hielp om echt samen te werken.",
+          keywords: ["groep 5/6", "tweekening", "samenwerken", "groepsvorming", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "wat-is-waar-groep",
+          visual: "line",
+          visualHint: "Leerlingen reageren op uitspraken die waar zijn voor henzelf en ontdekken zo overeenkomsten binnen de groep.",
+          title: "Wat is waar?",
+          summary: "Leerlingen reageren op waar-zinnen en ontdekken al bewegend wat ze met elkaar delen.",
+          duration: "10 min",
+          setup: "Maak een middenruimte vrij waarin leerlingen één stap naar voren kunnen zetten.",
+          goal: "Overeenkomsten zichtbaar maken en daarmee groepsgevoel en verbondenheid versterken.",
+          movementFocus: "Bij elke uitspraak stappen leerlingen in of uit de kring of naar voren op de lijn.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat leerlingen in een kring of achter een lijn staan.",
+            "Noem een uitspraak, zoals: ik help graag iemand anders, ik speel graag buiten of ik houd van voetbal.",
+            "Als de uitspraak klopt, stappen leerlingen naar voren of in de kring.",
+            "Bespreek kort welke overeenkomsten zichtbaar werden."
+          ],
+          differentiation: "Laat leerlingen later zelf een uitspraak bedenken die zoveel mogelijk klasgenoten in beweging krijgt.",
+          teacherTip: "Begin met luchtige uitspraken en bouw daarna rustig op naar samenwerken en vriendschap.",
+          keywords: ["groep 5/6", "wat is waar", "overeenkomsten", "groepsvorming", "gouden weken"]
+        })
+      ]
+    },
+    [GOLDEN_SUBJECT_78]: {
+      [GOLDEN_MOMENT_KENNIS]: [
+        goldenWeekTask({
+          key: "tijdmachine-vooruitblik",
+          visual: "path",
+          visualHint: "Leerlingen lopen langs denkbeeldige tijdstops en delen iets uit het vorige jaar en iets waar ze dit jaar naar uitkijken.",
+          title: "Tijdmachine vooruitblik",
+          summary: "Leerlingen blikken terug en vooruit en leren elkaar kennen via momenten, verwachtingen en doelen voor het jaar.",
+          duration: "12-15 min",
+          setup: "Maak 3 stopplekken in het lokaal: terugblik, nu en vooruitblik.",
+          goal: "Leerlingen inhoudelijker laten kennismaken en meteen zicht geven op verwachtingen en kansen in de groep.",
+          movementFocus: "Tussen stopplekken bewegen en bij elke plek kort delen of luisteren.",
+          materials: ["Eventueel drie pleklabels"],
+          steps: [
+            "Wijs drie plekken aan: terugblik, nu en vooruitblik.",
+            "Laat leerlingen per plek in tweetallen of kleine groepjes kort uitwisselen wat past bij die stop.",
+            "Laat de groep na één minuut doorschuiven naar de volgende stop.",
+            "Sluit af met één rondje waarin leerlingen iets verrassends delen dat zij hebben gehoord."
+          ],
+          differentiation: "Laat leerlingen bij de laatste stop één persoonlijk doel voor de groep formuleren.",
+          teacherTip: "Deze werkvorm werkt sterk als je aan het eind expliciet teruggrijpt op wat leerlingen hopen voor het schooljaar.",
+          keywords: ["groep 7/8", "tijdmachine", "kennismaken", "vooruitkijken", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "over-de-lijn-bovenbouw",
+          visual: "line",
+          visualHint: "Bij stellingen over school, hobby's en samenwerken steken leerlingen de lijn over en zien ze meteen wie hetzelfde kiest.",
+          title: "Over de lijn",
+          summary: "Leerlingen stappen over een lijn bij stellingen die bij hen passen en maken zo snel herkenning en gesprek mogelijk.",
+          duration: "10-12 min",
+          setup: "Leg een lijn op de vloer of spreek een duidelijke grens in het lokaal af.",
+          goal: "Kennismaken, herkenning creëren en de groep vanaf het begin in beweging met elkaar in contact brengen.",
+          movementFocus: "Positie kiezen door fysiek de lijn over te steken en daarna weer terug te keren.",
+          materials: ["Eventueel tape voor een lijn op de vloer"],
+          steps: [
+            "Laat iedereen aan één kant van de lijn starten.",
+            "Noem een stelling, zoals: ik werk graag samen, ik houd van lezen of ik vind een nieuw schooljaar spannend.",
+            "Wie zich herkent, stapt over de lijn.",
+            "Vraag af en toe door: wat maakt dat jij hiervoor koos?"
+          ],
+          differentiation: "Gebruik eerst lichte stellingen en voeg later vragen toe over samenwerken, hulp vragen of een plek in de groep vinden.",
+          teacherTip: "Kies een rustig tempo; in groep 7/8 zit de meerwaarde juist vaak in het korte gesprek na de beweging.",
+          keywords: ["groep 7/8", "over de lijn", "kennismaken", "stellingen", "gouden weken"]
+        })
+      ],
+      [GOLDEN_MOMENT_GROUP]: [
+        goldenWeekTask({
+          key: "kleef-aan-overeenkomsten",
+          visual: "mission",
+          visualHint: "Leerlingen vormen al lopend steeds nieuwe groepjes op basis van een overeenkomst die de leerkracht noemt.",
+          title: "Kleef aan overeenkomsten",
+          summary: "Leerlingen zoeken snel anderen met dezelfde voorkeur, ervaring of werkstijl en vormen telkens nieuwe groepjes.",
+          duration: "10-12 min",
+          setup: "Zorg voor loopruimte en bedenk 6 tot 8 overeenkomsten of keuzestellingen.",
+          goal: "Laat leerlingen ervaren dat een groep uit veel verschillende, maar ook gedeelde kenmerken bestaat.",
+          movementFocus: "Snel clusteren, weer loslaten en opnieuw een andere match zoeken.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat leerlingen door het lokaal lopen.",
+            "Noem een overeenkomst of keuze, zoals: zoek mensen die graag buiten sporten of die rustig starten fijn vinden.",
+            "Laat leerlingen groepjes vormen op basis van wat bij hen past.",
+            "Na een korte uitwisseling laat je de groepjes weer los en volgt de volgende overeenkomst."
+          ],
+          differentiation: "Laat leerlingen in een latere ronde zelf een overeenkomst bedenken waarop zij een groepje vormen.",
+          teacherTip: "Varieer tussen luchtige en meer schoolgerichte overeenkomsten; zo bouw je zowel sfeer als inhoudelijk zicht op de groep op.",
+          keywords: ["groep 7/8", "kleef aan overeenkomsten", "groepsvorming", "verbinding", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "klassenzicht-in-hoeken",
+          visual: "corners",
+          visualHint: "Vier hoeken staan voor gevoelens of ervaringen in de groep, waarna leerlingen hun keuze kort toelichten.",
+          title: "Klassenzicht in hoeken",
+          summary: "Leerlingen kiezen een hoek die past bij hoe zij de groep ervaren en geven daar kort woorden aan.",
+          duration: "12-15 min",
+          setup: "Label vier hoeken, bijvoorbeeld: ik voel me al thuis, ik leer nog mensen kennen, ik heb al maatjes, ik weet nog niet goed waar ik sta.",
+          goal: "Zicht krijgen op hoe leerlingen de groep beleven en groepsvorming bewust bespreekbaar maken.",
+          movementFocus: "Door fysiek een hoek te kiezen wordt zichtbaar hoe de groep ervoor staat en waar verbinding nog nodig is.",
+          materials: ["Eventueel hoeklabels"],
+          steps: [
+            "Benoem de vier hoeken en leg ze kort uit.",
+            "Laat leerlingen kiezen welke hoek nu het best bij hun gevoel of ervaring past.",
+            "Geef per hoek kort tijd om met elkaar uit te wisselen waarom die keuze past.",
+            "Haal klassikaal op wat de groep nodig heeft om sterker te worden."
+          ],
+          differentiation: "Werk eerst met veiligere hoekkeuzes en ga later pas naar stellingen over samenwerken, hulp vragen of erbij horen.",
+          teacherTip: "Benadruk dat er geen goede of foute hoek is; het doel is zicht krijgen op de groep, niet elkaar overtuigen.",
+          keywords: ["groep 7/8", "klassenzicht", "hoeken", "groepsvorming", "gouden weken"]
+        })
+      ]
+    }
+  };
+}
+
 const initialState = {
   groupId: null,
   subjectId: null,
@@ -2902,19 +3294,43 @@ let localCreateDraft = null;
 let localChangeFeedback = null;
 
 function getAllSubjectOptions() {
-  return [...subjects, ...energizerSubjects];
+  return [...subjects, ...goldenWeekSubjects, ...energizerSubjects];
 }
 
 function getAllMomentOptions() {
-  return [...moments, energizerMoment];
+  return [...moments, ...goldenWeekMoments, energizerMoment];
 }
 
 function isEnergizerGroup(groupId = state.groupId) {
   return groupId === GROUP_ENERGIZERS;
 }
 
+function isGoldenWeekGroup(groupId = state.groupId) {
+  return groupId === GROUP_GOLDEN;
+}
+
 function getSubjectOptionsForCurrentRoute(groupId = state.groupId) {
-  return isEnergizerGroup(groupId) ? energizerSubjects : subjects;
+  if (isEnergizerGroup(groupId)) {
+    return energizerSubjects;
+  }
+
+  if (isGoldenWeekGroup(groupId)) {
+    return goldenWeekSubjects;
+  }
+
+  return subjects;
+}
+
+function getMomentOptionsForCurrentRoute(groupId = state.groupId) {
+  if (isEnergizerGroup(groupId)) {
+    return [];
+  }
+
+  if (isGoldenWeekGroup(groupId)) {
+    return goldenWeekMoments;
+  }
+
+  return moments;
 }
 
 const orderMaps = {
@@ -2987,29 +3403,47 @@ function bindIfPresent(element, eventName, handler) {
 
 function buildLibrary() {
   const regularGroups = groups
-    .filter((group) => !isEnergizerGroup(group.id))
+    .filter((group) => !isEnergizerGroup(group.id) && !isGoldenWeekGroup(group.id))
     .map((group) => ({
-        ...group,
-        subjects: subjects.map((subject) => ({
-          ...subject,
-          moments: moments.map((moment) => ({
-            ...moment,
-            tasks: getBlueprintsForRoute(group.id, subject.id, moment.id, taskBlueprints[subject.id][moment.id])
-              .map((blueprint) => materializeTask(group, subject, moment, blueprint))
-              .filter(Boolean)
-          }))
+      ...group,
+      subjects: subjects.map((subject) => ({
+        ...subject,
+        moments: moments.map((moment) => ({
+          ...moment,
+          tasks: getBlueprintsForRoute(group.id, subject.id, moment.id, taskBlueprints[subject.id][moment.id])
+            .map((blueprint) => materializeTask(group, subject, moment, blueprint))
+            .filter(Boolean)
         }))
-      }));
+      }))
+    }));
+
+  const standaloneGroups = [];
+  const goldenWeekGroup = groups.find((group) => isGoldenWeekGroup(group.id));
+
+  if (goldenWeekGroup) {
+    standaloneGroups.push({
+      ...goldenWeekGroup,
+      subjects: goldenWeekSubjects.map((subject) => ({
+        ...subject,
+        moments: goldenWeekMoments.map((moment) => ({
+          ...moment,
+          tasks: getBlueprintsForRoute(
+            goldenWeekGroup.id,
+            subject.id,
+            moment.id,
+            standaloneGoldenWeekBlueprints[subject.id][moment.id]
+          )
+            .map((blueprint) => materializeTask(goldenWeekGroup, subject, moment, blueprint))
+            .filter(Boolean)
+        }))
+      }))
+    });
+  }
 
   const energizerGroup = groups.find((group) => isEnergizerGroup(group.id));
 
-  if (!energizerGroup) {
-    return regularGroups;
-  }
-
-  return [
-    ...regularGroups,
-    {
+  if (energizerGroup) {
+    standaloneGroups.push({
       ...energizerGroup,
       subjects: energizerSubjects.map((subject) => ({
         ...subject,
@@ -3022,8 +3456,10 @@ function buildLibrary() {
           }
         ]
       }))
-    }
-  ];
+    });
+  }
+
+  return [...regularGroups, ...standaloneGroups];
 }
 
 const taskPrintProfiles = {
@@ -3788,7 +4224,7 @@ function readGroupValue(value, groupId) {
       return value[groupId];
     }
 
-    if (groupId === GROUP_ENERGIZERS) {
+    if (groupId === GROUP_ENERGIZERS || groupId === GROUP_GOLDEN) {
       const fallback = Object.values(value).find((entry) => entry !== null && entry !== undefined);
       return fallback ?? null;
     }
@@ -8099,20 +8535,18 @@ function renderFilters() {
     )
     .join("");
 
-  ui.momentFilters.innerHTML = isEnergizerGroup()
-    ? ""
-    : moments
-        .map((moment) =>
-          renderFilterButton({
-            id: moment.id,
-            level: "moment",
-            title: moment.label,
-            description: moment.subtitle,
-            count: countForMoment(moment.id),
-            active: state.momentId === moment.id
-          })
-        )
-        .join("");
+  ui.momentFilters.innerHTML = getMomentOptionsForCurrentRoute()
+    .map((moment) =>
+      renderFilterButton({
+        id: moment.id,
+        level: "moment",
+        title: moment.label,
+        description: moment.subtitle,
+        count: countForMoment(moment.id),
+        active: state.momentId === moment.id
+      })
+    )
+    .join("");
 }
 
 function renderFilterButton({ id, level, title, description, count, active }) {
@@ -8163,6 +8597,18 @@ function renderHeader() {
     ui.contentEyebrow.textContent = `${selectedGroup.label} • ${selectedSubject.label}`;
     ui.contentTitle.textContent = energizerMoment.subtitle;
     ui.contentDescription.textContent = selectedSubject.description;
+  } else if (isGoldenWeekGroup(selectedGroup.id) && !selectedSubject) {
+    ui.contentEyebrow.textContent = selectedGroup.label;
+    ui.contentTitle.textContent = getSiteText("headerTitleGoldenWeekBuild");
+    ui.contentDescription.textContent = getSiteText("headerDescriptionGoldenWeekBuild");
+  } else if (isGoldenWeekGroup(selectedGroup.id) && !selectedMoment) {
+    ui.contentEyebrow.textContent = `${selectedGroup.label} • ${selectedSubject.label}`;
+    ui.contentTitle.textContent = getSiteText("headerTitleGoldenWeekType");
+    ui.contentDescription.textContent = getSiteText("headerDescriptionGoldenWeekType");
+  } else if (isGoldenWeekGroup(selectedGroup.id)) {
+    ui.contentEyebrow.textContent = `${selectedGroup.label} • ${selectedSubject.label}`;
+    ui.contentTitle.textContent = selectedMoment.subtitle;
+    ui.contentDescription.textContent = selectedMoment.description;
   } else if (!selectedSubject) {
     ui.contentEyebrow.textContent = selectedGroup.label;
     ui.contentTitle.textContent = getSiteText("headerTitleChooseSubject", { groep: selectedGroup.label });
@@ -8237,17 +8683,25 @@ function renderStepSection() {
     ui.stepSectionDescription.textContent =
       "Je kunt direct een opdracht openen, of eerst nog verder kiezen op bouw, vak of lesmoment.";
   } else if (nextStep?.level === "group") {
-    ui.stepSectionTitle.textContent = "Kies een bouw of energizers";
+    ui.stepSectionTitle.textContent = "Kies een bouw, Gouden Weken of energizers";
     ui.stepSectionDescription.textContent =
-      "De opdrachten zijn afgestemd op groep 3/4, 5/6 en 7/8. Daarnaast kun je direct naar een aparte bibliotheek met energizers voor lesovergangen.";
+      "De opdrachten zijn afgestemd op groep 3/4, 5/6 en 7/8. Daarnaast kun je direct naar een aparte bibliotheek voor Gouden Weken of energizers voor lesovergangen.";
   } else if (nextStep?.level === "subject" && isEnergizerGroup()) {
     ui.stepSectionTitle.textContent = "Kies een type energizer";
     ui.stepSectionDescription.textContent =
       "Kies of je een activerende, focussende of kalmerend actieve energizer zoekt voor een lesovergang.";
+  } else if (nextStep?.level === "subject" && isGoldenWeekGroup()) {
+    ui.stepSectionTitle.textContent = "Kies een bouw voor Gouden Weken";
+    ui.stepSectionDescription.textContent =
+      "Zo vind je meteen kennismakings- en groepsvormingsactiviteiten die passen bij de leeftijd van de groep.";
   } else if (nextStep?.level === "subject") {
     ui.stepSectionTitle.textContent = "Kies een vak";
     ui.stepSectionDescription.textContent =
       "Beperk de bibliotheek tot taal, spelling of rekenen zodat docenten sneller passende werkvormen zien.";
+  } else if (nextStep?.level === "moment" && isGoldenWeekGroup()) {
+    ui.stepSectionTitle.textContent = "Kies het doel van de activiteit";
+    ui.stepSectionDescription.textContent =
+      "Kies of je vooral een kennismakingsspel zoekt, of juist een werkvorm voor verbinding en groepsvorming.";
   } else if (nextStep?.level === "moment") {
     ui.stepSectionTitle.textContent = "Kies het lesmoment";
     ui.stepSectionDescription.textContent =
@@ -8317,7 +8771,7 @@ function renderStepCards(nextStep) {
       .join("");
   }
 
-  return moments
+  return getMomentOptionsForCurrentRoute()
     .map((moment) => {
       const count = countForMoment(moment.id);
       const disabled = count === 0;
@@ -8368,7 +8822,9 @@ function renderResultsSection() {
     ui.resultsMeta.textContent =
       isEnergizerGroup()
         ? getSiteText("resultsMetaNeedEnergizerType")
-        : getSiteText("resultsMetaNeedRoute");
+        : isGoldenWeekGroup()
+          ? getSiteText("resultsMetaNeedGoldenRoute")
+          : getSiteText("resultsMetaNeedRoute");
     ui.taskDetail.className = "task-detail";
     ui.taskDetail.innerHTML = "";
     ui.taskGrid.innerHTML = `
@@ -8376,7 +8832,9 @@ function renderResultsSection() {
         ${
           isEnergizerGroup()
             ? getSiteText("resultsEmptyEnergizerText")
-            : getSiteText("resultsEmptyRouteText")
+            : isGoldenWeekGroup()
+              ? getSiteText("resultsEmptyGoldenText")
+              : getSiteText("resultsEmptyRouteText")
         }
       </div>
     `;
@@ -9073,6 +9531,10 @@ function getSuggestedCustomVisual(groupId, subjectId, momentId) {
     }
 
     return "path";
+  }
+
+  if (groupId === GROUP_GOLDEN) {
+    return momentId === GOLDEN_MOMENT_GROUP ? "circle" : "path";
   }
 
   if (momentId === "bewegend") {
