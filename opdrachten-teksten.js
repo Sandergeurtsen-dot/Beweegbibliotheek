@@ -40,10 +40,10 @@ window.taskTextOverrides = {
             "Wisbordje of papier"
           ],
           steps: [
-            "Werk in tweetallen.",
-            "Eén leerling loopt naar een woordkaart, onthoudt het woord en loopt terug.",
-            "Samen zeggen de leerlingen het woord, leggen uit wat het betekent of gebruiken het in een zin.",
-            "Daarna wisselen de rollen."
+            "Maak vaste tweetallen en spreek af wie leerling A en leerling B is.",
+            "Leerling A loopt naar 1 woordkaart, leest of onthoudt het woord en loopt terug naar de schrijfplek.",
+            "Samen zeggen beide leerlingen het woord hardop, leggen de betekenis uit of maken er 1 passende zin mee.",
+            "Schrijf het woord of de zin op en wissel daarna van rol, zodat leerling B het volgende woord ophaalt."
           ],
           differentiation: "Gebruik ook beeldkaartjes of laat sterkere leerlingen zelf een zin maken met het woord.",
           teacherTip: "Laat leerlingen eerst het woord hardop herhalen voordat ze naar betekenis of gebruik gaan.",
@@ -72,10 +72,10 @@ window.taskTextOverrides = {
             "Eventueel praatkaartjes"
           ],
           steps: [
-            "Laat leerlingen rustig door het lokaal lopen.",
-            "Bij een signaal zoeken zij een maatje.",
-            "Geef een korte vraag, bijvoorbeeld: Wat zie je op de boerderij?",
-            "Leerling A vertelt, leerling B luistert en noemt daarna één woord of zin terug."
+            "Laat leerlingen rustig door het lokaal lopen, zonder te rennen, tot jij een stopteken geeft.",
+            "Bij het stopteken zoekt iedere leerling meteen het dichtstbijzijnde maatje en blijft daar staan.",
+            "Geef 1 korte vraag, bijvoorbeeld: Wat zie je op de boerderij?",
+            "Leerling A antwoordt in 1 of 2 zinnen, leerling B luistert en zegt daarna 1 woord of zin terug; wissel bij de volgende vraag van spreker."
           ],
           differentiation: "Laat leerlingen eerst nadenken met een themawoord, gebaar of voorwerp als steun.",
           teacherTip: "Model eerst hoe een volledig antwoord en een goede luisterreactie klinken.",
@@ -103,10 +103,10 @@ window.taskTextOverrides = {
             "Geen extra materiaal"
           ],
           steps: [
-            "Verdeel de klas in kleine groepjes.",
-            "De eerste leerling loopt naar een plek in het lokaal en vertelt één zin van een verhaal.",
-            "Daarna tikt hij of zij de volgende leerling aan.",
-            "De volgende leerling voegt een zin toe, zodat het verhaal steeds verder groeit."
+            "Verdeel de klas in kleine groepjes en geef ieder groepje 1 vaste vertelplek.",
+            "De eerste leerling van elk groepje loopt naar de vertelplek en zegt 1 beginzin van het verhaal.",
+            "Daarna loopt hij of zij terug, tikt de volgende leerling aan en die loopt naar voren.",
+            "De volgende leerling voegt 1 nieuwe zin toe; ga zo door tot het verhaal van het groepje klaar is."
           ],
           differentiation: "Werk met een beginzin, een themawoord of drie plaatjes als steun.",
           teacherTip: "Geef groepjes eventueel eerst één vaste beginzin; dan komt de inhoud sneller op gang.",
@@ -359,10 +359,10 @@ window.taskTextOverrides = {
             "Papier of wisbordje"
           ],
           steps: [
-            "Werk in tweetallen.",
-            "Eén leerling loopt naar een tekststrook en onthoudt de kernzin.",
-            "Terug bij het maatje schrijven of formuleren ze samen de hoofdgedachte.",
-            "Daarna wisselen ze."
+            "Maak vaste tweetallen en spreek af wie eerst loopt en wie schrijft.",
+            "Leerling A loopt naar 1 tekststrook, leest de kernzin goed en onthoudt die.",
+            "Terug bij de schrijfplek vertelt leerling A de kernzin na en formuleert het tweetal samen de hoofdgedachte.",
+            "Schrijf de hoofdgedachte op en wissel daarna van rol voor de volgende tekststrook."
           ],
           differentiation: "Gebruik ondersteunende woorden of een half ingevulde samenvatstructuur voor wie dat nodig heeft.",
           teacherTip: "Laat leerlingen eerst de kernzin navertellen voordat ze gaan schrijven; zo blijft de inhoud voorop staan.",
@@ -452,10 +452,10 @@ window.taskTextOverrides = {
             "Vraagkaartjes"
           ],
           steps: [
-            "Verspreid vraagkaartjes door het lokaal.",
-            "Leerlingen lopen in tweetallen langs de kaartjes.",
-            "Bij elk kaartje leest leerling A de vraag en leerling B antwoordt in een volledige zin.",
-            "Bij het volgende kaartje wisselen de rollen."
+            "Maak vaste tweetallen en laat elk duo bij een ander vraagkaartje starten.",
+            "Loop samen naar het kaartje en laat leerling A de vraag hardop voorlezen.",
+            "Leerling B antwoordt in 1 volledige zin of meer, terwijl leerling A luistert.",
+            "Loop daarna door naar het volgende kaartje en wissel daar de rollen om."
           ],
           differentiation: "Laat leerlingen aan het eind één sterk antwoord klassikaal delen.",
           teacherTip: "Zeg expliciet dat korte éénwoordantwoorden niet genoeg zijn; zo borg je de taalopbrengst.",
@@ -516,10 +516,10 @@ window.taskTextOverrides = {
             "Kaartjes"
           ],
           steps: [
-            "Geef drie leerlingen de kaartjes inleiding, kern en slot.",
-            "Laat hen in de goede volgorde gaan staan.",
-            "Bespreek welke informatie bij elk deel hoort.",
-            "Laat daarna andere leerlingen zinnen of ideeën bij de juiste plek brengen."
+            "Geef 3 leerlingen de kaarten inleiding, kern en slot en laat hen naast elkaar op 1 lijn staan.",
+            "Spreek samen af welke plek links, midden en rechts is in de tekst.",
+            "Laat andere leerlingen met zinnen of ideeën naar de juiste plek lopen.",
+            "Controleer samen of elke zin echt bij inleiding, kern of slot hoort."
           ],
           differentiation: "Gebruik ook informatieve teksten met kopjes als extra uitwerking.",
           teacherTip: "Laat leerlingen niet alleen de volgorde noemen, maar ook hardop zeggen wat de taak van elk deel is.",
@@ -547,10 +547,10 @@ window.taskTextOverrides = {
             "Kaartjes met signaalwoorden"
           ],
           steps: [
-            "Geef een leerling een kaartje met een signaalwoord zoals daarna, omdat, maar of ten eerste.",
-            "De leerling loopt naar de juiste tekstverbandplek.",
-            "Laat hem of haar hardop uitleggen waarom het signaalwoord daar hoort.",
-            "Gebruik daarna het woord in een voorbeeldzin."
+            "Maak 4 vaste plekken in het lokaal: tijd, oorzaak-gevolg, opsomming en tegenstelling.",
+            "Geef 1 leerling of 1 tweetal een kaartje met een signaalwoord, zoals daarna, omdat, maar of ten eerste.",
+            "Laat de leerling naar de juiste plek lopen en daar hardop uitleggen waarom het woord bij dat tekstverband hoort.",
+            "Gebruik het signaalwoord daarna samen in 1 voorbeeldzin."
           ],
           differentiation: "Laat tweetallen zelf een zin maken met het signaalwoord als verdiepingsstap.",
           teacherTip: "Houd de vier verbanden zichtbaar in dezelfde taal als je in de methode gebruikt.",
@@ -579,10 +579,10 @@ window.taskTextOverrides = {
             "Of post-its"
           ],
           steps: [
-            "Kies een kernwoord uit het thema, bijvoorbeeld vulkaan of uitvinding.",
-            "Leerlingen krijgen om de beurt een woordkaartje en leggen of staan het op de juiste plek rond het kernwoord.",
-            "Bespreek of het woord hoort bij eigenschap, onderdeel, handeling of voorbeeld.",
-            "Bouw zo samen een mondeling woordweb."
+            "Leg 1 kernwoord in het midden van de vloer en spreek af dat woorden daaromheen komen te liggen.",
+            "Geef leerlingen om de beurt 1 woordkaartje.",
+            "Laat iedere leerling het kaartje op een plek rond het kernwoord leggen en hardop zeggen of het een eigenschap, onderdeel, handeling of voorbeeld is.",
+            "Controleer samen of de plek klopt en bouw zo het woordweb stap voor stap uit."
           ],
           differentiation: "Laat leerlingen zelf ontbrekende woorden toevoegen of relatiestippen benoemen.",
           teacherTip: "Vraag steeds expliciet wat de relatie met het kernwoord is; dan blijft het woordweb inhoudelijk sterk.",
@@ -614,10 +614,10 @@ window.taskTextOverrides = {
             "Vraagkaartjes"
           ],
           steps: [
-            "Laat leerlingen in twee rijen tegenover elkaar staan.",
-            "De ene rij stelt een vraag en de andere rij antwoordt.",
-            "Na één minuut schuift één rij een plek door.",
-            "Herhaal dit met nieuwe vragen of vervolgvragen."
+            "Maak 2 rijen tegenover elkaar, zodat iedere leerling 1 gesprekspartner recht voor zich heeft.",
+            "De ene rij stelt eerst 1 vraag en de andere rij antwoordt, daarna wisselen de rollen direct om.",
+            "Na ongeveer 1 minuut blijft 1 rij staan en schuift de andere rij 1 plek door naar rechts of links.",
+            "De leerling aan het einde loopt door naar de eerste plek, zodat iedereen een nieuw maatje krijgt."
           ],
           differentiation: "Werk rond een thema, boek of zaakvakonderwerp voor meer inhoudelijke diepgang.",
           teacherTip: "Model eerst hoe een goede vervolg- of doorvraag klinkt; dat tilt het gesprek meteen omhoog.",
@@ -645,10 +645,10 @@ window.taskTextOverrides = {
             "Werkblad of schrijfkaart"
           ],
           steps: [
-            "Leerlingen starten bij de eerste post en noteren daar het doel van hun tekst.",
-            "Bij de volgende post bepalen zij voor wie de tekst is.",
-            "Bij kern en slot schrijven zij steekwoorden of zinnen.",
-            "Aan het eind hebben zij een compacte tekstopzet."
+            "Verdeel de schrijfposten over het lokaal en laat leerlingen met hun werkblad bij post 1 starten.",
+            "Bij de eerste post noteren zij het doel van hun tekst; bij de volgende post kiezen zij publiek, kern en slot.",
+            "Laat leerlingen pas doorschuiven als zij per post 1 keuze of korte notitie hebben gemaakt.",
+            "Aan het eind lezen zij hun tekstopzet terug en controleren of alle onderdelen logisch op elkaar aansluiten."
           ],
           differentiation: "Gebruik verschillende tekstsoorten, zoals betoog, uitleg, verslag of e-mail.",
           teacherTip: "Laat leerlingen hun tekstdoel steeds hardop uitspreken; dat maakt de keuzes bij de andere posten beter.",
@@ -677,10 +677,10 @@ window.taskTextOverrides = {
             "Eventueel samenvatkaartje"
           ],
           steps: [
-            "Leerlingen lopen in tweetallen een vaste route.",
-            "Leerling A vat de tekst in maximaal drie zinnen samen.",
-            "Leerling B luistert en vult aan met wat nog ontbreekt.",
-            "Daarna wisselen de rollen met een tweede tekst of alinea."
+            "Maak vaste tweetallen en spreek een korte route af door lokaal of gang.",
+            "Tijdens het lopen vat leerling A de tekst of alinea samen in maximaal 3 zinnen.",
+            "Leerling B luistert, controleert of de hoofdpunten genoemd zijn en vult alleen aan wat nog ontbreekt.",
+            "Wissel daarna van rol bij een tweede tekst, alinea of vraag."
           ],
           differentiation: "Geef een vaste samenvatstructuur: onderwerp, belangrijkste informatie en conclusie.",
           teacherTip: "Zet vooraf een maximum aan het aantal zinnen; dan blijft de samenvatting echt kernachtig.",
@@ -710,10 +710,10 @@ window.taskTextOverrides = {
             "Kaartjes"
           ],
           steps: [
-            "Leg op de vloer een volgorde van drie plekken: standpunt, argument en voorbeeld.",
-            "Leerlingen krijgen kaartjes en gaan op de juiste plek staan.",
-            "Bespreek samen hoe een overtuigende redenering is opgebouwd.",
-            "Laat daarna kleine groepjes zelf een nieuwe argumentenlijn maken."
+            "Leg op de vloer 3 vaste plekken in deze volgorde: standpunt, argument en voorbeeld.",
+            "Geef leerlingen kaartjes en laat hen op de plek gaan staan waar hun kaart volgens hen hoort.",
+            "Laat iedere leerling kort toelichten waarom zijn of haar kaart op die plek past.",
+            "Controleer samen de volgorde en laat daarna kleine groepjes zelf een nieuwe argumentenlijn maken."
           ],
           differentiation: "Laat leerlingen sterke en zwakke argumenten vergelijken in een extra ronde.",
           teacherTip: "Vraag steeds wat er misgaat als een voorbeeld voor het standpunt komt; zo zien leerlingen de structuur beter.",
@@ -904,10 +904,10 @@ window.taskTextOverrides = {
             "Schrift of wisbordje"
           ],
           steps: [
-            "Werk in tweetallen.",
-            "Eén leerling loopt naar een woordkaartje, leest of onthoudt het woord en loopt terug.",
-            "Samen hakken de leerlingen het woord, zeggen de klanken en schrijven het op.",
-            "Daarna wisselen de rollen."
+            "Maak vaste tweetallen en spreek af wie leerling A en leerling B is.",
+            "Leerling A loopt naar 1 woordkaartje, leest of onthoudt het woord en loopt terug naar de schrijfplek.",
+            "Samen hakken de leerlingen het woord, zeggen de klanken hardop en schrijven het daarna op.",
+            "Controleer samen het woord en wissel daarna van rol, zodat leerling B het volgende woord ophaalt."
           ],
           differentiation: "Laat sterke spellers na het opschrijven meteen een zin maken met het woord.",
           teacherTip: "Laat leerlingen eerst hardop hakken voordat er geschreven wordt; zo blijft de auditieve analyse centraal.",
@@ -936,10 +936,10 @@ window.taskTextOverrides = {
             "Schrift of wisbordjes"
           ],
           steps: [
-            "Verdeel de klas in kleine teams.",
-            "De eerste leerling haalt een kaartje op, leest het woord hardop en legt uit wat hij of zij hoort.",
-            "Het team schrijft het woord op.",
-            "Daarna haalt de volgende leerling een nieuw kaartje."
+            "Verdeel de klas in kleine teams en geef elk team 1 eigen schrijfplek.",
+            "De eerste leerling van ieder team loopt naar de kaartjes, haalt 1 woord op en leest het hardop voor aan het team.",
+            "Het team zegt de categorie of klank mee en schrijft daarna het woord op.",
+            "De leerling tikt de volgende teamgenoot aan; die haalt het volgende kaartje op."
           ],
           differentiation: "Geef zwakkere leerlingen kaartjes met een plaatje erbij of kortere woorden uit dezelfde categorie.",
           teacherTip: "Laat ieder team steeds eerst de categorie noemen voordat het woord wordt opgeschreven.",
@@ -967,10 +967,10 @@ window.taskTextOverrides = {
             "Kaartjes met woorden of plaatjes"
           ],
           steps: [
-            "Geef iedere leerling een woordkaartje.",
-            "Laat leerlingen door de klas lopen en iemand zoeken met hetzelfde patroon, bijvoorbeeld korte klank, lange klank of tweetekenklank.",
-            "Als een duo of groepje denkt bij elkaar te horen, leggen ze uit waarom.",
-            "Controleer klassikaal enkele voorbeelden."
+            "Geef iedere leerling 1 woordkaartje.",
+            "Laat leerlingen rustig rondlopen en hun woord vergelijken met dat van anderen.",
+            "Wie denkt een maatje of groepje met hetzelfde spellingpatroon te hebben, blijft samen staan en legt uit waarom.",
+            "Controleer daarna een paar groepjes klassikaal en laat leerlingen waar nodig nog van plek wisselen."
           ],
           differentiation: "Werk eerst met twee duidelijke categorieen en voeg later een derde patroon toe.",
           teacherTip: "Laat leerlingen pas blijven staan als zij hun patroon in woorden kunnen uitleggen.",
@@ -1194,10 +1194,10 @@ window.taskTextOverrides = {
             "Schrift"
           ],
           steps: [
-            "Zet in elk hoekje van het lokaal een post neer.",
-            "Per post maken leerlingen 2 of 3 woorden of kiezen ze de goede spelling.",
-            "Na twee minuten schuiven ze door.",
-            "Sluit af met een korte nabespreking van lastige woorden."
+            "Maak 4 tot 6 vaste posten en laat kleine groepjes of tweetallen bij verschillende startposten beginnen.",
+            "Per post maken leerlingen 2 of 3 woorden of kiezen zij de goede spelling.",
+            "Na ongeveer 2 minuten geef jij een signaal en schuift ieder groepje 1 post door.",
+            "Sluit af met een korte bespreking van de lastigste woorden en regels."
           ],
           differentiation: "Laat sterke spellers op één post ook zelf een extra voorbeeld bedenken.",
           teacherTip: "Houd iedere post heel compact; zo blijft het tempo hoog en wordt de circuitvorm echt helpend.",
@@ -1258,10 +1258,10 @@ window.taskTextOverrides = {
             "Schrift of wisbordje"
           ],
           steps: [
-            "Werk in tweetallen.",
-            "Eén leerling loopt naar een kaartje en leest het woord of de korte zin.",
-            "Terug bij de tafel schrijft het tweetal het woord of de zin op en benoemt de regel.",
-            "Daarna wisselen de rollen."
+            "Maak vaste tweetallen en spreek af wie eerst loopt en wie schrijft.",
+            "Leerling A loopt naar 1 woord- of zinstrip, leest die goed en onthoudt zoveel mogelijk.",
+            "Terug bij de schrijfplek noteert het tweetal het woord of de zin en noemt daarbij hardop de regel of categorie.",
+            "Controleer kort en wissel daarna van rol voor het volgende kaartje."
           ],
           differentiation: "Gebruik korte zinnen in plaats van losse woorden als je transfer naar schrijven wilt oefenen.",
           teacherTip: "Laat leerlingen na elke zin eerst samen de categorie of regel noemen; dan blijft het geen overschrijfoefening.",
@@ -1351,10 +1351,10 @@ window.taskTextOverrides = {
             "Kaartjes"
           ],
           steps: [
-            "Geef iedere leerling één kaartje.",
-            "De klas loopt rond en zoekt de partner of matchgroep die erbij hoort, bijvoorbeeld een woord en de juiste categorie.",
-            "Als leerlingen denken dat hun kaarten bij elkaar horen, leggen ze dat aan elkaar uit.",
-            "Controleer klassikaal enkele matches."
+            "Geef iedere leerling 1 kaartje.",
+            "Laat de klas rondlopen en zoeken naar de partner of matchgroep die erbij hoort, bijvoorbeeld een woord en de juiste categorie of regel.",
+            "Wie denkt de juiste match te hebben, blijft samen staan en legt eerst aan elkaar uit waarom de kaarten bij elkaar horen.",
+            "Controleer daarna een paar matches klassikaal en verbeter waar nodig."
           ],
           differentiation: "Werk in trio's of matchgroepen met woord, categorie en uitleg als uitbreiding.",
           teacherTip: "Laat leerlingen pas verder zoeken als ze eerst hebben verteld waarom een kaart niet past; dat scherpt het denken.",
@@ -1416,9 +1416,9 @@ window.taskTextOverrides = {
           ],
           steps: [
             "Verspreid woorden, regelkaartjes en voorbeeldkaartjes door het lokaal.",
-            "Leerlingen lopen in tweetallen en zoeken steeds een set van drie die bij elkaar hoort.",
-            "Bij elk setje spreken ze hardop uit welke regel wordt toegepast.",
-            "Bespreek klassikaal twee of drie complete sets."
+            "Laat ieder tweetal eerst 1 woordkaart zoeken en daarna de regelkaart en het voorbeeld zoeken die daarbij passen.",
+            "Als het tweetal denkt een complete set te hebben, spreken zij hardop uit welke regel wordt toegepast.",
+            "Controleer samen 2 of 3 sets en verbeter waar nodig."
           ],
           differentiation: "Laat leerlingen zelf een extra voorbeeldwoord toevoegen aan een gevonden set.",
           teacherTip: "Leg de nadruk op de uitlegzin; juist het verwoorden van de regel maakt deze opdracht sterk.",
@@ -1515,10 +1515,10 @@ window.taskTextOverrides = {
             "Schrift of wisbordje"
           ],
           steps: [
-            "Werk in tweetallen.",
-            "Eén leerling leest een zin aan de muur, bijvoorbeeld: Morgen ... hij de wedstrijd.",
-            "Terug bij de tafel vullen de leerlingen de juiste vorm in en leggen de regel uit.",
-            "Daarna wisselen ze."
+            "Maak vaste tweetallen en spreek af wie eerst loopt en wie schrijft.",
+            "Leerling A leest 1 zin aan de muur, bijvoorbeeld: Morgen ... hij de wedstrijd, en onthoudt de zin.",
+            "Terug bij de tafel vullen de leerlingen samen de juiste werkwoordsvorm in en leggen uit welke regel zij gebruiken.",
+            "Controleer kort en wissel daarna van rol voor de volgende zin."
           ],
           differentiation: "Gebruik ook zinnen met onderwerp achter de persoonsvorm voor extra uitdaging.",
           teacherTip: "Laat leerlingen eerst samen benoemen wat de persoonsvorm en de tijd zijn voordat ze schrijven.",
@@ -1547,10 +1547,10 @@ window.taskTextOverrides = {
             "Schrift of wisbordje"
           ],
           steps: [
-            "Verdeel de klas over meerdere posten.",
-            "Per post maken leerlingen een korte opdracht: kies de juiste spelling, verbeter een zin of verklaar de regel.",
-            "Na twee of drie minuten schuiven ze door.",
-            "Sluit af met een gezamenlijke foutenanalyse."
+            "Verdeel de klas over meerdere posten en laat ieder tweetal of groepje bij een andere startpost beginnen.",
+            "Per post maken leerlingen 1 korte opdracht: kies de juiste spelling, verbeter een zin of verklaar de regel.",
+            "Na 2 of 3 minuten geef jij een signaal en schuift ieder groepje 1 post door.",
+            "Sluit af met een gezamenlijke foutenanalyse van de lastigste voorbeelden."
           ],
           differentiation: "Laat snelle leerlingen een extra controlevraag formuleren voor de volgende groep.",
           teacherTip: "Zorg dat per post maar één kernvaardigheid centraal staat; dat houdt het circuit overzichtelijk.",
@@ -1673,10 +1673,10 @@ window.taskTextOverrides = {
             "Foutzinnen op kaart of papier"
           ],
           steps: [
-            "Leerlingen lopen in tweetallen langs de foutzinnen.",
-            "Ze noteren welke fout ze zien en hoe het goed moet.",
-            "Daarna leggen ze uit welke regel of welk woordbeeld daarbij hoort.",
-            "Sluit af met een korte klassikale check."
+            "Laat tweetallen bij verschillende foutzinnen starten.",
+            "Lees samen de zin, wijs de fout aan en noteer hoe het goed moet.",
+            "Laat het tweetal daarna hardop zeggen welke regel of welk woordbeeld bij de verbetering hoort.",
+            "Geef een signaal om door te lopen naar de volgende foutzin en sluit af met een gezamenlijke check."
           ],
           differentiation: "Laat leerlingen zelf een foutzin maken voor een ander tweetal als extra ronde.",
           teacherTip: "Gebruik verschillende foutsoorten door elkaar, zodat leerlingen echt moeten controleren in plaats van raden.",
@@ -1704,10 +1704,10 @@ window.taskTextOverrides = {
             "Stapkaarten of tapevakken"
           ],
           steps: [
-            "Lees een zin voor met een werkwoordsvorm die gekozen moet worden.",
-            "Een leerling loopt stap voor stap door het schema en zegt hardop wat hij of zij controleert.",
-            "De klas vult aan waar nodig.",
-            "Schrijf daarna samen de juiste vorm op."
+            "Leg de stappen van het schema in een vaste volgorde op de vloer.",
+            "Lees 1 zin voor en laat 1 leerling op de eerste stapkaart gaan staan.",
+            "De leerling loopt stap voor stap door het schema en zegt bij elke stap hardop wat hij of zij controleert.",
+            "De klas vult aan en daarna schrijven jullie samen de juiste werkwoordsvorm op."
           ],
           differentiation: "Laat tweetallen later zelf een zin kiezen en het schema samen doorlopen.",
           teacherTip: "Gebruik steeds dezelfde volgorde en taal; zo wordt het schema echt een vaste denkroute.",
@@ -1804,10 +1804,10 @@ window.taskTextOverrides = {
             "Antwoordkaartjes"
           ],
           steps: [
-            "Verdeel de groep in kleine teams.",
+            "Verdeel de klas in kleine teams en geef elk team 1 eigen startplek.",
             "Leg aan de overkant somkaartjes en antwoordkaartjes klaar.",
-            "Een leerling rent, pakt een kaartje en rekent de som uit.",
-            "De leerling koppelt de som aan het juiste antwoordkaartje en daarna start de volgende leerling."
+            "De eerste leerling rent naar voren, pakt 1 somkaartje, rekent de som uit en zoekt het juiste antwoordkaartje.",
+            "Daarna loopt de leerling terug en start pas de volgende teamgenoot, zodat steeds 1 leerling per team onderweg is."
           ],
           differentiation: "Gebruik voor sommige teams minder kaartjes of eenvoudigere sommen.",
           teacherTip: "Leg de antwoorden overzichtelijk neer en gebruik per team een eigen kleur, zodat de controle snel blijft.",
@@ -1835,10 +1835,10 @@ window.taskTextOverrides = {
             "Wisbordje of kladpapier"
           ],
           steps: [
-            "Hang somkaartjes verspreid op in het lokaal.",
-            "Laat leerlingen in tweetallen naar een kaartje lopen en de som lezen.",
-            "Leerlingen lopen terug naar hun plek en rekenen samen de som uit op een wisbordje of kladpapier.",
-            "Daarna lopen zij naar het volgende kaartje."
+            "Maak vaste tweetallen en laat elk duo bij een ander somkaartje starten.",
+            "Loop samen naar het kaartje en lees de som goed.",
+            "Ga terug naar de schrijfplek en reken de som samen uit op een wisbordje of kladpapier.",
+            "Controleer kort en loop daarna door naar het volgende kaartje."
           ],
           differentiation: "Maak 2 routes met verschillende moeilijkheidsgraden.",
           teacherTip: "Gebruik vaste looprichtingen, zodat tweetallen elkaar niet in de weg lopen.",
@@ -1865,10 +1865,10 @@ window.taskTextOverrides = {
             "Geen extra materiaal of flitskaartjes"
           ],
           steps: [
-            "Laat leerlingen in tweetallen tegenover elkaar staan.",
-            "1 leerling noemt een som of laat een kaartje zien.",
-            "De ander antwoordt direct.",
-            "Na 5 sommen wisselen de rollen."
+            "Laat ieder tweetal tegenover elkaar staan op 1 vaste plek, zodat beide leerlingen elkaar goed kunnen horen.",
+            "Leerling A noemt 1 som of laat 1 flitskaartje zien.",
+            "Leerling B geeft direct het antwoord; daarna volgt meteen de volgende som.",
+            "Na 5 sommen wisselen de rollen, zodat leerling B de sommen noemt of de kaartjes laat zien."
           ],
           differentiation: "Gebruik kaartjes per niveau: splitsingen, plus- en minsommen of tafels van 2, 5 en 10.",
           teacherTip: "Houd de rondes kort, zodat het tempo hoog blijft en alle leerlingen veel beurten krijgen.",
@@ -2115,10 +2115,10 @@ window.taskTextOverrides = {
             "Papier of wisbordje"
           ],
           steps: [
-            "Werk in tweetallen.",
-            "1 leerling loopt naar een opgave, leest en onthoudt die en loopt terug.",
-            "Samen noteren en maken zij de opgave.",
-            "Daarna wisselen de rollen."
+            "Maak vaste tweetallen en spreek af wie eerst loopt en wie schrijft.",
+            "Leerling A loopt naar 1 opgave, leest die goed en onthoudt zoveel mogelijk.",
+            "Terug bij de schrijfplek noteert het tweetal de opgave en maakt die samen.",
+            "Controleer kort en wissel daarna van rol voor de volgende opgave."
           ],
           differentiation: "Maak een basisset en een uitdagende set in verschillende kleuren.",
           teacherTip: "Laat leerlingen eerst herhalen wat zij hebben onthouden voordat zij gaan schrijven; dat houdt de opdracht echt actief.",
@@ -2146,10 +2146,10 @@ window.taskTextOverrides = {
             "Antwoordblad"
           ],
           steps: [
-            "Verspreid 6 tot 8 posten door het lokaal of de gang.",
-            "Leerlingen lopen langs de posten en maken per post 1 of 2 opdrachten.",
-            "Na een signaal schuiven zij door naar de volgende post.",
-            "Bespreek de antwoorden kort na."
+            "Verspreid 6 tot 8 posten en laat tweetallen of kleine groepjes bij verschillende startposten beginnen.",
+            "Per post maken zij 1 of 2 opdrachten op het antwoordblad.",
+            "Na een signaal schuift ieder duo of groepje 1 post door naar de volgende opdracht.",
+            "Bespreek na het circuit de antwoorden kort en laat leerlingen hun strategie toelichten."
           ],
           differentiation: "Richt een deel van het circuit in met ondersteuning, zoals voorbeeldkaartjes of hulpschema's.",
           teacherTip: "Maak de posten klein en helder, zodat de beweegtijd niet ten koste gaat van de rekentijd.",
@@ -2176,10 +2176,10 @@ window.taskTextOverrides = {
             "Kaartjes of werkblad"
           ],
           steps: [
-            "Geef leerlingen een kaartje of opdrachtblad.",
-            "Laat hen rondlopen en iemand zoeken met bijvoorbeeld dezelfde uitkomst, een gelijkwaardige breuk of een passend kommagetal.",
-            "Als zij een match hebben gevonden, leggen zij aan elkaar uit waarom het past.",
-            "Na enkele matches volgt een korte klassikale terugkoppeling."
+            "Geef iedere leerling 1 kaartje of 1 opdracht van het werkblad.",
+            "Laat leerlingen rondlopen en 1 leerling zoeken met dezelfde uitkomst, een gelijkwaardige breuk of een passend kommagetal.",
+            "Als zij een match denken te hebben, blijven ze samen staan en leggen ze allebei uit waarom de match klopt.",
+            "Controleer daarna een paar matches klassikaal en laat leerlingen waar nodig opnieuw zoeken."
           ],
           differentiation: "Laat sterke leerlingen hun match ook in een andere notatie geven.",
           teacherTip: "Laat leerlingen pas verder lopen nadat zij hun match aan elkaar hebben uitgelegd; zo blijft de inhoud centraal.",
@@ -2210,10 +2210,10 @@ window.taskTextOverrides = {
             "Breukkaartjes"
           ],
           steps: [
-            "Maak een lijn van 0 naar 1, eventueel doorlopend naar 2.",
-            "Geef leerlingen een breukkaartje, zoals 1/2, 3/4 of 5/4.",
-            "Laat hen op de juiste plek op de lijn staan.",
-            "Bespreek wie het dichtst bij 1 staat, welke breuken even groot zijn en welke tussen 1/2 en 1 liggen."
+            "Maak 1 grote lijn van 0 naar 1, eventueel doorlopend naar 2, en markeer 0, 1/2, 1 en 2 als steunpunten.",
+            "Geef iedere leerling 1 breukkaartje, zoals 1/2, 3/4 of 5/4.",
+            "Laat leerlingen een plek op de lijn kiezen en eerst vergelijken met de leerlingen links en rechts van hen.",
+            "Controleer samen de lijn en bespreek welke breuken even groot zijn of dicht bij 1 liggen."
           ],
           differentiation: "Begin met eenvoudige breuken en voeg later onechte breuken toe.",
           teacherTip: "Laat leerlingen eerst schatten waar hun kaart hoort en pas daarna verplaatsen of bijstellen.",
@@ -2271,10 +2271,10 @@ window.taskTextOverrides = {
             "Kaartjes met kommagetallen"
           ],
           steps: [
-            "Geef iedere leerling of ieder tweetal een kaartje met een kommagetal.",
-            "Laat leerlingen zonder praten op volgorde gaan staan van klein naar groot.",
-            "Daarna lichten zij toe waarom hun plek klopt.",
-            "Bespreek lastige paren, zoals 0,5 en 0,05."
+            "Geef iedere leerling of ieder tweetal 1 kaartje met een kommagetal.",
+            "Spreek af waar klein en groot komt: links staat het kleinste getal en rechts het grootste getal.",
+            "Laat leerlingen daarna zonder praten op 1 lange lijn gaan staan en alleen vergelijken met de kaartjes van de leerlingen naast hen.",
+            "Controleer samen de volgorde en bespreek daarna lastige paren, zoals 0,5 en 0,05."
           ],
           differentiation: "Gebruik alleen tienden in een basisronde en voeg honderdsten toe in een vervolgronde.",
           teacherTip: "Laat leerlingen eerst alleen kijken naar de kaartjes en pas daarna overleggen; zo zie je hun eerste redenering beter.",
@@ -2337,10 +2337,10 @@ window.taskTextOverrides = {
             "Antwoordstroken"
           ],
           steps: [
-            "Verdeel de klas in teams.",
-            "Elk teamlid lost om de beurt 1 opgave op en brengt het antwoord naar voren.",
-            "Daarna is de volgende leerling aan de beurt.",
-            "Controleer de antwoorden klassikaal en bespreek veelgemaakte fouten."
+            "Verdeel de klas in teams en geef elk team 1 eigen startplek en 1 eigen antwoordstrook.",
+            "De eerste leerling van het team lost 1 opgave op, loopt naar voren en legt het antwoord op de juiste plek.",
+            "Daarna loopt de leerling terug, legt kort uit hoe het antwoord is gevonden en tikt de volgende leerling aan.",
+            "Controleer na een reeks opgaven de antwoorden samen en bespreek veelgemaakte fouten."
           ],
           differentiation: "Gebruik basis- en plusstroken per team.",
           teacherTip: "Laat teams pas de volgende beurt starten als de vorige leerling kort heeft uitgelegd hoe het antwoord is gevonden.",
@@ -2399,10 +2399,10 @@ window.taskTextOverrides = {
             "Antwoordblad"
           ],
           steps: [
-            "Richt posten in rond procenten, schaal, verhoudingen, breuken-decimalen-procenten en grafieken.",
-            "Laat leerlingen in tweetallen langs de posten lopen.",
-            "Zij noteren hun antwoorden en controleren na afloop gezamenlijk.",
-            "Bespreek vooral de gekozen strategieen."
+            "Richt meerdere posten in en laat elk tweetal bij een andere startpost beginnen.",
+            "Per post maken leerlingen 1 kernopgave en noteren hun antwoord op het antwoordblad.",
+            "Na een signaal schuift ieder tweetal 1 post door naar de volgende opdracht.",
+            "Controleer na afloop de antwoorden samen en bespreek vooral de gekozen strategieen."
           ],
           differentiation: "Geef een extra uitdaging bij elke post, bijvoorbeeld een verdiepingsvraag.",
           teacherTip: "Gebruik per post 1 kernvraag en 1 optionele plusvraag, zodat alle leerlingen tempo houden.",
@@ -2461,10 +2461,10 @@ window.taskTextOverrides = {
             "Opgavekaartjes"
           ],
           steps: [
-            "Laat leerlingen in tweetallen een klein rondje door lokaal of gang lopen.",
-            "1 leerling legt hardop uit hoe hij of zij de som zou aanpakken.",
-            "De ander luistert, stelt vragen en vult aan.",
-            "Na een wisselmoment draaien de rollen om."
+            "Maak vaste tweetallen en geef elk duo 1 opgavekaartje.",
+            "Loop samen een korte route door lokaal of gang.",
+            "Tijdens het lopen legt leerling A stap voor stap uit hoe hij of zij de opgave zou aanpakken, terwijl leerling B luistert en vragen stelt.",
+            "Wissel daarna van rol met een nieuwe opgave of laat leerling B dezelfde opgave op zijn of haar manier uitleggen."
           ],
           differentiation: "Geef sommige tweetallen een hulpschema en andere tweetallen open contextopgaven.",
           teacherTip: "Kies opgaven waarbij meerdere aanpakken mogelijk zijn, zodat de gesprekken rijker worden.",
@@ -2493,10 +2493,10 @@ window.taskTextOverrides = {
             "Kaartjes"
           ],
           steps: [
-            "Geef iedere leerling een kaartje met een breuk, decimaal getal of percentage.",
-            "Leerlingen lopen rond en zoeken de andere kaartjes die bij hun waarde horen.",
-            "Als matchgroep blijven zij samen staan en lichten hun match toe.",
-            "Bespreek klassikaal een paar combinaties."
+            "Geef iedere leerling 1 kaartje met een breuk, decimaal getal of percentage.",
+            "Laat leerlingen rondlopen en hun kaart vergelijken met die van anderen.",
+            "Wie denkt een complete matchgroep te hebben, blijft samen staan en legt uit waarom de drie waarden gelijk zijn.",
+            "Controleer een paar matchgroepen klassikaal en laat leerlingen waar nodig van groep wisselen."
           ],
           differentiation: "Voeg lastigere percentages toe, zoals 12,5% of 62,5%.",
           teacherTip: "Neem bewust ook lastige combinaties op en laat leerlingen eerst onderling redeneren voordat jij het bevestigt.",
@@ -3134,10 +3134,10 @@ window.taskTextOverrides = {
           "Geen extra materiaal"
         ],
         steps: [
-          "Laat leerlingen een maatje zoeken.",
-          "Leerling A beweegt langzaam, leerling B spiegelt precies.",
-          "Wissel na ongeveer 20 seconden van rol.",
-          "Sluit af met één gezamenlijke freeze."
+          "Laat ieder tweetal tegenover elkaar staan op 1 vaste plek, met ongeveer 1 armlengte afstand.",
+          "Leerling A maakt 20 seconden lang rustige bewegingen met armen, schouders of bovenlichaam.",
+          "Leerling B doet precies dezelfde bewegingen na, alsof hij of zij in een spiegel kijkt.",
+          "Wissel daarna van rol en sluit af met 1 gezamenlijke freeze."
         ],
         differentiation: "Werk eerst met alleen armbewegingen en voeg later grotere bewegingen toe.",
         teacherTip: "Juist langzaam bewegen maakt deze energizer sterk; zo dwing je echt tot kijken en afstemmen.",

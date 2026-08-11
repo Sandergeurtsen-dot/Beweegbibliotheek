@@ -1251,10 +1251,10 @@ function buildTaskBlueprintsFromDoc() {
           movementFocus: "Kort antwoorden, doorvragen en na elke ronde één plek doorschuiven.",
           materials: ["Vraagkaartjes"],
           steps: [
-            "Laat leerlingen in twee rijen tegenover elkaar staan.",
-            "De ene rij stelt een vraag en de andere rij antwoordt.",
-            "Na één minuut schuift één rij een plek door.",
-            "Herhaal dit met nieuwe vragen of vervolgvragen."
+            "Maak 2 rijen tegenover elkaar, zodat iedere leerling 1 gesprekspartner recht voor zich heeft.",
+            "De ene rij stelt eerst 1 vraag en de andere rij antwoordt, daarna wisselen de rollen direct om.",
+            "Na ongeveer 1 minuut blijft 1 rij staan en schuift de andere rij 1 plek door naar rechts of links.",
+            "De leerling aan het einde loopt door naar de eerste plek, zodat iedereen een nieuw maatje krijgt."
           ],
           questions: [
             "Waarom denk jij dat?",
@@ -2269,10 +2269,10 @@ function buildTaskBlueprintsFromDoc() {
           movementFocus: "Staand werken, direct reageren en na elke korte serie van rol wisselen.",
           materials: ["Geen extra materiaal of flitskaartjes"],
           steps: [
-            "Laat leerlingen in tweetallen tegenover elkaar staan.",
-            "1 leerling noemt een som of laat een kaartje zien.",
-            "De ander antwoordt direct.",
-            "Na 5 sommen wisselen de rollen."
+            "Laat ieder tweetal tegenover elkaar staan op 1 vaste plek, zodat beide leerlingen elkaar goed kunnen horen.",
+            "Leerling A noemt 1 som of laat 1 flitskaartje zien.",
+            "Leerling B geeft direct het antwoord; daarna volgt meteen de volgende som.",
+            "Na 5 sommen wisselen de rollen, zodat leerling B de sommen noemt of de kaartjes laat zien."
           ],
           differentiation: "Gebruik kaartjes per niveau: splitsingen, plus- en minsommen of tafels van 2, 5 en 10.",
           teacherTip: "Houd de rondes kort, zodat het tempo hoog blijft en alle leerlingen veel beurten krijgen.",
@@ -2535,10 +2535,10 @@ function buildTaskBlueprintsFromDoc() {
           movementFocus: "Lopen, positie kiezen in een rij en pas daarna hardop uitleggen.",
           materials: ["Kaartjes met kommagetallen"],
           steps: [
-            "Geef iedere leerling of ieder tweetal een kaartje met een kommagetal.",
-            "Laat leerlingen zonder praten op volgorde gaan staan van klein naar groot.",
-            "Daarna lichten zij toe waarom hun plek klopt.",
-            "Bespreek lastige paren, zoals 0,5 en 0,05."
+            "Geef iedere leerling of ieder tweetal 1 kaartje met een kommagetal.",
+            "Spreek af waar klein en groot komt: links staat het kleinste getal en rechts het grootste getal.",
+            "Laat leerlingen daarna zonder praten op 1 lange lijn gaan staan en alleen vergelijken met de kaartjes van de leerlingen naast hen.",
+            "Controleer samen de volgorde en bespreek daarna lastige paren, zoals 0,5 en 0,05."
           ],
           differentiation: "Gebruik alleen tienden in een basisronde en voeg honderdsten toe in een vervolgronde.",
           teacherTip: "Laat leerlingen eerst alleen kijken naar de kaartjes en pas daarna overleggen; zo zie je hun eerste redenering beter.",
@@ -2713,10 +2713,10 @@ function buildSupplementalTaskBlueprints() {
           movementFocus: "Kort uitwisselen, doorvragen en na elke ronde één plek doorschuiven.",
           materials: ["Stellingen of vraagkaartjes"],
           steps: [
-            "Laat leerlingen in twee rijen tegenover elkaar staan.",
-            "Lees een stelling of vraag voor, bijvoorbeeld over een tekst, actualiteit of thema.",
-            "Geef beide leerlingen kort tijd om hun antwoord of standpunt te delen.",
-            "Laat daarna één rij doorschuiven en start de volgende ronde."
+            "Maak 2 rijen tegenover elkaar, zodat iedere leerling 1 gesprekspartner recht voor zich heeft.",
+            "Lees 1 stelling of vraag voor, bijvoorbeeld over een tekst, actualiteit of thema.",
+            "Laat beide leerlingen kort hun antwoord of standpunt delen en 1 korte reactie geven op elkaar.",
+            "Daarna blijft 1 rij staan en schuift de andere rij 1 plek door; de leerling aan het einde sluit weer vooraan aan."
           ],
           differentiation: "Werk met vaste starters zoals ik denk dit, omdat... of laat leerlingen juist vrij reageren.",
           teacherTip: "Kies stellingen die net genoeg verschil oproepen; dan ontstaan korte maar inhoudelijke gesprekken.",
@@ -3053,10 +3053,10 @@ function buildSupplementalEnergizerBlueprints() {
         movementFocus: "Kijken, volgen en kleine bewegingen gecontroleerd nadoen.",
         materials: ["Geen extra materiaal"],
         steps: [
-          "Laat tweetallen tegenover elkaar staan.",
-          "Leerling A beweegt langzaam met armen, schouders of bovenlichaam.",
-          "Leerling B spiegelt zo precies mogelijk.",
-          "Wissel na ongeveer 20 seconden en sluit af met een gezamenlijke freeze."
+          "Laat ieder tweetal tegenover elkaar staan op 1 vaste plek, met ongeveer 1 armlengte afstand.",
+          "Leerling A maakt 20 seconden lang rustige bewegingen met armen, schouders of bovenlichaam.",
+          "Leerling B doet precies dezelfde bewegingen na, alsof hij of zij in een spiegel kijkt.",
+          "Wissel daarna van rol en sluit af met 1 gezamenlijke freeze."
         ],
         differentiation: "Gebruik eerst alleen armbewegingen en voeg later grotere bewegingen toe als de groep dit aankan.",
         teacherTip: "Rustige bewegingen werken hier beter dan snelle; dan moeten leerlingen echt kijken en afstemmen.",
@@ -3067,7 +3067,7 @@ function buildSupplementalEnergizerBlueprints() {
       allGroupTask({
         key: "steen-papier-schaar-stretch",
         visual: "line",
-        visualHint: "Tweetallen spelen steen-papier-schaar en zetten na elke ronde rustig een stap achteruit voor een lichte stretch.",
+        visualHint: "Tweetallen blijven tegenover elkaar staan. Na elke ronde doet alleen de leerling die niet won 1 kleine stap achteruit, zodat de afstand iets groter wordt en een lichte stretch ontstaat.",
         title: "Steen-papier-schaar stretch",
         summary: "Een rustige partnerenergizer waarbij steen-papier-schaar wordt gecombineerd met balans en lichte rekoefeningen.",
         duration: "1-2 min",
@@ -3076,10 +3076,10 @@ function buildSupplementalEnergizerBlueprints() {
         movementFocus: "Kleine stappen achteruit en rustige houdingscontrole na elke steen-papier-schaar-ronde.",
         materials: ["Geen extra materiaal"],
         steps: [
-          "Laat leerlingen in tweetallen tegenover elkaar staan.",
-          "Speel samen steen-papier-schaar.",
-          "Na elke ronde zet de minder succesvolle leerling één rustige stap achteruit en houden beide leerlingen hun balans vast.",
-          "Speel een paar rondes en laat daarna iedereen weer rustig terugstappen."
+          "Laat ieder tweetal tegenover elkaar staan op 1 vaste plek, met ongeveer 1 kleine stap afstand tussen beide leerlingen.",
+          "Speel samen 1 ronde steen-papier-schaar.",
+          "Na elke ronde doet alleen de leerling die niet won 1 kleine stap achteruit. De andere leerling blijft staan, zodat de afstand iets groter wordt en beide leerlingen licht moeten uitrekken.",
+          "Speel 3 tot 5 rondes en laat beide leerlingen daarna weer rustig naar de beginafstand terugstappen."
         ],
         differentiation: "Stop eerder bij jongere groepen of laat oudere groepen tussendoor kort hun armen uitstrekken.",
         teacherTip: "Benadruk dat het geen wedstrijd is; het gaat om rustig spelen, lachen en daarna weer landen.",
@@ -3097,10 +3097,10 @@ function buildSupplementalEnergizerBlueprints() {
         movementFocus: "Langzaam spiegelen en het tempo bewust laag houden.",
         materials: ["Geen extra materiaal"],
         steps: [
-          "Laat tweetallen tegenover elkaar staan.",
-          "Leerling A beweegt de armen langzaam omhoog en omlaag terwijl beide leerlingen rustig mee ademen.",
-          "Leerling B spiegelt zo precies mogelijk.",
-          "Wissel na een halve minuut en sluit af met een stille eindhouding."
+          "Laat ieder tweetal tegenover elkaar staan op 1 vaste plek, met genoeg ruimte om de armen rustig te bewegen.",
+          "Leerling A beweegt de armen langzaam omhoog en omlaag terwijl beide leerlingen rustig in- en uitademen.",
+          "Leerling B spiegelt deze beweging zo precies mogelijk en houdt hetzelfde rustige tempo aan.",
+          "Wissel na ongeveer 30 seconden van rol en sluit af met 1 stille eindhouding."
         ],
         differentiation: "Begin alleen met armbewegingen en voeg later ook schouders of een rustige draai toe.",
         teacherTip: "Hoe langzamer jij het voordoet, hoe makkelijker de klas echt in rust zakt.",
@@ -3411,10 +3411,10 @@ function buildSupplementalGoldenWeekBlueprints() {
           movementFocus: "Met elkaar verbonden blijven en samen gecontroleerd zitten en staan.",
           materials: ["Geen extra materiaal"],
           steps: [
-            "Maak tweetallen en laat die met de rug tegen elkaar aan staan.",
-            "Laat leerlingen de armen in elkaar haken.",
-            "De tweetallen proberen nu samen rustig te gaan zitten.",
-            "Lukt dat, dan proberen ze samen weer op te staan zonder los te laten."
+            "Maak tweetallen en laat elk duo rug tegen rug op 1 vaste plek staan.",
+            "Laat beide leerlingen de armen of ellebogen rustig in elkaar haken.",
+            "Op jouw signaal zakt elk duo samen langzaam door de knieën, alsof ze tegelijk gaan zitten, zonder los te laten.",
+            "Laat het duo daarna samen weer omhoog komen en bespreek kort wat hielp om tegelijk te bewegen."
           ],
           questions: [
             "Wat hielp om samen te blijven?",
@@ -3441,10 +3441,10 @@ function buildSupplementalGoldenWeekBlueprints() {
           movementFocus: "Kort spelen, vragen uitwisselen en daarna direct doorschuiven.",
           materials: ["Geen extra materiaal", "Eventueel vraagkaartjes"],
           steps: [
-            "Laat leerlingen een maatje zoeken.",
-            "Speel samen één ronde steen-papier-schaar.",
-            "Daarna beantwoorden beide leerlingen een korte vraag, bijvoorbeeld over hobby's of verwachtingen.",
-            "Laat één rij of helft doorschuiven naar een nieuw maatje."
+            "Maak tweetallen of 2 rijen tegenover elkaar, zodat iedere leerling 1 maatje recht voor zich heeft.",
+            "Speel samen 1 korte ronde steen-papier-schaar.",
+            "Daarna beantwoorden beide leerlingen 1 korte vraag, bijvoorbeeld over hobby's of verwachtingen.",
+            "Laat alleen 1 rij of helft 1 plek doorschuiven naar een nieuw maatje; de leerling aan het einde sluit weer vooraan aan."
           ],
           differentiation: "Gebruik eerst één gezamenlijke vraag en laat later leerlingen een vraagkaart trekken.",
           teacherTip: "Houd de roshambo-rondes kort; het gesprek erna is hier het belangrijkste deel.",
@@ -3596,10 +3596,10 @@ function buildSupplementalGoldenWeekBlueprints() {
           movementFocus: "Een plek in een lijn zoeken, vergelijken en daarna eventueel bijstellen.",
           materials: ["Geen extra materiaal"],
           steps: [
-            "Geef de groep een criterium, zoals lengte, leeftijd of afstand van huis tot school.",
-            "Laat leerlingen zonder veel hulp van jou een lijn vormen in de juiste volgorde.",
-            "Controleer daarna samen of de volgorde klopt.",
-            "Speel nog een ronde met een nieuw criterium."
+            "Spreek eerst af wat links en rechts op de lijn betekent, bijvoorbeeld van klein naar groot of van dichtbij naar ver weg.",
+            "Geef daarna 1 criterium, zoals lengte, leeftijd of afstand van huis tot school.",
+            "Laat leerlingen zelf een plek op de lijn kiezen en eerst vergelijken met de leerlingen naast hen.",
+            "Controleer daarna samen of de volgorde klopt en speel eventueel nog 1 ronde met een nieuw criterium."
           ],
           questions: [
             "Waar denk jij te moeten staan?",
@@ -3652,10 +3652,10 @@ function buildSupplementalGoldenWeekBlueprints() {
           movementFocus: "Kort uitwisselen, één doorvraag stellen en daarna doorschuiven.",
           materials: ["Vraagkaartjes of mondelinge vragen"],
           steps: [
-            "Laat leerlingen in twee rijen tegenover elkaar staan.",
-            "Geef per ronde een vraag, bijvoorbeeld over verwachtingen, hobby's of wat iemand belangrijk vindt in een klas.",
-            "Laat beide leerlingen antwoorden en minstens één doorvraag stellen.",
-            "Na elke ronde schuift één rij een plek door."
+            "Maak 2 rijen tegenover elkaar, zodat iedere leerling 1 maatje recht voor zich heeft.",
+            "Geef per ronde 1 vraag, bijvoorbeeld over verwachtingen, hobby's of wat iemand belangrijk vindt in een klas.",
+            "Laat beide leerlingen kort antwoorden en daarna minstens 1 doorvraag stellen aan hun maatje.",
+            "Na elke ronde blijft 1 rij staan en schuift de andere rij 1 plek door; de leerling aan het einde sluit weer vooraan aan."
           ],
           differentiation: "Gebruik eerst lichtere vragen en voeg later groeps- of schoolvragen toe.",
           teacherTip: "Leg nadruk op de doorvraag; juist dat maakt deze vorm sterker dan een gewone kennismakingsronde.",
@@ -3717,10 +3717,10 @@ function buildSupplementalGoldenWeekBlueprints() {
           movementFocus: "Zoeken naar je plek in de rij zonder te praten en steeds op anderen afstemmen.",
           materials: ["Geen extra materiaal"],
           steps: [
-            "Geef een criterium voor de volgorde, zoals geboortemaand of huisnummer.",
-            "Laat leerlingen zonder praten op volgorde gaan staan.",
-            "Controleer daarna samen of de rij klopt.",
-            "Bespreek kort wat hielp om dit als groep voor elkaar te krijgen."
+            "Spreek af waar de lijn begint en eindigt, bijvoorbeeld van januari naar december of van laag naar hoog huisnummer.",
+            "Geef daarna 1 criterium en laat leerlingen zonder praten een plek op de lijn kiezen.",
+            "Laat leerlingen eerst alleen vergelijken met de buurleerlingen naast hen en pas daarna de hele rij bekijken.",
+            "Controleer samen of de volgorde klopt en bespreek kort wat hielp om dit zonder praten voor elkaar te krijgen."
           ],
           differentiation: "Begin met een makkelijk criterium en maak het later complexer.",
           teacherTip: "Kijk vooral naar het proces: wie neemt initiatief, wie wacht, en hoe helpt de groep elkaar?",
@@ -3768,23 +3768,23 @@ function buildSupplementalGoldenWeekBlueprints() {
           teacherTip: "Houd de speelmomenten heel kort; het gesprek erna maakt deze opdracht waardevol voor groepsvorming.",
           keywords: ["groep 7/8", "roshambo", "samenwerken", "groepsvorming", "gouden weken"]
         }),
-        goldenWeekTask({
-          key: "chinees-boksen-bundel",
-          visual: "circle",
-          visualHint: "Tweetallen staan tegenover elkaar en proberen met gecontroleerde duw- en trekbewegingen de ander uit balans te brengen.",
+      goldenWeekTask({
+        key: "chinees-boksen-bundel",
+        visual: "circle",
+        visualHint: "Tweetallen staan tegenover elkaar met open handpalmen tegen elkaar en proberen de ander met rustige, gecontroleerde bewegingen uit balans te brengen.",
           title: "Chinees boksen",
           summary: "Leerlingen oefenen contact, balans en rekening houden met elkaar in een duidelijke partneropdracht.",
           duration: "10 min",
           setup: "Maak tweetallen en zorg voor voldoende ruimte tussen de koppels.",
           goal: "Aandacht voor de ander, zelfcontrole en samenwerken binnen een speelse uitdaging versterken.",
           movementFocus: "Stevig staan, reageren op de ander en gecontroleerd duwen of loslaten zonder wild te bewegen.",
-          materials: ["Geen extra materiaal"],
-          steps: [
-            "Laat tweetallen tegenover elkaar staan met beide handen tegen elkaar.",
-            "Leerlingen proberen de ander uit evenwicht te brengen door op het juiste moment licht te duwen of de handen weg te trekken.",
-            "Wissel na korte rondes van maatje of laat leerlingen nog een tweede ronde spelen.",
-            "Bespreek daarna wat hielp om stevig en eerlijk te blijven spelen."
-          ],
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Laat tweetallen recht tegenover elkaar staan op 1 vaste plek en de open handpalmen zacht tegen elkaar zetten.",
+          "Leerlingen proberen de ander uit evenwicht te brengen door op het juiste moment licht te duwen of juist plots los te laten.",
+          "Speel korte rondes van een paar seconden en wissel daarna van maatje of begin direct een nieuwe ronde.",
+          "Bespreek daarna wat hielp om stevig, rustig en eerlijk te blijven spelen."
+        ],
           questions: [
             "Wat hielp om in balans te blijven?",
             "Hoe merkte je dat iemand rekening met je hield?",
@@ -4182,10 +4182,10 @@ function buildStandaloneEnergizerBlueprints() {
         movementFocus: "Nauwkeurig volgen en kleine bewegingen gecontroleerd spiegelen.",
         materials: ["Geen extra materiaal"],
         steps: [
-          "Laat leerlingen een maatje zoeken.",
-          "Leerling A beweegt langzaam, leerling B spiegelt precies.",
-          "Wissel na ongeveer 20 seconden van rol.",
-          "Sluit af met één gezamenlijke freeze."
+          "Laat ieder tweetal tegenover elkaar staan op 1 vaste plek, met ongeveer 1 armlengte afstand.",
+          "Leerling A maakt 20 seconden lang rustige bewegingen met armen, schouders of bovenlichaam.",
+          "Leerling B doet precies dezelfde bewegingen na, alsof hij of zij in een spiegel kijkt.",
+          "Wissel daarna van rol en sluit af met 1 gezamenlijke freeze."
         ],
         differentiation: "Werk eerst met alleen armbewegingen en voeg later grotere bewegingen toe.",
         teacherTip: "Juist langzaam bewegen maakt deze energizer sterk; zo dwing je echt tot kijken en afstemmen.",
@@ -5863,7 +5863,7 @@ function getTaskOrganization(taskKey, visual) {
     "rekencircuit-bovenbouw",
     "splitsen-met-je-lichaam"
   ]);
-  const rowPairTasks = new Set(["interviewcarrousel"]);
+  const rowPairTasks = new Set(["interviewcarrousel", "stellingenspeeddate", "speeddate-met-doorvraag", "steen-papier-schaar-vraagwissel"]);
   const teamTasks = new Set([
     "verhaalestafette",
     "woordkaartjes-estafette",
@@ -11018,13 +11018,254 @@ function buildQuickFinish(task) {
   return task.steps[task.steps.length - 1] || task.goal;
 }
 
-function getStepLabel(index, total) {
+function getTaskOrganizationMeta(task) {
+  return task.cardPack?.organization ?? getTaskOrganization(task.key, task.visual);
+}
+
+function getFormationPreview(task) {
+  const organization = getTaskOrganizationMeta(task);
+
+  if (["steen-papier-schaar-stretch", "spiegeladem-in-tweetallen", "spiegelspel-in-tweetallen", "spiegelen-kort", "spiegelen-kleuters"].includes(task.key)) {
+    return "Tweetallen tegenover elkaar";
+  }
+
+  if (["speeddate-met-doorvraag", "interviewcarrousel", "steen-papier-schaar-vraagwissel", "stellingenspeeddate"].includes(task.key)) {
+    return "2 rijen tegenover elkaar";
+  }
+
+  if (["gooi-de-bal-naar-kort", "gooi-de-bal-naar-kleuters", "krantentikkertje-bundel", "wat-mij-bijzonder-maakt-bundel", "ritme-doorgeven"].includes(task.key)) {
+    return "Klassikaal in een kring";
+  }
+
+  if (["lijmfiguren-bundel", "chinees-boksen-bundel"].includes(task.key)) {
+    return "Tweetallen op vaste plek";
+  }
+
+  if (["levende-getallenlijn-bundel", "stille-volgorde", "kommagetallen-op-volgorde"].includes(task.key)) {
+    return "Klassikaal op 1 lijn";
+  }
+
+  if (organization.type === "individual") {
+    return "Iedere leerling werkt met een eigen kaart of plek";
+  }
+
+  if (organization.type === "row-pairs") {
+    return "2 rijen tegenover elkaar";
+  }
+
+  if (organization.type === "pairs") {
+    if (task.visual === "dictation") {
+      return "Tweetallen: 1 loopt, 1 schrijft";
+    }
+
+    if (task.visual === "stations") {
+      return "Tweetallen per startpost";
+    }
+
+    if (task.visual === "path") {
+      return "Tweetallen op vaste route";
+    }
+
+    return "Tweetallen op vaste plek";
+  }
+
+  if (organization.type === "teams") {
+    return "Teams of groepjes met vaste startplek";
+  }
+
+  if (organization.type === "small-groups") {
+    return "Kleine groepjes met eigen werkplek";
+  }
+
+  const wholeClassLabels = {
+    corners: "Klassikaal in hoeken",
+    stations: "Klassikaal langs posten",
+    path: "Klassikaal op vaste route",
+    line: "Klassikaal op 1 lijn",
+    measure: "Klassikaal rond 1 meetplek",
+    circle: "Klassikaal in een kring"
+  };
+
+  return wholeClassLabels[task.visual] || "Klassikaal";
+}
+
+function getFormationDescription(task) {
+  const organization = getTaskOrganizationMeta(task);
+
+  if (task.key === "steen-papier-schaar-stretch") {
+    return "Laat elk tweetal tegenover elkaar staan op 1 vaste plek, met ongeveer 1 kleine stap ruimte tussen beide leerlingen en extra ruimte achter beide leerlingen.";
+  }
+
+  if (["spiegeladem-in-tweetallen", "spiegelspel-in-tweetallen", "spiegelen-kort", "spiegelen-kleuters"].includes(task.key)) {
+    return "Laat elk tweetal tegenover elkaar staan op 1 vaste plek, met ongeveer 1 armlengte afstand zodat beide leerlingen goed kunnen kijken en bewegen.";
+  }
+
+  if (["speeddate-met-doorvraag", "interviewcarrousel", "steen-papier-schaar-vraagwissel", "stellingenspeeddate"].includes(task.key)) {
+    return "Maak 2 rijen tegenover elkaar. Iedere leerling heeft 1 maatje recht voor zich. Spreek vooraf af welke rij straks doorschuift.";
+  }
+
+  if (["gooi-de-bal-naar-kort", "gooi-de-bal-naar-kleuters", "krantentikkertje-bundel", "wat-mij-bijzonder-maakt-bundel", "ritme-doorgeven"].includes(task.key)) {
+    return "Laat de hele klas in 1 duidelijke kring staan of zitten, zodat iedereen elkaar kan zien en niemand buiten de kring valt.";
+  }
+
+  if (task.key === "chinees-boksen-bundel") {
+    return "Werk in tweetallen op 1 vaste plek. Laat beide leerlingen stevig staan, recht tegenover elkaar, met de handpalmen zacht tegen elkaar.";
+  }
+
+  if (task.key === "lijmfiguren-bundel") {
+    return "Werk in tweetallen op 1 vaste plek. Laat beide leerlingen eerst rug tegen rug staan en daarna de armen of ellebogen rustig in elkaar haken.";
+  }
+
+  if (["levende-getallenlijn-bundel", "stille-volgorde", "kommagetallen-op-volgorde"].includes(task.key)) {
+    return "Maak 1 lange denkbeeldige of getapete lijn in het lokaal. Spreek duidelijk af waar het begin en het einde van de lijn zijn.";
+  }
+
+  if (organization.type === "individual") {
+    return "Geef iedere leerling een eigen kaart, blad of plek. Iedereen start tegelijk en werkt eerst zelfstandig.";
+  }
+
+  if (organization.type === "row-pairs") {
+    return "Maak 2 rijen tegenover elkaar. Iedere leerling heeft 1 maatje voor zich; na elke ronde schuift alleen 1 rij door.";
+  }
+
+  if (organization.type === "pairs") {
+    if (task.visual === "dictation") {
+      return "Werk in tweetallen. Eén leerling loopt of leest, de ander blijft bij de schrijfplek. Wissel na iedere kaart of korte ronde.";
+    }
+
+    if (task.visual === "stations") {
+      return "Werk in tweetallen. Zet ieder duo bij een eigen startpost en laat de duo's na het signaal doorschuiven.";
+    }
+
+    if (task.visual === "path") {
+      return "Werk in tweetallen. Elk duo loopt samen dezelfde korte route en stopt op afgesproken plekken.";
+    }
+
+    return "Werk in tweetallen op 1 vaste plek. Spreek af wie begint en wanneer de rollen wisselen.";
+  }
+
+  if (organization.type === "teams") {
+    return `Verdeel de klas in ${CLASS_GROUP_COUNT} teams van ongeveer ${CLASS_GROUP_SIZE} leerlingen en geef ieder team een eigen startplek of startpost.`;
+  }
+
+  if (organization.type === "small-groups") {
+    return `Werk in kleine groepjes van ongeveer ${CLASS_GROUP_SIZE} leerlingen en geef ieder groepje een eigen plek in het lokaal.`;
+  }
+
+  const wholeClassDescriptions = {
+    corners: "Laat alle leerlingen klassikaal starten en wijs daarna 4 duidelijke hoeken aan waar leerlingen naartoe kunnen lopen.",
+    stations: "Verdeel de klas over vaste posten. Spreek af bij welke post iedereen begint en wanneer er gewisseld wordt.",
+    path: "Laat leerlingen klassikaal of per duo op een vaste route starten. Spreek looprichting en stopplekken vooraf af.",
+    line: "Laat de klas langs 1 lijn, strook of denkbeeldige rij starten en benoem duidelijk waar begin en einde zijn.",
+    measure: "Werk rond 1 grote meetplek of vloeropstelling. Laat leerlingen om de beurt of in kleine groepjes bij de meetplek komen.",
+    circle: "Laat de klas in 1 kring of halve kring starten, met voor iedere leerling een vaste plek."
+  };
+
+  return wholeClassDescriptions[task.visual] || "Laat de klas klassikaal starten en spreek vooraf duidelijk af waar leerlingen moeten staan of lopen.";
+}
+
+function getDuringTaskDescription(task) {
+  if (task.key === "steen-papier-schaar-stretch") {
+    return "Na iedere ronde doet alleen de leerling die niet won 1 kleine stap achteruit. De andere leerling blijft staan. Zo wordt de afstand iets groter en ontstaat vanzelf een lichte stretch.";
+  }
+
+  if (["speeddate-met-doorvraag", "interviewcarrousel", "steen-papier-schaar-vraagwissel", "stellingenspeeddate"].includes(task.key)) {
+    return "Laat 1 rij stil blijven staan. Alleen de andere rij schuift na iedere ronde 1 plek door. De leerling aan het einde loopt terug naar het begin van de rij.";
+  }
+
+  if (["levende-getallenlijn-bundel", "stille-volgorde", "kommagetallen-op-volgorde"].includes(task.key)) {
+    return "Geef iedere leerling 1 getal, kaart of gegeven. Laat de groep eerst zelf een plek kiezen op de lijn en controleer pas daarna samen of de volgorde klopt.";
+  }
+
+  if (task.key === "chinees-boksen-bundel") {
+    return "Laat leerlingen met open handen en rustige kracht werken. Het doel is niet hard duwen, maar voelen wanneer de ander uit balans raakt.";
+  }
+
+  if (task.key === "lijmfiguren-bundel") {
+    return "Laat elk duo eerst stevig inhaken. Daarna zakken beide leerlingen tegelijk rustig door de knieën en komen ook samen weer omhoog.";
+  }
+
+  if (task.visual === "dictation") {
+    return "1 leerling haalt of leest de kaart, de ander blijft bij de schrijfplek. Terug bij de tafel verwerken zij samen de informatie en daarna wisselen de rollen.";
+  }
+
+  if (task.visual === "stations") {
+    return "Laat leerlingen kort aan 1 post werken en pas doorschuiven na jouw signaal. Ieder duo of groepje gaat daarna samen naar de volgende post.";
+  }
+
+  if (task.visual === "path" && getTaskOrganizationMeta(task).type === "pairs") {
+    return "Loop samen dezelfde korte route. 1 leerling spreekt, leest of legt uit; de ander luistert, vult aan of stelt vragen. Wissel daarna van rol.";
+  }
+
+  if (getTaskOrganizationMeta(task).type === "teams") {
+    return "Laat per team steeds 1 leerling tegelijk lopen of bewegen. De rest van het team blijft bij de startplek, denkt mee en neemt over na het wisselmoment.";
+  }
+
+  if (getTaskOrganizationMeta(task).type === "individual") {
+    return "Iedere leerling zoekt eerst zelf een plek, match of positie. Laat leerlingen pas stoppen als zij hun keuze ook kunnen uitleggen.";
+  }
+
+  return task.visualHint || buildQuickPlay(task);
+}
+
+function getFinishDescription(task) {
+  if (task.key === "steen-papier-schaar-stretch") {
+    return "Speel 3 tot 5 rondes. Laat beide leerlingen daarna weer rustig naar de beginafstand terugstappen en sluit af in stilte.";
+  }
+
+  return buildQuickFinish(task);
+}
+
+function buildExecutionGuidance(task) {
+  return [
+    { label: "Opstelling", text: getFormationDescription(task) },
+    { label: "Start", text: task.setup },
+    { label: "Tijdens het spel", text: getDuringTaskDescription(task) },
+    { label: "Afronden", text: getFinishDescription(task) }
+  ].filter((item) => item.text);
+}
+
+function renderExecutionGuidance(task) {
+  const guidance = buildExecutionGuidance(task);
+
+  return renderStaticDetailPanel(
+    "Zo starten de leerlingen",
+    getFormationPreview(task),
+    `
+      <ul class="execution-guidance">
+        ${guidance
+          .map(
+            (item) => `
+              <li>
+                <strong>${escapeHtml(item.label)}:</strong>
+                ${escapeHtml(item.text)}
+              </li>
+            `
+          )
+          .join("")}
+      </ul>
+    `,
+    { wide: true }
+  );
+}
+
+function getStepLabel(step, index, total) {
+  const lowered = normalize(step || "");
+
   if (index === 0) {
-    return "Eerste stap";
+    return /tweetal|kring|hoek|lijn|plek|start|hang|maak|leg|verdeel|zet|geef|richt|markeer/.test(lowered) ? "Opstelling" : "Start";
   }
 
   if (index === total - 1) {
-    return "Laatste stap";
+    return "Afronden";
+  }
+
+  if (/wissel|schuif|draai de rollen om|nieuw maatje|nieuwe plek|volgende ronde/.test(lowered)) {
+    return "Wissel";
+  }
+
+  if (/bespreek|controleer|licht toe|verwoord|leg uit/.test(lowered)) {
+    return "Controle";
   }
 
   return `Stap ${index + 1}`;
@@ -12072,8 +12313,8 @@ function buildTeacherBriefItems(task, showCards) {
       value: task.duration
     },
     {
-      label: "Groepsvorm",
-      value: getOrganizationSummary(task)
+      label: "Opstelling",
+      value: getFormationPreview(task)
     },
     {
       label: "Klaarleggen",
@@ -12909,16 +13150,18 @@ function renderTaskDetail(task) {
                   ${renderTeacherBrief(task, showCards)}
                   ${renderQuestionStrip(task)}
                   <div class="task-detail__grid">
+                    ${renderExecutionGuidance(task)}
+
                     ${renderStaticDetailPanel(
                       "Zo voer je de opdracht uit",
-                      `${task.steps.length} korte stappen`,
+                      `${task.steps.length} duidelijke stappen`,
                       `
                         <ol>
                           ${task.steps
                             .map(
                               (step, index) => `
                                 <li>
-                                  <span class="step-label">${escapeHtml(getStepLabel(index, task.steps.length))}</span>
+                                  <span class="step-label">${escapeHtml(getStepLabel(step, index, task.steps.length))}</span>
                                   ${escapeHtml(step)}
                                 </li>
                               `
