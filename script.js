@@ -5082,6 +5082,7 @@ const taskPrintProfiles = {
   "schrijfronde-met-stopplaatsen": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: true },
   "wandel-en-vat-samen": { enabled: false },
   interviewcarrousel: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
+  "bron-en-bewijswandeling": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: true, includeTeacherSheets: true },
   schrijfposten: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: true },
   zinnenstraat: { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
   "verhaalpad-drie-stappen": { enabled: true, expandWorkCardsToClassSize: false, includeSupportCards: false, includeTeacherSheets: false },
@@ -5850,6 +5851,7 @@ function getTaskOrganization(taskKey, visual) {
     "loopdictee-woordenschat",
     "loopdictee-kernzinnen",
     "vraag-en-antwoordwandeling",
+    "bron-en-bewijswandeling",
     "wandel-en-vat-samen",
     "loopdictee-luisterwoorden",
     "loopdictee-categorie-van-de-week",
@@ -7222,6 +7224,58 @@ function buildDocTaalCardOverrides() {
       ],
       "Leg deze vraagkaart op de route. Laat het maatje antwoorden in een volledige zin en laat de ander 1 vervolgvraag stellen."
     ),
+    "bron-en-bewijswandeling": [
+      card(
+        "Bronkaart 1",
+        "Bron A\nSinds mei staan er nieuwe banken in de leestuin. Daardoor kiezen meer kinderen ervoor om buiten te lezen tijdens de pauze.",
+        "Hang deze bronkaart op. Laat tweetallen bewijswoorden of een bewijszin aanwijzen."
+      ),
+      card(
+        "Bronkaart 2",
+        "Bron B\nDe leerlingenraad vroeg om extra sportmateriaal voor het plein. De school bestelde daarna twaalf nieuwe springtouwen.",
+        "Hang deze bronkaart op. Laat tweetallen vertellen welk deel van de tekst hun keuze bewijst."
+      ),
+      card(
+        "Bronkaart 3",
+        "Bron C\nOp woensdag lopen groep 7 en 8 met afvalprikkers over het schoolplein. Binnen twintig minuten is het plein weer schoon.",
+        "Hang deze bronkaart op. Laat tweetallen precies aanwijzen welke woorden het bewijs geven."
+      ),
+      card(
+        "Bronkaart 4",
+        "Bron D\nTijdens de techniekmiddag bouwden drie groepen een brug van papier. De sterkste brug droeg acht woordenboeken zonder te scheuren.",
+        "Hang deze bronkaart op. Laat tweetallen samen controleren of hun uitspraak echt past."
+      ),
+      card(
+        "Bronkaart 5",
+        "Bron E\nDe schoolbibliotheek opent op dinsdag al om kwart voor acht. Leerlingen kunnen daardoor voor schooltijd boeken ruilen.",
+        "Hang deze bronkaart op. Laat tweetallen het beste tekstbewijs citeren of aanwijzen."
+      ),
+      card(
+        "Uitspraak 1",
+        "Kinderen gebruiken de leestuin vaker sinds er nieuwe banken staan.",
+        "Leg of hang deze uitspraak apart. Tweetallen zoeken het bronfragment dat dit het duidelijkst bewijst."
+      ),
+      card(
+        "Uitspraak 2",
+        "Na een vraag van leerlingen kwam er nieuw sportmateriaal op school.",
+        "Leg of hang deze uitspraak apart. Laat leerlingen hun keuze mondeling onderbouwen."
+      ),
+      card(
+        "Uitspraak 3",
+        "Groep 7 en 8 helpt mee om het schoolplein schoon te houden.",
+        "Leg of hang deze uitspraak apart. Laat leerlingen aanwijzen welke zin dit bewijst."
+      ),
+      card(
+        "Uitspraak 4",
+        "Een papieren brug kon verrassend veel gewicht dragen.",
+        "Leg of hang deze uitspraak apart. Laat leerlingen uitleggen waarom dit de beste match is."
+      ),
+      card(
+        "Uitspraak 5",
+        "Op dinsdag kunnen leerlingen al voor de lessen boeken omruilen.",
+        "Leg of hang deze uitspraak apart. Laat leerlingen het bewijswoord of de bewijszin erbij noemen."
+      )
+    ],
     "schrijfronde-met-stopplaatsen": [
       card("Stopkaart", "Begin", "Leg deze kaart bij de eerste schrijfplek."),
       card("Stopkaart", "Midden", "Leg deze kaart bij de tweede schrijfplek."),
@@ -9129,6 +9183,15 @@ function getTeacherSheetPromptLines(taskKey, subjectId, visual) {
       "Tekstdeel of zin: ____________________",
       "Wat voeg je toe?: ____________________",
       "Controle: klopt de opbouw? ____________________"
+    ];
+  }
+
+  if (taskKey === "bron-en-bewijswandeling") {
+    return [
+      "Uitspraak: ____________________",
+      "Bronfragment: ____________________",
+      "Welk tekstbewijs past?: ____________________",
+      "Waarom is dit het sterkste bewijs?: ____________________"
     ];
   }
 
@@ -12088,7 +12151,7 @@ function resetLocalTaskEdit(task) {
   return persisted;
 }
 
-function getMaterialsList(task) {
+function getBaseMaterialsList(task) {
   const seen = new Set();
   const cleaned = task.materials
     .map((item) => item.trim())
@@ -12105,6 +12168,149 @@ function getMaterialsList(task) {
     });
 
   return cleaned.length ? cleaned : ["Geen extra materialen nodig"];
+}
+
+function getMaterialsList(task) {
+  return getBaseMaterialsList(task);
+}
+
+function getDetailedMaterialsList(task) {
+  return getBaseMaterialsList(task).map((item) => formatMaterialLine(item, task));
+}
+
+function formatMaterialLine(item, task) {
+  const baseLabel = /^geen extra materiaal$/i.test(item.trim()) ? "Geen extra materiaal nodig" : item;
+  const sourceNote = getMaterialSourceNote(baseLabel, task);
+
+  return sourceNote ? `${baseLabel} - ${sourceNote}` : baseLabel;
+}
+
+function getMaterialSourceNote(item, task) {
+  const fingerprint = normalize(item);
+
+  if (!fingerprint || fingerprint.includes("geen extra materiaal")) {
+    return "";
+  }
+
+  const printSections = getMaterialPrintSections(item, task);
+
+  if (printSections.length) {
+    const sectionLabels = printSections.map((sectionId) => getPrintSectionSourceLabel(sectionId));
+    return printSections.includes("print")
+      ? "vind je via Direct printen"
+      : `vind je bij Direct printen > ${formatReadableList(sectionLabels)}`;
+  }
+
+  if (looksLikePrintableMaterial(item)) {
+    return /mondeling/i.test(item) ? "geef je mondeling of maak je zelf" : "maak je zelf of leg je los geprint klaar";
+  }
+
+  return "leg je zelf klaar";
+}
+
+function getMaterialPrintSections(item, task) {
+  if (!task.cardPack) {
+    return [];
+  }
+
+  const sections = [];
+
+  if (task.cardPack.cards.length && isWorkCardMaterial(item)) {
+    sections.push("cards");
+  }
+
+  if (task.cardPack.supportCards.length && isSupportMaterial(item)) {
+    sections.push("support");
+  }
+
+  if (task.cardPack.teacherSheets.length && isTeacherSheetMaterial(item)) {
+    sections.push("teacher");
+  }
+
+  if (
+    !sections.length &&
+    looksLikePrintableMaterial(item) &&
+    (task.cardPack.cards.length || task.cardPack.supportCards.length || task.cardPack.teacherSheets.length)
+  ) {
+    sections.push("print");
+  }
+
+  return sections;
+}
+
+function isWorkCardMaterial(item) {
+  const fingerprint = normalize(item);
+
+  if (!fingerprint) {
+    return false;
+  }
+
+  if (isSupportMaterial(item)) {
+    return false;
+  }
+
+  const hasSpecificWorkSignal =
+    /(bron|uitspraak|woordkaart|woordkaartjes|vraagkaart|vraagkaartjes|somkaart|somkaartjes|opgavekaart|opgavekaartjes|fragment|fragmenten|tekststrook|tekststroken|foutstrook|foutstroken|antwoordstrook|antwoordstroken|praatplaat|praatplaten|plaatjes|beeldkaart|beeldkaartjes|postkaart|postkaartjes|stapkaart|stapkaarten|vloerkaart|vloerkaartjes|routekaart|routekaarten|plekkaart|plekkaarten)/.test(
+      fingerprint
+    );
+  const hasGenericCardSignal = /(kaartje|kaartjes|kaart|kaarten)/.test(fingerprint);
+  const hasTeacherOnlySignal =
+    /(antwoordblad|werkblad|zoekblad|controleblad|verbeterblad|schrijfkaart|schrijfkaarten|schrijfkolom|schrijfkolommen|blad|bladen)/.test(
+      fingerprint
+    );
+
+  return hasSpecificWorkSignal || (hasGenericCardSignal && !hasTeacherOnlySignal);
+}
+
+function isSupportMaterial(item) {
+  const fingerprint = normalize(item);
+
+  return /(hoekkaart|hoekkaartjes|hoeklabel|hoeklabels|kleurkaart|kleurkaarten|lijnlabel|lijnlabels|label|labels|opstelling)/.test(
+    fingerprint
+  );
+}
+
+function isTeacherSheetMaterial(item) {
+  const fingerprint = normalize(item);
+
+  return /(antwoordblad|werkblad|zoekblad|controleblad|verbeterblad|schrijfkaart|schrijfkaarten|schrijfkolom|schrijfkolommen|antwoordblad|antwoordbladen|blad|bladen)/.test(
+    fingerprint
+  );
+}
+
+function looksLikePrintableMaterial(item) {
+  const fingerprint = normalize(item);
+
+  return /(kaart|kaartje|kaartjes|kaarten|blad|bladen|strook|stroken|fragment|fragmenten|grafiek|opgave|opgaven|vraag|vragen|bron|tekst|uitspraak|uitspraken|plaatje|plaatjes|label|labels|zoekblad|praatplaat|praatplaten)/.test(
+    fingerprint
+  );
+}
+
+function getPrintSectionSourceLabel(sectionId) {
+  const labels = {
+    cards: "Werkkaartjes",
+    support: "Hulpmateriaal",
+    teacher: "Groepsbladen",
+    print: "Direct printen"
+  };
+
+  return labels[sectionId] || "Direct printen";
+}
+
+function formatReadableList(items) {
+  if (!items.length) {
+    return "";
+  }
+
+  if (items.length === 1) {
+    return items[0];
+  }
+
+  if (items.length === 2) {
+    return `${items[0]} of ${items[1]}`;
+  }
+
+  return `${items.slice(0, -1).join(", ")} en ${items[items.length - 1]}`;
 }
 
 function getQuestionsList(task) {
@@ -12268,9 +12474,25 @@ function getPrintSummary(task, showCards) {
   return summary.length ? summary : ["Print alleen de opdrachtdetail of gebruik de opdracht zonder printset"];
 }
 
+function getQuickMaterialLines(task, showCards) {
+  const detailedMaterials = getDetailedMaterialsList(task);
+  const maxItems = showCards ? 2 : 3;
+
+  if (!detailedMaterials.length) {
+    return ["Geen extra materiaal nodig"];
+  }
+
+  const lines = detailedMaterials.slice(0, maxItems).map((item) => shortenPrintText(item, 92));
+
+  if (detailedMaterials.length > maxItems) {
+    lines.push(`En nog ${detailedMaterials.length - maxItems} extra benodigdheid${detailedMaterials.length - maxItems === 1 ? "" : "en"}.`);
+  }
+
+  return lines;
+}
+
 function buildReadyInOneMinute(task, showCards) {
   const explanation = buildClassExplanation(task);
-  const materials = getMaterialsList(task);
   const printSummary = getPrintSummary(task, showCards);
 
   return [
@@ -12287,7 +12509,7 @@ function buildReadyInOneMinute(task, showCards) {
     {
       label: "3",
       title: "Pak erbij",
-      lines: [shortenPrintText(materials.slice(0, 4).join(", "), 120)]
+      lines: getQuickMaterialLines(task, showCards)
     },
     {
       label: "4",
@@ -13110,6 +13332,7 @@ function renderTaskDetail(task) {
         ? "task"
         : state.detailView;
   const materials = getMaterialsList(task);
+  const detailedMaterials = getDetailedMaterialsList(task);
   const readyPreview = showCards
     ? `${materials.length} dingen + printset`
     : `${materials.length} dingen klaarleggen`;
@@ -13190,15 +13413,8 @@ function renderTaskDetail(task) {
                       `
                         <ul>
                           <li>${escapeHtml(task.setup)}</li>
-                          ${materials.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
-                          ${
-                            showCards
-                              ? task.cardPack.printChecklist
-                                  .slice(0, 3)
-                                  .map((item) => `<li>${escapeHtml(item)}</li>`)
-                                  .join("")
-                              : ""
-                          }
+                          ${detailedMaterials.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+                          ${showCards ? "<li>Open daarna Direct printen om de juiste kaarten en bladen te printen.</li>" : ""}
                         </ul>
                       `
                     )}
