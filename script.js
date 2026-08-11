@@ -13264,6 +13264,56 @@ function renderSequenceArt(labels, subjectAccent, momentAccent) {
 function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, stroke) {
   const key = task.key;
 
+  if (["naam-en-beweging-kring", "ik-hou-van-mijn-buur-junior", "iedereen-hoort-erbij-kring", "ritme-doorgeven"].includes(key)) {
+    const circlePresets = {
+      "naam-en-beweging-kring": { top: "NAAM", left: "ZEG", right: "DOE MEE", center: "BEWEGING", note: "HERHAAL" },
+      "ik-hou-van-mijn-buur-junior": { top: "ZEG", left: "PAST BIJ MIJ", right: "WISSEL", center: "NIEUWE PLEK", note: "KIJK ROND" },
+      "iedereen-hoort-erbij-kring": { top: "SITUATIE", left: "NODIG UIT", right: "DOE MEE", center: "ERBIJ", note: "SAMEN" },
+      "ritme-doorgeven": { top: "RITME", left: "KLAP", right: "GEEF DOOR", center: "LUISTER", note: "SAMEN" }
+    };
+
+    return renderCircleFlowSceneDetailed(circlePresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (
+    [
+      "hoofdzin-of-detail-lijn",
+      "regel-of-weetwoord-lijn",
+      "werkwoordkeuze-lijn",
+      "move-if-middenbouw",
+      "complimentenoversteek",
+      "move-if-bovenbouw",
+      "op-een-lijn-junior",
+      "wat-is-waar-groep",
+      "over-de-lijn-bovenbouw",
+      "teamkeuze-continuum"
+    ].includes(key)
+  ) {
+    const continuumPresets = {
+      "hoofdzin-of-detail-lijn": { left: "HOOFDZIN", right: "DETAIL", middle: "KIES PLEK", note: "LEG UIT" },
+      "regel-of-weetwoord-lijn": { left: "REGEL", right: "WEET", middle: "KIES WOORD", note: "WAAROM" },
+      "werkwoordkeuze-lijn": { left: "VORM A", right: "VORM B", middle: "KIES VORM", note: "CONTROLE" },
+      "move-if-middenbouw": { left: "BLIJF", right: "WISSEL", middle: "MOVE IF", note: "KIJK ROND" },
+      complimentenoversteek: { left: "START", right: "OVERSTEEK", middle: "ZEG IETS", note: "NIEUW MAATJE" },
+      "move-if-bovenbouw": { left: "BLIJF", right: "WISSEL", middle: "MOVE IF", note: "HERKEN" },
+      "op-een-lijn-junior": { left: "NEE", right: "JA", middle: "OP DE LIJN", note: "KIJK" },
+      "wat-is-waar-groep": { left: "BLIJF", right: "STAP IN", middle: "WAT IS WAAR?", note: "HERKEN" },
+      "over-de-lijn-bovenbouw": { left: "START", right: "OVER DE LIJN", middle: "STELLING", note: "PRAAT KORT" },
+      "teamkeuze-continuum": { left: "ONEENS", right: "EENS", middle: "TWIJFEL", note: "LEG UIT" }
+    };
+
+    return renderContinuumSceneDetailed(continuumPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
+  if (["samen-standbeeld", "samen-vorm-maken"].includes(key)) {
+    const groupPresets = {
+      "samen-standbeeld": { left: "OVERLEG", center: "BEELD", right: "FREEZE", note: "KIJK SAMEN" },
+      "samen-vorm-maken": { left: "OVERLEG", center: "VORM", right: "SAMEN", note: "LEG NEER" }
+    };
+
+    return renderGroupPoseSceneDetailed(groupPresets[key], subjectAccent, momentAccent, stroke);
+  }
+
   if (
     [
       "woord-of-geen-woord",
@@ -13333,7 +13383,9 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       "hoeken-kiezen-bij-spelling",
       "vier-hoeken-categorie-of-regel",
       "hoeken-kiezen",
-      "keuzehoeken-rekenen"
+      "keuzehoeken-rekenen",
+      "kleur-en-hobby-hoeken",
+      "klassenzicht-in-hoeken"
     ].includes(key)
   ) {
     const cornerPresets = {
@@ -13365,7 +13417,9 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       "keuzehoeken-rekenen": {
         center: "KIES HOEK",
         corners: ["BREUK", "PROCENT", "GRAFIEK", "MODEL"]
-      }
+      },
+      "kleur-en-hobby-hoeken": { center: "KIES HOEK", corners: ["KLEUR", "SPEL", "HOBBY", "SPORT"] },
+      "klassenzicht-in-hoeken": { center: "KIES HOEK", corners: ["THUIS", "LEREN", "MAATJES", "TWIJFEL"] }
     };
 
     return renderCornerChoiceScene(cornerPresets[key], subjectAccent, momentAccent, stroke);
@@ -13378,7 +13432,9 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       "loopdictee-luisterwoorden",
       "loopdictee-categorie-van-de-week",
       "loopdictee-werkwoordspelling",
-      "loopdictee-rekenen"
+      "loopdictee-rekenen",
+      "plaatje-woord-loop",
+      "kort-of-lang-dictee"
     ].includes(key)
   ) {
     const dictationPresets = {
@@ -13417,6 +13473,18 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
         wall: "OPGAVE",
         role: "LOPER",
         tags: ["ONTHOUD", "REKEN"]
+      },
+      "plaatje-woord-loop": {
+        write: "NOEM + SCHRIJF",
+        wall: "PLAATJES",
+        role: "LOPER",
+        tags: ["WOORD", "CHECK"]
+      },
+      "kort-of-lang-dictee": {
+        write: "SCHRIJF",
+        wall: "WOORDEN",
+        role: "LOPER",
+        tags: ["KORT", "LANG"]
       }
     };
 
@@ -13455,9 +13523,16 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
   }
 
   if (
-    ["schrijfronde-met-stopplaatsen", "schrijfposten", "categoriecircuit", "spellingcircuit-bovenbouw", "rekencircuit-56", "rekencircuit-bovenbouw"].includes(
-      key
-    )
+    [
+      "schrijfronde-met-stopplaatsen",
+      "schrijfposten",
+      "categoriecircuit",
+      "spellingcircuit-bovenbouw",
+      "rekencircuit-56",
+      "rekencircuit-bovenbouw",
+      "samenvatstappen",
+      "tijdmachine-vooruitblik"
+    ].includes(key)
   ) {
     const stationPresets = {
       "schrijfronde-met-stopplaatsen": { stations: ["BEGIN", "MIDDEN", "SLOT"], chip: "LEES TERUG" },
@@ -13465,16 +13540,26 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       categoriecircuit: { stations: ["LUISTER", "WEET", "REGEL"], chip: "WISSEL" },
       "spellingcircuit-bovenbouw": { stations: ["WW", "LEEN", "LEEST."], chip: "CHECK" },
       "rekencircuit-56": { stations: ["TAFELS", "BREUK", "CHECK"], chip: "DOOR" },
-      "rekencircuit-bovenbouw": { stations: ["PROCENT", "SCHAAL", "GRAFIEK"], chip: "DOOR" }
+      "rekencircuit-bovenbouw": { stations: ["PROCENT", "SCHAAL", "GRAFIEK"], chip: "DOOR" },
+      samenvatstappen: { stations: ["ONDERW.", "KERN", "SLOT"], chip: "SAMENVAT" },
+      "tijdmachine-vooruitblik": { stations: ["TERUG", "NU", "VOORUIT"], chip: "DEEL" }
     };
 
     return renderStationsSceneDetailed(stationPresets[key], subjectAccent, momentAccent, stroke);
   }
 
   if (
-    ["woordweb-op-de-vloer", "zoek-je-spellingmaatje", "zoek-de-juiste-spellingpartner", "zoek-iemand-die", "breuk-decimaal-procent-match"].includes(
-      key
-    )
+    [
+      "woordweb-op-de-vloer",
+      "zoek-je-spellingmaatje",
+      "zoek-de-juiste-spellingpartner",
+      "zoek-iemand-die",
+      "breuk-decimaal-procent-match",
+      "zoek-iemand-die-junior",
+      "zoek-iemand-die-middenbouw",
+      "wij-horen-bij-elkaar",
+      "kleef-aan-overeenkomsten"
+    ].includes(key)
   ) {
     const matchPresets = {
       "woordweb-op-de-vloer": {
@@ -13496,18 +13581,61 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       "breuk-decimaal-procent-match": {
         center: "NOTATIES",
         cards: ["1/2", "0,5", "50%", "3/4", "75%"]
+      },
+      "zoek-iemand-die-junior": {
+        center: "ZOEK",
+        cards: ["KLEUR", "SPEL", "DIER", "HOBBY", "VAK"]
+      },
+      "zoek-iemand-die-middenbouw": {
+        center: "ZOEK",
+        cards: ["LEZEN", "SPORT", "REKENEN", "TEKENEN", "BUITEN"]
+      },
+      "wij-horen-bij-elkaar": {
+        center: "SAMEN",
+        cards: ["BOUWEN", "TEKENEN", "SPORT", "LEZEN", "SPELEN"]
+      },
+      "kleef-aan-overeenkomsten": {
+        center: "MATCH",
+        cards: ["SPORT", "RUST", "TEAM", "MUZIEK", "BUITEN"]
       }
     };
 
     return renderMatchSceneDetailed(matchPresets[key], subjectAccent, momentAccent, stroke);
   }
 
-  if (["praatmaatjes-in-beweging", "interviewcarrousel", "staand-flitsen", "splitsen-met-je-lichaam"].includes(key)) {
+  if (
+    [
+      "praatmaatjes-in-beweging",
+      "interviewcarrousel",
+      "staand-flitsen",
+      "splitsen-met-je-lichaam",
+      "stellingenspeeddate",
+      "steen-papier-schaar-stretch",
+      "spiegeladem-in-tweetallen",
+      "steen-papier-schaar-vraagwissel",
+      "als-je-mij-echt-kent-middenbouw",
+      "speeddate-met-doorvraag",
+      "als-je-mij-echt-kent-bovenbouw",
+      "kennismaken-in-tweetallen-junior",
+      "vakantievragen-in-beweging",
+      "tweekening-samen"
+    ].includes(key)
+  ) {
     const duoPresets = {
       "praatmaatjes-in-beweging": { left: "VRAAG", right: "ANTWOORD", middle: "ZEG TERUG" },
       interviewcarrousel: { left: "VRAAG", right: "ANTWOORD", middle: "SCHUIF DOOR" },
       "staand-flitsen": { left: "SOM", right: "ANTWOORD", middle: "OM BEURT" },
-      "splitsen-met-je-lichaam": { left: "5", right: "3", middle: "SAMEN 8" }
+      "splitsen-met-je-lichaam": { left: "5", right: "3", middle: "SAMEN 8" },
+      stellingenspeeddate: { left: "STELLING", right: "REACTIE", middle: "SCHUIF DOOR" },
+      "steen-papier-schaar-stretch": { left: "RPS", right: "STREK", middle: "BALANS" },
+      "spiegeladem-in-tweetallen": { left: "LEIDT", right: "SPIEGELT", middle: "ADEM" },
+      "steen-papier-schaar-vraagwissel": { left: "RPS", right: "VRAAG", middle: "SCHUIF DOOR" },
+      "als-je-mij-echt-kent-middenbouw": { left: "VERTEL", right: "LUISTER", middle: "ONTHOUD" },
+      "speeddate-met-doorvraag": { left: "VRAAG", right: "DOORVRAAG", middle: "SCHUIF DOOR" },
+      "als-je-mij-echt-kent-bovenbouw": { left: "DEEL", right: "LUISTER", middle: "VAT SAMEN" },
+      "kennismaken-in-tweetallen-junior": { left: "NAAM", right: "ANTWOORD", middle: "NIEUW MAATJE" },
+      "vakantievragen-in-beweging": { left: "VRAAG", right: "ANTWOORD", middle: "LOOP VERDER" },
+      "tweekening-samen": { left: "BESCHRIJF", right: "TEKEN", middle: "VERGELIJK" }
     };
 
     return renderDuoSceneDetailed(duoPresets[key], subjectAccent, momentAccent, stroke);
@@ -13530,7 +13658,13 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       "leestekenroute",
       "grafiekenwandeling",
       "schaalwandeling",
-      "foutenjacht"
+      "foutenjacht",
+      "bron-en-bewijswandeling",
+      "vertel-en-wisselpad",
+      "net-als-woordpad",
+      "maatjesbrug",
+      "roshambo-samenwerkingsmix",
+      "redigeerroute-kort"
     ].includes(key)
   ) {
     if (key === "weetwoordmuur") {
@@ -13569,6 +13703,15 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       );
     }
 
+    if (key === "redigeerroute-kort") {
+      return renderTextRouteSceneDetailed(
+        { strips: ["FOUT", "REGEL", "HERSTEL"], side: "CHECK", note: "VERBETER" },
+        subjectAccent,
+        momentAccent,
+        stroke
+      );
+    }
+
     const routePresets = {
       "vraag-en-antwoordwandeling": {
         start: "START",
@@ -13597,7 +13740,12 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       sommenwandeling: { start: "START", stops: ["LEES", "ONTHOUD", "REKEN", "CHECK"], side: "WISBORD", end: "VOLGENDE" },
       "wandel-en-leg-uit": { start: "LOOP", stops: ["LEG UIT", "LUISTER", "VRAAG", "WISSEL"], side: "MAATJE", end: "CHECK" },
       regelroute: { start: "WOORD", stops: ["REGEL", "VOORBLD", "LEG UIT", "CHECK"], side: "SET", end: "KLAAR" },
-      schaalwandeling: { start: "LOOP", stops: ["MEET", "REKEN", "SCHAAL", "CHECK"], side: "MEETLINT", end: "UITKOMST" }
+      schaalwandeling: { start: "LOOP", stops: ["MEET", "REKEN", "SCHAAL", "CHECK"], side: "MEETLINT", end: "UITKOMST" },
+      "bron-en-bewijswandeling": { start: "BRON", stops: ["LEES", "KIES", "BEWIJS", "LEG UIT"], side: "TWEETAL", end: "WISSEL" },
+      "vertel-en-wisselpad": { start: "KIJK", stops: ["NOEM", "VERTEL", "VOEG TOE", "WISSEL"], side: "PRAATPLAAT", end: "DOOR" },
+      "net-als-woordpad": { start: "BASIS", stops: ["KIJK", "ZOEK", "ZEG", "MATCH"], side: "PATROON", end: "CHECK" },
+      maatjesbrug: { start: "LOOP", stops: ["STOP", "VRAAG", "HIGH 5", "WISSEL"], side: "MAATJE", end: "DOOR" },
+      "roshambo-samenwerkingsmix": { start: "LOOP", stops: ["RPS", "VRAAG", "DEEL", "WISSEL"], side: "MAATJE", end: "DOOR" }
     };
 
     return renderRouteSceneDetailed(routePresets[key], subjectAccent, momentAccent, stroke);
@@ -13612,7 +13760,9 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       "argumentenlijn",
       "hakkenpad-op-de-vloer",
       "werkwoordschema-op-de-vloer",
-      "zin-in-delen"
+      "zin-in-delen",
+      "langzame-telstap",
+      "stille-volgorde"
     ].includes(key)
   ) {
     const floorPresets = {
@@ -13623,7 +13773,9 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
       argumentenlijn: { steps: ["STANDPUNT", "ARGUMENT", "VOORBEELD"], note: "BOUW OP" },
       "hakkenpad-op-de-vloer": { steps: ["V", "I", "S"], note: "PLAK HET WOORD" },
       "werkwoordschema-op-de-vloer": { steps: ["OND", "TIJD", "STAM", "UITG", "CHECK"], note: "LOOP HET SCHEMA" },
-      "zin-in-delen": { steps: ["NOOR", "FIETST", "NAAR", "SCHOOL"], note: "ZOEK OND / PV" }
+      "zin-in-delen": { steps: ["NOOR", "FIETST", "NAAR", "SCHOOL"], note: "ZOEK OND / PV" },
+      "langzame-telstap": { steps: ["1", "2", "3", "4"], note: "TEL RUSTIG" },
+      "stille-volgorde": { steps: ["JAN", "MRT", "JUN", "NOV"], note: "ZONDER PRATEN" }
     };
 
     return renderFloorStepsSceneDetailed(floorPresets[key], subjectAccent, momentAccent, stroke);
@@ -13638,11 +13790,13 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
     return renderTwoLaneSceneDetailed(lanePresets[key], subjectAccent, momentAccent, stroke);
   }
 
-  if (["getallenlijn-lopen", "breukenlijn-op-de-vloer", "kommagetallen-op-volgorde"].includes(key)) {
+  if (["getallenlijn-lopen", "breukenlijn-op-de-vloer", "kommagetallen-op-volgorde", "meer-of-minder-lijn", "breuken-schatten-op-de-lijn"].includes(key)) {
     const linePresets = {
       "getallenlijn-lopen": { anchors: ["0", "10", "20"], cards: ["+1", "+2", "-1"], note: "SPRING" },
       "breukenlijn-op-de-vloer": { anchors: ["0", "1/2", "1"], cards: ["1/4", "3/4", "5/4"], note: "PLAATS" },
-      "kommagetallen-op-volgorde": { anchors: ["0,0", "0,5", "1,0"], cards: ["0,25", "0,75", "1,25"], note: "VOLGORDE" }
+      "kommagetallen-op-volgorde": { anchors: ["0,0", "0,5", "1,0"], cards: ["0,25", "0,75", "1,25"], note: "VOLGORDE" },
+      "meer-of-minder-lijn": { anchors: ["10", "11", "12"], cards: ["-1", "+1", "+10"], note: "STAP" },
+      "breuken-schatten-op-de-lijn": { anchors: ["0", "1/2", "1"], cards: ["1/4", "2/3", "5/4"], note: "SCHAT" }
     };
 
     return renderNumberLineSceneDetailed(linePresets[key], subjectAccent, momentAccent, stroke);
@@ -13761,6 +13915,58 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
   }
 
   return "";
+}
+
+function renderCircleFlowSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderTrack(
+      [
+        [178, 72],
+        [266, 118],
+        [226, 174],
+        [128, 174],
+        [88, 118],
+        [178, 72]
+      ],
+      momentAccent
+    )}
+    ${renderWordCard(144, 48, 72, 28, preset.top, subjectAccent, stroke, 10)}
+    ${renderWordCard(38, 122, 86, 30, preset.left, subjectAccent, stroke, 10)}
+    ${renderWordCard(234, 122, 86, 30, preset.right, subjectAccent, stroke, 10)}
+    ${renderZone(122, 96, 116, 44, preset.center, "#ffffff", stroke, 12)}
+    ${renderMiniSign(144, 180, preset.note, momentAccent)}
+  `;
+}
+
+function renderContinuumSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    <path d="M42 126 H318" stroke="${stroke}" stroke-width="6" stroke-linecap="round" />
+    ${renderTick(86)}
+    ${renderTick(180)}
+    ${renderTick(274)}
+    ${renderWordCard(28, 78, 84, 34, preset.left, subjectAccent, stroke, 10.5)}
+    ${renderWordCard(244, 78, 84, 34, preset.right, subjectAccent, stroke, 10.5)}
+    ${renderZone(124, 138, 112, 34, preset.middle, "#ffffff", stroke, 11)}
+    ${renderMiniSign(144, 54, preset.note, momentAccent)}
+  `;
+}
+
+function renderGroupPoseSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
+  return `
+    ${renderTrack(
+      [
+        [100, 132],
+        [148, 92],
+        [212, 92],
+        [260, 132]
+      ],
+      momentAccent
+    )}
+    ${renderLearnerIcon(92, 144, subjectAccent, stroke, preset.left)}
+    ${renderLearnerIcon(180, 98, momentAccent, stroke, preset.center)}
+    ${renderLearnerIcon(268, 144, subjectAccent, stroke, preset.right)}
+    ${renderMiniSign(144, 176, preset.note, momentAccent)}
+  `;
 }
 
 function renderChoiceJumpScene(preset, subjectAccent, momentAccent, stroke) {
