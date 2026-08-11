@@ -12474,6 +12474,31 @@ function getPrintSummary(task, showCards) {
   return summary.length ? summary : ["Print alleen de opdrachtdetail of gebruik de opdracht zonder printset"];
 }
 
+function buildPrintPreviewLine(label, items, maxVisible = 4) {
+  if (!items.length) {
+    return "";
+  }
+
+  const previewNames = items
+    .slice(0, maxVisible)
+    .map((item) => item.title || item.label || "Printblad");
+  const remainingCount = Math.max(0, items.length - maxVisible);
+
+  return `${label}: ${previewNames.join(", ")}${remainingCount ? ` + ${remainingCount} meer` : ""}`;
+}
+
+function getPrintPreviewLines(task) {
+  if (!task.cardPack) {
+    return [];
+  }
+
+  return [
+    buildPrintPreviewLine("Werkkaartjes", task.cardPack.cards),
+    buildPrintPreviewLine("Hulpmateriaal", task.cardPack.supportCards),
+    buildPrintPreviewLine("Groepsbladen", task.cardPack.teacherSheets, 3)
+  ].filter(Boolean);
+}
+
 function getQuickMaterialLines(task, showCards) {
   const detailedMaterials = getDetailedMaterialsList(task);
   const maxItems = showCards ? 2 : 3;
@@ -12585,7 +12610,7 @@ function renderTeacherToolbar(showCards) {
         ${showCards ? "" : "disabled"}
         aria-pressed="${state.detailView === "print" ? "true" : "false"}"
       >
-        Printweergave
+        Kaartjes & printen
       </button>
     </div>
   `;
@@ -13333,6 +13358,7 @@ function renderTaskDetail(task) {
         : state.detailView;
   const materials = getMaterialsList(task);
   const detailedMaterials = getDetailedMaterialsList(task);
+  const printPreviewLines = getPrintPreviewLines(task);
   const readyPreview = showCards
     ? `${materials.length} dingen + printset`
     : `${materials.length} dingen klaarleggen`;
@@ -13414,7 +13440,19 @@ function renderTaskDetail(task) {
                         <ul>
                           <li>${escapeHtml(task.setup)}</li>
                           ${detailedMaterials.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
-                          ${showCards ? "<li>Open daarna Direct printen om de juiste kaarten en bladen te printen.</li>" : ""}
+                          ${
+                            showCards
+                              ? `
+                                <li><strong>Dit staat al klaar in de printset:</strong></li>
+                                ${printPreviewLines.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+                                <li>
+                                  <button type="button" class="button button--secondary button--small" data-detail-view="print">
+                                    Bekijk kaartjes en printbladen
+                                  </button>
+                                </li>
+                              `
+                              : ""
+                          }
                         </ul>
                       `
                     )}
