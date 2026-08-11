@@ -1099,7 +1099,7 @@ function buildTaskBlueprintsFromDoc() {
           setup: "Geen voorbereiding of leg enkele praatvragen klaar als steun.",
           goal: "Spreken, luisteren, beurt nemen en zinsvorming oefenen.",
           movementFocus: "Rustig bewegen, snel een maatje zoeken en daarna om de beurt een korte taalbeurt geven.",
-          materials: ["Geen extra materiaal", "Eventueel praatkaartjes"],
+          materials: ["Geen extra materiaal", "Gebruik mondelinge praatvragen als steun als dat helpt"],
           steps: [
             "Laat leerlingen rustig door het lokaal lopen.",
             "Bij een signaal zoeken zij een maatje.",
@@ -1222,7 +1222,7 @@ function buildTaskBlueprintsFromDoc() {
           setup: "Gebruik een gelezen tekst of filmpje en spreek een vaste route af.",
           goal: "Samenvatten, spreken en luisteren actief inoefenen.",
           movementFocus: "Rustig lopen, kernachtig samenvatten en daarna aanvullen of controleren.",
-          materials: ["Geen extra materiaal", "Eventueel samenvatkaartje"],
+          materials: ["Geen extra materiaal", "Gebruik mondelinge samenvatsteun als dat helpt"],
           steps: [
             "Leerlingen lopen in tweetallen een vaste route.",
             "Leerling A vat de tekst in maximaal drie zinnen samen.",
@@ -1534,7 +1534,7 @@ function buildTaskBlueprintsFromDoc() {
           setup: "Geen voorbereiding of leg eventueel een paar letterkaartjes klaar.",
           goal: "Letterherkenning, hakken en plakken en het herkennen van spellingpatronen versnellen.",
           movementFocus: "Joggen op de plaats en per klanktype direct een vaste beweging maken.",
-          materials: ["Geen extra materiaal", "Eventueel letterkaartjes"],
+          materials: ["Geen extra materiaal", "Gebruik alleen eigen lettersteun als dat helpt"],
           steps: [
             "Laat leerlingen rustig op de plaats joggen.",
             "Flits een letter of noem een woord.",
@@ -1940,7 +1940,7 @@ function buildTaskBlueprintsFromDoc() {
           setup: "Geen voorbereiding. Spreek af hoe leerlingen letters uitbeelden of verdeel letterrollen.",
           goal: "Lettervolgorde, woordbeeld en de categorie van de week zichtbaar maken.",
           movementFocus: "Met het lichaam of in een opstelling letters en de volgorde van een woord laten zien.",
-          materials: ["Geen extra materiaal", "Eventueel letterkaartjes"],
+          materials: ["Geen extra materiaal", "Gebruik alleen eigen lettersteun als dat helpt"],
           steps: [
             "Geef een woord uit de les, bijvoorbeeld maan, vis of boek.",
             "Leerlingen spreken af wie welke letter is of gebruiken letterkaartjes.",
@@ -2139,7 +2139,7 @@ function buildTaskBlueprintsFromDoc() {
           setup: "Geen voorbereiding. Zorg voor een duidelijke looproute door het lokaal en spreek een stopteken af.",
           goal: "Buurgetallen, hoofdrekenen en getalbegrip snel ophalen in een korte beweegronde.",
           movementFocus: "Rustig bewegen, direct stilvallen op signaal en meteen mentaal schakelen naar een som of getalvraag.",
-          materials: ["Geen extra materiaal", "Eventueel vingers of antwoordkaartjes"],
+          materials: ["Geen extra materiaal", "Laat leerlingen antwoorden met vingers of mondeling"],
           steps: [
             "Laat leerlingen rustig door het lokaal bewegen.",
             "Roep stop en noem direct een rekenvraag, zoals: wat is 8 + 6 of wat is het buurgetal van 39?",
@@ -2264,10 +2264,10 @@ function buildTaskBlueprintsFromDoc() {
           title: "Staand flitsen",
           summary: "Leerlingen oefenen sommen en splitsingen mondeling in een snelle staande duo-opdracht.",
           duration: "5-10 min",
-          setup: "Geen uitgebreide voorbereiding. Zet eventueel flitskaartjes klaar per niveau.",
+          setup: "Geen uitgebreide voorbereiding. Noem de sommen mondeling of leg eigen flitskaartjes uit de les klaar per niveau.",
           goal: "Sommen, splitsingen en basisautomatisering snel en herhaald ophalen.",
           movementFocus: "Staand werken, direct reageren en na elke korte serie van rol wisselen.",
-          materials: ["Geen extra materiaal of flitskaartjes"],
+          materials: ["Geen extra materiaal", "Noem de sommen mondeling of gebruik eigen flitskaartjes uit de les"],
           steps: [
             "Laat ieder tweetal tegenover elkaar staan op 1 vaste plek, zodat beide leerlingen elkaar goed kunnen horen.",
             "Leerling A noemt 1 som of laat 1 flitskaartje zien.",
@@ -2708,10 +2708,10 @@ function buildSupplementalTaskBlueprints() {
           title: "Stellingenspeeddate",
           summary: "Leerlingen oefenen snel argumenteren en luisteren door korte taalstellingen in wisselende tweetallen te bespreken.",
           duration: "10 min",
-          setup: "Zet twee rijen tegenover elkaar en kies 4 tot 6 korte stellingen of boekvragen.",
+          setup: "Zet twee rijen tegenover elkaar en kies 4 tot 6 korte stellingen of boekvragen die je mondeling noemt of projecteert.",
           goal: "Spreken, luisteren, standpunt innemen en onderbouwen in korte rondes oefenen.",
           movementFocus: "Kort uitwisselen, doorvragen en na elke ronde één plek doorschuiven.",
-          materials: ["Stellingen of vraagkaartjes"],
+          materials: ["4 tot 6 stellingen of boekvragen die je mondeling noemt of projecteert"],
           steps: [
             "Maak 2 rijen tegenover elkaar, zodat iedere leerling 1 gesprekspartner recht voor zich heeft.",
             "Lees 1 stelling of vraag voor, bijvoorbeeld over een tekst, actualiteit of thema.",
@@ -2773,10 +2773,10 @@ function buildSupplementalTaskBlueprints() {
           title: "Hoofdzin of detail-lijn",
           summary: "Leerlingen kiezen fysiek tussen hoofdgedachte en detail en leggen daarna hun keuze uit.",
           duration: "10 min",
-          setup: "Maak twee kanten in het lokaal: hoofdgedachte en detail.",
+          setup: "Maak twee kanten in het lokaal: hoofdgedachte en detail, en kies 6 tot 8 zinnen uit de huidige tekst of les.",
           goal: "Hoofdgedachte onderscheiden van ondersteunende details in teksten oefenen.",
           movementFocus: "Een kant kiezen en daarna mondeling verwoorden waarom een zin hoofdzaak of detail is.",
-          materials: ["Zinnen of tekstkaartjes"],
+          materials: ["6 tot 8 zinnen uit de huidige tekst of eigen zinstroken"],
           steps: [
             "Noem of laat een zin zien uit een tekst.",
             "Laat leerlingen naar hoofdgedachte of detail lopen.",
@@ -2797,7 +2797,7 @@ function buildSupplementalTaskBlueprints() {
           setup: "Maak drie stopplaatsen: onderwerp, belangrijkste informatie en slotzin.",
           goal: "Samenvatten en hoofdinformatie selecteren in een duidelijke structuur oefenen.",
           movementFocus: "Van stap naar stap bewegen en per plek kort formuleren wat daar thuishoort.",
-          materials: ["Tekst of alinea", "Werkblad of wisbordje"],
+          materials: ["Tekst of alinea uit de huidige les", "Wisbordje of papier"],
           steps: [
             "Geef leerlingen een korte tekst of alinea als basis.",
             "Bij de eerste stop benoemen ze het onderwerp.",
@@ -2844,7 +2844,7 @@ function buildSupplementalTaskBlueprints() {
           setup: "Hang woordkaartjes op en maak twee schrijfkolommen: korte klank en lange klank.",
           goal: "Het verschil tussen korte en lange klank herkennen en koppelen aan de juiste spelling.",
           movementFocus: "Lopen, woord onthouden en daarna samen kiezen in welke klankkolom het woord hoort.",
-          materials: ["Woordkaartjes", "Twee schrijfkolommen", "Potlood"],
+          materials: ["Woordkaartjes uit je eigen les of zelfgemaakte woordstroken", "Twee schrijfkolommen", "Potlood"],
           steps: [
             "Maak tweetallen en verspreid woordkaartjes door het lokaal.",
             "Eén leerling haalt een woord op en loopt terug naar het maatje.",
@@ -2867,7 +2867,7 @@ function buildSupplementalTaskBlueprints() {
           setup: "Maak twee kanten in het lokaal: regelwoord en weetwoord.",
           goal: "Verschil zien tussen woorden die je kunt uitleggen met een regel en woorden die je vooral moet onthouden.",
           movementFocus: "Een kant kiezen en daarna kort verwoorden waarom dat woord daar thuishoort.",
-          materials: ["Woordkaartjes of mondelinge voorbeelden"],
+          materials: ["Woordvoorbeelden die je mondeling noemt of zelf op kaartjes zet"],
           steps: [
             "Noem of toon een woord, bijvoorbeeld gevaarlijk, geit, chocolade of eerlijk.",
             "Laat leerlingen naar regelwoord of weetwoord lopen.",
@@ -2888,7 +2888,7 @@ function buildSupplementalTaskBlueprints() {
           setup: "Leg basiswoorden en nieuwe voorbeeldwoorden verspreid neer in het lokaal.",
           goal: "Net-als-woorden en analogie in spelling bewust gebruiken.",
           movementFocus: "Van voorbeeld naar nieuw woord lopen en hardop benoemen welk patroon hetzelfde blijft.",
-          materials: ["Basiswoordkaartjes", "Voorbeeldwoorden"],
+          materials: ["Basiswoorden en voorbeeldwoorden uit de les"],
           steps: [
             "Leg enkele basiswoorden neer, bijvoorbeeld bomen, rijden of gevaar.",
             "Laat leerlingen een woord zoeken dat volgens hetzelfde patroon geschreven wordt.",
@@ -2909,7 +2909,7 @@ function buildSupplementalTaskBlueprints() {
           setup: "Maak twee kanten in het lokaal met per ronde twee mogelijke werkwoordsvormen.",
           goal: "Werkwoordsvormen kiezen op basis van onderwerp, tijd en regel.",
           movementFocus: "Snel positie kiezen bij de juiste vorm en daarna de controlevolgorde verwoorden.",
-          materials: ["Twee antwoordkaarten per ronde"],
+          materials: ["Twee antwoordmogelijkheden per ronde, mondeling genoemd of op eigen kaartjes"],
           steps: [
             "Laat per ronde twee mogelijke werkwoordsvormen zien, bijvoorbeeld gebeurt of gebeurd.",
             "Leerlingen lopen naar de vorm die volgens hen klopt.",
@@ -2930,7 +2930,7 @@ function buildSupplementalTaskBlueprints() {
           setup: "Hang 4 tot 6 korte foutstroken op met verschillende foutsoorten.",
           goal: "Reviseren, foutenanalyse en controle van spelling en leestekens oefenen.",
           movementFocus: "Naar een foutstrook lopen, kort corrigeren en mondeling aangeven wat is aangepast.",
-          materials: ["Foutstroken", "Verbeterblad of wisbordje"],
+          materials: ["4 tot 6 foutzinnen of foutstroken uit de les", "Verbeterblad of wisbordje"],
           steps: [
             "Verspreid korte foutstroken door het lokaal.",
             "Laat leerlingen in tweetallen per stop één fout zoeken en verbeteren.",
@@ -2978,7 +2978,7 @@ function buildSupplementalTaskBlueprints() {
           setup: "Maak een vloerlijn van 0 tot 1 of van 0 tot 2 en gebruik breukkaartjes.",
           goal: "Breuken plaatsen, vergelijken en redeneren met referentiepunten zoals 1/2 en 1.",
           movementFocus: "Een plek op de lijn kiezen en daarna mondeling onderbouwen waarom die plaats logisch is.",
-          materials: ["Breukkaartjes", "Getallenlijn op de vloer"],
+          materials: ["Breukkaartjes of breuken die je mondeling noemt", "Getallenlijn op de vloer"],
           steps: [
             "Geef leerlingen een breukkaartje, bijvoorbeeld 2/3, 3/8 of 5/4.",
             "Laat hen eerst schatten waar hun breuk hoort en daar gaan staan.",
@@ -3439,7 +3439,7 @@ function buildSupplementalGoldenWeekBlueprints() {
           setup: "Laat leerlingen in twee rijen of losse tweetallen staan en kies 4 tot 6 kennismakingsvragen.",
           goal: "Snel drempels verlagen en veel maatjescontacten opbouwen in een speelse vorm.",
           movementFocus: "Kort spelen, vragen uitwisselen en daarna direct doorschuiven.",
-          materials: ["Geen extra materiaal", "Eventueel vraagkaartjes"],
+          materials: ["Geen extra materiaal", "Gebruik mondelinge vragen als steun als dat helpt"],
           steps: [
             "Maak tweetallen of 2 rijen tegenover elkaar, zodat iedere leerling 1 maatje recht voor zich heeft.",
             "Speel samen 1 korte ronde steen-papier-schaar.",
@@ -3502,7 +3502,7 @@ function buildSupplementalGoldenWeekBlueprints() {
           setup: "Maak of print een eenvoudig zoekblad met herkenbare vragen en geef ieder kind een pen of potlood.",
           goal: "Kennismaken, veel korte contactmomenten oefenen en meteen aandacht geven aan afspraken tijdens een spelvorm.",
           movementFocus: "Rondlopen, iemand aanspreken, kort doorvragen en daarna weer door naar een nieuw vakje.",
-          materials: ["Zoekblad", "Pen of potlood"],
+          materials: ["Zoekblad uit je eigen les of een zelfgemaakt blad", "Pen of potlood"],
           steps: [
             "Geef ieder kind een zoekblad met verschillende vakjes.",
             "Leerlingen lopen rond en zoeken een klasgenoot bij wie een vakje past.",
@@ -3650,7 +3650,7 @@ function buildSupplementalGoldenWeekBlueprints() {
           setup: "Zet twee rijen tegenover elkaar en kies 4 tot 6 vragen die meer diepgang geven.",
           goal: "Kennismaken, luisteren en doorvragen combineren in een vlotte vorm.",
           movementFocus: "Kort uitwisselen, één doorvraag stellen en daarna doorschuiven.",
-          materials: ["Vraagkaartjes of mondelinge vragen"],
+          materials: ["4 tot 6 vragen met een doorvraag, mondeling genoemd of op eigen kaartjes"],
           steps: [
             "Maak 2 rijen tegenover elkaar, zodat iedere leerling 1 maatje recht voor zich heeft.",
             "Geef per ronde 1 vraag, bijvoorbeeld over verwachtingen, hobby's of wat iemand belangrijk vindt in een klas.",
@@ -3757,7 +3757,7 @@ function buildSupplementalGoldenWeekBlueprints() {
           setup: "Zorg voor loopruimte en bedenk een paar korte samenwerkvragen.",
           goal: "Speels contact maken en tegelijk taal geven aan goed samenwerken in de klas.",
           movementFocus: "Kort spelen, wisselen van maatje en meteen door naar een nieuwe vraag.",
-          materials: ["Geen extra materiaal", "Eventueel vraagkaartjes"],
+          materials: ["Geen extra materiaal", "Gebruik mondelinge samenwerkvragen als steun als dat helpt"],
           steps: [
             "Laat leerlingen door het lokaal lopen.",
             "Bij een stopteken zoeken ze een maatje en spelen samen één ronde steen-papier-schaar.",
@@ -3804,7 +3804,7 @@ function buildSupplementalGoldenWeekBlueprints() {
           setup: "Leg verschillende kleine materialen klaar, zoals kaarten, dobbelstenen, bekers, touwtjes, lego of zachte ballen.",
           goal: "Contact maken, sportief spelen en leerlingen zelfstandig korte spelafspraken laten maken.",
           movementFocus: "Steeds een nieuw maatje zoeken, een korte challenge doen en daarna weer doorschakelen.",
-          materials: ["Kleine spelmaterialen zoals kaarten, dobbelstenen, bekers, touwtjes of zachte ballen"],
+          materials: ["Leg kleine spelmaterialen zelf klaar, zoals dobbelstenen, bekers, touwtjes of zachte ballen"],
           steps: [
             "Leg verschillende kleine materialen klaar door het lokaal of speellokaal.",
             "Leerlingen dagen een klasgenoot uit voor een korte challenge bij één materiaal.",
@@ -4394,7 +4394,7 @@ function buildStandaloneGoldenWeekBlueprints() {
           setup: "Geef vier hoeken een duidelijk kleur- of speellabel met kaartjes of voorwerpen.",
           goal: "Kiezen, kijken naar elkaar en laagdrempelig iets over jezelf delen.",
           movementFocus: "Naar een hoek lopen, daar even blijven en samen kijken wie dezelfde keuze heeft.",
-          materials: ["Hoeklabels of kleurkaarten"],
+          materials: ["Kleurhoeken of speelhoeken die je zelf markeert met kaarten of voorwerpen"],
           steps: [
             "Leg uit welke kleur of speelkeuze bij elke hoek hoort.",
             "Noem een ronde, bijvoorbeeld: kies jouw lievelingskleur of kies waar jij graag speelt.",
@@ -5659,7 +5659,7 @@ async function loadPublishedCustomTaskExport() {
   }
 
   try {
-    const response = await fetch(`${LIVE_CUSTOM_TASK_EXPORT_PATH}?v=20260410-2`, {
+    const response = await fetch(`${LIVE_CUSTOM_TASK_EXPORT_PATH}?v=20260811-3`, {
       cache: "no-store"
     });
 
