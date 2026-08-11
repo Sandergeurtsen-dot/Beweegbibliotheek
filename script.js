@@ -229,6 +229,7 @@ const EDITABLE_TASK_FIELDS = new Set([
   "movementFocus",
   "materials",
   "steps",
+  "questions",
   "differentiation",
   "teacherTip",
   "visualHint",
@@ -289,6 +290,13 @@ const LOCAL_EDIT_FIELD_CONFIG = [
     type: "list",
     rows: 6,
     help: "Zet elke stap op een nieuwe regel."
+  },
+  {
+    key: "questions",
+    label: "Vragen voor in de les",
+    type: "list",
+    rows: 5,
+    help: "Zet elke vraag op een nieuwe regel. Alleen invullen als deze opdracht erom vraagt."
   },
   {
     key: "differentiation",
@@ -664,9 +672,67 @@ const subjectThemes = {
   }
 };
 
-const taskBlueprints = redistributeRegularTaskBlueprints(buildTaskBlueprintsFromDoc());
-const standaloneEnergizerBlueprints = buildStandaloneEnergizerBlueprints();
-const standaloneGoldenWeekBlueprints = buildStandaloneGoldenWeekBlueprints();
+const taskBlueprints = redistributeRegularTaskBlueprints(
+  mergeRegularTaskBlueprintCollections(buildTaskBlueprintsFromDoc(), buildSupplementalTaskBlueprints())
+);
+const standaloneEnergizerBlueprints = mergeStandaloneSubjectBlueprints(
+  buildStandaloneEnergizerBlueprints(),
+  buildSupplementalEnergizerBlueprints()
+);
+const standaloneGoldenWeekBlueprints = mergeStandaloneGoldenBlueprints(
+  buildStandaloneGoldenWeekBlueprints(),
+  buildSupplementalGoldenWeekBlueprints()
+);
+
+function mergeRegularTaskBlueprintCollections(base, extra) {
+  const merged = {};
+  const subjectKeys = new Set([...Object.keys(base || {}), ...Object.keys(extra || {})]);
+
+  subjectKeys.forEach((subjectKey) => {
+    merged[subjectKey] = emptyTaskMoments();
+    ["energizers", "tijdens", "bewegend"].forEach((momentKey) => {
+      merged[subjectKey][momentKey] = [
+        ...((base?.[subjectKey]?.[momentKey] || []).slice()),
+        ...((extra?.[subjectKey]?.[momentKey] || []).slice())
+      ];
+    });
+  });
+
+  return merged;
+}
+
+function mergeStandaloneSubjectBlueprints(base, extra) {
+  const merged = {};
+  const subjectKeys = new Set([...Object.keys(base || {}), ...Object.keys(extra || {})]);
+
+  subjectKeys.forEach((subjectKey) => {
+    merged[subjectKey] = [...((base?.[subjectKey] || []).slice()), ...((extra?.[subjectKey] || []).slice())];
+  });
+
+  return merged;
+}
+
+function mergeStandaloneGoldenBlueprints(base, extra) {
+  const merged = {};
+  const subjectKeys = new Set([...Object.keys(base || {}), ...Object.keys(extra || {})]);
+
+  subjectKeys.forEach((subjectKey) => {
+    merged[subjectKey] = {};
+    const momentKeys = new Set([
+      ...Object.keys(base?.[subjectKey] || {}),
+      ...Object.keys(extra?.[subjectKey] || {})
+    ]);
+
+    momentKeys.forEach((momentKey) => {
+      merged[subjectKey][momentKey] = [
+        ...((base?.[subjectKey]?.[momentKey] || []).slice()),
+        ...((extra?.[subjectKey]?.[momentKey] || []).slice())
+      ];
+    });
+  });
+
+  return merged;
+}
 
 function emptyTaskMoments() {
   return {
@@ -698,6 +764,7 @@ function docTask(groupId, config) {
     movementFocus: config.movementFocus,
     materials: config.materials,
     steps: config.steps,
+    questions: onlyGroup(groupId, config.questions ?? []),
     differentiation: onlyGroup(groupId, config.differentiation),
     teacherTip: onlyGroup(groupId, config.teacherTip),
     keywords: [...config.keywords, ...(config.methodKeywords ?? ["getal en ruimte junior", "dynamische schooldag", "rekenen"])]
@@ -732,6 +799,7 @@ function allGroupTask(config) {
     movementFocus: config.movementFocus,
     materials: config.materials,
     steps: config.steps,
+    questions: same(config.questions ?? []),
     differentiation: same(config.differentiation),
     teacherTip: same(config.teacherTip),
     keywords: [...config.keywords, ...(config.methodKeywords ?? ["energizer", "lesovergang", "dynamische schooldag"])]
@@ -752,6 +820,7 @@ function goldenWeekTask(config) {
     movementFocus: config.movementFocus,
     materials: config.materials,
     steps: config.steps,
+    questions: config.questions ?? [],
     differentiation: config.differentiation,
     teacherTip: config.teacherTip,
     keywords: [...config.keywords, "gouden weken", "groepsvorming", "nieuw schooljaar"]
@@ -863,6 +932,12 @@ function buildTaskBlueprintsFromDoc() {
             "Laat leerlingen reageren met de afgesproken beweging.",
             "Bespreek af en toe waarom iets een feit of mening is."
           ],
+          questions: [
+            "Waarom kies jij voor feit of mening?",
+            "Welk woord laat zien dat dit een mening is?",
+            "Kun je dit controleren of bewijzen?",
+            "Hoe maak je van deze mening een feitelijke zin?"
+          ],
           differentiation: "Gebruik uitspraken uit de actuele thematekst of laat leerlingen zelf een feit en een mening formuleren.",
           teacherTip: "Kies uitspraken die net genoeg discussie oproepen; zo blijft het geen trucje maar een denkactiviteit.",
           keywords: ["groep 5/6", "feit", "mening", "kritisch luisteren", "taalbeschouwing"]
@@ -905,6 +980,12 @@ function buildTaskBlueprintsFromDoc() {
             "Leerlingen kiezen een kant.",
             "Vraag twee of drie leerlingen om in één zin hun keuze toe te lichten."
           ],
+          questions: [
+            "Waarom sta jij hier?",
+            "Welk argument vind jij het sterkst?",
+            "Wat zou de andere kant kunnen zeggen?",
+            "Ben je door iemand anders aan het denken gezet?"
+          ],
           differentiation: "Voeg een middenpositie toe voor twijfel als je meer nuance wilt.",
           teacherTip: "Laat leerlingen eerst kiezen zonder overleg; zo zie je sneller hun eigen eerste gedachte.",
           keywords: ["groep 7/8", "standpunt", "argumenteren", "spreken", "luisteren"]
@@ -926,6 +1007,12 @@ function buildTaskBlueprintsFromDoc() {
             "Leerlingen lopen naar de plek van het woord dat volgens hen het beste past.",
             "Bespreek kort waarom dat kernwoord het onderwerp goed samenvat."
           ],
+          questions: [
+            "Welk kernwoord vat de tekst het best samen?",
+            "Welk woord past minder goed en waarom?",
+            "Op welke zin uit de tekst baseer je je keuze?",
+            "Kun jij zelf een nog sterker kernwoord bedenken?"
+          ],
           differentiation: "Laat leerlingen daarna zelf een nog beter kernwoord formuleren.",
           teacherTip: "Kies kernwoorden die dicht bij elkaar liggen; dan moeten leerlingen echt samenvattend nadenken.",
           keywords: ["groep 7/8", "kernwoord", "samenvatten", "tekstbegrip", "woordenschat"]
@@ -946,6 +1033,12 @@ function buildTaskBlueprintsFromDoc() {
             "Noem een uitspraak uit een tekst of onderwerp.",
             "Leerlingen kiezen een positie.",
             "Vraag enkele leerlingen hun keuze te verantwoorden."
+          ],
+          questions: [
+            "Waardoor weet je zeker dat dit waar is?",
+            "Welk deel maakt je aan het twijfelen?",
+            "Welke informatie mis je nog?",
+            "Hoe kun je dit controleren?"
           ],
           differentiation: "Gebruik ook bronkritische of argumentatieve uitspraken voor een verdiepend gesprek.",
           teacherTip: "Laat leerlingen in de twijfelzone juist benoemen welke informatie ze nog missen.",
@@ -970,6 +1063,12 @@ function buildTaskBlueprintsFromDoc() {
             "Samen zeggen de leerlingen het woord, leggen uit wat het betekent of gebruiken het in een zin.",
             "Daarna wisselen de rollen."
           ],
+          questions: [
+            "Wat betekent dit woord?",
+            "Kun jij een zin maken met dit woord?",
+            "Welk ander woord past hierbij?",
+            "Wat zei jouw maatje net over dit woord?"
+          ],
           differentiation: "Gebruik ook beeldkaartjes of laat sterkere leerlingen zelf een zin maken met het woord.",
           teacherTip: "Laat leerlingen eerst het woord hardop herhalen voordat ze naar betekenis of gebruik gaan.",
           keywords: ["groep 3/4", "woordenschat", "loopdictee", "spreken", "luisteren"]
@@ -990,6 +1089,12 @@ function buildTaskBlueprintsFromDoc() {
             "Bij een signaal zoeken zij een maatje.",
             "Geef een korte vraag, bijvoorbeeld: Wat zie je op de boerderij?",
             "Leerling A vertelt, leerling B luistert en noemt daarna één woord of zin terug."
+          ],
+          questions: [
+            "Wat zie jij op deze plaat of in dit thema?",
+            "Welk woord past hierbij?",
+            "Kun jij jouw antwoord in een hele zin zeggen?",
+            "Wat zei jouw maatje net?"
           ],
           differentiation: "Laat leerlingen eerst nadenken met een themawoord, gebaar of voorwerp als steun.",
           teacherTip: "Model eerst hoe een volledig antwoord en een goede luisterreactie klinken.",
@@ -1033,6 +1138,12 @@ function buildTaskBlueprintsFromDoc() {
             "Terug bij het maatje schrijven of formuleren ze samen de hoofdgedachte.",
             "Daarna wisselen ze."
           ],
+          questions: [
+            "Wat is hier de belangrijkste informatie?",
+            "Welke woorden mogen niet missen?",
+            "Hoe zou jij deze kernzin kort navertellen?",
+            "Kun jij samen 1 hoofdgedachte formuleren?"
+          ],
           differentiation: "Gebruik ondersteunende woorden of een half ingevulde samenvatstructuur voor wie dat nodig heeft.",
           teacherTip: "Laat leerlingen eerst de kernzin navertellen voordat ze gaan schrijven; zo blijft de inhoud voorop staan.",
           keywords: ["groep 5/6", "kernzin", "hoofdgedachte", "samenvatten", "loopdictee"]
@@ -1053,6 +1164,12 @@ function buildTaskBlueprintsFromDoc() {
             "Leerlingen lopen in tweetallen langs de kaartjes.",
             "Bij elk kaartje leest leerling A de vraag en leerling B antwoordt in een volledige zin.",
             "Bij het volgende kaartje wisselen de rollen."
+          ],
+          questions: [
+            "Kun jij daar een volledig antwoord op geven?",
+            "Welk voorbeeld past bij jouw antwoord?",
+            "Kun jij het antwoord van je maatje samenvatten?",
+            "Welke vervolgvraag kun je nu stellen?"
           ],
           differentiation: "Laat leerlingen aan het eind één sterk antwoord klassikaal delen.",
           teacherTip: "Zeg expliciet dat korte éénwoordantwoorden niet genoeg zijn; zo borg je de taalopbrengst.",
@@ -1096,6 +1213,12 @@ function buildTaskBlueprintsFromDoc() {
             "Leerling B luistert en vult aan met wat nog ontbreekt.",
             "Daarna wisselen de rollen met een tweede tekst of alinea."
           ],
+          questions: [
+            "Wat is de hoofdgedachte in maximaal drie zinnen?",
+            "Wat mag echt niet missen in jouw samenvatting?",
+            "Welke aanvulling heeft jouw maatje?",
+            "Kun je het nog korter en duidelijker zeggen?"
+          ],
           differentiation: "Geef een vaste samenvatstructuur: onderwerp, belangrijkste informatie en conclusie.",
           teacherTip: "Zet vooraf een maximum aan het aantal zinnen; dan blijft de samenvatting echt kernachtig.",
           keywords: ["groep 7/8", "samenvatten", "spreken", "luisteren", "wandelroute"]
@@ -1116,6 +1239,12 @@ function buildTaskBlueprintsFromDoc() {
             "De ene rij stelt een vraag en de andere rij antwoordt.",
             "Na één minuut schuift één rij een plek door.",
             "Herhaal dit met nieuwe vragen of vervolgvragen."
+          ],
+          questions: [
+            "Waarom denk jij dat?",
+            "Kun je daarvan een voorbeeld geven?",
+            "Welke vervolgvraag kun jij nu stellen?",
+            "Wat neem jij mee uit het antwoord van je gesprekspartner?"
           ],
           differentiation: "Werk rond een thema, boek of zaakvakonderwerp voor meer inhoudelijke diepgang.",
           teacherTip: "Model eerst hoe een goede vervolg- of doorvraag klinkt; dat tilt het gesprek meteen omhoog.",
@@ -1545,6 +1674,12 @@ function buildTaskBlueprintsFromDoc() {
             "Samen hakken de leerlingen het woord, zeggen de klanken en schrijven het op.",
             "Daarna wisselen de rollen."
           ],
+          questions: [
+            "Welke klanken hoor je in dit woord?",
+            "Kun jij het woord hakken en plakken?",
+            "Welk deel moet je extra goed onthouden?",
+            "Kun jij het woord ook in een zin gebruiken?"
+          ],
           differentiation: "Laat sterke spellers na het opschrijven meteen een zin maken met het woord.",
           teacherTip: "Laat leerlingen eerst hardop hakken voordat er geschreven wordt; zo blijft de auditieve analyse centraal.",
           keywords: ["groep 3/4", "loopdictee", "luisterwoorden", "hakken", "plakken"]
@@ -1608,6 +1743,12 @@ function buildTaskBlueprintsFromDoc() {
             "Terug bij de tafel schrijft het tweetal het woord of de zin op en benoemt de regel.",
             "Daarna wisselen de rollen."
           ],
+          questions: [
+            "Welke spellingcategorie hoort hierbij?",
+            "Welke regel gebruik je?",
+            "Welk woorddeel helpt jou om het goed te schrijven?",
+            "Kun jij nog een woord bedenken dat ook zo werkt?"
+          ],
           differentiation: "Gebruik korte zinnen in plaats van losse woorden als je transfer naar schrijven wilt oefenen.",
           teacherTip: "Laat leerlingen na elke zin eerst samen de categorie of regel noemen; dan blijft het geen overschrijfoefening.",
           keywords: ["groep 5/6", "loopdictee", "categorie van de week", "regeluitleg", "context"]
@@ -1629,6 +1770,12 @@ function buildTaskBlueprintsFromDoc() {
             "Na twee minuten schuiven ze door.",
             "Sluit af met een korte nabespreking van lastige woorden."
           ],
+          questions: [
+            "Waarom hoort dit woord in deze categorie?",
+            "Welke spellingregel gebruik je hier?",
+            "Welk woord vond je lastig en waarom?",
+            "Kun jij nog een passend voorbeeld geven?"
+          ],
           differentiation: "Laat sterke spellers op één post ook zelf een extra voorbeeld bedenken.",
           teacherTip: "Houd iedere post heel compact; zo blijft het tempo hoog en wordt de circuitvorm echt helpend.",
           keywords: ["groep 5/6", "circuit", "spellingcategorieen", "luisterwoorden", "weetwoorden"]
@@ -1649,6 +1796,12 @@ function buildTaskBlueprintsFromDoc() {
             "De klas loopt rond en zoekt de partner of matchgroep die erbij hoort, bijvoorbeeld een woord en de juiste categorie.",
             "Als leerlingen denken dat hun kaarten bij elkaar horen, leggen ze dat aan elkaar uit.",
             "Controleer klassikaal enkele matches."
+          ],
+          questions: [
+            "Waarom horen deze kaarten bij elkaar?",
+            "Welke regel of categorie past hierbij?",
+            "Welk woorddeel geeft jou de aanwijzing?",
+            "Wat klopt er niet als je een andere match kiest?"
           ],
           differentiation: "Werk in trio's of matchgroepen met woord, categorie en uitleg als uitbreiding.",
           teacherTip: "Laat leerlingen pas verder zoeken als ze eerst hebben verteld waarom een kaart niet past; dat scherpt het denken.",
@@ -1840,6 +1993,12 @@ function buildTaskBlueprintsFromDoc() {
             "Leerlingen lopen in tweetallen en zoeken steeds een set van drie die bij elkaar hoort.",
             "Bij elk setje spreken ze hardop uit welke regel wordt toegepast.",
             "Bespreek klassikaal twee of drie complete sets."
+          ],
+          questions: [
+            "Welke regel hoort bij dit woord?",
+            "Welk voorbeeld laat die regel goed zien?",
+            "Hoe weet je dat deze set compleet klopt?",
+            "Kun jij zelf nog een extra voorbeeldwoord noemen?"
           ],
           differentiation: "Laat leerlingen zelf een extra voorbeeldwoord toevoegen aan een gevonden set.",
           teacherTip: "Leg de nadruk op de uitlegzin; juist het verwoorden van de regel maakt deze opdracht sterk.",
@@ -2183,6 +2342,12 @@ function buildTaskBlueprintsFromDoc() {
             "Als zij een match hebben gevonden, leggen zij aan elkaar uit waarom het past.",
             "Na enkele matches volgt een korte klassikale terugkoppeling."
           ],
+          questions: [
+            "Waarom hoort jouw kaartje bij dat van je maatje?",
+            "Welke uitkomst, breuk of notatie maakt de match goed?",
+            "Kun je deze match ook anders opschrijven?",
+            "Hoe weet je dat jullie antwoord gelijkwaardig is?"
+          ],
           differentiation: "Laat sterke leerlingen hun match ook in een andere notatie geven.",
           teacherTip: "Laat leerlingen pas verder lopen nadat zij hun match aan elkaar hebben uitgelegd; zo blijft de inhoud centraal.",
           keywords: ["groep 5/6", "match", "breuken", "kommagetallen", "vergelijkingen", "samenwerken"]
@@ -2224,6 +2389,12 @@ function buildTaskBlueprintsFromDoc() {
             "1 leerling legt hardop uit hoe hij of zij de som zou aanpakken.",
             "De ander luistert, stelt vragen en vult aan.",
             "Na een wisselmoment draaien de rollen om."
+          ],
+          questions: [
+            "Hoe pak jij deze som aan?",
+            "Waarom kies je juist deze strategie?",
+            "Kan het ook op een andere manier?",
+            "Hoe controleer je of jouw antwoord klopt?"
           ],
           differentiation: "Geef sommige tweetallen een hulpschema en andere tweetallen open contextopgaven.",
           teacherTip: "Kies opgaven waarbij meerdere aanpakken mogelijk zijn, zodat de gesprekken rijker worden.",
@@ -2503,6 +2674,775 @@ function buildTaskBlueprintsFromDoc() {
           differentiation: "Laat sterke leerlingen ook symmetrie of lijnstukken uitbeelden.",
           teacherTip: "Laat 1 groepje de vorm maken en een ander groepje de eigenschappen benoemen; zo blijft iedereen actief kijken.",
           keywords: ["groep 7/8", "meetkunde", "hoeken", "lijnen", "symmetrie"]
+        })
+      ]
+    }
+  };
+}
+
+function buildSupplementalTaskBlueprints() {
+  return {
+    taal: {
+      energizers: [],
+      tijdens: [
+        taalDocTask(GROUP_78, {
+          key: "stellingenspeeddate",
+          visual: "line",
+          visualHint: "Twee rijen tegenover elkaar bespreken korte stellingen en schuiven daarna snel door naar een nieuw maatje.",
+          title: "Stellingenspeeddate",
+          summary: "Leerlingen oefenen snel argumenteren en luisteren door korte taalstellingen in wisselende tweetallen te bespreken.",
+          duration: "10 min",
+          setup: "Zet twee rijen tegenover elkaar en kies 4 tot 6 korte stellingen of boekvragen.",
+          goal: "Spreken, luisteren, standpunt innemen en onderbouwen in korte rondes oefenen.",
+          movementFocus: "Kort uitwisselen, doorvragen en na elke ronde één plek doorschuiven.",
+          materials: ["Stellingen of vraagkaartjes"],
+          steps: [
+            "Laat leerlingen in twee rijen tegenover elkaar staan.",
+            "Lees een stelling of vraag voor, bijvoorbeeld over een tekst, actualiteit of thema.",
+            "Geef beide leerlingen kort tijd om hun antwoord of standpunt te delen.",
+            "Laat daarna één rij doorschuiven en start de volgende ronde."
+          ],
+          differentiation: "Werk met vaste starters zoals ik denk dit, omdat... of laat leerlingen juist vrij reageren.",
+          teacherTip: "Kies stellingen die net genoeg verschil oproepen; dan ontstaan korte maar inhoudelijke gesprekken.",
+          keywords: ["groep 7/8", "speeddate", "stelling", "argumenteren", "luisteren"]
+        }),
+        taalDocTask(GROUP_78, {
+          key: "bron-en-bewijswandeling",
+          visual: "path",
+          visualHint: "Tweetallen lopen langs bronkaartjes en koppelen uitspraken direct aan een passend bewijsfragment.",
+          title: "Bron- en bewijswandeling",
+          summary: "Leerlingen oefenen kritisch lezen door uitspraken te koppelen aan het beste bewijs uit een bron.",
+          duration: "10-15 min",
+          setup: "Hang korte bronfragmenten en uitspraken op verschillende plekken in het lokaal.",
+          goal: "Informatie selecteren, brongebruik en onderbouwen met tekstbewijs oefenen.",
+          movementFocus: "Tussen bron en uitspraak lopen, kiezen en samen kort verwoorden waarom het bewijs past.",
+          materials: ["Bronkaartjes", "Uitspraken of antwoordblad"],
+          steps: [
+            "Werk in tweetallen en verspreid bronfragmenten en uitspraken door het lokaal.",
+            "Laat leerlingen per uitspraak het best passende bewijs zoeken.",
+            "Bij elk gevonden bewijs lichten leerlingen kort toe waarom dat fragment het sterkst past.",
+            "Bespreek aan het eind twee of drie lastige koppelingen klassikaal."
+          ],
+          differentiation: "Gebruik kortere fragmenten voor een basisronde en voeg daarna twijfelgevallen toe.",
+          teacherTip: "Vraag steeds welk woord of welke zin in de bron hun keuze bewijst; zo blijft het echt brongericht.",
+          keywords: ["groep 7/8", "bron", "bewijs", "kritisch lezen", "onderbouwen"]
+        })
+      ],
+      bewegend: [
+        taalDocTask(GROUP_34, {
+          key: "vertel-en-wisselpad",
+          visual: "path",
+          visualHint: "Een route langs drie praatplaten helpt leerlingen om steeds één zin te zeggen en daarna door te lopen.",
+          title: "Vertel en wisselpad",
+          summary: "Leerlingen lopen langs praatplaten en zeggen bij elke stop een passende zin of een nieuw detail.",
+          duration: "10 min",
+          setup: "Leg of hang 3 tot 4 praatplaten of themaplaatjes verspreid in het lokaal.",
+          goal: "Zinsvorming, woordenschat en mondeling vertellen in korte stappen oefenen.",
+          movementFocus: "Van plaat naar plaat lopen en per stop direct één passende zin verwoorden.",
+          materials: ["Praatplaten of themaplaatjes"],
+          steps: [
+            "Verspreid een paar praatplaten in het lokaal.",
+            "Laat leerlingen in tweetallen of kleine groepjes van plaat naar plaat lopen.",
+            "Bij elke stop zegt een leerling een passende zin of noemt iets nieuws dat te zien is.",
+            "Wissel daarna door naar de volgende plaat en herhaal."
+          ],
+          differentiation: "Werk met beginzinnen voor groep 3 of laat groep 4 twee zinnen achter elkaar maken.",
+          teacherTip: "Gebruik platen uit het actuele thema; dan versterk je tegelijk de leswoordenschat.",
+          keywords: ["groep 3/4", "vertellen", "zinnen", "praatplaat", "woordenschat"]
+        }),
+        taalDocTask(GROUP_56, {
+          key: "hoofdzin-of-detail-lijn",
+          visual: "line",
+          visualHint: "Een lijn met twee kanten maakt zichtbaar of een zin de hoofdgedachte of juist een detail weergeeft.",
+          title: "Hoofdzin of detail-lijn",
+          summary: "Leerlingen kiezen fysiek tussen hoofdgedachte en detail en leggen daarna hun keuze uit.",
+          duration: "10 min",
+          setup: "Maak twee kanten in het lokaal: hoofdgedachte en detail.",
+          goal: "Hoofdgedachte onderscheiden van ondersteunende details in teksten oefenen.",
+          movementFocus: "Een kant kiezen en daarna mondeling verwoorden waarom een zin hoofdzaak of detail is.",
+          materials: ["Zinnen of tekstkaartjes"],
+          steps: [
+            "Noem of laat een zin zien uit een tekst.",
+            "Laat leerlingen naar hoofdgedachte of detail lopen.",
+            "Vraag enkele leerlingen hun keuze kort toe te lichten.",
+            "Herhaal dit met meerdere zinnen uit dezelfde of een nieuwe tekst."
+          ],
+          differentiation: "Gebruik eerst heel duidelijke voorbeelden en voeg daarna twijfelzinnen toe.",
+          teacherTip: "Kies één korte tekst als kapstok, zodat leerlingen echt leren vergelijken binnen dezelfde inhoud.",
+          keywords: ["groep 5/6", "hoofdgedachte", "detail", "tekstbegrip", "lijn"]
+        }),
+        taalDocTask(GROUP_56, {
+          key: "samenvatstappen",
+          visual: "stations",
+          visualHint: "Drie korte stopplaatsen helpen leerlingen om onderwerp, kern en slot van een samenvatting op te bouwen.",
+          title: "Samenvatstappen",
+          summary: "Leerlingen lopen langs drie samenvatstappen en formuleren per stap een stukje van de kern.",
+          duration: "10-12 min",
+          setup: "Maak drie stopplaatsen: onderwerp, belangrijkste informatie en slotzin.",
+          goal: "Samenvatten en hoofdinformatie selecteren in een duidelijke structuur oefenen.",
+          movementFocus: "Van stap naar stap bewegen en per plek kort formuleren wat daar thuishoort.",
+          materials: ["Tekst of alinea", "Werkblad of wisbordje"],
+          steps: [
+            "Geef leerlingen een korte tekst of alinea als basis.",
+            "Bij de eerste stop benoemen ze het onderwerp.",
+            "Bij de tweede stop noemen of noteren ze de belangrijkste informatie.",
+            "Bij de laatste stop maken ze een korte slotzin of hoofdgedachte."
+          ],
+          differentiation: "Gebruik eerst een invulstructuur en laat later leerlingen vrijer samenvatten.",
+          teacherTip: "Houd de tekst compact; deze werkvorm werkt het sterkst als leerlingen echt moeten kiezen wat kern is.",
+          keywords: ["groep 5/6", "samenvatten", "hoofdinformatie", "stappen", "tekstbegrip"]
+        })
+      ]
+    },
+    spelling: {
+      energizers: [],
+      tijdens: [
+        spellingDocTask(GROUP_34, {
+          key: "plaatje-woord-loop",
+          visual: "dictation",
+          visualHint: "Tweetallen halen een plaatje op, zeggen samen het woord en schrijven het daarna correct op.",
+          title: "Plaatje-woord-loop",
+          summary: "Leerlingen halen een plaatje op, noemen het woord hardop en schrijven daarna samen de juiste spelling.",
+          duration: "10 min",
+          setup: "Hang 6 tot 8 plaatjes op die passen bij de categorie van de week.",
+          goal: "Woorden koppelen aan betekenis, klank en correcte spelling uit Staal 2.",
+          movementFocus: "Lopen, onthouden en daarna samen het woord hardop analyseren en opschrijven.",
+          materials: ["Plaatjes", "Schrift of wisbordje"],
+          steps: [
+            "Werk in tweetallen en verspreid plaatjes door het lokaal.",
+            "Eén leerling loopt naar een plaatje, benoemt het woord en loopt terug.",
+            "Samen zeggen de leerlingen het woord nog eens en schrijven het correct op.",
+            "Daarna wisselen de rollen."
+          ],
+          differentiation: "Gebruik bij zwakkere spellers de woorden ook mondeling voor als extra steun.",
+          teacherTip: "Kies plaatjes waarbij het doelwoord meteen duidelijk is; dan blijft de focus op spelling liggen.",
+          keywords: ["groep 3/4", "plaatje", "woord", "luisterwoorden", "spelling"]
+        }),
+        spellingDocTask(GROUP_34, {
+          key: "kort-of-lang-dictee",
+          visual: "dictation",
+          visualHint: "Leerlingen halen woorden op en beslissen samen of ze een korte of lange klank horen.",
+          title: "Kort of lang-dictee",
+          summary: "Tweetallen halen woorden op, schrijven die op en plaatsen ze direct bij korte of lange klank.",
+          duration: "10 min",
+          setup: "Hang woordkaartjes op en maak twee schrijfkolommen: korte klank en lange klank.",
+          goal: "Het verschil tussen korte en lange klank herkennen en koppelen aan de juiste spelling.",
+          movementFocus: "Lopen, woord onthouden en daarna samen kiezen in welke klankkolom het woord hoort.",
+          materials: ["Woordkaartjes", "Twee schrijfkolommen", "Potlood"],
+          steps: [
+            "Maak tweetallen en verspreid woordkaartjes door het lokaal.",
+            "Eén leerling haalt een woord op en loopt terug naar het maatje.",
+            "Samen schrijven zij het woord op en zetten het in de kolom korte of lange klank.",
+            "Controleer na meerdere woorden klassikaal enkele keuzes."
+          ],
+          differentiation: "Begin met duidelijke woorden en voeg later woorden als bomen en bommen toe.",
+          teacherTip: "Laat leerlingen bij elk woord eerst hardop de klank noemen voordat ze schrijven.",
+          keywords: ["groep 3/4", "korte klank", "lange klank", "dictee", "lettergroep"]
+        })
+      ],
+      bewegend: [
+        spellingDocTask(GROUP_56, {
+          key: "regel-of-weetwoord-lijn",
+          visual: "line",
+          visualHint: "Twee kanten in het lokaal maken zichtbaar of een woord vooral om een regel of om woordbeeld vraagt.",
+          title: "Regel of weetwoord-lijn",
+          summary: "Leerlingen kiezen of een woord via een regel of via woordbeeld onthouden wordt en lichten dat toe.",
+          duration: "10 min",
+          setup: "Maak twee kanten in het lokaal: regelwoord en weetwoord.",
+          goal: "Verschil zien tussen woorden die je kunt uitleggen met een regel en woorden die je vooral moet onthouden.",
+          movementFocus: "Een kant kiezen en daarna kort verwoorden waarom dat woord daar thuishoort.",
+          materials: ["Woordkaartjes of mondelinge voorbeelden"],
+          steps: [
+            "Noem of toon een woord, bijvoorbeeld gevaarlijk, geit, chocolade of eerlijk.",
+            "Laat leerlingen naar regelwoord of weetwoord lopen.",
+            "Vraag enkele leerlingen om hun keuze uit te leggen.",
+            "Herhaal dit met meerdere woorden uit de lesweek."
+          ],
+          differentiation: "Voeg later ook twijfelwoorden toe waarbij leerlingen echt moeten overleggen.",
+          teacherTip: "Vraag niet alleen naar de juiste kant, maar vooral naar het denken erachter; daar zit de leerwinst.",
+          keywords: ["groep 5/6", "regelwoord", "weetwoord", "woordbeeld", "spellinglijn"]
+        }),
+        spellingDocTask(GROUP_56, {
+          key: "net-als-woordpad",
+          visual: "path",
+          visualHint: "Leerlingen lopen van een basiswoord naar nieuwe woorden die volgens hetzelfde spellingprincipe werken.",
+          title: "Net-als-woordpad",
+          summary: "Leerlingen koppelen een voorbeeldwoord aan nieuwe woorden met hetzelfde spellingpatroon.",
+          duration: "10-12 min",
+          setup: "Leg basiswoorden en nieuwe voorbeeldwoorden verspreid neer in het lokaal.",
+          goal: "Net-als-woorden en analogie in spelling bewust gebruiken.",
+          movementFocus: "Van voorbeeld naar nieuw woord lopen en hardop benoemen welk patroon hetzelfde blijft.",
+          materials: ["Basiswoordkaartjes", "Voorbeeldwoorden"],
+          steps: [
+            "Leg enkele basiswoorden neer, bijvoorbeeld bomen, rijden of gevaar.",
+            "Laat leerlingen een woord zoeken dat volgens hetzelfde patroon geschreven wordt.",
+            "Bij elk gevonden woord benoemen ze welk deel hetzelfde werkt.",
+            "Bespreek kort een paar sterke matches klassikaal."
+          ],
+          differentiation: "Laat sterke leerlingen zelf een extra net-als-woord bedenken voor hun set.",
+          teacherTip: "Kies basiswoorden die de leerlingen al kennen uit de methode; dan wordt de analogie sneller gebruikt.",
+          keywords: ["groep 5/6", "net-als-woord", "patroon", "spelling", "analogie"]
+        }),
+        spellingDocTask(GROUP_78, {
+          key: "werkwoordkeuze-lijn",
+          visual: "line",
+          visualHint: "Een keuze tussen twee vormen maakt werkwoordspelling zichtbaar voordat leerlingen hun redenering geven.",
+          title: "Werkwoordkeuze-lijn",
+          summary: "Leerlingen kiezen tussen twee werkwoordsvormen en moeten daarna kort uitleggen waarom die vorm klopt.",
+          duration: "10 min",
+          setup: "Maak twee kanten in het lokaal met per ronde twee mogelijke werkwoordsvormen.",
+          goal: "Werkwoordsvormen kiezen op basis van onderwerp, tijd en regel.",
+          movementFocus: "Snel positie kiezen bij de juiste vorm en daarna de controlevolgorde verwoorden.",
+          materials: ["Twee antwoordkaarten per ronde"],
+          steps: [
+            "Laat per ronde twee mogelijke werkwoordsvormen zien, bijvoorbeeld gebeurt of gebeurd.",
+            "Leerlingen lopen naar de vorm die volgens hen klopt.",
+            "Vraag een paar leerlingen om kort uit te leggen welke controle zij hebben gebruikt.",
+            "Herhaal dit met meerdere zinnen."
+          ],
+          differentiation: "Gebruik later ook zinnen met inversie of voltooid deelwoord voor extra uitdaging.",
+          teacherTip: "Houd per ronde maar twee keuzes zichtbaar; dat maakt de werkwoordcontrole helder en snel.",
+          keywords: ["groep 7/8", "werkwoordspelling", "keuze", "dt", "controle"]
+        }),
+        spellingDocTask(GROUP_78, {
+          key: "redigeerroute-kort",
+          visual: "path",
+          visualHint: "Korte foutstroken laten leerlingen al lopend reviseren en meteen benoemen wat zij verbeteren.",
+          title: "Redigeerroute kort",
+          summary: "Leerlingen lopen een korte route langs foutstroken en verbeteren per stop één taal- of spelfout.",
+          duration: "10 min",
+          setup: "Hang 4 tot 6 korte foutstroken op met verschillende foutsoorten.",
+          goal: "Reviseren, foutenanalyse en controle van spelling en leestekens oefenen.",
+          movementFocus: "Naar een foutstrook lopen, kort corrigeren en mondeling aangeven wat is aangepast.",
+          materials: ["Foutstroken", "Verbeterblad of wisbordje"],
+          steps: [
+            "Verspreid korte foutstroken door het lokaal.",
+            "Laat leerlingen in tweetallen per stop één fout zoeken en verbeteren.",
+            "Na elke correctie benoemen zij kort welke regel of welk teken is aangepast.",
+            "Bespreek aan het eind de lastigste foutstrook klassikaal."
+          ],
+          differentiation: "Gebruik in een plusronde ook zinnen met meerdere foutsoorten tegelijk.",
+          teacherTip: "Houd de stroken kort; het doel is snel reviseren en verantwoorden, niet lange teksten overschrijven.",
+          keywords: ["groep 7/8", "revisie", "redigeren", "fouten", "spelling"]
+        })
+      ]
+    },
+    rekenen: {
+      energizers: [],
+      tijdens: [],
+      bewegend: [
+        docTask(GROUP_34, {
+          key: "meer-of-minder-lijn",
+          visual: "line",
+          visualHint: "Een vloerlijn helpt leerlingen letterlijk stappen vooruit en terug te zetten bij meer en minder.",
+          title: "Meer of minder-lijn",
+          summary: "Leerlingen lopen op een lijn vooruit of terug en ervaren zo wat 1 meer, 1 minder, 10 meer of 10 minder betekent.",
+          duration: "10 min",
+          setup: "Leg een eenvoudige getallenlijn op de vloer, passend bij de groep.",
+          goal: "Getalbegrip en het denken in meer en minder concreet maken.",
+          movementFocus: "Gerichte stappen vooruit en terug koppelen aan wat er met het getal verandert.",
+          materials: ["Getallenlijn op de vloer"],
+          steps: [
+            "Laat een leerling op een startgetal op de lijn staan.",
+            "Geef opdrachten zoals 1 meer, 1 minder, 2 terug of 10 vooruit.",
+            "Laat de leerling de stap zetten en het nieuwe getal hardop noemen.",
+            "Herhaal dit met meerdere leerlingen en startgetallen."
+          ],
+          differentiation: "Gebruik in groep 3 een korte lijn en in groep 4 grotere sprongen of tientallen.",
+          teacherTip: "Laat leerlingen eerst voorspellen en pas daarna bewegen; zo train je echt het rekenen in het hoofd.",
+          keywords: ["groep 3/4", "meer en minder", "getallenlijn", "stappen", "getalbegrip"]
+        }),
+        docTask(GROUP_56, {
+          key: "breuken-schatten-op-de-lijn",
+          visual: "line",
+          visualHint: "Leerlingen schatten eerst hun plek op de lijn en controleren daarna samen of hun breuk goed staat.",
+          title: "Breuken schatten op de lijn",
+          summary: "Leerlingen schatten waar een breuk ligt, gaan daar staan en lichten vervolgens hun keuze toe.",
+          duration: "10 min",
+          setup: "Maak een vloerlijn van 0 tot 1 of van 0 tot 2 en gebruik breukkaartjes.",
+          goal: "Breuken plaatsen, vergelijken en redeneren met referentiepunten zoals 1/2 en 1.",
+          movementFocus: "Een plek op de lijn kiezen en daarna mondeling onderbouwen waarom die plaats logisch is.",
+          materials: ["Breukkaartjes", "Getallenlijn op de vloer"],
+          steps: [
+            "Geef leerlingen een breukkaartje, bijvoorbeeld 2/3, 3/8 of 5/4.",
+            "Laat hen eerst schatten waar hun breuk hoort en daar gaan staan.",
+            "Bespreek daarna met de groep wie links, rechts of dicht bij 1 hoort te staan.",
+            "Laat leerlingen zo nodig hun plek bijstellen en uitleggen waarom."
+          ],
+          differentiation: "Begin met eenvoudige breuken en voeg daarna onechte breuken of breuken met grotere noemers toe.",
+          teacherTip: "Gebruik herkenbare ankers zoals 0, 1/2 en 1; dat helpt leerlingen sneller redeneren.",
+          keywords: ["groep 5/6", "breuken", "schatten", "getallenlijn", "vergelijken"]
+        })
+      ]
+    }
+  };
+}
+
+function buildSupplementalEnergizerBlueprints() {
+  return {
+    [ENERGIZER_CALM]: [
+      allGroupTask({
+        key: "steen-papier-schaar-stretch",
+        visual: "line",
+        visualHint: "Tweetallen spelen steen-papier-schaar en zetten na elke ronde rustig een stap achteruit voor een lichte stretch.",
+        title: "Steen-papier-schaar stretch",
+        summary: "Een rustige partnerenergizer waarbij steen-papier-schaar wordt gecombineerd met balans en lichte rekoefeningen.",
+        duration: "1-2 min",
+        setup: "Laat leerlingen een maatje zoeken en tegenover elkaar staan met voldoende ruimte achter zich.",
+        goal: "Rustig schakelen, glimlachen en tegelijk de spanning even uit het lijf laten zakken.",
+        movementFocus: "Kleine stappen achteruit en rustige houdingscontrole na elke steen-papier-schaar-ronde.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Laat leerlingen in tweetallen tegenover elkaar staan.",
+          "Speel samen steen-papier-schaar.",
+          "Na elke ronde zet de minder succesvolle leerling één rustige stap achteruit en houden beide leerlingen hun balans vast.",
+          "Speel een paar rondes en laat daarna iedereen weer rustig terugstappen."
+        ],
+        differentiation: "Stop eerder bij jongere groepen of laat oudere groepen tussendoor kort hun armen uitstrekken.",
+        teacherTip: "Benadruk dat het geen wedstrijd is; het gaat om rustig spelen, lachen en daarna weer landen.",
+        keywords: ["energizer", "lesovergang", "kalmerend actief", "steen papier schaar", "balans"]
+      }),
+      allGroupTask({
+        key: "spiegeladem-in-tweetallen",
+        visual: "circle",
+        visualHint: "Tweetallen spiegelen langzaam elkaars armbewegingen terwijl ze rustig in- en uitademen.",
+        title: "Spiegeladem in tweetallen",
+        summary: "Leerlingen spiegelen een maatje met langzame armbewegingen en koppelen die aan een rustige ademhaling.",
+        duration: "1-2 min",
+        setup: "Laat leerlingen snel een maatje kiezen en op hun eigen plek blijven staan.",
+        goal: "De groep rustiger maken en tegelijk de aandacht op een ander richten.",
+        movementFocus: "Langzaam spiegelen en het tempo bewust laag houden.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Laat tweetallen tegenover elkaar staan.",
+          "Leerling A beweegt de armen langzaam omhoog en omlaag terwijl beide leerlingen rustig mee ademen.",
+          "Leerling B spiegelt zo precies mogelijk.",
+          "Wissel na een halve minuut en sluit af met een stille eindhouding."
+        ],
+        differentiation: "Begin alleen met armbewegingen en voeg later ook schouders of een rustige draai toe.",
+        teacherTip: "Hoe langzamer jij het voordoet, hoe makkelijker de klas echt in rust zakt.",
+        keywords: ["energizer", "lesovergang", "kalmerend actief", "spiegelen", "ademhaling"]
+      }),
+      allGroupTask({
+        key: "langzame-telstap",
+        visual: "path",
+        visualHint: "Vier rustige stappen vooruit en terug helpen leerlingen tellen, ademen en landen in hetzelfde ritme.",
+        title: "Langzame telstap",
+        summary: "De klas zet samen rustige stappen op een vaste tel en komt zo gecontroleerd terug naar stilte.",
+        duration: "1-2 min",
+        setup: "Geen voorbereiding. Laat leerlingen op hun eigen plek staan met een halve stap ruimte.",
+        goal: "Na een druk moment weer samen in een rustig ritme komen.",
+        movementFocus: "Langzame stapjes en rustig tellen op een gelijk tempo.",
+        materials: ["Geen extra materiaal"],
+        steps: [
+          "Tel samen rustig tot vier terwijl iedereen vier kleine stappen op de plaats of iets vooruit zet.",
+          "Tel daarna rustig terug naar één en laat iedereen vier kleine stappen terug zetten.",
+          "Herhaal dit twee of drie keer in hetzelfde tempo.",
+          "Sluit af met beide voeten stil op de grond en een korte stilte."
+        ],
+        differentiation: "Gebruik bij oudere groepen een langere telreeks of laat leerlingen stil in hun hoofd meetellen.",
+        teacherTip: "Houd je stem laag en gelijkmatig; dat geeft deze energizer zijn kalmerende effect.",
+        keywords: ["energizer", "lesovergang", "kalmerend actief", "ritme", "rustig tellen"]
+      })
+    ]
+  };
+}
+
+function buildSupplementalGoldenWeekBlueprints() {
+  return {
+    [GOLDEN_SUBJECT_34]: {
+      [GOLDEN_MOMENT_KENNIS]: [
+        goldenWeekTask({
+          key: "naam-en-beweging-kring",
+          visual: "circle",
+          visualHint: "In een kring noemen leerlingen hun naam en koppelen daar een eenvoudige beweging aan die de groep herhaalt.",
+          title: "Naam en beweging kring",
+          summary: "Leerlingen leren namen onthouden door iedere naam te verbinden aan een korte beweging.",
+          duration: "10 min",
+          setup: "Maak een kring met genoeg ruimte om kleine bewegingen te maken.",
+          goal: "Namen oefenen en een eerste veilige groepsdynamiek opbouwen.",
+          movementFocus: "Een naam uitspreken, een beweging voordoen en die samen herhalen.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Ga in een kring staan.",
+            "Eén leerling noemt de eigen naam en maakt een eenvoudige beweging.",
+            "De groep herhaalt de naam en de beweging samen.",
+            "Ga zo de kring rond en herhaal aan het eind nog een paar namen."
+          ],
+          differentiation: "Werk eerst met alleen voornamen en voeg later iets als een hobbybeweging toe.",
+          teacherTip: "Kies simpele bewegingen; dan gaat de aandacht naar de naam en niet naar een ingewikkelde uitvoering.",
+          keywords: ["groep 3/4", "naam", "beweging", "kennismaken", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "ik-hou-van-mijn-buur-junior",
+          visual: "circle",
+          visualHint: "Leerlingen bewegen naar een nieuwe plek wanneer een eenvoudige uitspraak ook voor hen geldt.",
+          title: "Ik hou van mijn buur junior",
+          summary: "Leerlingen ontdekken overeenkomsten door van plek te wisselen bij herkenbare uitspraken.",
+          duration: "10 min",
+          setup: "Zet een kring van plekken of stoelen klaar met één plek te weinig.",
+          goal: "Veilige herkenning en eerste overeenkomsten in de groep zichtbaar maken.",
+          movementFocus: "Bij een passende uitspraak snel van plek wisselen en een nieuwe buur ontmoeten.",
+          materials: ["Plekken of stoelen in een kring"],
+          steps: [
+            "Maak een kring met één plek te weinig.",
+            "De leerling in het midden zegt bijvoorbeeld: ik hou van mijn buur die graag buiten speelt.",
+            "Iedereen voor wie dat klopt, zoekt een nieuwe plek.",
+            "De leerling die overblijft, noemt de volgende uitspraak."
+          ],
+          differentiation: "Speel zittend of staand afhankelijk van de ruimte en rust in de groep.",
+          teacherTip: "Kies eerst luchtige uitspraken; zo durft iedereen mee te doen en krijg je snel beweging.",
+          keywords: ["groep 3/4", "ik hou van mijn buur", "overeenkomsten", "kennismaken", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "kleur-en-hobby-hoeken",
+          visual: "corners",
+          visualHint: "Hoeken voor kleuren of hobby's maken het makkelijk om snel te kiezen en iets over jezelf te vertellen.",
+          title: "Kleur en hobby-hoeken",
+          summary: "Leerlingen lopen naar een hoek die past bij hun kleur of hobby en vertellen daar kort iets over.",
+          duration: "10 min",
+          setup: "Label vier hoeken met kleuren, hobby's of favoriete activiteiten.",
+          goal: "Over jezelf vertellen en tegelijk klasgenoten met dezelfde voorkeur vinden.",
+          movementFocus: "Naar een keuzehoek lopen en daar een korte uitwisseling voeren.",
+          materials: ["Hoeklabels"],
+          steps: [
+            "Kies vier kleuren, hobby's of activiteiten en geef elke hoek een label.",
+            "Laat leerlingen naar de hoek lopen die het best past.",
+            "In de hoek vertelt ieder kind kort waarom deze keuze past.",
+            "Wissel daarna naar een nieuwe ronde met een andere keuzecategorie."
+          ],
+          differentiation: "Werk eerst met heel duidelijke keuzes en voeg later een open vraag toe.",
+          teacherTip: "Gebruik herkenbare keuzes uit de schooldag of vrije tijd; dan komt het praten sneller op gang.",
+          keywords: ["groep 3/4", "hoeken", "hobby", "kleur", "kennismaken", "gouden weken"]
+        })
+      ],
+      [GOLDEN_MOMENT_GROUP]: [
+        goldenWeekTask({
+          key: "samen-standbeeld",
+          visual: "circle",
+          visualHint: "Kleine groepjes maken een bevroren beeld van samen spelen, helpen of samenwerken.",
+          title: "Samen-standbeeld",
+          summary: "Leerlingen laten in kleine groepjes met een standbeeld zien wat goed samenspelen of samenwerken is.",
+          duration: "10 min",
+          setup: "Maak ruimte voor kleine groepjes en noem een paar situaties zoals helpen of samen spelen.",
+          goal: "Groepsafspraken zichtbaar en concreet maken met lichaamstaal.",
+          movementFocus: "Samen een houding kiezen, afstemmen en daarna bevroren presenteren.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Verdeel de klas in kleine groepjes.",
+            "Geef een opdracht zoals: maak een standbeeld van helpen of samen spelen.",
+            "Laat elk groepje kort overleggen en daarna bevriezen.",
+            "Bespreek samen wat je in elk standbeeld ziet."
+          ],
+          differentiation: "Laat groepjes later ook een minder goede situatie en een betere oplossing uitbeelden.",
+          teacherTip: "Kies concrete schoolvoorbeelden; dan wordt de link naar gedrag in de klas meteen duidelijk.",
+          keywords: ["groep 3/4", "standbeeld", "samenwerken", "groepsvorming", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "maatjesbrug",
+          visual: "path",
+          visualHint: "Door korte wissels en loopmomenten ontmoeten leerlingen steeds een nieuw maatje onder een speelse brugroute.",
+          title: "Maatjesbrug",
+          summary: "Leerlingen lopen door een eenvoudige maatjesroute en wisselen steeds kort van partner.",
+          duration: "10 min",
+          setup: "Laat tweetallen verspreid staan en maak een vaste looprichting af.",
+          goal: "Meer klasgenoten ontmoeten en wennen aan korte samenwerkwissels.",
+          movementFocus: "Lopen, stoppen bij een nieuw maatje en daarna weer rustig doorschuiven.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Maak tweetallen en laat die verspreid in het lokaal staan.",
+            "Op jouw signaal loopt één rij of helft rustig door naar een nieuw maatje.",
+            "Bij elk nieuwe maatje voeren leerlingen een korte opdracht uit, zoals samen een high five of een vraag beantwoorden.",
+            "Herhaal dit meerdere rondes."
+          ],
+          differentiation: "Gebruik alleen bewegingen in de eerste ronde en voeg later korte praatvragen toe.",
+          teacherTip: "Houd de wissels vlot en voorspelbaar; dan blijft de opdracht veilig en speels.",
+          keywords: ["groep 3/4", "maatjes", "wisselen", "groepsvorming", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "wij-horen-bij-elkaar",
+          visual: "mission",
+          visualHint: "Leerlingen zoeken klasgenoten met eenzelfde keuze en zeggen daarna hardop wat hen samenbindt.",
+          title: "Wij horen bij elkaar",
+          summary: "Leerlingen vormen kleine groepjes op basis van een overeenkomst en benoemen daarna samen wat hen verbindt.",
+          duration: "10 min",
+          setup: "Bedenk een paar eenvoudige overeenkomsten zoals buiten spelen, tekenen of bouwen.",
+          goal: "Verbondenheid en herkenning in de groep versterken.",
+          movementFocus: "Rondlopen, snel een passend groepje vormen en daarna kort samen overleggen.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat leerlingen rustig door het lokaal lopen.",
+            "Noem een overeenkomst, zoals: zoek kinderen die ook graag bouwen.",
+            "Laat leerlingen een klein groepje vormen.",
+            "Vraag elk groepje om samen één zin te zeggen over wat hen verbindt."
+          ],
+          differentiation: "Begin met twee of drie heel duidelijke overeenkomsten en maak ze later subtieler.",
+          teacherTip: "Vraag groepjes om hardop in wij-vorm te spreken; dat versterkt het groepsgevoel.",
+          keywords: ["groep 3/4", "overeenkomsten", "groepje", "groepsvorming", "gouden weken"]
+        })
+      ]
+    },
+    [GOLDEN_SUBJECT_56]: {
+      [GOLDEN_MOMENT_KENNIS]: [
+        goldenWeekTask({
+          key: "steen-papier-schaar-vraagwissel",
+          visual: "line",
+          visualHint: "Na een korte steen-papier-schaar-ronde beantwoorden leerlingen een vraag en schuiven daarna door naar een nieuw maatje.",
+          title: "Steen-papier-schaar vraagwissel",
+          summary: "Leerlingen spelen kort steen-papier-schaar en wisselen daarna een kennismakingsvraag uit.",
+          duration: "10 min",
+          setup: "Laat leerlingen in twee rijen of losse tweetallen staan en kies 4 tot 6 kennismakingsvragen.",
+          goal: "Snel drempels verlagen en veel maatjescontacten opbouwen in een speelse vorm.",
+          movementFocus: "Kort spelen, vragen uitwisselen en daarna direct doorschuiven.",
+          materials: ["Geen extra materiaal", "Eventueel vraagkaartjes"],
+          steps: [
+            "Laat leerlingen een maatje zoeken.",
+            "Speel samen één ronde steen-papier-schaar.",
+            "Daarna beantwoorden beide leerlingen een korte vraag, bijvoorbeeld over hobby's of verwachtingen.",
+            "Laat één rij of helft doorschuiven naar een nieuw maatje."
+          ],
+          differentiation: "Gebruik eerst één gezamenlijke vraag en laat later leerlingen een vraagkaart trekken.",
+          teacherTip: "Houd de roshambo-rondes kort; het gesprek erna is hier het belangrijkste deel.",
+          keywords: ["groep 5/6", "steen papier schaar", "kennismaken", "vraagwissel", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "als-je-mij-echt-kent-middenbouw",
+          visual: "circle",
+          visualHint: "Tweetallen delen in korte rondes meerdere zinnen die beginnen met: als je mij echt kent, dan weet je dat...",
+          title: "Als je mij echt kent",
+          summary: "Leerlingen vertellen in tweetallen meerdere dingen over zichzelf terwijl de ander echt luistert.",
+          duration: "10 min",
+          setup: "Maak tweetallen en spreek af wie eerst leerling A en B is.",
+          goal: "Dieper kennismaken dan alleen naam en hobby en actief leren luisteren.",
+          movementFocus: "Korte wissels van spreker en luisteraar met een rustig maatjesmoment.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat leerlingen in tweetallen staan.",
+            "Leerling A maakt zinnen af met: als je mij echt kent, dan weet je dat...",
+            "Leerling B luistert zonder te onderbreken.",
+            "Wissel daarna van rol en laat een paar leerlingen iets delen dat ze hebben onthouden."
+          ],
+          differentiation: "Gebruik een timer van 30 of 45 seconden voor extra structuur.",
+          teacherTip: "Model eerst wat actief luisteren eruitziet; dat maakt het gesprek meteen rijker.",
+          keywords: ["groep 5/6", "luisteren", "kennismaken", "tweetallen", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "move-if-middenbouw",
+          visual: "corners",
+          visualHint: "Leerlingen verplaatsen zich snel wanneer een uitspraak op hen past en zien zo veel overeenkomsten in de groep.",
+          title: "Move if middenbouw",
+          summary: "Leerlingen bewegen wanneer een uitspraak bij hen past en ontmoeten zo telkens nieuwe klasgenoten.",
+          duration: "10 min",
+          setup: "Laat iedereen op een vaste plek starten en bereid een serie luchtige uitspraken voor.",
+          goal: "Overeenkomsten zichtbaar maken en de groep luchtig in beweging brengen.",
+          movementFocus: "Bij een passende uitspraak van plek wisselen en daarna kort contact maken.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat leerlingen op een vaste plek staan.",
+            "Noem een uitspraak, zoals: move if je graag leest of graag buiten speelt.",
+            "Iedereen voor wie dat klopt, verplaatst zich naar een nieuwe plek.",
+            "Laat leerlingen kort kijken wie er mee bewoog en start daarna de volgende ronde."
+          ],
+          differentiation: "Speel eerst met makkelijke uitspraken en voeg later school- of samenwerkvragen toe.",
+          teacherTip: "Laat leerlingen niet alleen bewegen, maar ook even rondkijken; dan zien ze de herkenning in de groep.",
+          keywords: ["groep 5/6", "move if", "overeenkomsten", "kennismaken", "gouden weken"]
+        })
+      ],
+      [GOLDEN_MOMENT_GROUP]: [
+        goldenWeekTask({
+          key: "complimentenoversteek",
+          visual: "line",
+          visualHint: "Leerlingen steken een lijn over en geven een klasgenoot daarna een kort, concreet compliment.",
+          title: "Complimentenoversteek",
+          summary: "Een actieve groepsvorm waarin leerlingen korte, concrete complimenten oefenen.",
+          duration: "10 min",
+          setup: "Maak een lijn of middenruimte vrij en bespreek kort wat een concreet compliment is.",
+          goal: "Positieve groepssfeer en waarderende taal opbouwen.",
+          movementFocus: "Een lijn oversteken, een maatje zoeken en daarna doelgericht iets aardigs zeggen.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat leerlingen achter een lijn starten.",
+            "Geef de opdracht om de lijn over te steken en iemand een kort compliment te geven, bijvoorbeeld over helpen of samenwerken.",
+            "Laat leerlingen daarna terugkeren en een nieuw maatje zoeken.",
+            "Bespreek kort welke complimenten fijn en concreet voelden."
+          ],
+          differentiation: "Werk eerst met complimentstarters zoals ik vond het fijn dat jij...",
+          teacherTip: "Benadruk dat complimenten echt en concreet moeten zijn; dan voelt de oefening veilig en zinvol.",
+          keywords: ["groep 5/6", "compliment", "groepsvorming", "waarderen", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "ritme-doorgeven",
+          visual: "circle",
+          visualHint: "De klas bouwt samen een rustig groepsritme op en merkt hoe goed luisteren en afstemmen nodig zijn.",
+          title: "Ritme doorgeven",
+          summary: "Leerlingen geven een ritme door en ervaren hoe samenwerken en goed kijken nodig zijn voor een gezamenlijk resultaat.",
+          duration: "10 min",
+          setup: "Ga in een kring staan en spreek af dat iedereen goed kijkt en luistert.",
+          goal: "Afstemmen, samenwerken en groepsfocus oefenen.",
+          movementFocus: "Klap- of stampbewegingen precies overnemen en doorgeven in een groep.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Start in een kring met een eenvoudig klap- of stampritme.",
+            "Laat het ritme de kring rondgaan.",
+            "Voeg daarna een kleine variatie of tweede beweging toe.",
+            "Bespreek kort wat hielp om als groep hetzelfde ritme vast te houden."
+          ],
+          differentiation: "Werk eerst alleen met klappen en voeg later stampen of draaien toe.",
+          teacherTip: "Juist bij een rustig tempo zie je goed waar de groep al samenwerkt en waar nog afstemming nodig is.",
+          keywords: ["groep 5/6", "ritme", "afstemmen", "groepsvorming", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "samen-vorm-maken",
+          visual: "mission",
+          visualHint: "Kleine groepjes vormen zonder veel woorden samen een figuur, letter of symbool en ontdekken zo ieders rol.",
+          title: "Samen vorm maken",
+          summary: "Leerlingen maken in kleine groepjes een vorm en ervaren hoe plannen, luisteren en meebewegen samenkomen.",
+          duration: "10 min",
+          setup: "Maak ruimte voor groepjes van 4 of 5 leerlingen.",
+          goal: "Samenwerken, taakverdeling en overleggen zichtbaar oefenen.",
+          movementFocus: "In een groepje bewegen, afstemmen en samen één eindvorm maken.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Verdeel de klas in groepjes van 4 of 5.",
+            "Geef een opdracht zoals: maak samen een ster, een letter of een boot.",
+            "Laat groepjes kort overleggen en daarna hun vorm neerzetten.",
+            "Bespreek welke afspraken of rollen hielpen om snel samen te werken."
+          ],
+          differentiation: "Laat sommige groepjes zonder praten werken voor extra uitdaging.",
+          teacherTip: "Kies vormen die niet te moeilijk zijn; de kracht zit in het samenwerken, niet in een perfecte uitkomst.",
+          keywords: ["groep 5/6", "samenwerken", "vorm", "groepjes", "gouden weken"]
+        })
+      ]
+    },
+    [GOLDEN_SUBJECT_78]: {
+      [GOLDEN_MOMENT_KENNIS]: [
+        goldenWeekTask({
+          key: "speeddate-met-doorvraag",
+          visual: "line",
+          visualHint: "Twee rijen tegenover elkaar delen in korte rondes iets over zichzelf en oefenen meteen met doorvragen.",
+          title: "Speeddate met doorvraag",
+          summary: "Leerlingen leren elkaar snel kennen en oefenen meteen doorvragen op het antwoord van een ander.",
+          duration: "10-12 min",
+          setup: "Zet twee rijen tegenover elkaar en kies 4 tot 6 vragen die meer diepgang geven.",
+          goal: "Kennismaken, luisteren en doorvragen combineren in een vlotte vorm.",
+          movementFocus: "Kort uitwisselen, één doorvraag stellen en daarna doorschuiven.",
+          materials: ["Vraagkaartjes of mondelinge vragen"],
+          steps: [
+            "Laat leerlingen in twee rijen tegenover elkaar staan.",
+            "Geef per ronde een vraag, bijvoorbeeld over verwachtingen, hobby's of wat iemand belangrijk vindt in een klas.",
+            "Laat beide leerlingen antwoorden en minstens één doorvraag stellen.",
+            "Na elke ronde schuift één rij een plek door."
+          ],
+          differentiation: "Gebruik eerst lichtere vragen en voeg later groeps- of schoolvragen toe.",
+          teacherTip: "Leg nadruk op de doorvraag; juist dat maakt deze vorm sterker dan een gewone kennismakingsronde.",
+          keywords: ["groep 7/8", "speeddate", "doorvragen", "kennismaken", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "move-if-bovenbouw",
+          visual: "line",
+          visualHint: "Bij uitspraken over school, hobby's en samenwerken verplaatst een deel van de groep zich direct naar een nieuwe plek.",
+          title: "Move if bovenbouw",
+          summary: "Leerlingen bewegen bij herkenbare uitspraken en zien snel welke overeenkomsten en verschillen er in de groep zijn.",
+          duration: "10 min",
+          setup: "Laat iedereen starten op een vaste plek en bereid stellingen voor die passen bij groep 7/8.",
+          goal: "Herkenning, luchtig gesprek en snelle kennismaking met veel klasgenoten.",
+          movementFocus: "Verplaatsen bij een passende uitspraak en direct nieuwe klasgenoten om je heen ervaren.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat leerlingen op een eigen plek staan.",
+            "Noem uitspraken zoals: move if je graag samenwerkt, als je sport leuk vindt of als je een nieuw schooljaar spannend vindt.",
+            "Iedereen voor wie dat klopt, verplaatst zich.",
+            "Laat leerlingen kort rondkijken en start daarna de volgende ronde."
+          ],
+          differentiation: "Voeg later ook uitspraken toe over hulp vragen, planning of samenwerken.",
+          teacherTip: "Gebruik een rustige opbouw van luchtig naar iets persoonlijker; dan blijft het veilig voor iedereen.",
+          keywords: ["groep 7/8", "move if", "kennismaken", "stellingen", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "als-je-mij-echt-kent-bovenbouw",
+          visual: "path",
+          visualHint: "Leerlingen lopen in tweetallen een korte route en delen meerdere zinnen die laten zien wie ze zijn.",
+          title: "Als je mij echt kent bovenbouw",
+          summary: "Leerlingen delen in tweetallen meerdere persoonlijke maar veilige dingen over zichzelf.",
+          duration: "10-12 min",
+          setup: "Spreek een korte wandelroute af en maak tweetallen.",
+          goal: "Diepere kennismaking en aandachtig luisteren stimuleren.",
+          movementFocus: "Rustig lopen, delen en daarna van spreker wisselen.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Laat leerlingen in tweetallen een korte route lopen.",
+            "Leerling A vult meerdere keren aan: als je mij echt kent, dan weet je dat...",
+            "Leerling B luistert zonder te onderbreken en vat aan het einde kort samen wat is onthouden.",
+            "Daarna wisselen de rollen."
+          ],
+          differentiation: "Werk met een lijstje veilige thema's als extra steun voor leerlingen die dat nodig hebben.",
+          teacherTip: "Laat leerlingen vooraf kiezen wat ze wel en niet willen delen; zo blijft de opdracht veilig.",
+          keywords: ["groep 7/8", "luisteren", "tweetallen", "kennismaken", "gouden weken"]
+        })
+      ],
+      [GOLDEN_MOMENT_GROUP]: [
+        goldenWeekTask({
+          key: "stille-volgorde",
+          visual: "line",
+          visualHint: "De groep moet zonder praten een volgorde maken, waardoor luisteren met ogen en samenwerken zichtbaar wordt.",
+          title: "Stille volgorde",
+          summary: "Leerlingen vormen zonder praten een volgorde en ontdekken zo hoe belangrijk afstemmen en initiatief nemen is.",
+          duration: "10 min",
+          setup: "Kies een criterium zoals geboortemaand, huisnummer of lengte en maak een vrije lijn in het lokaal.",
+          goal: "Samenwerken, non-verbale afstemming en groepsprobleemoplossen oefenen.",
+          movementFocus: "Zoeken naar je plek in de rij zonder te praten en steeds op anderen afstemmen.",
+          materials: ["Geen extra materiaal"],
+          steps: [
+            "Geef een criterium voor de volgorde, zoals geboortemaand of huisnummer.",
+            "Laat leerlingen zonder praten op volgorde gaan staan.",
+            "Controleer daarna samen of de rij klopt.",
+            "Bespreek kort wat hielp om dit als groep voor elkaar te krijgen."
+          ],
+          differentiation: "Begin met een makkelijk criterium en maak het later complexer.",
+          teacherTip: "Kijk vooral naar het proces: wie neemt initiatief, wie wacht, en hoe helpt de groep elkaar?",
+          keywords: ["groep 7/8", "stil", "volgorde", "samenwerken", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "teamkeuze-continuum",
+          visual: "line",
+          visualHint: "Een denkbeeldige lijn laat zien hoe leerlingen denken over samenwerken, hulp vragen en verantwoordelijkheid nemen.",
+          title: "Teamkeuze-continuum",
+          summary: "Leerlingen kiezen een plek op een lijn bij uitspraken over samenwerken en bespreken daarna wat de groep nodig heeft.",
+          duration: "10-12 min",
+          setup: "Maak een lijn van helemaal eens tot helemaal oneens.",
+          goal: "Samenwerkingsvoorkeuren en groepsbehoeften zichtbaar maken en bespreekbaar maken.",
+          movementFocus: "Een positie kiezen en daarna kort toelichten wat die plek voor jou betekent.",
+          materials: ["Eventueel lijnlabels"],
+          steps: [
+            "Leg uit dat de lijn loopt van helemaal eens tot helemaal oneens.",
+            "Lees uitspraken voor over samenwerken, verantwoordelijkheid of hulp vragen.",
+            "Laat leerlingen op een passende plek gaan staan.",
+            "Bespreek per ronde wat dit zegt over wat de groep nodig heeft."
+          ],
+          differentiation: "Voeg een middenpositie toe voor twijfel of laat leerlingen later zelf een uitspraak formuleren.",
+          teacherTip: "Gebruik deze vorm niet om te overtuigen, maar om te begrijpen hoe de groep denkt.",
+          keywords: ["groep 7/8", "continuum", "samenwerken", "stellingen", "gouden weken"]
+        }),
+        goldenWeekTask({
+          key: "roshambo-samenwerkingsmix",
+          visual: "mission",
+          visualHint: "Na een korte steen-papier-schaar-ronde bespreken nieuwe maatjes telkens een korte samenwerkvraag.",
+          title: "Roshambo samenwerkingsmix",
+          summary: "Leerlingen wisselen na steen-papier-schaar steeds van maatje en praten kort over wat samenwerken sterker maakt.",
+          duration: "10 min",
+          setup: "Zorg voor loopruimte en bedenk een paar korte samenwerkvragen.",
+          goal: "Speels contact maken en tegelijk taal geven aan goed samenwerken in de klas.",
+          movementFocus: "Kort spelen, wisselen van maatje en meteen door naar een nieuwe vraag.",
+          materials: ["Geen extra materiaal", "Eventueel vraagkaartjes"],
+          steps: [
+            "Laat leerlingen door het lokaal lopen.",
+            "Bij een stopteken zoeken ze een maatje en spelen samen één ronde steen-papier-schaar.",
+            "Daarna beantwoorden beide leerlingen een korte samenwerkvraag, zoals: wat helpt jou bij samenwerken?",
+            "Laat leerlingen weer verder lopen en herhaal dit met nieuwe maatjes."
+          ],
+          differentiation: "Gebruik eerst luchtige samenwerkvragen en voeg later vragen toe over rollen, feedback of vertrouwen.",
+          teacherTip: "Houd de speelmomenten heel kort; het gesprek erna maakt deze opdracht waardevol voor groepsvorming.",
+          keywords: ["groep 7/8", "roshambo", "samenwerken", "groepsvorming", "gouden weken"]
         })
       ]
     }
@@ -3007,6 +3947,12 @@ function buildStandaloneGoldenWeekBlueprints() {
             "Laat beide leerlingen om de beurt antwoorden.",
             "Geef daarna het signaal om een nieuw maatje te zoeken en herhaal dit met een nieuwe vraag."
           ],
+          questions: [
+            "Hoe heet jij?",
+            "Wat speel jij graag?",
+            "Wat vind jij leuk op school?",
+            "Waar ben jij goed in?"
+          ],
           differentiation: "Werk met pictogrammen of laat leerlingen ook iets aanwijzen of voordoen als praten nog spannend is.",
           teacherTip: "Doe de eerste ronde zelf even voor met één leerling; dat maakt de opdracht in groep 3/4 direct veiliger.",
           keywords: ["groep 3/4", "kennismaken", "tweetallen", "gouden weken", "groepsvorming"]
@@ -3027,6 +3973,12 @@ function buildStandaloneGoldenWeekBlueprints() {
             "Laat leerlingen rustig door het lokaal lopen.",
             "Wanneer leerlingen iemand vinden die past, wisselen ze kort hun antwoord uit.",
             "Geef daarna een nieuwe vraag zodat iedereen weer verder zoekt."
+          ],
+          questions: [
+            "Wie heeft dezelfde lievelingskleur als jij?",
+            "Wie houdt ook van bouwen of tekenen?",
+            "Wie speelt graag hetzelfde als jij?",
+            "Wie heeft iets dat jij ook leuk vindt?"
           ],
           differentiation: "Gebruik alleen ja/nee-vragen voor een jongere groep of voeg één open vraag toe als de klas al wat losser is.",
           teacherTip: "Kies eerst heel toegankelijke vragen, zodat iedereen snel succeservaringen opdoet.",
@@ -3051,6 +4003,12 @@ function buildStandaloneGoldenWeekBlueprints() {
             "Laat leerlingen met een stap of gebaar laten zien wat zij zouden doen.",
             "Kies na elke situatie één of twee reacties om samen hardop te oefenen."
           ],
+          questions: [
+            "Wat kun jij doen als iemand alleen staat?",
+            "Hoe nodig jij iemand uit om mee te doen?",
+            "Wat helpt als iemand iets spannend vindt?",
+            "Hoe zorgen wij dat iedereen mee kan doen?"
+          ],
           differentiation: "Werk met uitgebeelde situaties als verwoorden nog lastig is.",
           teacherTip: "Houd de voorbeelden heel concreet en dicht bij de schooldag van jonge kinderen.",
           keywords: ["groep 3/4", "erbij horen", "groepsvorming", "veiligheid", "gouden weken"]
@@ -3071,6 +4029,12 @@ function buildStandaloneGoldenWeekBlueprints() {
             "Noem een stelling, zoals: ik speel liever buiten dan binnen of ik werk graag samen.",
             "Laat leerlingen op de lijn stappen als het bij hen past en op hun plek blijven als dat niet zo is.",
             "Vraag kort wat leerlingen opvalt aan de groep."
+          ],
+          questions: [
+            "Speel jij liever binnen of buiten?",
+            "Werk jij liever samen of alleen?",
+            "Kies jij liever rustig of actief?",
+            "Wat valt jou op aan onze groep?"
           ],
           differentiation: "Werk met twee duidelijke kanten, bijvoorbeeld ja en nee, als een open lijn nog te moeilijk is.",
           teacherTip: "Kies luchtige stellingen; in groep 3/4 is het doel vooral veilige herkenning en niet diep debat.",
@@ -3097,6 +4061,12 @@ function buildStandaloneGoldenWeekBlueprints() {
             "Bij het stopteken zoekt iedereen een maatje en wisselt om de beurt een antwoord uit.",
             "Laat leerlingen daarna weer verder lopen tot de volgende vraag."
           ],
+          questions: [
+            "Wat vond jij het leukste van de vakantie?",
+            "Waar kijk jij naar uit dit schooljaar?",
+            "Welke hobby doe jij het liefst?",
+            "Wat wil jij dat klasgenoten over jou weten?"
+          ],
           differentiation: "Gebruik een tijdslimiet per antwoord of laat leerlingen één antwoord van hun maatje onthouden voor de nabespreking.",
           teacherTip: "Wissel luchtige vragen af met één iets inhoudelijkere vraag; zo blijft het speels en krijg je toch betekenisvolle input.",
           keywords: ["groep 5/6", "vakantievragen", "kennismaken", "tweetallen", "gouden weken"]
@@ -3117,6 +4087,12 @@ function buildStandaloneGoldenWeekBlueprints() {
             "Laat hen iemand zoeken die bij de opdracht past en kort doorvragen.",
             "Geef na een halve minuut een nieuwe opdracht.",
             "Bespreek aan het eind welke verrassende overeenkomsten leerlingen ontdekten."
+          ],
+          questions: [
+            "Wie houdt van lezen?",
+            "Wie is graag buiten actief?",
+            "Wie vindt rekenen of taal leuk?",
+            "Wie kan goed tekenen, bouwen of sporten?"
           ],
           differentiation: "Laat leerlingen antwoorden opschrijven of juist alleen onthouden en later samenvatten.",
           teacherTip: "Voorkom dat leerlingen steeds bij hetzelfde vriendje blijven door expliciet te laten wisselen na elke opdracht.",
@@ -3141,6 +4117,12 @@ function buildStandaloneGoldenWeekBlueprints() {
             "Laat tweetallen na een eerste ronde vergelijken wat al hetzelfde is en wat nog niet.",
             "Wissel daarna van rol of geef een tweede tekening."
           ],
+          questions: [
+            "Wat moet jouw maatje precies tekenen?",
+            "Welke afspraak hielp goed bij het samenwerken?",
+            "Wat moest je nog duidelijker uitleggen?",
+            "Hoe wist je dat jullie bijna hetzelfde hadden?"
+          ],
           differentiation: "Maak de tekening simpeler voor een onrustige groep of voeg extra details toe voor meer uitdaging.",
           teacherTip: "De nabespreking is hier belangrijk: laat tweetallen benoemen wat hielp om echt samen te werken.",
           keywords: ["groep 5/6", "tweekening", "samenwerken", "groepsvorming", "gouden weken"]
@@ -3161,6 +4143,12 @@ function buildStandaloneGoldenWeekBlueprints() {
             "Noem een uitspraak, zoals: ik help graag iemand anders, ik speel graag buiten of ik houd van voetbal.",
             "Als de uitspraak klopt, stappen leerlingen naar voren of in de kring.",
             "Bespreek kort welke overeenkomsten zichtbaar werden."
+          ],
+          questions: [
+            "Wie herkent dit ook bij zichzelf?",
+            "Wat hebben jullie hierin gemeen?",
+            "Welke uitspraak past goed bij onze groep?",
+            "Wat verraste jou aan wat je zag?"
           ],
           differentiation: "Laat leerlingen later zelf een uitspraak bedenken die zoveel mogelijk klasgenoten in beweging krijgt.",
           teacherTip: "Begin met luchtige uitspraken en bouw daarna rustig op naar samenwerken en vriendschap.",
@@ -3187,6 +4175,12 @@ function buildStandaloneGoldenWeekBlueprints() {
             "Laat de groep na één minuut doorschuiven naar de volgende stop.",
             "Sluit af met één rondje waarin leerlingen iets verrassends delen dat zij hebben gehoord."
           ],
+          questions: [
+            "Waar ben je trots op van vorig jaar?",
+            "Wat wil je dit jaar leren?",
+            "Waar kijk je het meest naar uit?",
+            "Wat hoop je van deze groep?"
+          ],
           differentiation: "Laat leerlingen bij de laatste stop één persoonlijk doel voor de groep formuleren.",
           teacherTip: "Deze werkvorm werkt sterk als je aan het eind expliciet teruggrijpt op wat leerlingen hopen voor het schooljaar.",
           keywords: ["groep 7/8", "tijdmachine", "kennismaken", "vooruitkijken", "gouden weken"]
@@ -3207,6 +4201,12 @@ function buildStandaloneGoldenWeekBlueprints() {
             "Noem een stelling, zoals: ik werk graag samen, ik houd van lezen of ik vind een nieuw schooljaar spannend.",
             "Wie zich herkent, stapt over de lijn.",
             "Vraag af en toe door: wat maakt dat jij hiervoor koos?"
+          ],
+          questions: [
+            "Welke stelling past bij jou?",
+            "Waarom stap jij over de lijn?",
+            "Wat herken jij in anderen?",
+            "Welke keuze zegt iets over samenwerken in de klas?"
           ],
           differentiation: "Gebruik eerst lichte stellingen en voeg later vragen toe over samenwerken, hulp vragen of een plek in de groep vinden.",
           teacherTip: "Kies een rustig tempo; in groep 7/8 zit de meerwaarde juist vaak in het korte gesprek na de beweging.",
@@ -3231,6 +4231,12 @@ function buildStandaloneGoldenWeekBlueprints() {
             "Laat leerlingen groepjes vormen op basis van wat bij hen past.",
             "Na een korte uitwisseling laat je de groepjes weer los en volgt de volgende overeenkomst."
           ],
+          questions: [
+            "Wie past bij dezelfde keuze als jij?",
+            "Wat hebben jullie precies gemeen?",
+            "Welke overeenkomst verraste je?",
+            "Met wie werkte je nog niet samen maar zou dat wel kunnen?"
+          ],
           differentiation: "Laat leerlingen in een latere ronde zelf een overeenkomst bedenken waarop zij een groepje vormen.",
           teacherTip: "Varieer tussen luchtige en meer schoolgerichte overeenkomsten; zo bouw je zowel sfeer als inhoudelijk zicht op de groep op.",
           keywords: ["groep 7/8", "kleef aan overeenkomsten", "groepsvorming", "verbinding", "gouden weken"]
@@ -3251,6 +4257,12 @@ function buildStandaloneGoldenWeekBlueprints() {
             "Laat leerlingen kiezen welke hoek nu het best bij hun gevoel of ervaring past.",
             "Geef per hoek kort tijd om met elkaar uit te wisselen waarom die keuze past.",
             "Haal klassikaal op wat de groep nodig heeft om sterker te worden."
+          ],
+          questions: [
+            "Welke hoek past nu het best bij jou?",
+            "Wat maakt dat jij daar staat?",
+            "Wat heb jij nodig van de groep?",
+            "Wat kan onze klas vandaag al doen om sterker te worden?"
           ],
           differentiation: "Werk eerst met veiligere hoekkeuzes en ga later pas naar stellingen over samenwerken, hulp vragen of erbij horen.",
           teacherTip: "Benadruk dat er geen goede of foute hoek is; het doel is zicht krijgen op de groep, niet elkaar overtuigen.",
@@ -4094,6 +5106,7 @@ function materializeTask(group, subject, moment, blueprint) {
   const title = readGroupValue(editableBlueprint.title, group.id);
   const summary = readGroupValue(editableBlueprint.summary, group.id);
   const goal = readGroupValue(editableBlueprint.goal, group.id);
+  const questions = readGroupValue(editableBlueprint.questions ?? [], group.id) ?? [];
 
   if (!title || !summary || !goal) {
     return null;
@@ -4121,6 +5134,7 @@ function materializeTask(group, subject, moment, blueprint) {
     movementFocus: readGroupValue(editableBlueprint.movementFocus, group.id),
     materials: readGroupValue(editableBlueprint.materials, group.id),
     steps: readGroupValue(editableBlueprint.steps, group.id),
+    questions,
     differentiation: readGroupValue(editableBlueprint.differentiation, group.id),
     teacherTip: readGroupValue(editableBlueprint.teacherTip, group.id),
     visual: editableBlueprint.visual,
@@ -4142,6 +5156,7 @@ function materializeTask(group, subject, moment, blueprint) {
         goal,
         readGroupValue(editableBlueprint.setup, group.id),
         readGroupValue(editableBlueprint.movementFocus, group.id),
+        questions.join(" "),
         readGroupValue(editableBlueprint.keywords, group.id).join(" "),
         readGroupValue(editableBlueprint.materials, group.id).join(" ")
       ].join(" ")
@@ -9490,6 +10505,7 @@ function buildLocalCreateDefaults() {
     movementFocus: "",
     materials: "Geen extra materialen",
     steps: "Leg kort uit wat de bedoeling is.\nLaat leerlingen uitvoeren.\nBespreek kort na of controleer samen.",
+    questions: "",
     differentiation: "",
     teacherTip: "",
     visualHint: "",
@@ -9510,6 +10526,7 @@ function buildLocalCreateDraftFromForm(formData) {
     movementFocus: String(formData.get("movementFocus") || "").trim(),
     materials: String(formData.get("materials") || "").trim(),
     steps: String(formData.get("steps") || "").trim(),
+    questions: String(formData.get("questions") || "").trim(),
     differentiation: String(formData.get("differentiation") || "").trim(),
     teacherTip: String(formData.get("teacherTip") || "").trim(),
     visualHint: String(formData.get("visualHint") || "").trim(),
@@ -9596,6 +10613,10 @@ function buildLocalCustomTaskBlueprintFromForm(formData) {
     .split("\n")
     .map((item) => item.trim())
     .filter(Boolean);
+  const questions = String(formData.get("questions") || "")
+    .split("\n")
+    .map((item) => item.trim())
+    .filter(Boolean);
   const keywords = String(formData.get("keywords") || "")
     .split("\n")
     .map((item) => item.trim())
@@ -9619,6 +10640,7 @@ function buildLocalCustomTaskBlueprintFromForm(formData) {
     movementFocus: String(formData.get("movementFocus") || "").trim(),
     materials: materials.length ? materials : ["Geen extra materialen"],
     steps,
+    questions,
     differentiation: String(formData.get("differentiation") || "").trim(),
     teacherTip: String(formData.get("teacherTip") || "").trim(),
     visualHint: String(formData.get("visualHint") || "").trim(),
@@ -9657,6 +10679,7 @@ function buildLocalCustomTaskBlueprintFromTask(task, titleSuffix = "kopie") {
     movementFocus: task.movementFocus,
     materials: [...task.materials],
     steps: [...task.steps],
+    questions: [...(task.questions || [])],
     differentiation: task.differentiation,
     teacherTip: task.teacherTip,
     visualHint: task.visualHint,
@@ -10253,6 +11276,105 @@ function getMaterialsList(task) {
   return cleaned.length ? cleaned : ["Geen extra materialen nodig"];
 }
 
+function getQuestionsList(task) {
+  const seen = new Set();
+  const source =
+    Array.isArray(task.questions) && task.questions.length ? task.questions : buildFallbackQuestions(task);
+  return source
+    .map((item) => String(item || "").trim())
+    .filter(Boolean)
+    .filter((item) => {
+      const fingerprint = normalize(item);
+
+      if (seen.has(fingerprint)) {
+        return false;
+      }
+
+      seen.add(fingerprint);
+      return true;
+    });
+}
+
+function buildFallbackQuestions(task) {
+  if (task.groupId === GROUP_ENERGIZERS) {
+    return [];
+  }
+
+  if (task.groupId === GROUP_GOLDEN) {
+    if (task.momentId === GOLDEN_MOMENT_KENNIS) {
+      return [
+        "Wat heb je net ontdekt over een ander?",
+        "Wat hebben jullie met elkaar gemeen?",
+        "Welke vraag zou je hierna nog willen stellen?",
+        "Wat wil je straks nog van iemand onthouden?"
+      ];
+    }
+
+    return [
+      "Wat helpt deze groep om goed samen te werken?",
+      "Wat viel jou op aan de keuzes of reacties van anderen?",
+      "Wat heeft iemand nodig om zich veilig te voelen in deze groep?",
+      "Wat kunnen jullie vandaag al doen om de groep sterker te maken?"
+    ];
+  }
+
+  if (task.subjectId === "taal") {
+    if (task.momentId === "bewegend") {
+      return [
+        "Waar ga jij staan of welke stap kies jij en waarom?",
+        "Welke woorden, zinnen of tekstdelen horen hier volgens jou bij?",
+        "Kun je jouw keuze of antwoord uitleggen?",
+        "Wat hoorde je bij een ander dat ook goed past?"
+      ];
+    }
+
+    return [
+      "Wat is hier het belangrijkste woord, de belangrijkste zin of de hoofdgedachte?",
+      "Kun je jouw antwoord in een volledige zin geven?",
+      "Kun je een voorbeeld of toelichting geven?",
+      "Wat neem je mee uit het antwoord van je maatje?"
+    ];
+  }
+
+  if (task.subjectId === "spelling") {
+    if (task.momentId === "bewegend") {
+      return [
+        "Welke plek, strook of route kies jij en waarom?",
+        "Welke spellingregel of categorie past hierbij?",
+        "Welk woorddeel geeft jou de belangrijkste aanwijzing?",
+        "Hoe controleer je of dit woord of deze zin goed gespeld is?"
+      ];
+    }
+
+    return [
+      "Welke spellingcategorie of regel past hierbij?",
+      "Welk woorddeel helpt jou het meest bij het kiezen of schrijven?",
+      "Kun je nog een passend voorbeeld geven?",
+      "Hoe controleer je of jouw spelling klopt?"
+    ];
+  }
+
+  if (task.subjectId === "rekenen") {
+    if (task.momentId === "bewegend") {
+      return [
+        "Waar ga jij staan of welke stap zet jij en waarom?",
+        "Welke strategie gebruik je hier?",
+        "Wat laat de lijn, hoek, tabel of route jou zien?",
+        "Hoe controleer je of jouw antwoord of plek klopt?"
+      ];
+    }
+
+    return [
+      "Hoe pak jij deze som of opdracht aan?",
+      "Waarom werkt deze strategie volgens jou?",
+      "Kan het ook op een andere manier?",
+      "Hoe controleer je of jouw antwoord klopt?"
+    ];
+  }
+
+  return [];
+}
+
 function getOrganizationSummary(task) {
   const organization = task.cardPack?.organization ?? getTaskOrganization(task.key, task.visual);
 
@@ -10431,6 +11553,38 @@ function renderTeacherBrief(task, showCards) {
               <article class="teacher-brief__item">
                 <span class="teacher-brief__label">${escapeHtml(item.label)}</span>
                 <p>${escapeHtml(item.value)}</p>
+              </article>
+            `
+          )
+          .join("")}
+      </div>
+    </section>
+  `;
+}
+
+function renderQuestionStrip(task) {
+  const questions = getQuestionsList(task);
+
+  if (!questions.length) {
+    return "";
+  }
+
+  return `
+    <section class="teacher-question-strip" aria-label="Vragen voor in de les">
+      <div class="teacher-question-strip__head">
+        <div>
+          <strong>Vragen voor in de les</strong>
+          <p>Kies 1 of 2 vragen en gebruik ze direct tijdens deze opdracht.</p>
+        </div>
+        <span class="teacher-question-strip__meta">${questions.length} ${questions.length === 1 ? "vraag" : "vragen"}</span>
+      </div>
+      <div class="teacher-question-strip__grid">
+        ${questions
+          .map(
+            (question, index) => `
+              <article class="teacher-question-strip__item">
+                <span class="teacher-question-strip__label">Vraag ${index + 1}</span>
+                <p>${escapeHtml(question)}</p>
               </article>
             `
           )
@@ -11163,6 +12317,7 @@ function renderTaskDetail(task) {
                   ? renderLocalEditor(task)
                 : `
                   ${renderTeacherBrief(task, showCards)}
+                  ${renderQuestionStrip(task)}
                   <div class="task-detail__grid">
                     ${renderStaticDetailPanel(
                       "Zo voer je de opdracht uit",
