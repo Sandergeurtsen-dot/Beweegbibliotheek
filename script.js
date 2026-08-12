@@ -5659,7 +5659,7 @@ async function loadPublishedCustomTaskExport() {
   }
 
   try {
-    const response = await fetch(`${LIVE_CUSTOM_TASK_EXPORT_PATH}?v=20260812-1`, {
+    const response = await fetch(`${LIVE_CUSTOM_TASK_EXPORT_PATH}?v=20260812-2`, {
       cache: "no-store"
     });
 
@@ -15161,21 +15161,19 @@ function renderTaskSpecificIllustration(task, subjectAccent, momentAccent, strok
 
 function renderCircleFlowSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
+    ${renderMiniSign(144, 30, preset.top, subjectAccent)}
+    ${renderZone(110, 78, 140, 44, preset.center, "#ffffff", stroke, 12)}
+    ${renderLearnerIcon(92, 150, subjectAccent, stroke, preset.left)}
+    ${renderLearnerIcon(268, 150, subjectAccent, stroke, preset.right)}
     ${renderTrack(
       [
-        [178, 72],
-        [266, 118],
-        [226, 174],
-        [128, 174],
-        [88, 118],
-        [178, 72]
+        [118, 138],
+        [152, 128],
+        [208, 128],
+        [242, 138]
       ],
       momentAccent
     )}
-    ${renderWordCard(144, 48, 72, 28, preset.top, subjectAccent, stroke, 10)}
-    ${renderWordCard(38, 122, 86, 30, preset.left, subjectAccent, stroke, 10)}
-    ${renderWordCard(234, 122, 86, 30, preset.right, subjectAccent, stroke, 10)}
-    ${renderZone(122, 96, 116, 44, preset.center, "#ffffff", stroke, 12)}
     ${renderMiniSign(144, 180, preset.note, momentAccent)}
   `;
 }
@@ -15197,44 +15195,44 @@ function renderContinuumSceneDetailed(preset, subjectAccent, momentAccent, strok
 
 function renderGroupPoseSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderTrack(
-      [
-        [100, 132],
-        [148, 92],
-        [212, 92],
-        [260, 132]
-      ],
-      momentAccent
-    )}
+    ${renderZone(118, 72, 124, 42, preset.note, "#ffffff", stroke, 11)}
     ${renderLearnerIcon(92, 144, subjectAccent, stroke, preset.left)}
     ${renderLearnerIcon(180, 98, momentAccent, stroke, preset.center)}
     ${renderLearnerIcon(268, 144, subjectAccent, stroke, preset.right)}
-    ${renderMiniSign(144, 176, preset.note, momentAccent)}
+    ${renderTrack(
+      [
+        [118, 138],
+        [154, 108],
+        [206, 108],
+        [242, 138]
+      ],
+      momentAccent
+    )}
   `;
 }
 
 function renderBallPassSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderMiniSign(144, 26, preset.top, subjectAccent)}
+    ${renderZone(108, 34, 144, 40, preset.note, "#ffffff", stroke, 11)}
+    ${renderLearnerIcon(86, 116, subjectAccent, stroke, preset.left)}
+    ${renderLearnerIcon(274, 116, subjectAccent, stroke, preset.right)}
+    <circle cx="180" cy="104" r="18" fill="#ffffff" stroke="${stroke}" stroke-width="4" />
+    ${renderSvgTextBlock(160, 88, 40, 32, preset.ball, stroke, 10, 2)}
     ${renderTrack(
       [
-        [104, 110],
-        [180, 84],
-        [256, 110]
+        [112, 120],
+        [180, 104],
+        [248, 120]
       ],
       momentAccent
     )}
-    ${renderLearnerIcon(86, 116, subjectAccent, stroke, preset.left)}
-    ${renderLearnerIcon(274, 116, subjectAccent, stroke, preset.right)}
-    <circle cx="180" cy="88" r="18" fill="#ffffff" stroke="${stroke}" stroke-width="4" />
-    ${renderSvgTextBlock(160, 72, 40, 32, preset.ball, momentAccent, 10, 2)}
-    ${renderMiniSign(144, 140, preset.note, momentAccent)}
+    ${renderMiniSign(144, 176, preset.top, subjectAccent)}
   `;
 }
 
 function renderSeatSwitchSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderMiniSign(144, 24, preset.top, subjectAccent)}
+    ${renderZone(114, 36, 132, 40, preset.middle, "#ffffff", stroke, 12)}
     ${renderSeatShape(88, 112, stroke, subjectAccent)}
     ${renderSeatShape(272, 112, stroke, subjectAccent)}
     ${renderTrack(
@@ -15246,14 +15244,14 @@ function renderSeatSwitchSceneDetailed(preset, subjectAccent, momentAccent, stro
       ],
       momentAccent
     )}
-    ${renderWordCard(132, 86, 96, 38, preset.middle, momentAccent, stroke, 11)}
-    ${renderMiniSign(144, 138, preset.note, momentAccent)}
+    ${renderMiniSign(144, 174, preset.note, momentAccent)}
+    ${renderMiniSign(144, 82, preset.top, subjectAccent)}
   `;
 }
 
 function renderHoopDanceSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderMiniSign(144, 24, preset.top, subjectAccent)}
+    ${renderZone(124, 40, 112, 40, preset.center, "#ffffff", stroke, 11)}
     ${renderHoopShape(106, 108, momentAccent, stroke)}
     ${renderHoopShape(254, 108, momentAccent, stroke)}
     ${renderTrack(
@@ -15264,140 +15262,161 @@ function renderHoopDanceSceneDetailed(preset, subjectAccent, momentAccent, strok
       ],
       momentAccent
     )}
-    ${renderZone(142, 84, 76, 34, preset.center, "#ffffff", stroke, 11)}
-    ${renderMiniSign(144, 140, preset.note, momentAccent)}
+    ${renderLearnerIcon(106, 152, subjectAccent, stroke, "SAMEN")}
+    ${renderLearnerIcon(254, 152, subjectAccent, stroke, "IN 1")}
+    ${renderMiniSign(144, 178, preset.note, momentAccent)}
+    ${renderMiniSign(144, 88, preset.top, subjectAccent)}
   `;
 }
 
 function renderMirrorSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderWordCard(126, 24, 108, 30, preset.top, momentAccent, stroke, 11)}
-    ${renderLearnerIcon(92, 116, subjectAccent, stroke, preset.left)}
-    ${renderLearnerIcon(268, 116, subjectAccent, stroke, preset.right)}
-    <rect x="164" y="62" width="32" height="76" rx="14" fill="${momentAccent}" opacity="0.12" stroke="${stroke}" stroke-width="3" />
-    <path d="M180 68 V132" stroke="${momentAccent}" stroke-width="4" stroke-dasharray="6 8" stroke-linecap="round" />
-    ${renderMiniSign(144, 140, preset.note, momentAccent)}
+    ${renderZone(118, 34, 124, 40, preset.top, "#ffffff", stroke, 11)}
+    ${renderLearnerIcon(92, 146, subjectAccent, stroke, preset.left)}
+    ${renderLearnerIcon(268, 146, subjectAccent, stroke, preset.right)}
+    <path d="M180 82 V158" stroke="${momentAccent}" stroke-width="4" stroke-dasharray="8 10" stroke-linecap="round" />
+    ${renderTrack(
+      [
+        [122, 134],
+        [150, 126],
+        [210, 126],
+        [238, 134]
+      ],
+      momentAccent
+    )}
+    ${renderMiniSign(144, 178, preset.note, momentAccent)}
   `;
 }
 
 function renderSearchSheetSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderMiniSign(144, 24, preset.top, subjectAccent)}
-    ${renderBingoBoard(32, 58, stroke, subjectAccent)}
-    ${renderWordCard(188, 64, 74, 30, preset.labels[0], subjectAccent, stroke, 10.5)}
-    ${renderWordCard(188, 102, 74, 30, preset.labels[1], momentAccent, stroke, 10.5)}
+    ${renderZone(112, 32, 136, 40, preset.top, "#ffffff", stroke, 11)}
+    ${renderBingoBoard(36, 78, stroke, subjectAccent)}
+    ${renderLearnerIcon(278, 144, subjectAccent, stroke, "ZOEK")}
     ${renderTrack(
       [
-        [150, 100],
-        [182, 100],
-        [212, 118],
-        [252, 118]
+        [148, 118],
+        [184, 116],
+        [220, 128],
+        [248, 138]
       ],
       momentAccent
     )}
-    ${renderLearnerIcon(284, 110, subjectAccent, stroke, "LOOP")}
-    ${renderMiniSign(144, 140, preset.note, momentAccent)}
+    ${renderMiniSign(146, 180, preset.note, momentAccent)}
+    ${renderWordCard(188, 88, 80, 30, preset.labels[0], subjectAccent, stroke, 10.5)}
+    ${renderWordCard(188, 126, 80, 30, preset.labels[1], momentAccent, stroke, 10.5)}
   `;
 }
 
 function renderChoiceChallengeSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderMiniSign(144, 24, preset.top, subjectAccent)}
+    ${renderZone(112, 78, 136, 44, "KIES 1", "#ffffff", stroke, 12)}
     ${renderWordCard(28, 62, 82, 30, preset.cards[0], subjectAccent, stroke, 10)}
     ${renderWordCard(250, 62, 82, 30, preset.cards[1], subjectAccent, stroke, 10)}
     ${renderWordCard(28, 118, 82, 30, preset.cards[2], subjectAccent, stroke, 10)}
     ${renderWordCard(250, 118, 82, 30, preset.cards[3], subjectAccent, stroke, 10)}
-    ${renderZone(128, 82, 104, 46, "KIES 1", "#ffffff", stroke, 12)}
-    ${renderMiniSign(144, 142, preset.note, momentAccent)}
+    ${renderMiniSign(144, 30, preset.top, subjectAccent)}
+    ${renderMiniSign(144, 178, preset.note, momentAccent)}
   `;
 }
 
 function renderLiveOrderSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderMiniSign(144, 24, preset.top, subjectAccent)}
-    ${renderWordCard(24, 64, 80, 30, preset.left, subjectAccent, stroke, 10.5)}
-    ${renderWordCard(256, 64, 80, 30, preset.right, subjectAccent, stroke, 10.5)}
-    <path d="M54 118 H306" stroke="${stroke}" stroke-width="6" stroke-linecap="round" />
+    ${renderZone(114, 34, 132, 40, preset.top, "#ffffff", stroke, 11)}
+    <path d="M52 142 H308" stroke="${stroke}" stroke-width="4.4" stroke-linecap="round" />
     ${renderTick(116)}
     ${renderTick(180)}
     ${renderTick(244)}
-    ${renderCirclePoint(116, 100, "1", momentAccent, stroke)}
-    ${renderCirclePoint(180, 100, "2", momentAccent, stroke)}
-    ${renderCirclePoint(244, 100, "3", momentAccent, stroke)}
-    ${renderMiniSign(144, 138, preset.note, momentAccent)}
+    ${renderLearnerIcon(116, 142, subjectAccent, stroke, "1")}
+    ${renderLearnerIcon(180, 120, momentAccent, stroke, "2")}
+    ${renderLearnerIcon(244, 142, subjectAccent, stroke, "3")}
+    ${renderWordCard(24, 90, 80, 30, preset.left, subjectAccent, stroke, 10.5)}
+    ${renderWordCard(256, 90, 80, 30, preset.right, subjectAccent, stroke, 10.5)}
+    ${renderMiniSign(144, 178, preset.note, momentAccent)}
   `;
 }
 
 function renderBodyBuildSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderWordCard(126, 22, 108, 30, "MAAK VORM", momentAccent, stroke, 11)}
-    ${renderWordCard(26, 60, 84, 40, preset.cards[0], subjectAccent, stroke, 18)}
-    ${renderWordCard(138, 60, 84, 40, preset.cards[1], subjectAccent, stroke, 18)}
-    ${renderWordCard(250, 60, 84, 40, preset.cards[2], subjectAccent, stroke, 18)}
-    ${renderSimpleFigure(68, 118, subjectAccent, stroke)}
-    ${renderSimpleFigure(180, 118, subjectAccent, stroke)}
-    ${renderSimpleFigure(292, 118, subjectAccent, stroke)}
-    ${renderMiniSign(144, 140, preset.note, momentAccent)}
+    ${renderZone(108, 28, 144, 40, "MAAK VORM", "#ffffff", stroke, 11)}
+    ${renderWordCard(38, 84, 72, 36, preset.cards[0], subjectAccent, stroke, 18)}
+    ${renderWordCard(144, 84, 72, 36, preset.cards[1], subjectAccent, stroke, 18)}
+    ${renderWordCard(250, 84, 72, 36, preset.cards[2], subjectAccent, stroke, 18)}
+    ${renderSimpleFigure(84, 156, subjectAccent, stroke)}
+    ${renderSimpleFigure(180, 146, momentAccent, stroke)}
+    ${renderSimpleFigure(276, 156, subjectAccent, stroke)}
+    ${renderTrack(
+      [
+        [110, 132],
+        [146, 122],
+        [214, 122],
+        [250, 132]
+      ],
+      momentAccent
+    )}
+    ${renderMiniSign(144, 180, preset.note, momentAccent)}
   `;
 }
 
 function renderPushBalanceSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderWordCard(128, 24, 104, 30, "BALANS", momentAccent, stroke, 11)}
-    ${renderSimpleFigure(94, 84, subjectAccent, stroke)}
-    ${renderSimpleFigure(266, 84, subjectAccent, stroke)}
-    ${renderWordCard(36, 116, 76, 30, preset.left, subjectAccent, stroke, 10.5)}
-    ${renderWordCard(248, 116, 76, 30, preset.right, subjectAccent, stroke, 10.5)}
-    <path d="M116 94 H154" stroke="${momentAccent}" stroke-width="4" stroke-linecap="round" />
-    <path d="M154 94 L144 88 M154 94 L144 100" stroke="${momentAccent}" stroke-width="4" stroke-linecap="round" />
-    <path d="M244 94 H206" stroke="${momentAccent}" stroke-width="4" stroke-linecap="round" />
-    <path d="M206 94 L216 88 M206 94 L216 100" stroke="${momentAccent}" stroke-width="4" stroke-linecap="round" />
-    ${renderMiniSign(144, 140, preset.note, momentAccent)}
+    ${renderZone(120, 30, 120, 40, "BALANS", "#ffffff", stroke, 11)}
+    ${renderSimpleFigure(94, 116, subjectAccent, stroke)}
+    ${renderSimpleFigure(266, 116, subjectAccent, stroke)}
+    ${renderWordCard(34, 156, 84, 30, preset.left, subjectAccent, stroke, 10.5)}
+    ${renderWordCard(242, 156, 84, 30, preset.right, subjectAccent, stroke, 10.5)}
+    ${renderTrack(
+      [
+        [112, 120],
+        [150, 114],
+        [210, 114],
+        [248, 120]
+      ],
+      momentAccent
+    )}
+    ${renderMiniSign(144, 178, preset.note, momentAccent)}
   `;
 }
 
 function renderLinkedSitStandSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderMiniSign(144, 24, preset.note, momentAccent)}
-    ${renderSimpleFigure(150, 78, subjectAccent, stroke)}
-    ${renderSimpleFigure(210, 78, subjectAccent, stroke)}
-    <path d="M162 92 Q180 80 198 92" fill="none" stroke="${momentAccent}" stroke-width="5" stroke-linecap="round" />
-    <path d="M146 118 C146 136 136 142 136 154" fill="none" stroke="${momentAccent}" stroke-width="4" stroke-linecap="round" />
-    <path d="M136 154 L130 146 M136 154 L142 146" stroke="${momentAccent}" stroke-width="4" stroke-linecap="round" />
-    <path d="M224 154 C224 138 236 132 236 118" fill="none" stroke="${momentAccent}" stroke-width="4" stroke-linecap="round" />
-    <path d="M236 118 L230 126 M236 118 L242 126" stroke="${momentAccent}" stroke-width="4" stroke-linecap="round" />
-    ${renderWordCard(34, 138, 84, 30, preset.left, subjectAccent, stroke, 10.5)}
-    ${renderWordCard(242, 138, 84, 30, preset.right, subjectAccent, stroke, 10.5)}
-    ${renderZone(138, 90, 84, 34, "SAMEN", "#ffffff", stroke, 11)}
+    ${renderZone(132, 40, 96, 38, "SAMEN", "#ffffff", stroke, 11)}
+    ${renderSimpleFigure(146, 104, subjectAccent, stroke)}
+    ${renderSimpleFigure(214, 104, subjectAccent, stroke)}
+    <path d="M160 114 Q180 96 200 114" fill="none" stroke="${momentAccent}" stroke-width="4.5" stroke-linecap="round" />
+    <path d="M146 134 C146 148 138 156 136 168" fill="none" stroke="${momentAccent}" stroke-width="4" stroke-linecap="round" />
+    <path d="M214 134 C214 148 222 156 224 168" fill="none" stroke="${momentAccent}" stroke-width="4" stroke-linecap="round" />
+    ${renderWordCard(34, 154, 84, 30, preset.left, subjectAccent, stroke, 10.5)}
+    ${renderWordCard(242, 154, 84, 30, preset.right, subjectAccent, stroke, 10.5)}
+    ${renderMiniSign(144, 178, preset.note, momentAccent)}
   `;
 }
 
 function renderChoiceJumpScene(preset, subjectAccent, momentAccent, stroke) {
   return `
+    ${renderZone(108, 70, 144, 44, preset.prompt, "#ffffff", stroke, 12)}
+    ${renderChoicePad(40, 152, preset.actions[0], subjectAccent, stroke)}
+    ${renderChoicePad(142, 152, preset.actions[1], subjectAccent, stroke)}
+    ${renderChoicePad(244, 152, preset.actions[2], subjectAccent, stroke)}
     ${renderTrack(
       [
-        [154, 144],
-        [198, 144],
-        [232, 152]
+        [180, 116],
+        [180, 140]
       ],
       momentAccent
     )}
-    ${renderZone(28, 84, 124, 42, preset.prompt, "#ffffff", stroke, 12)}
-    ${renderChoicePad(248, 154, preset.actions[0], subjectAccent, stroke)}
-    ${renderChoicePad(296, 120, preset.actions[1], subjectAccent, stroke)}
-    ${renderChoicePad(248, 86, preset.actions[2], subjectAccent, stroke)}
-    ${renderMiniSign(170, 92, "REAGEER DIRECT", momentAccent)}
+    ${renderMiniSign(144, 30, "REAGEER", momentAccent)}
   `;
 }
 
 function renderSignalSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderZone(124, 78, 112, 40, preset.title, "#ffffff", stroke, 12)}
-    ${renderWordCard(28, 58, 66, 30, preset.items[0], subjectAccent, stroke, 10)}
-    ${renderWordCard(266, 58, 66, 30, preset.items[1], subjectAccent, stroke, 10)}
-    ${renderWordCard(28, 132, 66, 30, preset.items[2], momentAccent, stroke, 10)}
-    ${renderWordCard(266, 132, 66, 30, preset.items[3], momentAccent, stroke, 10)}
-    ${renderMiniSign(142, 136, preset.note, momentAccent)}
+    ${renderZone(114, 78, 132, 44, preset.title, "#ffffff", stroke, 12)}
+    ${renderWordCard(34, 56, 72, 30, preset.items[0], subjectAccent, stroke, 10)}
+    ${renderWordCard(254, 56, 72, 30, preset.items[1], subjectAccent, stroke, 10)}
+    ${renderWordCard(34, 154, 72, 30, preset.items[2], momentAccent, stroke, 10)}
+    ${renderWordCard(254, 154, 72, 30, preset.items[3], momentAccent, stroke, 10)}
+    ${renderMiniSign(144, 178, preset.note, momentAccent)}
   `;
 }
 
@@ -15419,55 +15438,54 @@ function renderLeaderSceneDetailed(preset, subjectAccent, momentAccent, stroke) 
 
 function renderRhythmSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderZone(38, 84, 92, 40, preset.top, "#ffffff", stroke, 12)}
-    ${renderZone(38, 136, 92, 40, preset.bottom, "#ffffff", stroke, 12)}
+    ${renderZone(108, 72, 144, 42, preset.note, "#ffffff", stroke, 11)}
+    ${renderWordCard(44, 132, 88, 34, preset.top, subjectAccent, stroke, 11)}
+    ${renderWordCard(228, 132, 88, 34, preset.bottom, subjectAccent, stroke, 11)}
     ${renderTrack(
       [
-        [146, 106],
-        [176, 92],
-        [206, 118],
-        [236, 92],
-        [268, 106]
+        [132, 148],
+        [166, 136],
+        [194, 136],
+        [228, 148]
       ],
       momentAccent
     )}
-    ${renderMiniSign(212, 134, preset.note, subjectAccent)}
   `;
 }
 
 function renderAnimalSceneDetailed(labels, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderWordCard(38, 70, 82, 32, labels[0], subjectAccent, stroke, 11)}
-    ${renderWordCard(138, 116, 82, 32, labels[1], subjectAccent, stroke, 11)}
-    ${renderWordCard(238, 70, 82, 32, labels[2], subjectAccent, stroke, 11)}
+    ${renderZone(114, 32, 132, 40, "DOE NA", "#ffffff", stroke, 11)}
+    ${renderWordCard(36, 132, 82, 32, labels[0], subjectAccent, stroke, 11)}
+    ${renderWordCard(138, 96, 82, 32, labels[1], subjectAccent, stroke, 11)}
+    ${renderWordCard(240, 132, 82, 32, labels[2], subjectAccent, stroke, 11)}
     ${renderTrack(
       [
-        [82, 108],
-        [138, 134],
-        [220, 134],
-        [276, 108]
+        [120, 144],
+        [150, 122],
+        [210, 122],
+        [240, 144]
       ],
       momentAccent
     )}
-    ${renderMiniSign(132, 56, "DOE NA", momentAccent)}
   `;
 }
 
 function renderStretchSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderWordCard(48, 126, 68, 30, preset.cards[0], subjectAccent, stroke, 10.5)}
-    ${renderWordCard(146, 88, 68, 30, preset.cards[1], subjectAccent, stroke, 10.5)}
-    ${renderWordCard(244, 126, 68, 30, preset.cards[2], subjectAccent, stroke, 10.5)}
+    ${renderZone(112, 48, 136, 40, preset.note, "#ffffff", stroke, 11)}
+    ${renderWordCard(48, 146, 68, 30, preset.cards[0], subjectAccent, stroke, 10.5)}
+    ${renderWordCard(146, 110, 68, 30, preset.cards[1], subjectAccent, stroke, 10.5)}
+    ${renderWordCard(244, 146, 68, 30, preset.cards[2], subjectAccent, stroke, 10.5)}
     ${renderTrack(
       [
-        [84, 120],
-        [146, 84],
-        [214, 84],
-        [276, 120]
+        [84, 140],
+        [146, 106],
+        [214, 106],
+        [276, 140]
       ],
       momentAccent
     )}
-    ${renderMiniSign(144, 154, preset.note, momentAccent)}
   `;
 }
 
@@ -15492,36 +15510,43 @@ function renderCountJumpScene(preset, subjectAccent, momentAccent, stroke) {
 
 function renderMoveStopScene(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderMiniSign(34, 86, preset.start, subjectAccent)}
+    ${renderZone(114, 76, 132, 42, preset.prompt, "#ffffff", stroke, 12)}
+    ${renderMiniSign(34, 132, preset.start, subjectAccent)}
     ${renderTrack(
       [
-        [58, 98],
-        [100, 132],
-        [150, 150]
+        [108, 148],
+        [146, 136],
+        [174, 142]
       ],
       momentAccent
     )}
-    ${renderZone(164, 132, 84, 38, preset.stop, "#ffffff", stroke)}
-    ${renderZone(262, 82, 64, 40, preset.prompt, "#ffffff", stroke, 12)}
-    ${renderMiniSign(258, 134, preset.check, subjectAccent)}
+    ${renderLearnerIcon(92, 152, subjectAccent, stroke, "GA")}
+    ${renderWordCard(244, 132, 84, 34, preset.stop, subjectAccent, stroke, 10.5)}
+    ${renderMiniSign(244, 176, preset.check, momentAccent)}
   `;
 }
 
 function renderCornerChoiceScene(preset, subjectAccent, momentAccent, stroke) {
   return `
+    ${renderZone(114, 86, 132, 46, preset.center, "#ffffff", stroke, 12)}
+    ${renderWordCard(24, 48, 88, 34, preset.corners[0], subjectAccent, stroke, 10.5)}
+    ${renderWordCard(248, 48, 88, 34, preset.corners[1], subjectAccent, stroke, 10.5)}
+    ${renderWordCard(24, 164, 88, 34, preset.corners[2], subjectAccent, stroke, 10.5)}
+    ${renderWordCard(248, 164, 88, 34, preset.corners[3], subjectAccent, stroke, 10.5)}
     ${renderTrack(
       [
-        [180, 128],
-        [224, 104],
-        [248, 86]
+        [114, 122],
+        [98, 82]
       ],
       momentAccent
     )}
-    ${renderZone(24, 66, 88, 38, preset.corners[0], "#ffffff", stroke, 11)}
-    ${renderZone(248, 66, 88, 38, preset.corners[1], "#ffffff", stroke, 11)}
-    ${renderZone(24, 156, 88, 38, preset.corners[2], "#ffffff", stroke, 11)}
-    ${renderZone(248, 156, 88, 38, preset.corners[3], "#ffffff", stroke, 11)}
-    ${renderZone(122, 100, 116, 56, preset.center, "#ffffff", stroke, 12)}
+    ${renderTrack(
+      [
+        [246, 122],
+        [262, 82]
+      ],
+      momentAccent
+    )}
   `;
 }
 
@@ -15672,20 +15697,20 @@ function renderRouteSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
 
 function renderWallSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
+    ${renderZone(114, 44, 132, 40, preset.note, "#ffffff", stroke, 11)}
+    ${renderLearnerIcon(96, 150, subjectAccent, stroke, "KIES")}
     ${renderTrack(
       [
-        [142, 154],
-        [176, 128],
-        [210, 108],
-        [236, 98]
+        [130, 140],
+        [170, 124],
+        [222, 118]
       ],
       momentAccent
     )}
-    ${renderWordCard(238, 54, 56, 30, preset.wall[0], subjectAccent, stroke, 11)}
-    ${renderWordCard(238, 94, 56, 30, preset.wall[1], subjectAccent, stroke, 11)}
-    ${renderWordCard(238, 134, 56, 30, preset.wall[2], subjectAccent, stroke, 11)}
-    ${renderZone(40, 136, 102, 40, preset.write, "#ffffff", stroke, 12)}
-    ${renderMiniSign(138, 78, preset.note, momentAccent)}
+    ${renderWordCard(236, 84, 60, 28, preset.wall[0], subjectAccent, stroke, 10.5)}
+    ${renderWordCard(236, 120, 60, 28, preset.wall[1], subjectAccent, stroke, 10.5)}
+    ${renderWordCard(236, 156, 60, 28, preset.wall[2], subjectAccent, stroke, 10.5)}
+    ${renderMiniSign(128, 178, preset.write, subjectAccent)}
   `;
 }
 
@@ -15749,12 +15774,12 @@ function renderFloorStepsSceneDetailed(preset, subjectAccent, momentAccent, stro
 
 function renderTwoLaneSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderZone(40, 82, 118, 40, preset.lanes[0], "#ffffff", stroke, 11)}
-    ${renderZone(40, 140, 118, 40, preset.lanes[1], "#ffffff", stroke, 11)}
-    ${renderWordCard(214, 80, 70, 30, preset.words[0], subjectAccent, stroke, 11)}
-    ${renderWordCard(214, 144, 70, 30, preset.words[1], subjectAccent, stroke, 11)}
-    ${renderMiniSign(188, 54, preset.note, momentAccent)}
-    <path d="M168 100 H206 M168 160 H206" stroke="${momentAccent}" stroke-width="5" stroke-linecap="round" stroke-dasharray="8 8" />
+    ${renderZone(108, 36, 144, 40, preset.note, "#ffffff", stroke, 11)}
+    ${renderWordCard(34, 88, 124, 38, preset.lanes[0], subjectAccent, stroke, 10.5)}
+    ${renderWordCard(34, 146, 124, 38, preset.lanes[1], subjectAccent, stroke, 10.5)}
+    ${renderWordCard(226, 90, 86, 30, preset.words[0], subjectAccent, stroke, 11)}
+    ${renderWordCard(226, 150, 86, 30, preset.words[1], subjectAccent, stroke, 11)}
+    <path d="M168 108 H218 M168 166 H218" stroke="${momentAccent}" stroke-width="4.2" stroke-linecap="round" stroke-dasharray="8 8" />
   `;
 }
 
@@ -15776,8 +15801,9 @@ function renderNumberLineSceneDetailed(preset, subjectAccent, momentAccent, stro
 
 function renderTableSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    <rect x="54" y="86" width="252" height="96" rx="18" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
-    <path d="M118 86 V182 M182 86 V182 M244 86 V182 M54 134 H306" stroke="${stroke}" stroke-width="3" />
+    ${renderZone(110, 34, 140, 40, preset.note, "#ffffff", stroke, 11)}
+    <rect x="54" y="92" width="252" height="90" rx="18" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
+    <path d="M118 92 V182 M182 92 V182 M244 92 V182 M54 138 H306" stroke="${stroke}" stroke-width="3" />
     ${renderTableText(86, 118, preset.headers[0], subjectAccent)}
     ${renderTableText(86, 166, preset.headers[1], subjectAccent)}
     ${renderTableText(150, 118, preset.top[0], stroke)}
@@ -15786,39 +15812,38 @@ function renderTableSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
     ${renderTableText(150, 166, preset.bottom[0], stroke)}
     ${renderTableText(214, 166, preset.bottom[1], stroke)}
     ${renderTableText(274, 166, preset.bottom[2], stroke)}
-    ${renderMiniSign(124, 58, preset.note, momentAccent)}
   `;
 }
 
 function renderAreaSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    <rect x="86" y="76" width="180" height="96" rx="10" fill="${momentAccent}" opacity="0.12" stroke="${stroke}" stroke-width="5" />
-    <rect x="126" y="108" width="100" height="36" rx="10" fill="${subjectAccent}" opacity="0.18" />
-    ${renderMiniSign(98, 54, preset.border, subjectAccent)}
-    ${renderMiniSign(150, 182, preset.fill, momentAccent)}
-    ${renderZone(26, 144, 44, 34, preset.note, "#ffffff", stroke, 10)}
+    ${renderZone(118, 34, 124, 40, preset.note, "#ffffff", stroke, 10)}
+    <rect x="86" y="84" width="180" height="96" rx="10" fill="${momentAccent}" opacity="0.12" stroke="${stroke}" stroke-width="5" />
+    <rect x="126" y="116" width="100" height="36" rx="10" fill="${subjectAccent}" opacity="0.18" />
+    ${renderMiniSign(92, 184, preset.border, subjectAccent)}
+    ${renderMiniSign(194, 184, preset.fill, momentAccent)}
   `;
 }
 
 function renderGridSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    <rect x="104" y="72" width="152" height="120" rx="18" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
-    <path d="M142 72 V192 M180 72 V192 M218 72 V192 M104 102 H256 M104 132 H256 M104 162 H256" stroke="${stroke}" stroke-width="2" opacity="0.8" />
-    <circle cx="199" cy="147" r="10" fill="${momentAccent}" />
-    ${renderMiniSign(126, 52, preset.point, subjectAccent)}
-    ${renderMiniSign(122, 196, preset.note, momentAccent)}
+    ${renderZone(118, 32, 124, 40, preset.point, "#ffffff", stroke, 11)}
+    <rect x="104" y="82" width="152" height="108" rx="18" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
+    <path d="M142 82 V190 M180 82 V190 M218 82 V190 M104 110 H256 M104 138 H256 M104 166 H256" stroke="${stroke}" stroke-width="2" opacity="0.8" />
+    <circle cx="199" cy="151" r="10" fill="${momentAccent}" stroke="${stroke}" stroke-width="2" />
+    ${renderMiniSign(122, 194, preset.note, momentAccent)}
   `;
 }
 
 function renderGeometrySceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
+    ${renderZone(118, 32, 124, 40, preset.note, "#ffffff", stroke, 11)}
     <path d="M70 170 L70 110 L128 110" stroke="${stroke}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
     <path d="M176 170 L212 110 L248 170" stroke="${stroke}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
     <path d="M282 170 L314 132 L332 170" stroke="${stroke}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
     ${renderMiniSign(46, 176, preset.tags[0], subjectAccent)}
     ${renderMiniSign(170, 176, preset.tags[1], momentAccent)}
     ${renderMiniSign(276, 176, preset.tags[2], subjectAccent)}
-    ${renderMiniSign(132, 60, preset.note, momentAccent)}
   `;
 }
 
