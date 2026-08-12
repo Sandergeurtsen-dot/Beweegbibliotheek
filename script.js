@@ -5659,7 +5659,7 @@ async function loadPublishedCustomTaskExport() {
   }
 
   try {
-    const response = await fetch(`${LIVE_CUSTOM_TASK_EXPORT_PATH}?v=20260811-3`, {
+    const response = await fetch(`${LIVE_CUSTOM_TASK_EXPORT_PATH}?v=20260812-1`, {
       cache: "no-store"
     });
 
