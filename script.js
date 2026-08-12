@@ -13605,9 +13605,10 @@ function renderIllustration(task, compact) {
 
   const subject = getSubject(task.subjectId);
   const moment = getMoment(task.momentId);
-  const sky = compact ? "#f4f8ff" : "#f7fbff";
-  const field = compact ? "#eef8fb" : "#e9f6fb";
-  const stroke = "#19424a";
+  const sky = compact ? "#fff8ee" : "#fff9f1";
+  const field = compact ? "#eef6e6" : "#edf5e5";
+  const paperStroke = "#efe3d3";
+  const stroke = "#161616";
   const scene = renderIllustrationScene(task, subject.accent, moment.accent, stroke);
   const subjectBadge = compact ? { x: 16, y: 14, width: 126, height: 34, fontSize: 12.5 } : { x: 18, y: 16, width: 126, height: 34, fontSize: 13 };
   const momentBadge = compact ? { x: 198, y: 14, width: 146, height: 34, fontSize: 12.2 } : { x: 198, y: 16, width: 146, height: 34, fontSize: 12.8 };
@@ -13616,12 +13617,57 @@ function renderIllustration(task, compact) {
     <svg viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${escapeHtml(
       task.title
     )}">
-      <rect width="360" height="220" rx="24" fill="${sky}" />
-      <rect x="0" y="150" width="360" height="70" fill="${field}" />
-      <rect x="${subjectBadge.x}" y="${subjectBadge.y}" width="${subjectBadge.width}" height="${subjectBadge.height}" rx="17" fill="${subject.accent}" opacity="0.14" />
+      <defs>
+        <filter id="doodleShadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="2" stdDeviation="1.8" flood-color="#161616" flood-opacity="0.08" />
+        </filter>
+      </defs>
+      <rect width="360" height="220" rx="24" fill="${sky}" stroke="${paperStroke}" stroke-width="2.4" />
+      <path d="M0 154 C 42 142, 86 168, 128 156 S 210 138, 252 150 S 320 148, 360 154 L360 220 L0 220 Z" fill="${field}" />
+      <path d="M20 160 C 80 146, 144 178, 206 166 S 302 152, 346 164" fill="none" stroke="#b9d59f" stroke-width="7" stroke-linecap="round" opacity="0.35" />
+      <path d="M30 72 C 92 64, 148 80, 206 72 S 290 70, 334 78" fill="none" stroke="#f3c86d" stroke-width="4" stroke-linecap="round" opacity="0.5" />
+      <path d="M40 84 C 106 76, 160 92, 224 84 S 290 82, 324 88" fill="none" stroke="#f3c86d" stroke-width="2.6" stroke-linecap="round" opacity="0.32" />
+      ${renderSketchRect(subjectBadge.x + 5, subjectBadge.y + 4, subjectBadge.width, subjectBadge.height, {
+        fill: subject.accent,
+        fillOpacity: 0.2,
+        stroke: subject.accent,
+        strokeWidth: 2,
+        radius: 17,
+        secondOpacity: 0.12,
+        secondStrokeWidth: 1
+      })}
+      ${renderSketchRect(subjectBadge.x, subjectBadge.y, subjectBadge.width, subjectBadge.height, {
+        fill: "#ffffff",
+        fillOpacity: 1,
+        stroke,
+        radius: 17,
+        secondOpacity: 0.2,
+        secondStrokeWidth: 1.2
+      })}
       ${renderSvgTextBlock(subjectBadge.x, subjectBadge.y, subjectBadge.width, subjectBadge.height, subject.label, subject.accent, subjectBadge.fontSize, 2)}
-      <rect x="${momentBadge.x}" y="${momentBadge.y}" width="${momentBadge.width}" height="${momentBadge.height}" rx="17" fill="${moment.accent}" opacity="0.14" />
+      ${renderSketchRect(momentBadge.x + 5, momentBadge.y + 4, momentBadge.width, momentBadge.height, {
+        fill: moment.accent,
+        fillOpacity: 0.2,
+        stroke: moment.accent,
+        strokeWidth: 2,
+        radius: 17,
+        secondOpacity: 0.12,
+        secondStrokeWidth: 1
+      })}
+      ${renderSketchRect(momentBadge.x, momentBadge.y, momentBadge.width, momentBadge.height, {
+        fill: "#ffffff",
+        fillOpacity: 1,
+        stroke,
+        radius: 17,
+        secondOpacity: 0.2,
+        secondStrokeWidth: 1.2
+      })}
       ${renderSvgTextBlock(momentBadge.x, momentBadge.y, momentBadge.width, momentBadge.height, moment.label, moment.accent, momentBadge.fontSize, 2)}
+      <path d="M314 10 L334 10 L328 26 L308 24 Z" fill="${moment.accent}" opacity="0.65" />
+      ${renderDoodleSpark(24, 110, "#f2b24a")}
+      ${renderDoodleSpark(326, 130, stroke)}
+      <path d="M12 176 q12 10 0 20 q-10 9 2 18" fill="none" stroke="${subject.accent}" stroke-width="3" stroke-linecap="round" opacity="0.55" />
+      <path d="M344 98 q7 -10 14 0 q7 10 0 20" fill="none" stroke="#8dc36c" stroke-width="3" stroke-linecap="round" opacity="0.55" />
       ${scene}
     </svg>
   `;
@@ -15136,14 +15182,16 @@ function renderCircleFlowSceneDetailed(preset, subjectAccent, momentAccent, stro
 
 function renderContinuumSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    <path d="M42 126 H318" stroke="${stroke}" stroke-width="6" stroke-linecap="round" />
-    ${renderTick(86)}
+    ${renderZone(112, 78, 136, 44, preset.middle, "#ffffff", stroke, 12)}
+    <path d="M46 148 H314" stroke="${stroke}" stroke-width="4.4" stroke-linecap="round" />
+    ${renderTick(104)}
     ${renderTick(180)}
-    ${renderTick(274)}
-    ${renderWordCard(28, 78, 84, 34, preset.left, subjectAccent, stroke, 10.5)}
-    ${renderWordCard(244, 78, 84, 34, preset.right, subjectAccent, stroke, 10.5)}
-    ${renderZone(124, 138, 112, 34, preset.middle, "#ffffff", stroke, 11)}
-    ${renderMiniSign(144, 54, preset.note, momentAccent)}
+    ${renderTick(256)}
+    ${renderLearnerIcon(102, 142, subjectAccent, stroke, "LINKS")}
+    ${renderLearnerIcon(258, 142, subjectAccent, stroke, "RECHTS")}
+    ${renderWordCard(26, 30, 92, 34, preset.left, subjectAccent, stroke, 10.5)}
+    ${renderWordCard(242, 30, 92, 34, preset.right, subjectAccent, stroke, 10.5)}
+    ${renderMiniSign(144, 178, preset.note, momentAccent)}
   `;
 }
 
@@ -15479,88 +15527,105 @@ function renderCornerChoiceScene(preset, subjectAccent, momentAccent, stroke) {
 
 function renderDictationSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
+    ${renderZone(116, 72, 128, 44, preset.write, "#ffffff", stroke, 12)}
+    ${renderLearnerIcon(92, 148, subjectAccent, stroke, preset.role)}
+    ${renderCardRack(246, 104, preset.wall, subjectAccent, stroke)}
     ${renderTrack(
       [
-        [142, 154],
-        [178, 126],
-        [216, 110],
-        [248, 96]
+        [126, 144],
+        [166, 132],
+        [204, 128],
+        [244, 132]
       ],
       momentAccent
     )}
-    ${renderZone(26, 138, 116, 40, preset.write, "#ffffff", stroke, 12)}
-    ${renderCardRack(258, 62, preset.wall, subjectAccent, stroke)}
-    ${renderMiniSign(156, 72, preset.role, momentAccent)}
-    ${renderWordCard(166, 178, 56, 26, preset.tags[0], subjectAccent, stroke, 10)}
-    ${renderWordCard(230, 178, 56, 26, preset.tags[1], subjectAccent, stroke, 10)}
+    ${renderMiniSign(144, 176, preset.tags[0], subjectAccent)}
+    ${renderMiniSign(224, 176, preset.tags[1], momentAccent)}
   `;
 }
 
 function renderRelaySceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
+    ${renderWordCard(26, 34, 82, 34, preset.start, subjectAccent, stroke, 10.5)}
+    ${renderZone(120, 102, 126, 48, preset.team, "#ffffff", stroke, 12)}
+    ${renderCardRack(262, 98, preset.rack, subjectAccent, stroke)}
     ${renderTrack(
       [
-        [92, 120],
-        [124, 144],
-        [172, 144],
-        [232, 106],
-        [272, 98]
+        [102, 52],
+        [136, 84],
+        [176, 110],
+        [244, 120],
+        [262, 120]
       ],
       momentAccent
     )}
-    ${renderZone(24, 74, 78, 44, preset.start, "#ffffff", stroke)}
-    ${renderZone(136, 122, 106, 48, preset.team, "#ffffff", stroke, 12)}
-    ${renderCardRack(272, 74, preset.rack, subjectAccent, stroke)}
-    ${renderMiniSign(148, 80, preset.chip, momentAccent)}
+    ${renderLearnerIcon(84, 144, subjectAccent, stroke, "BEURT")}
+    ${renderMiniSign(150, 170, preset.chip, momentAccent)}
   `;
 }
 
 function renderStationsSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
+    ${renderWordCard(28, 110, 88, 40, preset.stations[0], subjectAccent, stroke, 11)}
+    ${renderWordCard(136, 74, 92, 40, preset.stations[1], subjectAccent, stroke, 11)}
+    ${renderWordCard(246, 110, 88, 40, preset.stations[2], subjectAccent, stroke, 11)}
     ${renderTrack(
       [
-        [106, 122],
-        [140, 92],
-        [198, 92],
-        [230, 116],
-        [252, 132]
+        [116, 128],
+        [150, 98],
+        [206, 98],
+        [246, 126]
       ],
       momentAccent
     )}
-    ${renderZone(28, 102, 78, 42, preset.stations[0], "#ffffff", stroke, 12)}
-    ${renderZone(138, 70, 86, 42, preset.stations[1], "#ffffff", stroke, 12)}
-    ${renderZone(252, 112, 78, 42, preset.stations[2], "#ffffff", stroke, 12)}
-    ${renderMiniSign(154, 152, preset.chip, subjectAccent)}
+    ${renderLearnerIcon(184, 144, momentAccent, stroke, "WISSEL")}
+    ${renderMiniSign(144, 176, preset.chip, subjectAccent)}
   `;
 }
 
 function renderMatchSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    <circle cx="180" cy="124" r="46" fill="#ffffff" stroke="${stroke}" stroke-width="4" />
-    <rect x="132" y="106" width="96" height="36" rx="14" fill="${momentAccent}" opacity="0.9" />
-    ${renderSvgTextBlock(132, 106, 96, 36, preset.center, "#ffffff", 10.5, 2)}
-    ${renderWordCard(150, 54, 60, 28, preset.cards[0], subjectAccent, stroke, 11)}
-    ${renderWordCard(82, 92, 60, 28, preset.cards[1], subjectAccent, stroke, 11)}
-    ${renderWordCard(82, 154, 60, 28, preset.cards[2], subjectAccent, stroke, 11)}
-    ${renderWordCard(220, 154, 60, 28, preset.cards[3], subjectAccent, stroke, 11)}
-    ${renderWordCard(220, 92, 60, 28, preset.cards[4], subjectAccent, stroke, 11)}
+    ${renderZone(116, 86, 128, 44, preset.center, "#ffffff", stroke, 12)}
+    ${renderWordCard(150, 38, 64, 28, preset.cards[0], subjectAccent, stroke, 11)}
+    ${renderWordCard(54, 96, 70, 30, preset.cards[1], subjectAccent, stroke, 10.5)}
+    ${renderWordCard(54, 154, 70, 30, preset.cards[2], subjectAccent, stroke, 10.5)}
+    ${renderWordCard(236, 154, 70, 30, preset.cards[3], subjectAccent, stroke, 10.5)}
+    ${renderWordCard(236, 96, 70, 30, preset.cards[4], subjectAccent, stroke, 10.5)}
+    ${renderTrack(
+      [
+        [126, 108],
+        [154, 104],
+        [180, 116],
+        [236, 108]
+      ],
+      momentAccent
+    )}
+    ${renderMiniSign(144, 182, "ZOEK MATCH", momentAccent)}
   `;
 }
 
 function renderDuoSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
+    ${renderZone(110, 78, 140, 44, preset.middle, "#ffffff", stroke, 12)}
     ${renderTrack(
       [
-        [116, 136],
-        [156, 118],
-        [232, 118],
-        [244, 136]
+        [122, 140],
+        [152, 132],
+        [210, 132],
+        [238, 140]
       ],
       momentAccent
     )}
-    ${renderLearnerIcon(92, 140, subjectAccent, stroke, preset.left)}
-    ${renderLearnerIcon(268, 140, momentAccent, stroke, preset.right)}
-    ${renderZone(128, 90, 104, 36, preset.middle, "#ffffff", stroke, 12)}
+    ${renderTrack(
+      [
+        [156, 96],
+        [180, 86],
+        [204, 96]
+      ],
+      subjectAccent
+    )}
+    ${renderLearnerIcon(92, 148, subjectAccent, stroke, preset.left)}
+    ${renderLearnerIcon(268, 148, momentAccent, stroke, preset.right)}
   `;
 }
 
@@ -15585,14 +15650,23 @@ function renderWordBuildSceneDetailed(preset, subjectAccent, momentAccent, strok
 
 function renderRouteSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    ${renderMiniSign(30, 90, preset.start, subjectAccent)}
-    ${renderRouteStop(100, 160, preset.stops[0], momentAccent, stroke)}
-    ${renderRouteStop(148, 140, preset.stops[1], momentAccent, stroke)}
-    ${renderRouteStop(198, 118, preset.stops[2], momentAccent, stroke)}
-    ${renderRouteStop(246, 96, preset.stops[3], momentAccent, stroke)}
-    ${renderFlag(308, 56, subjectAccent)}
-    ${renderZone(244, 144, 90, 36, preset.side, "#ffffff", stroke, 11)}
-    ${renderMiniSign(274, 82, preset.end, momentAccent)}
+    ${renderWordCard(28, 100, 70, 34, preset.start, subjectAccent, stroke, 10.5)}
+    ${renderRouteStop(114, 152, preset.stops[0], momentAccent, stroke)}
+    ${renderRouteStop(162, 134, preset.stops[1], momentAccent, stroke)}
+    ${renderRouteStop(214, 114, preset.stops[2], momentAccent, stroke)}
+    ${renderWordCard(252, 96, 74, 38, preset.end, subjectAccent, stroke, 10.4)}
+    ${renderTrack(
+      [
+        [94, 118],
+        [118, 150],
+        [164, 134],
+        [214, 114],
+        [252, 114]
+      ],
+      momentAccent
+    )}
+    ${renderMiniSign(140, 176, preset.side, momentAccent)}
+    ${renderWordCard(238, 152, 98, 30, preset.stops[3], subjectAccent, stroke, 10)}
   `;
 }
 
@@ -15617,20 +15691,20 @@ function renderWallSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
 
 function renderTextRouteSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
+    ${renderWordCard(34, 96, 86, 30, preset.strips[0], subjectAccent, stroke, 10.6)}
+    ${renderWordCard(138, 132, 86, 30, preset.strips[1], subjectAccent, stroke, 10.6)}
+    ${renderWordCard(242, 96, 86, 30, preset.strips[2], subjectAccent, stroke, 10.6)}
     ${renderTrack(
       [
-        [90, 118],
-        [144, 138],
-        [234, 138],
-        [280, 118]
+        [120, 112],
+        [144, 142],
+        [224, 142],
+        [242, 112]
       ],
       momentAccent
     )}
-    ${renderWordCard(44, 90, 90, 28, preset.strips[0], subjectAccent, stroke, 11)}
-    ${renderWordCard(146, 124, 90, 28, preset.strips[1], subjectAccent, stroke, 11)}
-    ${renderWordCard(248, 90, 90, 28, preset.strips[2], subjectAccent, stroke, 11)}
-    ${renderZone(126, 170, 108, 30, preset.side, "#ffffff", stroke, 11)}
-    ${renderMiniSign(132, 66, preset.note, momentAccent)}
+    ${renderZone(118, 54, 124, 40, preset.note, "#ffffff", stroke, 11)}
+    ${renderMiniSign(144, 178, preset.side, subjectAccent)}
   `;
 }
 
@@ -15655,21 +15729,21 @@ function renderGraphRouteSceneDetailed(preset, subjectAccent, momentAccent, stro
 
 function renderFloorStepsSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   const boxes = preset.steps
-    .map((step, index) => renderWordCard(34 + index * 58, 118, 50, 42, step, subjectAccent, stroke, 12))
+    .map((step, index) => renderWordCard(32 + index * 58, 118, 52, 42, step, subjectAccent, stroke, 11.4))
     .join("");
 
   return `
+    ${renderZone(118, 66, 124, 40, preset.note, "#ffffff", stroke, 11)}
+    ${boxes}
     ${renderTrack(
       [
-        [58, 112],
+        [56, 112],
         [106, 98],
-        [248, 98],
-        [286, 112]
+        [250, 98],
+        [298, 112]
       ],
       momentAccent
     )}
-    ${boxes}
-    ${renderMiniSign(116, 74, preset.note, momentAccent)}
   `;
 }
 
@@ -15686,17 +15760,17 @@ function renderTwoLaneSceneDetailed(preset, subjectAccent, momentAccent, stroke)
 
 function renderNumberLineSceneDetailed(preset, subjectAccent, momentAccent, stroke) {
   return `
-    <path d="M34 124 H326" stroke="${stroke}" stroke-width="6" stroke-linecap="round" />
+    ${renderZone(104, 72, 150, 44, preset.note, "#ffffff", stroke, 12)}
+    ${renderLearnerIcon(94, 152, subjectAccent, stroke, preset.cards[0])}
+    ${renderLearnerIcon(266, 152, subjectAccent, stroke, preset.cards[2])}
+    <path d="M36 156 H326" stroke="${stroke}" stroke-width="4.4" stroke-linecap="round" />
     ${renderTick(82)}
     ${renderTick(178)}
     ${renderTick(274)}
-    ${renderCardTag(60, 82, preset.anchors[0], subjectAccent)}
-    ${renderCardTag(156, 68, preset.anchors[1], subjectAccent)}
-    ${renderCardTag(252, 82, preset.anchors[2], subjectAccent)}
-    ${renderWordCard(84, 150, 50, 24, preset.cards[0], momentAccent, stroke, 10)}
-    ${renderWordCard(160, 150, 50, 24, preset.cards[1], momentAccent, stroke, 10)}
-    ${renderWordCard(236, 150, 50, 24, preset.cards[2], momentAccent, stroke, 10)}
-    ${renderMiniSign(262, 146, preset.note, momentAccent)}
+    <text x="32" y="192" fill="${stroke}" font-size="11" font-family="Chalkboard SE, Marker Felt, Comic Sans MS, Fredoka, Trebuchet MS, sans-serif" font-weight="700">${escapeHtml(preset.anchors[0])}</text>
+    <text x="166" y="192" fill="${stroke}" font-size="11" font-family="Chalkboard SE, Marker Felt, Comic Sans MS, Fredoka, Trebuchet MS, sans-serif" font-weight="700">${escapeHtml(preset.anchors[1])}</text>
+    <text x="314" y="192" text-anchor="end" fill="${stroke}" font-size="11" font-family="Chalkboard SE, Marker Felt, Comic Sans MS, Fredoka, Trebuchet MS, sans-serif" font-weight="700">${escapeHtml(preset.anchors[2])}</text>
+    ${renderWordCard(150, 122, 60, 28, preset.cards[1], momentAccent, stroke, 10.4)}
   `;
 }
 
@@ -15750,39 +15824,75 @@ function renderGeometrySceneDetailed(preset, subjectAccent, momentAccent, stroke
 
 function renderZone(x, y, width, height, label, fill, stroke, fontSize = 14) {
   return `
-    <rect x="${x}" y="${y}" width="${width}" height="${height}" rx="16" fill="${fill}" stroke="${stroke}" stroke-width="3" />
+    ${renderSketchRect(x, y, width, height, {
+      fill: fill || "#ffffff",
+      stroke,
+      radius: 18,
+      strokeWidth: 3.1,
+      shadowAccent: "#9ec3ff",
+      shadowOffsetX: 5,
+      shadowOffsetY: 4
+    })}
     ${renderSvgTextBlock(x, y, width, height, label, stroke, fontSize, 3)}
   `;
 }
 
 function renderTrack(points, color) {
-  const [start, ...rest] = points;
-  const path = rest.reduce((acc, [x, y]) => `${acc} L${x} ${y}`, `M${start[0]} ${start[1]}`);
+  const primaryPath = buildSketchTrackPath(points, 0);
+  const secondaryPath = buildSketchTrackPath(points, 1);
+  const arrowHead = buildArrowHeadPath(points, 10);
 
-  return `<path d="${path}" fill="none" stroke="${color}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 10" opacity="0.78" />`;
+  return `
+    <path d="${primaryPath}" fill="none" stroke="#f1b24b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 12" opacity="0.95" />
+    <path d="${secondaryPath}" fill="none" stroke="#161616" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 12" opacity="0.2" />
+    ${arrowHead ? `<path d="${arrowHead}" fill="#f1b24b" stroke="#161616" stroke-width="1.8" stroke-linejoin="round" />` : ""}
+  `;
 }
 
 function renderCardRack(x, y, label, accent, stroke) {
   return `
-    <rect x="${x}" y="${y}" width="56" height="84" rx="18" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
-    <rect x="${x + 10}" y="${y + 12}" width="36" height="14" rx="7" fill="${accent}" opacity="0.25" />
-    <rect x="${x + 10}" y="${y + 34}" width="36" height="14" rx="7" fill="${accent}" opacity="0.2" />
-    <rect x="${x + 10}" y="${y + 56}" width="36" height="14" rx="7" fill="${accent}" opacity="0.16" />
-    ${renderSvgTextBlock(x - 2, y + 88, 60, 22, label, stroke, 11, 2)}
+    ${renderSketchRect(x, y, 68, 92, {
+      fill: "#ffffff",
+      stroke,
+      radius: 18,
+      strokeWidth: 3,
+      shadowAccent: accent,
+      shadowOffsetX: 4,
+      shadowOffsetY: 4
+    })}
+    <rect x="${x + 14}" y="${y + 14}" width="40" height="24" rx="10" fill="${accent}" opacity="0.12" />
+    <path d="M${x + 16} ${y + 48} H${x + 52} M${x + 16} ${y + 60} H${x + 50} M${x + 16} ${y + 72} H${x + 46}" stroke="${stroke}" stroke-width="3" stroke-linecap="round" opacity="0.82" />
+    ${renderSvgTextBlock(x + 7, y + 12, 54, 26, label, stroke, 9.6, 2)}
   `;
 }
 
 function renderChoicePad(x, y, label, accent, stroke) {
   return `
-    <rect x="${x}" y="${y}" width="72" height="32" rx="14" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
-    ${renderSvgTextBlock(x, y, 72, 32, label, accent, 10.5, 2)}
+    ${renderSketchRect(x, y, 78, 34, {
+      fill: "#ffffff",
+      stroke,
+      radius: 16,
+      strokeWidth: 3,
+      shadowAccent: accent,
+      shadowOffsetX: 4,
+      shadowOffsetY: 4
+    })}
+    ${renderSvgTextBlock(x, y, 78, 34, label, stroke, 10.4, 2)}
   `;
 }
 
 function renderWordCard(x, y, width, height, label, accent, stroke, fontSize = 12) {
   return `
-    <rect x="${x}" y="${y}" width="${width}" height="${height}" rx="12" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
-    ${renderSvgTextBlock(x, y, width, height, label, accent, fontSize, 3)}
+    ${renderSketchRect(x, y, width, height, {
+      fill: "#ffffff",
+      stroke,
+      radius: 16,
+      strokeWidth: 3,
+      shadowAccent: accent,
+      shadowOffsetX: 4,
+      shadowOffsetY: 4
+    })}
+    ${renderSvgTextBlock(x, y, width, height, label, stroke, fontSize, 3)}
   `;
 }
 
@@ -15791,31 +15901,59 @@ function renderMiniSign(x, y, label, accent) {
   const height = 28;
 
   return `
-    <rect x="${x}" y="${y}" width="${width}" height="${height}" rx="11" fill="${accent}" opacity="0.15" />
-    ${renderSvgTextBlock(x, y, width, height, label, accent, 9.4, 2)}
+    ${renderSketchRect(x, y, width, height, {
+      fill: "#f6c765",
+      fillOpacity: 0.96,
+      stroke: "#161616",
+      strokeWidth: 2.4,
+      radius: 11,
+      shadowAccent: accent,
+      shadowOffsetX: 3.5,
+      shadowOffsetY: 3.5
+    })}
+    ${renderSvgTextBlock(x, y, width, height, label, "#161616", 9.4, 2)}
   `;
 }
 
 function renderRouteStop(x, y, label, accent, stroke) {
   return `
-    <circle cx="${x}" cy="${y}" r="12" fill="#ffffff" stroke="${stroke}" stroke-width="4" />
-    ${renderSvgTextBlock(x - 12, y - 12, 24, 24, label, accent, 8.5, 2)}
+    ${renderSketchCircle(x, y, 11, { fill: "#ffffff", stroke, strokeWidth: 3.4, shadowAccent: accent, shadowOffsetX: 2.5, shadowOffsetY: 2.5 })}
+    ${renderSvgTextBlock(x - 16, y + 14, 32, 18, label, stroke, 8.2, 2)}
   `;
 }
 
 function renderLearnerIcon(x, y, accent, stroke, label) {
+  const body = renderScribbleBody(x, y - 2, 42, 56, accent);
+  const hair = renderHairTuft(x, y - 38, stroke);
+
   return `
-    <circle cx="${x}" cy="${y - 22}" r="14" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
-    <rect x="${x - 18}" y="${y - 4}" width="36" height="42" rx="16" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
-    <rect x="${x - 24}" y="${y + 36}" width="48" height="22" rx="11" fill="${accent}" opacity="0.14" />
-    ${renderSvgTextBlock(x - 26, y + 36, 52, 24, label, accent, 9.2, 2)}
+    ${renderSketchCircle(x, y - 28, 16, { fill: "#ffffff", stroke, strokeWidth: 3 })}
+    ${hair}
+    <circle cx="${x - 4.5}" cy="${y - 30}" r="1.8" fill="${stroke}" />
+    <circle cx="${x + 4.5}" cy="${y - 30}" r="1.8" fill="${stroke}" />
+    <path d="M${x - 6} ${y - 22} q6 7 12 0" fill="none" stroke="${stroke}" stroke-width="2.3" stroke-linecap="round" />
+    ${body}
+    <path d="M${x - 22} ${y + 4} q-12 8 -13 22" stroke="${stroke}" stroke-width="3" stroke-linecap="round" fill="none" />
+    <path d="M${x + 20} ${y + 5} q12 7 13 20" stroke="${stroke}" stroke-width="3" stroke-linecap="round" fill="none" />
+    <path d="M${x - 7} ${y + 42} q-8 14 -8 28" stroke="${stroke}" stroke-width="3" stroke-linecap="round" fill="none" />
+    <path d="M${x + 7} ${y + 42} q8 14 8 28" stroke="${stroke}" stroke-width="3" stroke-linecap="round" fill="none" />
+    ${renderSketchRect(x - 28, y + 46, 56, 22, {
+      fill: "#f6c765",
+      stroke,
+      strokeWidth: 2.4,
+      radius: 11,
+      shadowAccent: accent,
+      shadowOffsetX: 3,
+      shadowOffsetY: 3
+    })}
+    ${renderSvgTextBlock(x - 30, y + 46, 60, 22, label, stroke, 9.2, 2)}
   `;
 }
 
 function renderCirclePoint(x, y, label, accent, stroke) {
   return `
-    <circle cx="${x}" cy="${y}" r="16" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
-    <text x="${x}" y="${y + 5}" text-anchor="middle" fill="${accent}" font-size="14" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
+    ${renderSketchCircle(x, y, 16, { fill: "#ffffff", stroke, strokeWidth: 3, shadowAccent: accent, shadowOffsetX: 3, shadowOffsetY: 3 })}
+    <text x="${x}" y="${y + 5}" text-anchor="middle" fill="${stroke}" font-size="14" font-family="Chalkboard SE, Marker Felt, Comic Sans MS, Fredoka, Trebuchet MS, sans-serif" font-weight="700">${escapeHtml(
       label
     )}</text>
   `;
@@ -15823,26 +15961,34 @@ function renderCirclePoint(x, y, label, accent, stroke) {
 
 function renderFlag(x, y, accent) {
   return `
-    <path d="M${x} ${y} V${y + 48}" stroke="${accent}" stroke-width="6" stroke-linecap="round" />
-    <path d="M${x} ${y} L${x + 24} ${y + 12} L${x} ${y + 24} Z" fill="${accent}" />
+    <path d="M${x} ${y} V${y + 48}" stroke="#161616" stroke-width="4" stroke-linecap="round" />
+    <path d="M${x} ${y} L${x + 24} ${y + 12} L${x} ${y + 24} Z" fill="${accent}" stroke="#161616" stroke-width="2" stroke-linejoin="round" />
   `;
 }
 
 function renderTick(x) {
-  return `<path d="M${x} 112 V136" stroke="#ffffff" stroke-width="4" />`;
+  return `<path d="M${x} 112 V136" stroke="#161616" stroke-width="3.4" stroke-linecap="round" />`;
 }
 
 function renderCardTag(x, y, label, accent) {
   return `
-    <rect x="${x}" y="${y}" width="34" height="24" rx="8" fill="#ffffff" stroke="${accent}" stroke-width="3" />
-    ${renderSvgTextBlock(x, y, 34, 24, label, accent, 10.5, 2)}
+    ${renderSketchRect(x, y, 38, 26, {
+      fill: "#ffffff",
+      stroke: "#161616",
+      radius: 9,
+      strokeWidth: 2.4,
+      shadowAccent: accent,
+      shadowOffsetX: 3,
+      shadowOffsetY: 3
+    })}
+    ${renderSvgTextBlock(x, y, 38, 26, label, "#161616", 10.5, 2)}
   `;
 }
 
 function renderJumpPad(x, y, label, accent, stroke) {
   return `
-    <circle cx="${x}" cy="${y}" r="20" fill="#ffffff" stroke="${stroke}" stroke-width="4" />
-    <text x="${x}" y="${y + 6}" text-anchor="middle" fill="${accent}" font-size="16" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">${escapeHtml(
+    ${renderSketchCircle(x, y, 21, { fill: "#ffffff", stroke, strokeWidth: 3.2, shadowAccent: accent, shadowOffsetX: 3, shadowOffsetY: 3 })}
+    <text x="${x}" y="${y + 6}" text-anchor="middle" fill="${stroke}" font-size="16" font-family="Chalkboard SE, Marker Felt, Comic Sans MS, Fredoka, Trebuchet MS, sans-serif" font-weight="700">${escapeHtml(
       label
     )}</text>
   `;
@@ -15850,28 +15996,85 @@ function renderJumpPad(x, y, label, accent, stroke) {
 
 function renderRuler(x, y, stroke, accent) {
   return `
-    <rect x="${x}" y="${y}" width="104" height="18" rx="9" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
-    <path d="M${x + 14} ${y} V${y + 18} M${x + 28} ${y} V${y + 12} M${x + 42} ${y} V${y + 18} M${x + 56} ${y} V${y + 12} M${x + 70} ${y} V${y + 18} M${x + 84} ${y} V${y + 12}" stroke="${accent}" stroke-width="3" />
+    ${renderSketchRect(x, y, 110, 22, {
+      fill: "#ffffff",
+      stroke,
+      radius: 10,
+      strokeWidth: 2.8,
+      shadowAccent: accent,
+      shadowOffsetX: 3,
+      shadowOffsetY: 3
+    })}
+    <path d="M${x + 16} ${y + 1} V${y + 21} M${x + 30} ${y + 1} V${y + 14} M${x + 44} ${y + 1} V${y + 21} M${x + 58} ${y + 1} V${y + 14} M${x + 72} ${y + 1} V${y + 21} M${x + 86} ${y + 1} V${y + 14}" stroke="${stroke}" stroke-width="2.5" stroke-linecap="round" />
   `;
 }
 
 function renderBingoBoard(x, y, stroke, accent) {
   return `
-    <rect x="${x}" y="${y}" width="118" height="86" rx="18" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
-    <path d="M${x + 39} ${y + 12} V${y + 74} M${x + 79} ${y + 12} V${y + 74} M${x + 12} ${y + 29} H${x + 106} M${x + 12} ${y + 57} H${x + 106}" stroke="${accent}" stroke-width="3" opacity="0.65" />
-    <circle cx="${x + 25}" cy="${y + 20}" r="7" fill="${accent}" opacity="0.85" />
-    <circle cx="${x + 92}" cy="${y + 46}" r="7" fill="${accent}" opacity="0.55" />
-    <circle cx="${x + 59}" cy="${y + 68}" r="7" fill="${accent}" opacity="0.7" />
+    ${renderSketchRect(x, y, 118, 86, {
+      fill: "#ffffff",
+      stroke,
+      radius: 18,
+      strokeWidth: 3,
+      shadowAccent: accent,
+      shadowOffsetX: 4,
+      shadowOffsetY: 4
+    })}
+    <path d="M${x + 39} ${y + 12} V${y + 74} M${x + 79} ${y + 12} V${y + 74} M${x + 12} ${y + 29} H${x + 106} M${x + 12} ${y + 57} H${x + 106}" stroke="${stroke}" stroke-width="2.4" opacity="0.8" />
+    <circle cx="${x + 25}" cy="${y + 20}" r="7" fill="${accent}" opacity="0.5" stroke="${stroke}" stroke-width="1.4" />
+    <circle cx="${x + 92}" cy="${y + 46}" r="7" fill="${accent}" opacity="0.35" stroke="${stroke}" stroke-width="1.4" />
+    <circle cx="${x + 59}" cy="${y + 68}" r="7" fill="${accent}" opacity="0.42" stroke="${stroke}" stroke-width="1.4" />
   `;
 }
 
 function renderMiniGraphCard(x, y, label, accent, stroke) {
   return `
-    <rect x="${x}" y="${y}" width="78" height="56" rx="14" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
-    <path d="M${x + 14} ${y + 42} H${x + 62} M${x + 14} ${y + 42} V${y + 16}" stroke="${accent}" stroke-width="3" />
-    <path d="M${x + 18} ${y + 38} L${x + 30} ${y + 28} L${x + 42} ${y + 30} L${x + 56} ${y + 18}" stroke="${accent}" stroke-width="3" fill="none" />
-    ${renderSvgTextBlock(x + 8, y + 40, 62, 16, label, stroke, 9.5, 2)}
+    ${renderSketchRect(x, y, 82, 58, {
+      fill: "#ffffff",
+      stroke,
+      radius: 14,
+      strokeWidth: 3,
+      shadowAccent: accent,
+      shadowOffsetX: 4,
+      shadowOffsetY: 4
+    })}
+    <path d="M${x + 14} ${y + 42} H${x + 64} M${x + 14} ${y + 42} V${y + 16}" stroke="${stroke}" stroke-width="2.7" stroke-linecap="round" />
+    <path d="M${x + 18} ${y + 38} L${x + 30} ${y + 28} L${x + 42} ${y + 30} L${x + 58} ${y + 18}" stroke="${accent}" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+    ${renderSvgTextBlock(x + 8, y + 40, 66, 16, label, stroke, 9.5, 2)}
   `;
+}
+
+function buildSketchTrackPath(points, variant = 0) {
+  if (!points.length) {
+    return "";
+  }
+
+  const adjusted = points.map(([x, y], index) => {
+    const swing = variant === 0 ? 1 : -1;
+    const offsetX = index === 0 || index === points.length - 1 ? 0 : swing * ((index % 2 === 0 ? 1.8 : -1.4));
+    const offsetY = index === 0 || index === points.length - 1 ? 0 : swing * ((index % 2 === 0 ? -1.2 : 1.6));
+
+    return [x + offsetX, y + offsetY];
+  });
+
+  const [start, ...rest] = adjusted;
+  return rest.reduce((acc, [x, y]) => `${acc} L${x} ${y}`, `M${start[0]} ${start[1]}`);
+}
+
+function buildArrowHeadPath(points, size = 10) {
+  if (!points || points.length < 2) {
+    return "";
+  }
+
+  const [fromX, fromY] = points[points.length - 2];
+  const [toX, toY] = points[points.length - 1];
+  const angle = Math.atan2(toY - fromY, toX - fromX);
+  const leftX = toX - size * Math.cos(angle - Math.PI / 7);
+  const leftY = toY - size * Math.sin(angle - Math.PI / 7);
+  const rightX = toX - size * Math.cos(angle + Math.PI / 7);
+  const rightY = toY - size * Math.sin(angle + Math.PI / 7);
+
+  return `M${toX} ${toY} L${leftX} ${leftY} L${rightX} ${rightY} Z`;
 }
 
 function renderTableText(x, y, text, fill) {
@@ -15885,7 +16088,7 @@ function renderSvgTextBlock(x, y, width, height, label, fill, preferredFontSize 
   const startY = y + height / 2 - ((fitted.lines.length - 1) * lineHeight) / 2 + fitted.fontSize * 0.34;
 
   return `
-    <text text-anchor="middle" fill="${fill}" font-size="${fitted.fontSize}" font-family="Avenir Next, Trebuchet MS, sans-serif" font-weight="800">
+    <text text-anchor="middle" fill="${fill}" font-size="${fitted.fontSize}" font-family="Chalkboard SE, Marker Felt, Comic Sans MS, Fredoka, Trebuchet MS, sans-serif" font-weight="700" letter-spacing="0">
       ${fitted.lines
         .map(
           (line, index) =>
@@ -15898,23 +16101,124 @@ function renderSvgTextBlock(x, y, width, height, label, fill, preferredFontSize 
 
 function renderSimpleFigure(x, y, accent, stroke) {
   return `
-    <circle cx="${x}" cy="${y}" r="8" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
-    <path d="M${x} ${y + 8} V${y + 26} M${x - 12} ${y + 16} H${x + 12} M${x} ${y + 26} L${x - 10} ${y + 40} M${x} ${y + 26} L${x + 10} ${y + 40}" stroke="${accent}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+    ${renderSketchCircle(x, y, 9, { fill: "#ffffff", stroke, strokeWidth: 2.8 })}
+    ${renderHairTuft(x, y - 9, stroke)}
+    <circle cx="${x - 3}" cy="${y - 1}" r="1.3" fill="${stroke}" />
+    <circle cx="${x + 3}" cy="${y - 1}" r="1.3" fill="${stroke}" />
+    <path d="M${x - 4} ${y + 4} q4 4 8 0" fill="none" stroke="${stroke}" stroke-width="1.8" stroke-linecap="round" />
+    <ellipse cx="${x}" cy="${y + 22}" rx="12" ry="16" fill="${accent}" fill-opacity="0.14" stroke="${stroke}" stroke-width="2.6" />
+    ${renderScribblePatch(x - 8, y + 12, 16, 20, accent, 4)}
+    <path d="M${x - 10} ${y + 18} q-8 4 -10 12 M${x + 10} ${y + 18} q8 4 10 12 M${x - 4} ${y + 37} q-6 8 -6 16 M${x + 4} ${y + 37} q6 8 6 16" stroke="${stroke}" stroke-width="2.5" stroke-linecap="round" fill="none" />
   `;
 }
 
 function renderSeatShape(x, y, stroke, accent) {
   return `
-    <rect x="${x - 16}" y="${y - 6}" width="32" height="10" rx="4" fill="#ffffff" stroke="${stroke}" stroke-width="3" />
-    <rect x="${x - 12}" y="${y - 28}" width="24" height="16" rx="6" fill="${accent}" opacity="0.18" stroke="${stroke}" stroke-width="3" />
+    ${renderSketchRect(x - 16, y - 6, 32, 10, { fill: "#ffffff", stroke, radius: 4, strokeWidth: 2.6, shadowAccent: accent, shadowOffsetX: 2.5, shadowOffsetY: 2.5 })}
+    ${renderSketchRect(x - 12, y - 28, 24, 16, { fill: "#ffffff", stroke, radius: 6, strokeWidth: 2.6, shadowAccent: accent, shadowOffsetX: 2.5, shadowOffsetY: 2.5 })}
     <path d="M${x - 12} ${y + 4} V${y + 22} M${x + 12} ${y + 4} V${y + 22} M${x - 10} ${y - 12} V${y + 4} M${x + 10} ${y - 12} V${y + 4}" stroke="${stroke}" stroke-width="3" stroke-linecap="round" />
   `;
 }
 
 function renderHoopShape(x, y, accent, stroke) {
   return `
-    <circle cx="${x}" cy="${y}" r="28" fill="none" stroke="${accent}" stroke-width="6" opacity="0.85" />
-    <circle cx="${x}" cy="${y}" r="18" fill="#f7fbff" stroke="${stroke}" stroke-width="2.5" opacity="0.18" />
+    ${renderSketchCircle(x, y, 28, { fill: "none", stroke: accent, strokeWidth: 5.5 })}
+    ${renderSketchCircle(x, y, 18, { fill: "#fffdf6", fillOpacity: 0.7, stroke, strokeWidth: 2.1 })}
+  `;
+}
+
+function renderSketchRect(x, y, width, height, options = {}) {
+  const {
+    fill = "#ffffff",
+    fillOpacity = 1,
+    stroke = "#19424a",
+    strokeWidth = 3,
+    radius = 14,
+    secondOpacity = 0.18,
+    secondStrokeWidth = 1.2,
+    shadowAccent = "",
+    shadowOffsetX = 0,
+    shadowOffsetY = 0,
+    inner = false
+  } = options;
+  const wobble = getSketchRotation(x, y);
+  const centerX = x + width / 2;
+  const centerY = y + height / 2;
+  const shadowX = x + shadowOffsetX;
+  const shadowY = y + shadowOffsetY;
+  const shadowCenterX = shadowX + width / 2;
+  const shadowCenterY = shadowY + height / 2;
+  const inset = Math.min(2.2, Math.max(1, Math.min(width, height) * 0.04));
+  const innerX = x + inset;
+  const innerY = y + inset * 0.7;
+  const innerWidth = Math.max(8, width - inset * 2);
+  const innerHeight = Math.max(8, height - inset * 1.6);
+  const innerRadius = Math.max(6, radius - 2);
+
+  return `
+    ${shadowAccent ? `<rect x="${shadowX}" y="${shadowY}" width="${width}" height="${height}" rx="${radius}" fill="${shadowAccent}" fill-opacity="0.18" stroke="${shadowAccent}" stroke-width="1.6" transform="rotate(${wobble * 0.7} ${shadowCenterX} ${shadowCenterY})" />` : ""}
+    <rect x="${x}" y="${y}" width="${width}" height="${height}" rx="${radius}" fill="${fill}" fill-opacity="${fillOpacity}" stroke="${stroke}" stroke-width="${strokeWidth}" transform="rotate(${wobble} ${centerX} ${centerY})" />
+    ${inner ? `<rect x="${innerX}" y="${innerY}" width="${innerWidth}" height="${innerHeight}" rx="${innerRadius}" fill="none" stroke="${stroke}" stroke-width="${secondStrokeWidth}" opacity="${secondOpacity}" transform="rotate(${-wobble * 0.8} ${centerX} ${centerY})" />` : ""}
+  `;
+}
+
+function renderSketchCircle(cx, cy, radius, options = {}) {
+  const {
+    fill = "#ffffff",
+    fillOpacity = 1,
+    stroke = "#19424a",
+    strokeWidth = 3,
+    secondOpacity = 0.18,
+    shadowAccent = "",
+    shadowOffsetX = 0,
+    shadowOffsetY = 0,
+    inner = false
+  } = options;
+  const innerRadius = Math.max(3, radius - Math.max(1.2, radius * 0.08));
+
+  return `
+    ${shadowAccent ? `<circle cx="${cx + shadowOffsetX}" cy="${cy + shadowOffsetY}" r="${radius}" fill="${shadowAccent}" fill-opacity="0.18" stroke="${shadowAccent}" stroke-width="1.2" />` : ""}
+    <circle cx="${cx}" cy="${cy}" r="${radius}" fill="${fill}" fill-opacity="${fillOpacity}" stroke="${stroke}" stroke-width="${strokeWidth}" />
+    ${inner ? `<circle cx="${cx + 1.1}" cy="${cy - 0.8}" r="${innerRadius}" fill="none" stroke="${stroke}" stroke-width="${Math.max(1.1, strokeWidth * 0.45)}" opacity="${secondOpacity}" />` : ""}
+  `;
+}
+
+function getSketchRotation(x, y) {
+  const seed = (Math.round(x) * 7 + Math.round(y) * 13) % 9;
+  return (seed - 4) * 0.22;
+}
+
+function renderDoodleSpark(x, y, accent) {
+  return `
+    <path d="M${x} ${y - 8} V${y + 8} M${x - 8} ${y} H${x + 8} M${x - 6} ${y - 6} L${x + 6} ${y + 6} M${x - 6} ${y + 6} L${x + 6} ${y - 6}" stroke="${accent}" stroke-width="2.4" stroke-linecap="round" opacity="0.8" />
+    <path d="M${x - 9} ${y + 11} q7 -4 14 0" fill="none" stroke="${accent}" stroke-width="1.8" stroke-linecap="round" opacity="0.45" />
+  `;
+}
+
+function renderHairTuft(x, y, stroke) {
+  return `<path d="M${x - 8} ${y} q4 -10 8 0 M${x} ${y} q2 -8 7 -2" fill="none" stroke="${stroke}" stroke-width="2.6" stroke-linecap="round" />`;
+}
+
+function renderScribblePatch(x, y, width, height, accent, lines = 5) {
+  const segments = Array.from({ length: lines }, (_, index) => {
+    const step = width / Math.max(2, lines + 1);
+    const startX = x + 2 + index * step;
+    const startY = y + height - 2;
+    const endX = Math.min(x + width - 1, startX + width * 0.34);
+    const endY = y + 3 + (index % 2) * 1.5;
+    return `<path d="M${startX} ${startY} L${endX} ${endY}" stroke="${accent}" stroke-width="2.2" stroke-linecap="round" opacity="0.55" />`;
+  }).join("");
+
+  return segments;
+}
+
+function renderScribbleBody(x, y, width, height, accent) {
+  const left = x - width / 2;
+  const top = y;
+
+  return `
+    <path d="M${left + 7} ${top + 8} q8 -12 20 -10 q16 2 22 20 q6 19 0 34 q-6 15 -18 18 q-14 3 -23 -8 q-9 -11 -10 -24 q-1 -16 9 -30 Z" fill="#ffffff" stroke="#161616" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    ${renderScribblePatch(left + 8, top + 10, width - 16, height - 18, accent, 6)}
   `;
 }
 
