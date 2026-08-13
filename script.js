@@ -5236,6 +5236,33 @@ function persistLocalJsonStorage(storageKey, value) {
   }
 }
 
+function isLegacyLoopdicteeWoordenschatArt(activityArt) {
+  return (
+    typeof activityArt === "string" &&
+    activityArt.includes('class="activity-photo"') &&
+    activityArt.includes('alt="Loopdictee woordenschat"')
+  );
+}
+
+function sanitizeRenderedTaskOverrides(overrides) {
+  if (!overrides || typeof overrides !== "object" || Array.isArray(overrides)) {
+    return {};
+  }
+
+  const sanitized = JSON.parse(JSON.stringify(overrides));
+  const wordDictationOverride = sanitized["loopdictee-woordenschat"];
+
+  if (wordDictationOverride && isLegacyLoopdicteeWoordenschatArt(wordDictationOverride.activityArt)) {
+    delete wordDictationOverride.activityArt;
+
+    if (!Object.keys(wordDictationOverride).length) {
+      delete sanitized["loopdictee-woordenschat"];
+    }
+  }
+
+  return sanitized;
+}
+
 function loadLocalTaskTextOverrides() {
   return loadLocalJsonStorage(LOCAL_EDIT_STORAGE_KEY);
 }
@@ -5253,7 +5280,14 @@ function persistLocalSiteTextOverrides() {
 }
 
 function loadLocalRenderedTaskOverrides() {
-  return loadLocalJsonStorage(LOCAL_RENDER_EDIT_STORAGE_KEY);
+  const storedOverrides = loadLocalJsonStorage(LOCAL_RENDER_EDIT_STORAGE_KEY);
+  const sanitizedOverrides = sanitizeRenderedTaskOverrides(storedOverrides);
+
+  if (JSON.stringify(storedOverrides) !== JSON.stringify(sanitizedOverrides)) {
+    persistLocalJsonStorage(LOCAL_RENDER_EDIT_STORAGE_KEY, sanitizedOverrides);
+  }
+
+  return sanitizedOverrides;
 }
 
 function persistLocalRenderedTaskOverrides() {
@@ -5421,8 +5455,9 @@ function applyPublishedExportData(exportData) {
     exportData?.textOverrides && typeof exportData.textOverrides === "object" ? exportData.textOverrides : {};
   publishedSiteTextOverrides =
     exportData?.siteTextOverrides && typeof exportData.siteTextOverrides === "object" ? exportData.siteTextOverrides : {};
-  publishedRenderedTaskOverrides =
-    exportData?.renderedOverrides && typeof exportData.renderedOverrides === "object" ? exportData.renderedOverrides : {};
+  publishedRenderedTaskOverrides = sanitizeRenderedTaskOverrides(
+    exportData?.renderedOverrides && typeof exportData.renderedOverrides === "object" ? exportData.renderedOverrides : {}
+  );
   publishedDeletedCustomTaskKeys = new Set(
     Array.isArray(exportData?.deletedTasks) ? exportData.deletedTasks.map((entry) => entry?.key).filter(Boolean) : []
   );
