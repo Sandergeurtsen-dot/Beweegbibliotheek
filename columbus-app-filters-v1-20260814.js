@@ -14411,13 +14411,25 @@ function renderMappedRasterIllustration(task, fallbackIllustration) {
   }
 
   const gridSize = Number(mappedArt.gridSize) || 2;
-  const gridPosition = String(mappedArt.position || "").match(/^r(\d+)c(\d+)$/);
+  const mappedPosition = String(mappedArt.position || "");
+  const gridPosition = mappedPosition.match(/^r(\d+)c(\d+)$/);
   const allowedPositions = new Set(["top-left", "top-right", "bottom-left", "bottom-right", "center", "single"]);
-  const position = gridPosition ? "grid" : allowedPositions.has(mappedArt.position) ? mappedArt.position : "single";
-  const row = gridPosition ? Math.min(gridSize, Math.max(1, Number(gridPosition[1]))) : 1;
-  const column = gridPosition ? Math.min(gridSize, Math.max(1, Number(gridPosition[2]))) : 1;
-  const cropStyle = gridPosition
-    ? `width: ${gridSize * 100}%; max-width: none; height: auto; top: -${(row - 1) * 100}%; left: -${(column - 1) * 100}%;`
+  const isTiledPosition = Boolean(gridPosition) || ["top-left", "top-right", "bottom-left", "bottom-right"].includes(mappedPosition);
+  const position = isTiledPosition ? "grid" : allowedPositions.has(mappedPosition) ? mappedPosition : "single";
+  const semanticRow = mappedPosition.startsWith("bottom") ? 2 : 1;
+  const semanticColumn = mappedPosition.endsWith("right") ? 2 : 1;
+  const row = gridPosition
+    ? Math.min(gridSize, Math.max(1, Number(gridPosition[1])))
+    : Math.min(gridSize, semanticRow);
+  const column = gridPosition
+    ? Math.min(gridSize, Math.max(1, Number(gridPosition[2])))
+    : Math.min(gridSize, semanticColumn);
+  const cropZoom = 1.06;
+  const cropAxisOffset = (index) => index === gridSize
+    ? gridSize * cropZoom - 1
+    : (index - 1) * cropZoom;
+  const cropStyle = isTiledPosition
+    ? `width: ${gridSize * cropZoom * 100}%; max-width: none; height: auto; top: -${cropAxisOffset(row) * 100}%; left: -${cropAxisOffset(column) * 100}%; right: auto; bottom: auto; transform: none;`
     : "";
   const cacheSeparator = mappedArt.src.includes("?") ? "&" : "?";
   const imageSrc = `${mappedArt.src}${cacheSeparator}v=20260814-3`;
