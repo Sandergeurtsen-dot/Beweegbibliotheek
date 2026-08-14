@@ -14424,12 +14424,12 @@ function renderMappedRasterIllustration(task, fallbackIllustration) {
   const column = gridPosition
     ? Math.min(gridSize, Math.max(1, Number(gridPosition[2])))
     : Math.min(gridSize, semanticColumn);
-  const cropZoom = 1.06;
-  const cropAxisOffset = (index) => index === gridSize
-    ? gridSize * cropZoom - 1
-    : (index - 1) * cropZoom;
+  const verticalCropZoom = gridSize === 3 ? 1.06 : 1;
+  const verticalCropOffset = row === gridSize
+    ? gridSize * verticalCropZoom - 1
+    : (row - 1) * verticalCropZoom;
   const cropStyle = isTiledPosition
-    ? `width: ${gridSize * cropZoom * 100}%; max-width: none; height: auto; top: -${cropAxisOffset(row) * 100}%; left: -${cropAxisOffset(column) * 100}%; right: auto; bottom: auto; transform: none;`
+    ? `width: ${gridSize * 100}%; max-width: none; height: ${gridSize * verticalCropZoom * 100}%; top: -${verticalCropOffset * 100}%; left: -${(column - 1) * 100}%; right: auto; bottom: auto; transform: none;`
     : "";
   const cacheSeparator = mappedArt.src.includes("?") ? "&" : "?";
   const imageSrc = `${mappedArt.src}${cacheSeparator}v=20260814-3`;
