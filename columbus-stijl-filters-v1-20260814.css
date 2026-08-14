@@ -934,6 +934,60 @@ body::before {
   height: 100%;
 }
 
+.generated-activity-art__loading {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  gap: 0.55rem;
+  background:
+    radial-gradient(circle at 24% 30%, rgba(57, 178, 211, 0.11), transparent 25%),
+    radial-gradient(circle at 76% 68%, rgba(103, 167, 75, 0.1), transparent 27%),
+    #ffffff;
+  color: #58718b;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-align: center;
+  transition: opacity 160ms ease;
+}
+
+.generated-activity-art__loading::before {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid rgba(57, 178, 211, 0.22);
+  border-top-color: #23a9c7;
+  border-radius: 50%;
+  content: "";
+  animation: activity-art-loading 780ms linear infinite;
+}
+
+.generated-activity-art__loading span {
+  position: absolute;
+  top: calc(50% + 1.55rem);
+}
+
+.generated-activity-art.is-loaded .generated-activity-art__loading {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.generated-activity-art.is-error .generated-activity-art__loading::before {
+  display: none;
+}
+
+@keyframes activity-art-loading {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .generated-activity-art__loading::before {
+    animation: none;
+  }
+}
+
 .generated-activity-art--top-left > img {
   top: 0;
   left: 0;

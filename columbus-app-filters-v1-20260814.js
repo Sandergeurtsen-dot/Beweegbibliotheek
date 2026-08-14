@@ -5831,7 +5831,7 @@ function refreshTaskData() {
   document.body.dataset.illustrationUniqueSeedCount = String(
     new Set(allTasks.map((task) => getTaskIllustrationSeed(task))).size
   );
-  document.body.dataset.illustrationVersion = "quick-filters-v1-art-refresh-20260814";
+  document.body.dataset.illustrationVersion = "quick-filters-v1-art-refresh-3-20260814";
 }
 
 async function loadPublishedCustomTaskExport() {
@@ -14420,18 +14420,21 @@ function renderMappedRasterIllustration(task, fallbackIllustration) {
     ? `width: ${gridSize * 100}%; max-width: none; height: auto; top: -${(row - 1) * 100}%; left: -${(column - 1) * 100}%;`
     : "";
   const cacheSeparator = mappedArt.src.includes("?") ? "&" : "?";
-  const imageSrc = `${mappedArt.src}${cacheSeparator}v=20260814-2`;
+  const imageSrc = `${mappedArt.src}${cacheSeparator}v=20260814-3`;
 
   return `
     <span class="generated-activity-art generated-activity-art--${position}">
-      <span class="generated-activity-art__fallback">${fallbackIllustration}</span>
+      <span class="generated-activity-art__loading" aria-hidden="true">
+        <span>Afbeelding laden...</span>
+      </span>
       <img
         src="${escapeAttribute(imageSrc)}"
         alt="Illustratie bij ${escapeAttribute(task.title)}"
-        loading="lazy"
+        loading="eager"
         decoding="async"
         style="${cropStyle}"
-        onerror="this.hidden = true"
+        onload="this.parentElement.classList.add('is-loaded')"
+        onerror="this.hidden = true; this.parentElement.classList.add('is-error'); this.previousElementSibling.querySelector('span').textContent = 'Afbeelding niet geladen'"
       />
     </span>
   `;
