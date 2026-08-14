@@ -839,7 +839,11 @@ body::before {
 }
 
 .task-card__art {
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 3 / 2;
+}
+
+.task-detail__art {
+  aspect-ratio: 3 / 2;
 }
 
 .task-card__art svg,
