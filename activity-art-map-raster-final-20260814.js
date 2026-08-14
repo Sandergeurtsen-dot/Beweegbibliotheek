@@ -111,17 +111,17 @@ globalThis.activityArtMapV4 = {
   },
   "energizers-energizer-kalmerend-lesovergangen-langzame-telstap": {
     "src": "./assets/activity-art-v4/generated-grid3-set-14.png",
-    "position": "r2c1",
+    "position": "bottom-left",
     "gridSize": 2
   },
   "energizers-energizer-kalmerend-lesovergangen-spiegeladem-in-tweetallen": {
     "src": "./assets/activity-art-v4/generated-grid3-set-14.png",
-    "position": "r1c2",
+    "position": "top-right",
     "gridSize": 2
   },
   "energizers-energizer-kalmerend-lesovergangen-steen-papier-schaar-stretch": {
     "src": "./assets/activity-art-v4/generated-grid3-set-14.png",
-    "position": "r1c1",
+    "position": "top-left",
     "gridSize": 2
   },
   "energizers-energizer-kalmerend-lesovergangen-stoelyoga-in-beweging": {
