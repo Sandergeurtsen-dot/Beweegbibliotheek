@@ -10,7 +10,31 @@
       href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=20260813-1" />
+    <link rel="stylesheet" href="./columbus-stijl-doodle-v3-20260814.css" />
+    <style id="columbus-critical-art-layout">
+      .task-card__art {
+        display: block !important;
+        width: 100% !important;
+        min-height: 180px !important;
+        aspect-ratio: 16 / 10 !important;
+        overflow: hidden !important;
+      }
+
+      .task-card__art > svg,
+      .task-card__art .unique-task-illustration,
+      .task-detail__art > svg,
+      .task-detail__art .unique-task-illustration {
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      @media (max-width: 760px) {
+        .task-card__art {
+          min-height: 160px !important;
+        }
+      }
+    </style>
   </head>
   <body>
     <div class="page-shell">
@@ -116,7 +140,8 @@
       </div>
     </noscript>
 
-    <script src="./opdrachten-teksten.js?v=20260813-1" defer></script>
-    <script src="./script.js?v=20260813-1" defer></script>
+    <script src="./columbus-opdrachten-doodle-v3-20260814.js" defer></script>
+    <script src="./activity-art-map-raster-final-20260814.js" defer></script>
+    <script src="./columbus-app-raster-final-20260814.js" defer></script>
   </body>
 </html>
