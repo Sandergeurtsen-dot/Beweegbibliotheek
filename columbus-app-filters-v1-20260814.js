@@ -14424,12 +14424,11 @@ function renderMappedRasterIllustration(task, fallbackIllustration) {
   const column = gridPosition
     ? Math.min(gridSize, Math.max(1, Number(gridPosition[2])))
     : Math.min(gridSize, semanticColumn);
-  const verticalCropZoom = gridSize === 3 ? 1.06 : 1;
-  const verticalCropOffset = row === gridSize
-    ? gridSize * verticalCropZoom - 1
-    : (row - 1) * verticalCropZoom;
+  // The generated 3x3 sheets use uneven row gutters, so each row needs its own tight crop.
+  const gridHeight = gridSize === 3 ? [300, 315, 309][row - 1] : gridSize * 100;
+  const rowOffset = gridSize === 3 ? [0, 104.5, 203.5][row - 1] : (row - 1) * 100;
   const cropStyle = isTiledPosition
-    ? `width: ${gridSize * 100}%; max-width: none; height: ${gridSize * verticalCropZoom * 100}%; top: -${verticalCropOffset * 100}%; left: -${(column - 1) * 100}%; right: auto; bottom: auto; transform: none;`
+    ? `width: ${gridSize * 100}%; max-width: none; height: ${gridHeight}%; top: -${rowOffset}%; left: -${(column - 1) * 100}%; right: auto; bottom: auto; transform: none;`
     : "";
   const cacheSeparator = mappedArt.src.includes("?") ? "&" : "?";
   const imageSrc = `${mappedArt.src}${cacheSeparator}v=20260814-3`;
